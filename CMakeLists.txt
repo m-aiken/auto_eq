@@ -29,9 +29,14 @@ include(${CPM_DOWNLOAD_LOCATION})
 # Add JUCE to our project's dependencies.
 #
 CPMAddPackage(
-  NAME JUCE
-  GITHUB_REPOSITORY juce-framework/JUCE
-  GIT_TAG 7.0.12 # Need to do this because the JUCE version in GH doesn't have the preceding v (i.e v7.0.12).
-  VERSION 7.0.12
-  SOURCE_DIR ${DEPENDENCIES_DIR}/juce
+    NAME JUCE
+    GITHUB_REPOSITORY juce-framework/JUCE
+    GIT_TAG 7.0.12 # Need to do this because the JUCE version in GH doesn't have the preceding v (i.e v7.0.12).
+    VERSION 7.0.12
+    SOURCE_DIR ${DEPENDENCIES_DIR}/juce
 )
+
+#
+# Add our plugin subdirectory.
+#
+add_subdirectory(plugin)
