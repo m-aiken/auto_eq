@@ -4,7 +4,7 @@
 /*---------------------------------------------------------------------------
 **
 */
-AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor(AudioPluginAudioProcessor& p)
+PluginEditor::PluginEditor(PluginProcessor& p)
     : AudioProcessorEditor(&p)
     , processor_ref(p)
 {
@@ -17,7 +17,7 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor(AudioPluginAudi
 /*---------------------------------------------------------------------------
 **
 */
-AudioPluginAudioProcessorEditor::~AudioPluginAudioProcessorEditor()
+PluginEditor::~PluginEditor()
 {
 }
 
@@ -25,7 +25,7 @@ AudioPluginAudioProcessorEditor::~AudioPluginAudioProcessorEditor()
 **
 */
 void
-AudioPluginAudioProcessorEditor::paint(juce::Graphics& g)
+PluginEditor::paint(juce::Graphics& g)
 {
     // (Our component is opaque, so we must completely fill the background with a solid colour)
     g.fillAll(getLookAndFeel().findColour(juce::ResizableWindow::backgroundColourId));
@@ -39,7 +39,7 @@ AudioPluginAudioProcessorEditor::paint(juce::Graphics& g)
 **
 */
 void
-AudioPluginAudioProcessorEditor::resized()
+PluginEditor::resized()
 {
     // This is generally where you'll want to lay out the positions of any
     // subcomponents in your editor..
