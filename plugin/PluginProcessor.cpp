@@ -6,13 +6,8 @@
 */
 AudioPluginAudioProcessor::AudioPluginAudioProcessor()
     : AudioProcessor(BusesProperties()
-#if !JucePlugin_IsMidiEffect
-    #if !JucePlugin_IsSynth
                          .withInput("Input", juce::AudioChannelSet::quadraphonic(), true)
-    #endif
-                         .withOutput("Output", juce::AudioChannelSet::stereo(), true)
-#endif
-    )
+                         .withOutput("Output", juce::AudioChannelSet::stereo(), true))
 {
 }
 
@@ -38,11 +33,7 @@ AudioPluginAudioProcessor::getName() const
 bool
 AudioPluginAudioProcessor::acceptsMidi() const
 {
-#if JucePlugin_WantsMidiInput
-    return true;
-#else
     return false;
-#endif
 }
 
 /*---------------------------------------------------------------------------
@@ -51,11 +42,7 @@ AudioPluginAudioProcessor::acceptsMidi() const
 bool
 AudioPluginAudioProcessor::producesMidi() const
 {
-#if JucePlugin_ProducesMidiOutput
-    return true;
-#else
     return false;
-#endif
 }
 
 /*---------------------------------------------------------------------------
@@ -64,11 +51,7 @@ AudioPluginAudioProcessor::producesMidi() const
 bool
 AudioPluginAudioProcessor::isMidiEffect() const
 {
-#if JucePlugin_IsMidiEffect
-    return true;
-#else
     return false;
-#endif
 }
 
 /*---------------------------------------------------------------------------
@@ -154,10 +137,6 @@ AudioPluginAudioProcessor::releaseResources()
 bool
 AudioPluginAudioProcessor::isBusesLayoutSupported(const BusesLayout& layouts) const
 {
-#if JucePlugin_IsMidiEffect
-    juce::ignoreUnused(layouts);
-    return true;
-#else
     // This is the place where you check if the layout is supported.
     // In this template code we only support mono or stereo.
     // Some plugin hosts, such as certain GarageBand versions, will only
@@ -166,14 +145,11 @@ AudioPluginAudioProcessor::isBusesLayoutSupported(const BusesLayout& layouts) co
         && layouts.getMainOutputChannelSet() != juce::AudioChannelSet::stereo())
         return false;
 
-        // This checks if the input layout matches the output layout
-    #if !JucePlugin_IsSynth
+    // This checks if the input layout matches the output layout
     if (layouts.getMainOutputChannelSet() != layouts.getMainInputChannelSet())
         return false;
-    #endif
 
     return true;
-#endif
 }
 
 /*---------------------------------------------------------------------------
