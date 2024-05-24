@@ -1,42 +1,61 @@
 cmake_minimum_required(VERSION 3.22)
-
-project(ReactiveLufsNormalisation)
-
+project(ReLufs VERSION 1.0.0)
 set(CMAKE_CXX_STANDARD 23)
 
 #
-# Create a dependencies folder in our project.
+# Dependencies.
+# 1. Create a dependencies folder in our project.
+# 2. Get CPM (cmake package manager).
+# 3. Use CPM to get JUCE.
 #
 set(DEPENDENCIES_DIR ${CMAKE_CURRENT_SOURCE_DIR}/dependencies)
+include(cmake/get_cpm.cmake)
+include(cmake/get_juce.cmake)
 
 #
-# Add CPM (cmake package manager) to our project's dependencies.
+# Plugin configuration.
 #
-set(CPM_DOWNLOAD_VERSION 0.39.0)
-set(CPM_DOWNLOAD_LOCATION "${DEPENDENCIES_DIR}/cpm/CPM_${CPM_DOWNLOAD_VERSION}.cmake")
+juce_add_plugin(${PROJECT_NAME}
+    # VERSION ...                               # Set this if the plugin version is different to the project version
+    # ICON_BIG ...                              # ICON_* arguments specify a path to an image file to use as an icon for the Standalone
+    # ICON_SMALL ...
+    COMPANY_NAME maiken                         # Specify the name of the plugin's author
+    IS_SYNTH FALSE                              # Is this a synth or an effect?
+    NEEDS_MIDI_INPUT FALSE                      # Does the plugin need midi input?
+    NEEDS_MIDI_OUTPUT FALSE                     # Does the plugin need midi output?
+    IS_MIDI_EFFECT FALSE                        # Is this plugin a MIDI effect?
+    # EDITOR_WANTS_KEYBOARD_FOCUS TRUE/FALSE    # Does the editor need keyboard focus?
+    # COPY_PLUGIN_AFTER_BUILD TRUE/FALSE        # Should the plugin be installed to a default location after building?
+    PLUGIN_MANUFACTURER_CODE MAPC               # A four-character manufacturer id with at least one upper-case character
+    PLUGIN_CODE P008                            # A unique four-character plugin id with exactly one upper-case character
+                                                # GarageBand 10.3 requires the first letter to be upper-case, and the remaining letters to be lower-case
+    FORMATS AU VST3 Standalone                  # The formats to build. Other valid formats are: AAX Unity VST AU AUv3
+    PRODUCT_NAME "Reactive LUFS Normalisation") # The name of the final executable, which can differ from the target name
 
-# Expand relative path. This is important if the provided path contains a tilde (~).
-get_filename_component(CPM_DOWNLOAD_LOCATION ${CPM_DOWNLOAD_LOCATION} ABSOLUTE)
+juce_generate_juce_header(${PROJECT_NAME})
 
-file(DOWNLOAD
-     https://github.com/cpm-cmake/CPM.cmake/releases/download/v${CPM_DOWNLOAD_VERSION}/CPM.cmake
-     ${CPM_DOWNLOAD_LOCATION}
-)
+target_sources(${PROJECT_NAME}
+    PRIVATE
+        source/PluginEditor.cpp
+        source/PluginProcessor.cpp)
 
-include(${CPM_DOWNLOAD_LOCATION})
+# JUCE modules make use of compile definitions to switch certain features on/off.
+# If there's a particular feature you need that's not on by default,
+# check the module header for the correct flag to set here.
+target_compile_definitions(${PROJECT_NAME}
+    PUBLIC
+        # JUCE_WEB_BROWSER and JUCE_USE_CURL would be on by default, but you might not need them.
+        JUCE_WEB_BROWSER=0  # If you remove this, add `NEEDS_WEB_BROWSER TRUE` to the `juce_add_plugin` call
+        JUCE_USE_CURL=0     # If you remove this, add `NEEDS_CURL TRUE` to the `juce_add_plugin` call
+        JUCE_VST3_CAN_REPLACE_VST2=0)
 
-#
-# Add JUCE to our project's dependencies.
-#
-CPMAddPackage(
-    NAME JUCE
-    GITHUB_REPOSITORY juce-framework/JUCE
-    GIT_TAG 7.0.12 # Need to do this because the JUCE version in GH doesn't have the preceding v (i.e v7.0.12).
-    VERSION 7.0.12
-    SOURCE_DIR ${DEPENDENCIES_DIR}/juce
-)
+# juce_add_binary_data(ReLufsPluginData SOURCES ...)
 
-#
-# Add our plugin subdirectory.
-#
-add_subdirectory(plugin)
+target_link_libraries(${PROJECT_NAME}
+    PRIVATE
+        # ReLufsPluginData
+        juce::juce_audio_utils
+    PUBLIC
+        juce::juce_recommended_config_flags
+        juce::juce_recommended_lto_flags
+        juce::juce_recommended_warning_flags)
