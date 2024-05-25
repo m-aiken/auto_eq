@@ -116,9 +116,10 @@ PluginProcessor::changeProgramName(int index, const juce::String& new_name)
 void
 PluginProcessor::prepareToPlay(double sample_rate, int samples_per_block)
 {
-    // Use this method as the place to do any pre-playback
-    // initialisation that you need..
-    juce::ignoreUnused(sample_rate, samples_per_block);
+    // Pre-playback initialisation.
+    juce::ignoreUnused(samples_per_block);
+
+    fft_buffer_playback_source_l_.prepare(sample_rate);
 }
 
 /*---------------------------------------------------------------------------
@@ -161,8 +162,8 @@ PluginProcessor::processBlock(juce::AudioBuffer< float >& buffer, juce::MidiBuff
     juce::ignoreUnused(midi_messages);
 
     juce::ScopedNoDenormals noDenormals;
-    auto                    totalNumInputChannels  = getTotalNumInputChannels();
-    auto                    totalNumOutputChannels = getTotalNumOutputChannels();
+    int                     total_num_input_channels  = getTotalNumInputChannels();
+    int                     total_num_output_channels = getTotalNumOutputChannels();
 
     // In case we have more outputs than inputs, this code clears any output
     // channels that didn't contain input data, (because these aren't
@@ -170,19 +171,14 @@ PluginProcessor::processBlock(juce::AudioBuffer< float >& buffer, juce::MidiBuff
     // This is here to avoid people getting screaming feedback
     // when they first compile a plugin, but obviously you don't need to keep
     // this code if your algorithm always overwrites all the output channels.
-    for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
+    for (int i = total_num_input_channels; i < total_num_output_channels; ++i) {
         buffer.clear(i, 0, buffer.getNumSamples());
+    }
 
-    // This is the place where you'd normally do the guts of your plugin's
-    // audio processing...
-    // Make sure to reset the state if your inner loop is processing
-    // the samples and the outer loop is handling the channels.
-    // Alternatively, you can process the samples with the channels
-    // interleaved by keeping the same state.
-    for (int channel = 0; channel < totalNumInputChannels; ++channel) {
-        auto* channelData = buffer.getWritePointer(channel);
-        juce::ignoreUnused(channelData);
-        // ..do something to the data...
+    const float* channel_1_data = buffer.getReadPointer(0);
+
+    for (int i = 0; i < buffer.getNumSamples(); ++i) {
+        fft_buffer_playback_source_l_.pushNextSample(channel_1_data[i]);
     }
 }
 
@@ -192,7 +188,7 @@ PluginProcessor::processBlock(juce::AudioBuffer< float >& buffer, juce::MidiBuff
 bool
 PluginProcessor::hasEditor() const
 {
-    return true;  // (change this to false if you choose to not supply an editor)
+    return true;
 }
 
 /*---------------------------------------------------------------------------
@@ -225,6 +221,15 @@ PluginProcessor::setStateInformation(const void* data, int size_in_bytes)
     // You should use this method to restore your parameters from this memory block,
     // whose contents will have been created by the getStateInformation() call.
     juce::ignoreUnused(data, size_in_bytes);
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
+MonoFftBuffer&
+PluginProcessor::getFftBufferPlaybackSourceL()
+{
+    return fft_buffer_playback_source_l_;
 }
 
 /*---------------------------------------------------------------------------

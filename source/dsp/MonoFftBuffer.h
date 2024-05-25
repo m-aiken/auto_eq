@@ -14,12 +14,11 @@ public:
 
     // FFT constants.
     enum {
-        FFT_ORDER     = SIZE_2048,
-        FFT_SIZE      = 1 << FFT_ORDER,
-        FFT_DATA_SIZE = FFT_SIZE * 2,
+        FFT_ORDER = SIZE_2048,
+        FFT_SIZE  = 1 << FFT_ORDER,
     };
 
-    typedef std::array< float, FFT_DATA_SIZE > FftDataBlock;
+    typedef std::array< float, FFT_SIZE * 2 > FftDataBlock;
 
 public:
     MonoFftBuffer();
@@ -27,9 +26,9 @@ public:
     void prepare(double sample_rate);
 
     void pushNextSample(float sample);
-    void getNextBlock(FftDataBlock& block);
+    void getNextBlock(FftDataBlock& block) const;
 
-    double getBinWidth();
+    double getBinWidth() const;
 
     bool isPrepared() const;
 

@@ -40,7 +40,7 @@ MonoFftBuffer::pushNextSample(float sample)
 **
 */
 void
-MonoFftBuffer::getNextBlock(FftDataBlock& block)
+MonoFftBuffer::getNextBlock(FftDataBlock& block) const
 {
     // Zero out the incoming buffer.
     std::fill(block.begin(), block.end(), 0.f);
@@ -52,7 +52,7 @@ MonoFftBuffer::getNextBlock(FftDataBlock& block)
 **
 */
 double
-MonoFftBuffer::getBinWidth()
+MonoFftBuffer::getBinWidth() const
 {
     return isPrepared() ? (sample_rate_ / static_cast< double >(FFT_SIZE)) : 0.0;
 }
