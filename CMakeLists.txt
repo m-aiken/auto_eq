@@ -37,7 +37,8 @@ juce_generate_juce_header(${PROJECT_NAME})
 target_sources(${PROJECT_NAME}
     PRIVATE
         source/PluginEditor.cpp
-        source/PluginProcessor.cpp)
+        source/PluginProcessor.cpp
+        source/dsp/MonoFftBuffer.cpp)
 
 # JUCE modules make use of compile definitions to switch certain features on/off.
 # If there's a particular feature you need that's not on by default,
@@ -55,6 +56,7 @@ target_link_libraries(${PROJECT_NAME}
     PRIVATE
         # ReLufsPluginData
         juce::juce_audio_utils
+        juce::juce_dsp
     PUBLIC
         juce::juce_recommended_config_flags
         juce::juce_recommended_lto_flags
