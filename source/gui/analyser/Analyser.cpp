@@ -7,10 +7,10 @@ Analyser::Analyser(PluginProcessor& p)
 {
     addAndMakeVisible(backdrop_);
 
-    path_colours_.at(Global::CHANNEL_PLAYBACK_LEFT)  = juce::Colours::aquamarine;
-    path_colours_.at(Global::CHANNEL_PLAYBACK_RIGHT) = juce::Colours::red;
-    path_colours_.at(Global::CHANNEL_AMBIENT_LEFT)   = juce::Colours::green;
-    path_colours_.at(Global::CHANNEL_AMBIENT_RIGHT)  = juce::Colours::yellow;
+    path_colours_.at(Global::PLAYBACK_LEFT)  = juce::Colours::aquamarine;
+    path_colours_.at(Global::PLAYBACK_RIGHT) = juce::Colours::red;
+    path_colours_.at(Global::AMBIENT_LEFT)   = juce::Colours::green;
+    path_colours_.at(Global::AMBIENT_RIGHT)  = juce::Colours::yellow;
 
     PluginProcessor::FftBuffers& fft_buffers = p.getFftBuffers();
 

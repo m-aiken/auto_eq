@@ -14,10 +14,10 @@ static const float MAX_HZ = 20000.f;
 static const uint8 NUM_INPUTS = 4;
 
 enum CHANNEL_DESIGNATION {
-    CHANNEL_PLAYBACK_LEFT,
-    CHANNEL_PLAYBACK_RIGHT,
-    CHANNEL_AMBIENT_LEFT,
-    CHANNEL_AMBIENT_RIGHT,
+    PLAYBACK_LEFT,
+    PLAYBACK_RIGHT,
+    AMBIENT_LEFT,
+    AMBIENT_RIGHT,
 };
 
 }  // namespace Global

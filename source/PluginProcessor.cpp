@@ -119,10 +119,10 @@ PluginProcessor::prepareToPlay(double sample_rate, int samples_per_block)
     // Pre-playback initialisation.
     juce::ignoreUnused(samples_per_block);
 
-    fft_buffers_.at(Global::CHANNEL_PLAYBACK_LEFT).prepare(sample_rate);
-    fft_buffers_.at(Global::CHANNEL_PLAYBACK_RIGHT).prepare(sample_rate);
-    fft_buffers_.at(Global::CHANNEL_AMBIENT_LEFT).prepare(sample_rate);
-    fft_buffers_.at(Global::CHANNEL_AMBIENT_RIGHT).prepare(sample_rate);
+    fft_buffers_.at(Global::PLAYBACK_LEFT).prepare(sample_rate);
+    fft_buffers_.at(Global::PLAYBACK_RIGHT).prepare(sample_rate);
+    fft_buffers_.at(Global::AMBIENT_LEFT).prepare(sample_rate);
+    fft_buffers_.at(Global::AMBIENT_RIGHT).prepare(sample_rate);
 }
 
 /*---------------------------------------------------------------------------
@@ -178,14 +178,11 @@ PluginProcessor::processBlock(juce::AudioBuffer< float >& buffer, juce::MidiBuff
         buffer.clear(i, 0, buffer.getNumSamples());
     }
 
-    int safe_num_inputs = juce::jmin< int >(total_num_input_channels, Global::NUM_INPUTS);
-
-    for (int i = 0; i < safe_num_inputs; ++i) {
-        const float* channel_data = buffer.getReadPointer(i);
-
-        for (int j = 0; j < buffer.getNumSamples(); ++j) {
-            fft_buffers_.at(i).pushNextSample(channel_data[i]);
-        }
+    for (int i = 0; i < buffer.getNumSamples(); ++i) {
+        fft_buffers_.at(Global::PLAYBACK_LEFT).pushNextSample(buffer.getSample(Global::PLAYBACK_LEFT, i));
+        fft_buffers_.at(Global::PLAYBACK_RIGHT).pushNextSample(buffer.getSample(Global::PLAYBACK_RIGHT, i));
+        fft_buffers_.at(Global::AMBIENT_LEFT).pushNextSample(buffer.getSample(Global::AMBIENT_LEFT, i));
+        fft_buffers_.at(Global::AMBIENT_RIGHT).pushNextSample(buffer.getSample(Global::AMBIENT_RIGHT, i));
     }
 }
 
