@@ -4,10 +4,20 @@
 **
 */
 Analyser::Analyser(PluginProcessor& p)
-    : spectrogram_path_(p.getFftBufferPlaybackSourceL())
 {
     addAndMakeVisible(backdrop_);
-    addAndMakeVisible(spectrogram_path_);
+
+    path_colours_.at(Global::CHANNEL_PLAYBACK_LEFT)  = juce::Colours::aquamarine;
+    path_colours_.at(Global::CHANNEL_PLAYBACK_RIGHT) = juce::Colours::red;
+    path_colours_.at(Global::CHANNEL_AMBIENT_LEFT)   = juce::Colours::green;
+    path_colours_.at(Global::CHANNEL_AMBIENT_RIGHT)  = juce::Colours::yellow;
+
+    PluginProcessor::FftBuffers& fft_buffers = p.getFftBuffers();
+
+    for (int i = 0; i < Global::NUM_INPUTS; ++i) {
+        spectrogram_paths_.at(i) = std::make_unique< MonoSpectrogramPath >(fft_buffers.at(i), path_colours_.at(i));
+        addAndMakeVisible(spectrogram_paths_.at(i).get());
+    }
 }
 
 /*---------------------------------------------------------------------------
@@ -19,7 +29,10 @@ Analyser::resized()
     auto bounds = getLocalBounds();
 
     backdrop_.setBounds(bounds);
-    spectrogram_path_.setBounds(bounds);
+
+    for (int i = 0; i < Global::NUM_INPUTS; ++i) {
+        spectrogram_paths_.at(i)->setBounds(bounds);
+    }
 }
 
 /*---------------------------------------------------------------------------

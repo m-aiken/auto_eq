@@ -3,6 +3,7 @@
 #include <juce_audio_processors/juce_audio_processors.h>
 
 #include "dsp/MonoFftBuffer.h"
+#include "utility/GlobalConstants.h"
 
 class PluginProcessor final : public juce::AudioProcessor
 {
@@ -37,13 +38,12 @@ public:
     void getStateInformation(juce::MemoryBlock& dest_data) override;
     void setStateInformation(const void* data, int size_in_bytes) override;
 
-    MonoFftBuffer& getFftBufferPlaybackSourceL();
+    typedef std::array< MonoFftBuffer, Global::NUM_INPUTS > FftBuffers;
+
+    FftBuffers& getFftBuffers();
 
 private:
-    MonoFftBuffer fft_buffer_playback_source_l_;
-    // MonoFftBuffer fft_buffer_playback_source_r_;
-    // MonoFftBuffer fft_buffer_ambient_source_l_;
-    // MonoFftBuffer fft_buffer_ambient_source_r_;
+    FftBuffers fft_buffers_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PluginProcessor)
 };

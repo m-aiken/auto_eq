@@ -4,10 +4,11 @@
 /*---------------------------------------------------------------------------
 **
 */
-MonoSpectrogramPath::MonoSpectrogramPath(MonoFftBuffer& fft_buffer)
+MonoSpectrogramPath::MonoSpectrogramPath(MonoFftBuffer& fft_buffer, const juce::Colour& path_colour)
     : fft_(MonoFftBuffer::FFT_ORDER)
     , windowing_fn_(MonoFftBuffer::FFT_SIZE, juce::dsp::WindowingFunction< float >::blackmanHarris)
     , fft_buffer_(fft_buffer)
+    , path_colour_(path_colour)
 {
     std::fill(fft_data_.begin(), fft_data_.end(), 0.f);
 
@@ -32,7 +33,7 @@ MonoSpectrogramPath::paint(juce::Graphics& g)
         return;
     }
 
-    g.setColour(juce::Colours::aquamarine);
+    g.setColour(path_colour_);
     g.strokePath(path_, juce::PathStrokeType(1.f));
 }
 
