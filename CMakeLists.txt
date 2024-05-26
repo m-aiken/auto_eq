@@ -39,7 +39,9 @@ target_sources(${PROJECT_NAME}
         source/PluginEditor.cpp
         source/PluginProcessor.cpp
         source/dsp/MonoFftBuffer.cpp
-        source/gui/MonoSpectrogram.cpp)
+        source/gui/analyser/Analyser.cpp
+        source/gui/analyser/AnalyserCanvas.cpp
+        source/gui/analyser/MonoSpectrogramPath.cpp)
 
 # JUCE modules make use of compile definitions to switch certain features on/off.
 # If there's a particular feature you need that's not on by default,

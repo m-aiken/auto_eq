@@ -1,10 +1,10 @@
-#include "MonoSpectrogram.h"
-#include "../Utility/GlobalConstants.h"
+#include "MonoSpectrogramPath.h"
+#include "../../utility/GlobalConstants.h"
 
 /*---------------------------------------------------------------------------
 **
 */
-MonoSpectrogram::MonoSpectrogram(MonoFftBuffer& fft_buffer)
+MonoSpectrogramPath::MonoSpectrogramPath(MonoFftBuffer& fft_buffer)
     : fft_(MonoFftBuffer::FFT_ORDER)
     , windowing_fn_(MonoFftBuffer::FFT_SIZE, juce::dsp::WindowingFunction< float >::blackmanHarris)
     , fft_buffer_(fft_buffer)
@@ -17,7 +17,7 @@ MonoSpectrogram::MonoSpectrogram(MonoFftBuffer& fft_buffer)
 /*---------------------------------------------------------------------------
 **
 */
-MonoSpectrogram::~MonoSpectrogram()
+MonoSpectrogramPath::~MonoSpectrogramPath()
 {
     stopTimer();
 }
@@ -26,7 +26,7 @@ MonoSpectrogram::~MonoSpectrogram()
 **
 */
 void
-MonoSpectrogram::paint(juce::Graphics& g)
+MonoSpectrogramPath::paint(juce::Graphics& g)
 {
     if (path_.isEmpty()) {
         return;
@@ -40,7 +40,7 @@ MonoSpectrogram::paint(juce::Graphics& g)
 **
 */
 void
-MonoSpectrogram::timerCallback()
+MonoSpectrogramPath::timerCallback()
 {
     processFftData();
     generatePath();
@@ -51,7 +51,7 @@ MonoSpectrogram::timerCallback()
 **
 */
 void
-MonoSpectrogram::processFftData()
+MonoSpectrogramPath::processFftData()
 {
     fft_buffer_.getNextBlock(fft_data_);
     windowing_fn_.multiplyWithWindowingTable(fft_data_.data(), MonoFftBuffer::FFT_SIZE);
@@ -70,7 +70,7 @@ MonoSpectrogram::processFftData()
 **
 */
 void
-MonoSpectrogram::generatePath()
+MonoSpectrogramPath::generatePath()
 {
     auto   bounds        = getLocalBounds();
     auto   bounds_x      = bounds.getX();

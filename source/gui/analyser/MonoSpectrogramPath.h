@@ -2,15 +2,15 @@
 
 #include <JuceHeader.h>
 
-#include "../dsp/MonoFftBuffer.h"
+#include "../../dsp/MonoFftBuffer.h"
 
-class MonoSpectrogram
+class MonoSpectrogramPath
     : public juce::Component
     , public juce::Timer
 {
 public:
-    MonoSpectrogram(MonoFftBuffer& fft_buffer);
-    ~MonoSpectrogram();
+    MonoSpectrogramPath(MonoFftBuffer& fft_buffer);
+    ~MonoSpectrogramPath();
 
     void paint(juce::Graphics& g) override;
 
@@ -26,5 +26,5 @@ private:
     MonoFftBuffer&                        fft_buffer_;
     juce::Path                            path_;
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MonoSpectrogram)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MonoSpectrogramPath)
 };
