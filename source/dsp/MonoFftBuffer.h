@@ -13,10 +13,9 @@ public:
     };
 
     // FFT constants.
-    enum {
-        FFT_ORDER = SIZE_2048,
-        FFT_SIZE  = 1 << FFT_ORDER,
-    };
+    static constexpr uint8  FFT_ORDER = SIZE_2048;
+    static constexpr size_t FFT_SIZE  = 1 << FFT_ORDER;
+    static constexpr size_t NUM_BINS  = FFT_SIZE * 0.5;
 
     typedef std::array< float, FFT_SIZE * 2 > FftDataBlock;
 
