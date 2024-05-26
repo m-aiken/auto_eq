@@ -20,4 +20,9 @@ enum CHANNEL_DESIGNATION {
     AMBIENT_RIGHT,
 };
 
+enum PATH_DISPLAY_MODE {
+    PATH_STROKE,
+    PATH_FILL,
+};
+
 }  // namespace Global

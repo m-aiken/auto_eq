@@ -1,14 +1,16 @@
 #include "MonoSpectrogramPath.h"
-#include "../../utility/GlobalConstants.h"
 
 /*---------------------------------------------------------------------------
 **
 */
-MonoSpectrogramPath::MonoSpectrogramPath(MonoFftBuffer& fft_buffer, const juce::Colour& path_colour)
+MonoSpectrogramPath::MonoSpectrogramPath(MonoFftBuffer&            fft_buffer,
+                                         const juce::Colour&       path_colour,
+                                         Global::PATH_DISPLAY_MODE display_mode)
     : fft_(MonoFftBuffer::FFT_ORDER)
     , windowing_fn_(MonoFftBuffer::FFT_SIZE, juce::dsp::WindowingFunction< float >::blackmanHarris)
     , fft_buffer_(fft_buffer)
     , path_colour_(path_colour)
+    , display_mode_(display_mode)
 {
     std::fill(fft_data_.begin(), fft_data_.end(), 0.f);
 
@@ -34,7 +36,13 @@ MonoSpectrogramPath::paint(juce::Graphics& g)
     }
 
     g.setColour(path_colour_);
-    g.strokePath(path_, juce::PathStrokeType(1.f));
+
+    if (display_mode_ == Global::PATH_STROKE) {
+        g.strokePath(path_, juce::PathStrokeType(1.f));
+    }
+    else {
+        g.fillPath(path_);
+    }
 }
 
 /*---------------------------------------------------------------------------

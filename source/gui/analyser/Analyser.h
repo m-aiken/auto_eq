@@ -16,7 +16,6 @@ public:
 
 private:
     AnalyserCanvas                                                           backdrop_;
-    std::array< juce::Colour, Global::NUM_INPUTS >                           path_colours_;
     std::array< std::unique_ptr< MonoSpectrogramPath >, Global::NUM_INPUTS > spectrogram_paths_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Analyser)
