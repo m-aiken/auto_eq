@@ -2,7 +2,7 @@
 
 #include <JuceHeader.h>
 
-#include "MonoFftBuffer.h"
+#include "../dsp/MonoFftBuffer.h"
 
 class MonoSpectrogram
     : public juce::Component
