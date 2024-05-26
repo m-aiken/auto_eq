@@ -1,9 +1,9 @@
-#include "Spectrogram.h"
+#include "MonoSpectrogram.h"
 
 /*---------------------------------------------------------------------------
 **
 */
-Spectrogram::Spectrogram(MonoFftBuffer& fft_buffer)
+MonoSpectrogram::MonoSpectrogram(MonoFftBuffer& fft_buffer)
     : fft_(MonoFftBuffer::FFT_ORDER)
     , windowing_fn_(MonoFftBuffer::FFT_SIZE, juce::dsp::WindowingFunction< float >::blackmanHarris)
     , fft_buffer_(fft_buffer)
@@ -16,7 +16,7 @@ Spectrogram::Spectrogram(MonoFftBuffer& fft_buffer)
 /*---------------------------------------------------------------------------
 **
 */
-Spectrogram::~Spectrogram()
+MonoSpectrogram::~MonoSpectrogram()
 {
     stopTimer();
 }
@@ -25,7 +25,7 @@ Spectrogram::~Spectrogram()
 **
 */
 void
-Spectrogram::paint(juce::Graphics& g)
+MonoSpectrogram::paint(juce::Graphics& g)
 {
 }
 
@@ -33,7 +33,7 @@ Spectrogram::paint(juce::Graphics& g)
 **
 */
 void
-Spectrogram::timerCallback()
+MonoSpectrogram::timerCallback()
 {
     processFftData();
     generatePath();
@@ -44,7 +44,7 @@ Spectrogram::timerCallback()
 **
 */
 void
-Spectrogram::processFftData()
+MonoSpectrogram::processFftData()
 {
     fft_buffer_.getNextBlock(fft_data_);
     windowing_fn_.multiplyWithWindowingTable(fft_data_.data(), MonoFftBuffer::FFT_SIZE);
@@ -62,7 +62,7 @@ Spectrogram::processFftData()
 **
 */
 void
-Spectrogram::generatePath()
+MonoSpectrogram::generatePath()
 {
 }
 

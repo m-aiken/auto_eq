@@ -4,13 +4,13 @@
 
 #include "MonoFftBuffer.h"
 
-class Spectrogram
+class MonoSpectrogram
     : public juce::Component
     , public juce::Timer
 {
 public:
-    Spectrogram(MonoFftBuffer& fft_buffer);
-    ~Spectrogram();
+    MonoSpectrogram(MonoFftBuffer& fft_buffer);
+    ~MonoSpectrogram();
 
     void paint(juce::Graphics& g) override;
 
@@ -26,5 +26,5 @@ private:
     MonoFftBuffer&                        fft_buffer_;
     juce::Path                            path_;
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Spectrogram)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MonoSpectrogram)
 };
