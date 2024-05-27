@@ -5,12 +5,17 @@
 **
 */
 PluginProcessor::PluginProcessor()
-    : AudioProcessor(BusesProperties()
-                         .withInput("Playback Input L", juce::AudioChannelSet::mono(), true)
-                         .withInput("Playback Input R", juce::AudioChannelSet::mono(), true)
-                         .withInput("Ambient Input L", juce::AudioChannelSet::mono(), true)
-                         .withInput("Ambient Input R", juce::AudioChannelSet::mono(), true)
-                         .withOutput("Output", juce::AudioChannelSet::stereo(), true))
+    : AudioProcessor(
+        BusesProperties()
+            .withInput(Global::Channels::getChannelName(Global::Channels::PRIMARY_LEFT), juce::AudioChannelSet::mono(), true)
+            .withInput(Global::Channels::getChannelName(Global::Channels::PRIMARY_RIGHT), juce::AudioChannelSet::mono(), true)
+            .withInput(Global::Channels::getChannelName(Global::Channels::SIDECHAIN_LEFT),
+                       juce::AudioChannelSet::mono(),
+                       true)
+            .withInput(Global::Channels::getChannelName(Global::Channels::SIDECHAIN_RIGHT),
+                       juce::AudioChannelSet::mono(),
+                       true)
+            .withOutput("Output", juce::AudioChannelSet::stereo(), true))
 {
 }
 
@@ -122,10 +127,10 @@ PluginProcessor::prepareToPlay(double sample_rate, int samples_per_block)
     // Pre-playback initialisation.
     juce::ignoreUnused(samples_per_block);
 
-    fft_buffers_.at(Global::PLAYBACK_LEFT).prepare(sample_rate);
-    fft_buffers_.at(Global::PLAYBACK_RIGHT).prepare(sample_rate);
-    fft_buffers_.at(Global::AMBIENT_LEFT).prepare(sample_rate);
-    fft_buffers_.at(Global::AMBIENT_RIGHT).prepare(sample_rate);
+    fft_buffers_.at(Global::Channels::PRIMARY_LEFT).prepare(sample_rate);
+    fft_buffers_.at(Global::Channels::PRIMARY_RIGHT).prepare(sample_rate);
+    fft_buffers_.at(Global::Channels::SIDECHAIN_LEFT).prepare(sample_rate);
+    fft_buffers_.at(Global::Channels::SIDECHAIN_RIGHT).prepare(sample_rate);
 }
 
 /*---------------------------------------------------------------------------
@@ -173,10 +178,16 @@ PluginProcessor::processBlock(juce::AudioBuffer< float >& buffer, juce::MidiBuff
     }
 
     for (int i = 0; i < buffer.getNumSamples(); ++i) {
-        fft_buffers_.at(Global::PLAYBACK_LEFT).pushNextSample(buffer.getSample(Global::PLAYBACK_LEFT, i));
-        fft_buffers_.at(Global::PLAYBACK_RIGHT).pushNextSample(buffer.getSample(Global::PLAYBACK_RIGHT, i));
-        fft_buffers_.at(Global::AMBIENT_LEFT).pushNextSample(buffer.getSample(Global::AMBIENT_LEFT, i));
-        fft_buffers_.at(Global::AMBIENT_RIGHT).pushNextSample(buffer.getSample(Global::AMBIENT_RIGHT, i));
+        fft_buffers_.at(Global::Channels::PRIMARY_LEFT).pushNextSample(buffer.getSample(Global::Channels::PRIMARY_LEFT, i));
+
+        fft_buffers_.at(Global::Channels::PRIMARY_RIGHT)
+            .pushNextSample(buffer.getSample(Global::Channels::PRIMARY_RIGHT, i));
+
+        fft_buffers_.at(Global::Channels::SIDECHAIN_LEFT)
+            .pushNextSample(buffer.getSample(Global::Channels::SIDECHAIN_LEFT, i));
+
+        fft_buffers_.at(Global::Channels::SIDECHAIN_RIGHT)
+            .pushNextSample(buffer.getSample(Global::Channels::SIDECHAIN_RIGHT, i));
     }
 }
 
