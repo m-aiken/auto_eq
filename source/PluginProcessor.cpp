@@ -6,7 +6,10 @@
 */
 PluginProcessor::PluginProcessor()
     : AudioProcessor(BusesProperties()
-                         .withInput("Input", juce::AudioChannelSet::quadraphonic(), true)
+                         .withInput("Playback Input L", juce::AudioChannelSet::mono(), true)
+                         .withInput("Playback Input R", juce::AudioChannelSet::mono(), true)
+                         .withInput("Ambient Input L", juce::AudioChannelSet::mono(), true)
+                         .withInput("Ambient Input R", juce::AudioChannelSet::mono(), true)
                          .withOutput("Output", juce::AudioChannelSet::stereo(), true))
 {
 }
@@ -141,19 +144,10 @@ PluginProcessor::releaseResources()
 bool
 PluginProcessor::isBusesLayoutSupported(const BusesLayout& layouts) const
 {
-    // This is the place where you check if the layout is supported.
-    // In this template code we only support mono or stereo.
-    // Some plugin hosts, such as certain GarageBand versions, will only
-    // load plugins that support stereo bus layouts.
-    if (layouts.getMainOutputChannelSet() != juce::AudioChannelSet::mono()
-        && layouts.getMainOutputChannelSet() != juce::AudioChannelSet::stereo())
-        return false;
+    const int num_inputs  = layouts.getMainInputChannels();
+    const int num_outputs = layouts.getMainOutputChannels();
 
-    // This checks if the input layout matches the output layout
-    if (layouts.getMainOutputChannelSet() != layouts.getMainInputChannelSet())
-        return false;
-
-    return true;
+    return (num_inputs <= 4 && num_outputs <= 2);
 }
 
 /*---------------------------------------------------------------------------
