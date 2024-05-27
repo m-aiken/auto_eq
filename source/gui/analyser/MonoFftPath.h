@@ -5,13 +5,13 @@
 #include "../../dsp/MonoFftBuffer.h"
 #include "../../utility/GlobalConstants.h"
 
-class MonoSpectrogramPath
+class MonoFftPath
     : public juce::Component
     , public juce::Timer
 {
 public:
-    MonoSpectrogramPath(MonoFftBuffer& fft_buffer, const juce::Colour& path_colour, Global::PATH_DISPLAY_MODE display_mode);
-    ~MonoSpectrogramPath();
+    MonoFftPath(MonoFftBuffer& fft_buffer, const juce::Colour& path_colour, Global::PATH_DISPLAY_MODE display_mode);
+    ~MonoFftPath();
 
     void paint(juce::Graphics& g) override;
 
@@ -29,5 +29,5 @@ private:
     juce::Colour                          path_colour_;
     Global::PATH_DISPLAY_MODE             display_mode_;
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MonoSpectrogramPath)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MonoFftPath)
 };
