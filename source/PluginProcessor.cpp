@@ -1,6 +1,8 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
+#include "dsp/EqParams.h"
+
 /*---------------------------------------------------------------------------
 **
 */
@@ -255,44 +257,44 @@ PluginProcessor::getParameterLayout()
     //
 
     // Low Cut.
-    Global::EQ::addCutFreqParamToLayout(parameter_layout, Global::EQ::LOW_CUT_FREQ, Global::MIN_HZ);
-    Global::EQ::addCutChoiceParamToLayout(parameter_layout, Global::EQ::LOW_CUT_SLOPE);
-    Global::EQ::addEnabledParamToLayout(parameter_layout, Global::EQ::LOW_CUT_ENABLED);
+    EqParams::addCutFreqParamToLayout(parameter_layout, EqParams::LOW_CUT_FREQ, Global::MIN_HZ);
+    EqParams::addCutChoiceParamToLayout(parameter_layout, EqParams::LOW_CUT_SLOPE);
+    EqParams::addEnabledParamToLayout(parameter_layout, EqParams::LOW_CUT_ENABLED);
 
     // Peak 1.
-    Global::EQ::addPeakFreqParamToLayout(parameter_layout, Global::EQ::PEAK_1_FREQ);
-    Global::EQ::addPeakGainParamToLayout(parameter_layout, Global::EQ::PEAK_1_GAIN);
-    Global::EQ::addPeakQualParamToLayout(parameter_layout, Global::EQ::PEAK_1_Q);
+    EqParams::addPeakFreqParamToLayout(parameter_layout, EqParams::PEAK_1_FREQ);
+    EqParams::addPeakGainParamToLayout(parameter_layout, EqParams::PEAK_1_GAIN);
+    EqParams::addPeakQualParamToLayout(parameter_layout, EqParams::PEAK_1_Q);
 
     // Peak 2.
-    Global::EQ::addPeakFreqParamToLayout(parameter_layout, Global::EQ::PEAK_2_FREQ);
-    Global::EQ::addPeakGainParamToLayout(parameter_layout, Global::EQ::PEAK_2_GAIN);
-    Global::EQ::addPeakQualParamToLayout(parameter_layout, Global::EQ::PEAK_2_Q);
+    EqParams::addPeakFreqParamToLayout(parameter_layout, EqParams::PEAK_2_FREQ);
+    EqParams::addPeakGainParamToLayout(parameter_layout, EqParams::PEAK_2_GAIN);
+    EqParams::addPeakQualParamToLayout(parameter_layout, EqParams::PEAK_2_Q);
 
     // Peak 3.
-    Global::EQ::addPeakFreqParamToLayout(parameter_layout, Global::EQ::PEAK_3_FREQ);
-    Global::EQ::addPeakGainParamToLayout(parameter_layout, Global::EQ::PEAK_3_GAIN);
-    Global::EQ::addPeakQualParamToLayout(parameter_layout, Global::EQ::PEAK_3_Q);
+    EqParams::addPeakFreqParamToLayout(parameter_layout, EqParams::PEAK_3_FREQ);
+    EqParams::addPeakGainParamToLayout(parameter_layout, EqParams::PEAK_3_GAIN);
+    EqParams::addPeakQualParamToLayout(parameter_layout, EqParams::PEAK_3_Q);
 
     // Peak 4.
-    Global::EQ::addPeakFreqParamToLayout(parameter_layout, Global::EQ::PEAK_4_FREQ);
-    Global::EQ::addPeakGainParamToLayout(parameter_layout, Global::EQ::PEAK_4_GAIN);
-    Global::EQ::addPeakQualParamToLayout(parameter_layout, Global::EQ::PEAK_4_Q);
+    EqParams::addPeakFreqParamToLayout(parameter_layout, EqParams::PEAK_4_FREQ);
+    EqParams::addPeakGainParamToLayout(parameter_layout, EqParams::PEAK_4_GAIN);
+    EqParams::addPeakQualParamToLayout(parameter_layout, EqParams::PEAK_4_Q);
 
     // Peak 5.
-    Global::EQ::addPeakFreqParamToLayout(parameter_layout, Global::EQ::PEAK_5_FREQ);
-    Global::EQ::addPeakGainParamToLayout(parameter_layout, Global::EQ::PEAK_5_GAIN);
-    Global::EQ::addPeakQualParamToLayout(parameter_layout, Global::EQ::PEAK_5_Q);
+    EqParams::addPeakFreqParamToLayout(parameter_layout, EqParams::PEAK_5_FREQ);
+    EqParams::addPeakGainParamToLayout(parameter_layout, EqParams::PEAK_5_GAIN);
+    EqParams::addPeakQualParamToLayout(parameter_layout, EqParams::PEAK_5_Q);
 
     // Peak 6.
-    Global::EQ::addPeakFreqParamToLayout(parameter_layout, Global::EQ::PEAK_6_FREQ);
-    Global::EQ::addPeakGainParamToLayout(parameter_layout, Global::EQ::PEAK_6_GAIN);
-    Global::EQ::addPeakQualParamToLayout(parameter_layout, Global::EQ::PEAK_6_Q);
+    EqParams::addPeakFreqParamToLayout(parameter_layout, EqParams::PEAK_6_FREQ);
+    EqParams::addPeakGainParamToLayout(parameter_layout, EqParams::PEAK_6_GAIN);
+    EqParams::addPeakQualParamToLayout(parameter_layout, EqParams::PEAK_6_Q);
 
     // High Cut.
-    Global::EQ::addCutFreqParamToLayout(parameter_layout, Global::EQ::HIGH_CUT_FREQ, Global::MAX_HZ);
-    Global::EQ::addCutChoiceParamToLayout(parameter_layout, Global::EQ::HIGH_CUT_SLOPE);
-    Global::EQ::addEnabledParamToLayout(parameter_layout, Global::EQ::HIGH_CUT_ENABLED);
+    EqParams::addCutFreqParamToLayout(parameter_layout, EqParams::HIGH_CUT_FREQ, Global::MAX_HZ);
+    EqParams::addCutChoiceParamToLayout(parameter_layout, EqParams::HIGH_CUT_SLOPE);
+    EqParams::addEnabledParamToLayout(parameter_layout, EqParams::HIGH_CUT_ENABLED);
 
     return parameter_layout;
 }

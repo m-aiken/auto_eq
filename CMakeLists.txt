@@ -38,6 +38,7 @@ target_sources(${PROJECT_NAME}
         PRIVATE
         source/PluginEditor.cpp
         source/PluginProcessor.cpp
+        source/dsp/EqParams.cpp
         source/dsp/MonoFftBuffer.cpp
         source/gui/analyser/Analyser.cpp
         source/gui/analyser/AnalyserCanvas.cpp
