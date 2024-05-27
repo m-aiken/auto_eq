@@ -16,6 +16,7 @@ PluginProcessor::PluginProcessor()
                        juce::AudioChannelSet::mono(),
                        true)
             .withOutput("Output", juce::AudioChannelSet::stereo(), true))
+    , apvts_(*this, nullptr, "APVTS", getParameterLayout())
 {
 }
 
@@ -239,6 +240,66 @@ PluginProcessor::FftBuffers&
 PluginProcessor::getFftBuffers()
 {
     return fft_buffers_;
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
+/*static*/ juce::AudioProcessorValueTreeState::ParameterLayout
+PluginProcessor::getParameterLayout()
+{
+    juce::AudioProcessorValueTreeState::ParameterLayout parameter_layout;
+
+    //
+    // EQ.
+    //
+
+    // Low Cut.
+    parameter_layout.add(std::make_unique< juce::AudioParameterFloat >(
+        Global::EQ::LOW_CUT_FREQ,
+        Global::EQ::getParamName(Global::EQ::LOW_CUT_FREQ),
+        juce::NormalisableRange< float >(Global::MIN_HZ, Global::MAX_HZ, 1.f, 1.f),
+        Global::MIN_HZ));
+
+    parameter_layout.add(
+        std::make_unique< juce::AudioParameterChoice >(Global::EQ::LOW_CUT_SLOPE,
+                                                       Global::EQ::getParamName(Global::EQ::LOW_CUT_SLOPE),
+                                                       Global::EQ::getSlopeChoices(),
+                                                       Global::EQ::DB_PER_OCT_12));
+
+    // Peak 0.
+    parameter_layout.add(std::make_unique< juce::AudioParameterFloat >(
+        Global::EQ::PEAK_0_FREQ,
+        Global::EQ::getParamName(Global::EQ::PEAK_0_FREQ),
+        juce::NormalisableRange< float >(Global::MIN_HZ, Global::MAX_HZ, 1.f, 1.f),
+        750.f));
+
+    parameter_layout.add(std::make_unique< juce::AudioParameterFloat >(
+        Global::EQ::PEAK_0_GAIN,
+        Global::EQ::getParamName(Global::EQ::PEAK_0_GAIN),
+        juce::NormalisableRange< float >(Global::NEG_INF, Global::MAX_DB, 0.5f, 1.f),
+        0.f));
+
+    parameter_layout.add(std::make_unique< juce::AudioParameterFloat >(
+        Global::EQ::PEAK_0_Q,
+        Global::EQ::getParamName(Global::EQ::PEAK_0_Q),
+        juce::NormalisableRange< float >(Global::EQ::MIN_Q, Global::EQ::MAX_Q, 0.05f, 1.f),
+        Global::EQ::DEFAULT_Q));
+
+    // High Cut.
+    parameter_layout.add(std::make_unique< juce::AudioParameterFloat >(
+        Global::EQ::HIGH_CUT_FREQ,
+        Global::EQ::getParamName(Global::EQ::HIGH_CUT_FREQ),
+        juce::NormalisableRange< float >(Global::MIN_HZ, Global::MAX_HZ, 1.f, 1.f),
+        Global::MAX_HZ));
+
+    parameter_layout.add(
+        std::make_unique< juce::AudioParameterChoice >(Global::EQ::HIGH_CUT_SLOPE,
+                                                       Global::EQ::getParamName(Global::EQ::HIGH_CUT_SLOPE),
+                                                       Global::EQ::getSlopeChoices(),
+                                                       Global::EQ::DB_PER_OCT_12));
+
+    return parameter_layout;
 }
 
 /*---------------------------------------------------------------------------

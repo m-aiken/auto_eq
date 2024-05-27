@@ -43,6 +43,9 @@ public:
     FftBuffers& getFftBuffers();
 
 private:
+    static juce::AudioProcessorValueTreeState::ParameterLayout getParameterLayout();
+    juce::AudioProcessorValueTreeState                         apvts_;
+
     FftBuffers fft_buffers_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PluginProcessor)
