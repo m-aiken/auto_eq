@@ -255,49 +255,44 @@ PluginProcessor::getParameterLayout()
     //
 
     // Low Cut.
-    parameter_layout.add(std::make_unique< juce::AudioParameterFloat >(
-        Global::EQ::LOW_CUT_FREQ,
-        Global::EQ::getParamName(Global::EQ::LOW_CUT_FREQ),
-        juce::NormalisableRange< float >(Global::MIN_HZ, Global::MAX_HZ, 1.f, 1.f),
-        Global::MIN_HZ));
+    Global::EQ::addCutFreqParamToLayout(parameter_layout, Global::EQ::LOW_CUT_FREQ, Global::MIN_HZ);
+    Global::EQ::addCutChoiceParamToLayout(parameter_layout, Global::EQ::LOW_CUT_SLOPE);
+    Global::EQ::addEnabledParamToLayout(parameter_layout, Global::EQ::LOW_CUT_ENABLED);
 
-    parameter_layout.add(
-        std::make_unique< juce::AudioParameterChoice >(Global::EQ::LOW_CUT_SLOPE,
-                                                       Global::EQ::getParamName(Global::EQ::LOW_CUT_SLOPE),
-                                                       Global::EQ::getSlopeChoices(),
-                                                       Global::EQ::DB_PER_OCT_12));
+    // Peak 1.
+    Global::EQ::addPeakFreqParamToLayout(parameter_layout, Global::EQ::PEAK_1_FREQ);
+    Global::EQ::addPeakGainParamToLayout(parameter_layout, Global::EQ::PEAK_1_GAIN);
+    Global::EQ::addPeakQualParamToLayout(parameter_layout, Global::EQ::PEAK_1_Q);
 
-    // Peak 0.
-    parameter_layout.add(std::make_unique< juce::AudioParameterFloat >(
-        Global::EQ::PEAK_0_FREQ,
-        Global::EQ::getParamName(Global::EQ::PEAK_0_FREQ),
-        juce::NormalisableRange< float >(Global::MIN_HZ, Global::MAX_HZ, 1.f, 1.f),
-        750.f));
+    // Peak 2.
+    Global::EQ::addPeakFreqParamToLayout(parameter_layout, Global::EQ::PEAK_2_FREQ);
+    Global::EQ::addPeakGainParamToLayout(parameter_layout, Global::EQ::PEAK_2_GAIN);
+    Global::EQ::addPeakQualParamToLayout(parameter_layout, Global::EQ::PEAK_2_Q);
 
-    parameter_layout.add(std::make_unique< juce::AudioParameterFloat >(
-        Global::EQ::PEAK_0_GAIN,
-        Global::EQ::getParamName(Global::EQ::PEAK_0_GAIN),
-        juce::NormalisableRange< float >(Global::NEG_INF, Global::MAX_DB, 0.5f, 1.f),
-        0.f));
+    // Peak 3.
+    Global::EQ::addPeakFreqParamToLayout(parameter_layout, Global::EQ::PEAK_3_FREQ);
+    Global::EQ::addPeakGainParamToLayout(parameter_layout, Global::EQ::PEAK_3_GAIN);
+    Global::EQ::addPeakQualParamToLayout(parameter_layout, Global::EQ::PEAK_3_Q);
 
-    parameter_layout.add(std::make_unique< juce::AudioParameterFloat >(
-        Global::EQ::PEAK_0_Q,
-        Global::EQ::getParamName(Global::EQ::PEAK_0_Q),
-        juce::NormalisableRange< float >(Global::EQ::MIN_Q, Global::EQ::MAX_Q, 0.05f, 1.f),
-        Global::EQ::DEFAULT_Q));
+    // Peak 4.
+    Global::EQ::addPeakFreqParamToLayout(parameter_layout, Global::EQ::PEAK_4_FREQ);
+    Global::EQ::addPeakGainParamToLayout(parameter_layout, Global::EQ::PEAK_4_GAIN);
+    Global::EQ::addPeakQualParamToLayout(parameter_layout, Global::EQ::PEAK_4_Q);
+
+    // Peak 5.
+    Global::EQ::addPeakFreqParamToLayout(parameter_layout, Global::EQ::PEAK_5_FREQ);
+    Global::EQ::addPeakGainParamToLayout(parameter_layout, Global::EQ::PEAK_5_GAIN);
+    Global::EQ::addPeakQualParamToLayout(parameter_layout, Global::EQ::PEAK_5_Q);
+
+    // Peak 6.
+    Global::EQ::addPeakFreqParamToLayout(parameter_layout, Global::EQ::PEAK_6_FREQ);
+    Global::EQ::addPeakGainParamToLayout(parameter_layout, Global::EQ::PEAK_6_GAIN);
+    Global::EQ::addPeakQualParamToLayout(parameter_layout, Global::EQ::PEAK_6_Q);
 
     // High Cut.
-    parameter_layout.add(std::make_unique< juce::AudioParameterFloat >(
-        Global::EQ::HIGH_CUT_FREQ,
-        Global::EQ::getParamName(Global::EQ::HIGH_CUT_FREQ),
-        juce::NormalisableRange< float >(Global::MIN_HZ, Global::MAX_HZ, 1.f, 1.f),
-        Global::MAX_HZ));
-
-    parameter_layout.add(
-        std::make_unique< juce::AudioParameterChoice >(Global::EQ::HIGH_CUT_SLOPE,
-                                                       Global::EQ::getParamName(Global::EQ::HIGH_CUT_SLOPE),
-                                                       Global::EQ::getSlopeChoices(),
-                                                       Global::EQ::DB_PER_OCT_12));
+    Global::EQ::addCutFreqParamToLayout(parameter_layout, Global::EQ::HIGH_CUT_FREQ, Global::MAX_HZ);
+    Global::EQ::addCutChoiceParamToLayout(parameter_layout, Global::EQ::HIGH_CUT_SLOPE);
+    Global::EQ::addEnabledParamToLayout(parameter_layout, Global::EQ::HIGH_CUT_ENABLED);
 
     return parameter_layout;
 }
