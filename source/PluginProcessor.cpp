@@ -9,17 +9,41 @@
 PluginProcessor::PluginProcessor()
     : AudioProcessor(
         BusesProperties()
-            .withInput(Global::Channels::getChannelName(Global::Channels::PRIMARY_LEFT), juce::AudioChannelSet::mono(), true)
-            .withInput(Global::Channels::getChannelName(Global::Channels::PRIMARY_RIGHT), juce::AudioChannelSet::mono(), true)
-            .withInput(Global::Channels::getChannelName(Global::Channels::SIDECHAIN_LEFT),
-                       juce::AudioChannelSet::mono(),
-                       true)
-            .withInput(Global::Channels::getChannelName(Global::Channels::SIDECHAIN_RIGHT),
-                       juce::AudioChannelSet::mono(),
-                       true)
+            .withInput(Global::Channels::getName(Global::Channels::PRIMARY_LEFT), juce::AudioChannelSet::mono(), true)
+            .withInput(Global::Channels::getName(Global::Channels::PRIMARY_RIGHT), juce::AudioChannelSet::mono(), true)
+            .withInput(Global::Channels::getName(Global::Channels::SIDECHAIN_LEFT), juce::AudioChannelSet::mono(), true)
+            .withInput(Global::Channels::getName(Global::Channels::SIDECHAIN_RIGHT), juce::AudioChannelSet::mono(), true)
             .withOutput("Output", juce::AudioChannelSet::stereo(), true))
     , apvts_(*this, nullptr, "APVTS", getParameterLayout())
 {
+    assignParameter< juce::AudioParameterFloat* >(low_cut_.freq_, EqParams::LOW_CUT_FREQ);
+    assignParameter< juce::AudioParameterChoice* >(low_cut_.slope_, EqParams::LOW_CUT_SLOPE);
+    assignParameter< juce::AudioParameterBool* >(low_cut_.enabled_, EqParams::LOW_CUT_ENABLED);
+
+    assignParameter< juce::AudioParameterFloat* >(peak_1_.freq_, EqParams::PEAK_1_FREQ);
+    assignParameter< juce::AudioParameterFloat* >(peak_2_.freq_, EqParams::PEAK_2_FREQ);
+    assignParameter< juce::AudioParameterFloat* >(peak_3_.freq_, EqParams::PEAK_3_FREQ);
+    assignParameter< juce::AudioParameterFloat* >(peak_4_.freq_, EqParams::PEAK_4_FREQ);
+    assignParameter< juce::AudioParameterFloat* >(peak_5_.freq_, EqParams::PEAK_5_FREQ);
+    assignParameter< juce::AudioParameterFloat* >(peak_6_.freq_, EqParams::PEAK_6_FREQ);
+
+    assignParameter< juce::AudioParameterFloat* >(peak_1_.gain_, EqParams::PEAK_1_GAIN);
+    assignParameter< juce::AudioParameterFloat* >(peak_2_.gain_, EqParams::PEAK_2_GAIN);
+    assignParameter< juce::AudioParameterFloat* >(peak_3_.gain_, EqParams::PEAK_3_GAIN);
+    assignParameter< juce::AudioParameterFloat* >(peak_4_.gain_, EqParams::PEAK_4_GAIN);
+    assignParameter< juce::AudioParameterFloat* >(peak_5_.gain_, EqParams::PEAK_5_GAIN);
+    assignParameter< juce::AudioParameterFloat* >(peak_6_.gain_, EqParams::PEAK_6_GAIN);
+
+    assignParameter< juce::AudioParameterFloat* >(peak_1_.q_, EqParams::PEAK_1_Q);
+    assignParameter< juce::AudioParameterFloat* >(peak_2_.q_, EqParams::PEAK_2_Q);
+    assignParameter< juce::AudioParameterFloat* >(peak_3_.q_, EqParams::PEAK_3_Q);
+    assignParameter< juce::AudioParameterFloat* >(peak_4_.q_, EqParams::PEAK_4_Q);
+    assignParameter< juce::AudioParameterFloat* >(peak_5_.q_, EqParams::PEAK_5_Q);
+    assignParameter< juce::AudioParameterFloat* >(peak_6_.q_, EqParams::PEAK_6_Q);
+
+    assignParameter< juce::AudioParameterFloat* >(high_cut_.freq_, EqParams::HIGH_CUT_FREQ);
+    assignParameter< juce::AudioParameterChoice* >(high_cut_.slope_, EqParams::HIGH_CUT_SLOPE);
+    assignParameter< juce::AudioParameterBool* >(high_cut_.enabled_, EqParams::HIGH_CUT_ENABLED);
 }
 
 /*---------------------------------------------------------------------------
@@ -27,6 +51,37 @@ PluginProcessor::PluginProcessor()
 */
 PluginProcessor::~PluginProcessor()
 {
+    low_cut_.freq_    = nullptr;
+    low_cut_.slope_   = nullptr;
+    low_cut_.enabled_ = nullptr;
+
+    peak_1_.freq_ = nullptr;
+    peak_1_.gain_ = nullptr;
+    peak_1_.q_    = nullptr;
+
+    peak_2_.freq_ = nullptr;
+    peak_2_.gain_ = nullptr;
+    peak_2_.q_    = nullptr;
+
+    peak_3_.freq_ = nullptr;
+    peak_3_.gain_ = nullptr;
+    peak_3_.q_    = nullptr;
+
+    peak_4_.freq_ = nullptr;
+    peak_4_.gain_ = nullptr;
+    peak_4_.q_    = nullptr;
+
+    peak_5_.freq_ = nullptr;
+    peak_5_.gain_ = nullptr;
+    peak_5_.q_    = nullptr;
+
+    peak_6_.freq_ = nullptr;
+    peak_6_.gain_ = nullptr;
+    peak_6_.q_    = nullptr;
+
+    high_cut_.freq_    = nullptr;
+    high_cut_.slope_   = nullptr;
+    high_cut_.enabled_ = nullptr;
 }
 
 /*---------------------------------------------------------------------------

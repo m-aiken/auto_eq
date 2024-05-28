@@ -36,7 +36,7 @@ namespace Channels
         { SIDECHAIN_RIGHT, "Sidechain Input Right" },
     };
 
-    static const juce::String getChannelName(CHANNEL_ID channel_id)
+    static const juce::String getName(CHANNEL_ID channel_id)
     {
         return CHANNEL_NAME_MAP.at(channel_id);
     }

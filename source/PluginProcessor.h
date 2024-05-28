@@ -2,8 +2,11 @@
 
 #include <juce_audio_processors/juce_audio_processors.h>
 
+#include "dsp/CutBand.h"
+#include "dsp/EqParams.h"
 #include "dsp/FilterFactory.h"
 #include "dsp/MonoFftBuffer.h"
+#include "dsp/PeakBand.h"
 #include "utility/GlobalConstants.h"
 
 class PluginProcessor final : public juce::AudioProcessor
@@ -51,6 +54,25 @@ private:
 
     FilterFactory::MonoChain filter_chain_left_;
     FilterFactory::MonoChain filter_chain_right_;
+
+    CutBand  low_cut_;
+    PeakBand peak_1_;
+    PeakBand peak_2_;
+    PeakBand peak_3_;
+    PeakBand peak_4_;
+    PeakBand peak_5_;
+    PeakBand peak_6_;
+    CutBand  high_cut_;
+
+    template < typename T >
+    void assignParameter(T target, EqParams::PARAM_ID param_id)
+    {
+        auto apvts_param = dynamic_cast< T >(apvts_.getParameter(EqParams::getName(param_id)));
+
+        if (apvts_param != nullptr) {
+            target = apvts_param;
+        }
+    }
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PluginProcessor)
 };
