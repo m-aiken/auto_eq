@@ -17,76 +17,76 @@ EqParams::getParamName(PARAM_ID param_id)
 {
     switch (param_id) {
     case LOW_CUT_FREQ:
-        return "Low Cut Freq";
+        return "lc_freq";
 
     case LOW_CUT_SLOPE:
-        return "Low Cut Slope";
+        return "lc_slope";
 
     case LOW_CUT_ENABLED:
-        return "Low Cut Enabled";
+        return "lc_enabled";
 
     case PEAK_1_FREQ:
-        return "Peak 1 Freq";
+        return "p1_freq";
 
     case PEAK_1_GAIN:
-        return "Peak 1 Gain";
+        return "p1_gain";
 
     case PEAK_1_Q:
-        return "Peak 1 Q";
+        return "p1_q";
 
     case PEAK_2_FREQ:
-        return "Peak 2 Freq";
+        return "p2_freq";
 
     case PEAK_2_GAIN:
-        return "Peak 2 Gain";
+        return "p2_gain";
 
     case PEAK_2_Q:
-        return "Peak 2 Q";
+        return "p2_q";
 
     case PEAK_3_FREQ:
-        return "Peak 3 Freq";
+        return "p3_freq";
 
     case PEAK_3_GAIN:
-        return "Peak 3 Gain";
+        return "p3_gain";
 
     case PEAK_3_Q:
-        return "Peak 3 Q";
+        return "p3_q";
 
     case PEAK_4_FREQ:
-        return "Peak 4 Freq";
+        return "p4_freq";
 
     case PEAK_4_GAIN:
-        return "Peak 4 Gain";
+        return "p4_gain";
 
     case PEAK_4_Q:
-        return "Peak 4 Q";
+        return "p4_q";
 
     case PEAK_5_FREQ:
-        return "Peak 5 Freq";
+        return "p5_freq";
 
     case PEAK_5_GAIN:
-        return "Peak 5 Gain";
+        return "p5_gain";
 
     case PEAK_5_Q:
-        return "Peak 5 Q";
+        return "p5_q";
 
     case PEAK_6_FREQ:
-        return "Peak 6 Freq";
+        return "p6_freq";
 
     case PEAK_6_GAIN:
-        return "Peak 6 Gain";
+        return "p6_gain";
 
     case PEAK_6_Q:
-        return "Peak 6 Q";
+        return "p6_q";
 
     case HIGH_CUT_FREQ:
-        return "High Cut Freq";
+        return "hc_freq";
 
     case HIGH_CUT_SLOPE:
-        return "High Cut Slope";
+        return "hc_slope";
 
     case HIGH_CUT_ENABLED:
-        return "High Cut Enabled";
+        return "hc_enabled";
 
     default:
         return "";
