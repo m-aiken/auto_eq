@@ -2,6 +2,7 @@
 
 #include <juce_audio_processors/juce_audio_processors.h>
 
+#include "dsp/FilterFactory.h"
 #include "dsp/MonoFftBuffer.h"
 #include "utility/GlobalConstants.h"
 
@@ -47,6 +48,9 @@ private:
     juce::AudioProcessorValueTreeState                         apvts_;
 
     FftBuffers fft_buffers_;
+
+    FilterFactory::MonoChain filter_chain_left_;
+    FilterFactory::MonoChain filter_chain_right_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PluginProcessor)
 };

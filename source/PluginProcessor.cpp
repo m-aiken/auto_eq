@@ -128,12 +128,22 @@ void
 PluginProcessor::prepareToPlay(double sample_rate, int samples_per_block)
 {
     // Pre-playback initialisation.
-    juce::ignoreUnused(samples_per_block);
 
+    // FFT buffers.
     fft_buffers_.at(Global::Channels::PRIMARY_LEFT).prepare(sample_rate);
     fft_buffers_.at(Global::Channels::PRIMARY_RIGHT).prepare(sample_rate);
     fft_buffers_.at(Global::Channels::SIDECHAIN_LEFT).prepare(sample_rate);
     fft_buffers_.at(Global::Channels::SIDECHAIN_RIGHT).prepare(sample_rate);
+
+    // Filter chains.
+    juce::dsp::ProcessSpec filter_chain_spec;
+
+    filter_chain_spec.sampleRate       = sample_rate;
+    filter_chain_spec.maximumBlockSize = samples_per_block;
+    filter_chain_spec.numChannels      = 1;
+
+    filter_chain_left_.prepare(filter_chain_spec);
+    filter_chain_right_.prepare(filter_chain_spec);
 }
 
 /*---------------------------------------------------------------------------
@@ -180,6 +190,7 @@ PluginProcessor::processBlock(juce::AudioBuffer< float >& buffer, juce::MidiBuff
         buffer.clear(i, 0, buffer.getNumSamples());
     }
 
+    // FFT buffers.
     for (int i = 0; i < buffer.getNumSamples(); ++i) {
         fft_buffers_.at(Global::Channels::PRIMARY_LEFT).pushNextSample(buffer.getSample(Global::Channels::PRIMARY_LEFT, i));
 
@@ -192,6 +203,18 @@ PluginProcessor::processBlock(juce::AudioBuffer< float >& buffer, juce::MidiBuff
         fft_buffers_.at(Global::Channels::SIDECHAIN_RIGHT)
             .pushNextSample(buffer.getSample(Global::Channels::SIDECHAIN_RIGHT, i));
     }
+
+    // Filter chains.
+    juce::dsp::AudioBlock< float > audio_block(buffer);
+
+    auto audio_block_left  = audio_block.getSingleChannelBlock(Global::Channels::PRIMARY_LEFT);
+    auto audio_block_right = audio_block.getSingleChannelBlock(Global::Channels::PRIMARY_RIGHT);
+
+    juce::dsp::ProcessContextReplacing< float > process_context_left(audio_block_left);
+    juce::dsp::ProcessContextReplacing< float > process_context_right(audio_block_right);
+
+    filter_chain_left_.process(process_context_left);
+    filter_chain_right_.process(process_context_right);
 }
 
 /*---------------------------------------------------------------------------
