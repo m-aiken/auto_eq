@@ -1,6 +1,8 @@
 #include "EqParams.h"
 #include "../utility/GlobalConstants.h"
 
+/*static*/ const int EqParams::VERSION_HINT = 1;
+
 /*static*/ const float EqParams::MIN_Q     = 0.1f;
 /*static*/ const float EqParams::MAX_Q     = 10.f;
 /*static*/ const float EqParams::DEFAULT_Q = 1.f;
@@ -13,7 +15,7 @@ EqParams::EqParams()
 }
 
 /*static*/ const juce::String
-EqParams::getParamName(PARAM_ID param_id)
+EqParams::getName(PARAM_ID param_id)
 {
     switch (param_id) {
     case LOW_CUT_FREQ:
@@ -137,7 +139,10 @@ EqParams::getDefaultPeakFrequency(PARAM_ID param_id)
 EqParams::addPeakFreqParamToLayout(ParamLayout& pl, PARAM_ID id)
 {
     ValueRange range(Global::MIN_HZ, Global::MAX_HZ, 1.f, 1.f);
-    pl.add(std::make_unique< juce::AudioParameterFloat >(id, getParamName(id), range, getDefaultPeakFrequency(id)));
+    pl.add(std::make_unique< juce::AudioParameterFloat >(getVersionedParameterId(id),
+                                                         getName(id),
+                                                         range,
+                                                         getDefaultPeakFrequency(id)));
 }
 
 /*---------------------------------------------------------------------------
@@ -147,7 +152,7 @@ EqParams::addPeakFreqParamToLayout(ParamLayout& pl, PARAM_ID id)
 EqParams::addPeakGainParamToLayout(ParamLayout& pl, PARAM_ID id)
 {
     ValueRange range(Global::NEG_INF, Global::MAX_DB, 0.5f, 1.f);
-    pl.add(std::make_unique< juce::AudioParameterFloat >(id, getParamName(id), range, 0.f));
+    pl.add(std::make_unique< juce::AudioParameterFloat >(getVersionedParameterId(id), getName(id), range, 0.f));
 }
 
 /*---------------------------------------------------------------------------
@@ -157,7 +162,7 @@ EqParams::addPeakGainParamToLayout(ParamLayout& pl, PARAM_ID id)
 EqParams::addPeakQualParamToLayout(ParamLayout& pl, PARAM_ID id)
 {
     ValueRange range(MIN_Q, MAX_Q, 0.05f, 1.f);
-    pl.add(std::make_unique< juce::AudioParameterFloat >(id, getParamName(id), range, DEFAULT_Q));
+    pl.add(std::make_unique< juce::AudioParameterFloat >(getVersionedParameterId(id), getName(id), range, DEFAULT_Q));
 }
 
 /*---------------------------------------------------------------------------
@@ -166,7 +171,7 @@ EqParams::addPeakQualParamToLayout(ParamLayout& pl, PARAM_ID id)
 /*static*/ void
 EqParams::addEnabledParamToLayout(ParamLayout& pl, PARAM_ID id)
 {
-    pl.add(std::make_unique< juce::AudioParameterBool >(id, getParamName(id), false));
+    pl.add(std::make_unique< juce::AudioParameterBool >(getVersionedParameterId(id), getName(id), false));
 }
 
 /*---------------------------------------------------------------------------
@@ -176,7 +181,7 @@ EqParams::addEnabledParamToLayout(ParamLayout& pl, PARAM_ID id)
 EqParams::addCutFreqParamToLayout(ParamLayout& pl, PARAM_ID id, const float default_value)
 {
     ValueRange range(Global::MIN_HZ, Global::MAX_HZ, 1.f, 1.f);
-    pl.add(std::make_unique< juce::AudioParameterFloat >(id, getParamName(id), range, default_value));
+    pl.add(std::make_unique< juce::AudioParameterFloat >(getVersionedParameterId(id), getName(id), range, default_value));
 }
 
 /*---------------------------------------------------------------------------
@@ -185,7 +190,19 @@ EqParams::addCutFreqParamToLayout(ParamLayout& pl, PARAM_ID id, const float defa
 /*static*/ void
 EqParams::addCutChoiceParamToLayout(ParamLayout& pl, PARAM_ID id)
 {
-    pl.add(std::make_unique< juce::AudioParameterChoice >(id, getParamName(id), getSlopeChoices(), DB_PER_OCT_12));
+    pl.add(std::make_unique< juce::AudioParameterChoice >(getVersionedParameterId(id),
+                                                          getName(id),
+                                                          getSlopeChoices(),
+                                                          DB_PER_OCT_12));
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
+/*static*/ juce::ParameterID
+EqParams::getVersionedParameterId(PARAM_ID id)
+{
+    return juce::ParameterID(getName(id), VERSION_HINT);
 }
 
 /*---------------------------------------------------------------------------

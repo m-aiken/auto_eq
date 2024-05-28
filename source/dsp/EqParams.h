@@ -7,6 +7,8 @@ class EqParams
 public:
     EqParams();
 
+    static const int VERSION_HINT;
+
     static const float MIN_Q;
     static const float MAX_Q;
     static const float DEFAULT_Q;
@@ -52,7 +54,7 @@ public:
         DB_PER_OCT_48,
     };
 
-    static const juce::String getParamName(PARAM_ID param_id);
+    static const juce::String getName(PARAM_ID param_id);
     static juce::StringArray  getSlopeChoices();
     static float              getDefaultPeakFrequency(PARAM_ID param_id);
 
@@ -65,6 +67,8 @@ public:
     static void addEnabledParamToLayout(ParamLayout& pl, PARAM_ID id);
     static void addCutFreqParamToLayout(ParamLayout& pl, PARAM_ID id, const float default_value);
     static void addCutChoiceParamToLayout(ParamLayout& pl, PARAM_ID id);
+
+    static juce::ParameterID getVersionedParameterId(PARAM_ID id);
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(EqParams)
 };
