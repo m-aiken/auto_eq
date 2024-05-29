@@ -204,10 +204,13 @@ PluginProcessor::prepareToPlay(double sample_rate, int samples_per_block)
 
     filter_chain_spec.sampleRate       = sample_rate;
     filter_chain_spec.maximumBlockSize = samples_per_block;
-    filter_chain_spec.numChannels      = 1;
+    filter_chain_spec.numChannels      = getTotalNumOutputChannels();
 
     filter_chain_left_.prepare(filter_chain_spec);
     filter_chain_right_.prepare(filter_chain_spec);
+
+    // EQ bands (filters).
+    updateFilterCoefficients();
 }
 
 /*---------------------------------------------------------------------------
@@ -254,19 +257,17 @@ PluginProcessor::processBlock(juce::AudioBuffer< float >& buffer, juce::MidiBuff
         buffer.clear(i, 0, buffer.getNumSamples());
     }
 
-    // FFT buffers.
+    // Sidechain/Ambient FFT buffers (not affected by EQ).
     for (int i = 0; i < buffer.getNumSamples(); ++i) {
-        fft_buffers_.at(Global::Channels::PRIMARY_LEFT).pushNextSample(buffer.getSample(Global::Channels::PRIMARY_LEFT, i));
-
-        fft_buffers_.at(Global::Channels::PRIMARY_RIGHT)
-            .pushNextSample(buffer.getSample(Global::Channels::PRIMARY_RIGHT, i));
-
         fft_buffers_.at(Global::Channels::SIDECHAIN_LEFT)
             .pushNextSample(buffer.getSample(Global::Channels::SIDECHAIN_LEFT, i));
 
         fft_buffers_.at(Global::Channels::SIDECHAIN_RIGHT)
             .pushNextSample(buffer.getSample(Global::Channels::SIDECHAIN_RIGHT, i));
     }
+
+    // EQ bands (filters).
+    updateFilterCoefficients();
 
     // Filter chains.
     juce::dsp::AudioBlock< float > audio_block(buffer);
@@ -279,6 +280,14 @@ PluginProcessor::processBlock(juce::AudioBuffer< float >& buffer, juce::MidiBuff
 
     filter_chain_left_.process(process_context_left);
     filter_chain_right_.process(process_context_right);
+
+    // Primary/Playback FFT buffers (affected by EQ).
+    for (int i = 0; i < buffer.getNumSamples(); ++i) {
+        fft_buffers_.at(Global::Channels::PRIMARY_LEFT).pushNextSample(buffer.getSample(Global::Channels::PRIMARY_LEFT, i));
+
+        fft_buffers_.at(Global::Channels::PRIMARY_RIGHT)
+            .pushNextSample(buffer.getSample(Global::Channels::PRIMARY_RIGHT, i));
+    }
 }
 
 /*---------------------------------------------------------------------------
@@ -389,6 +398,46 @@ PluginProcessor::getParameterLayout()
     EqParams::addEnabledParamToLayout(parameter_layout, EqParams::HIGH_CUT_ENABLED);
 
     return parameter_layout;
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
+void
+PluginProcessor::updateFilterCoefficients()
+{
+    double sample_rate = getSampleRate();
+
+    if (low_cut_.enabled_ != nullptr && low_cut_.enabled_->get()) {
+        FilterFactory::updateLowCut(filter_chain_left_, low_cut_, sample_rate);
+        FilterFactory::updateLowCut(filter_chain_right_, low_cut_, sample_rate);
+    }
+
+    if (high_cut_.enabled_ != nullptr && high_cut_.enabled_->get()) {
+        FilterFactory::updateHighCut(filter_chain_left_, high_cut_, sample_rate);
+        FilterFactory::updateHighCut(filter_chain_right_, high_cut_, sample_rate);
+    }
+
+    FilterFactory::updateLowShelf(filter_chain_left_, low_shelf_, sample_rate);
+    FilterFactory::updateLowShelf(filter_chain_right_, low_shelf_, sample_rate);
+
+    FilterFactory::updateHighShelf(filter_chain_left_, high_shelf_, sample_rate);
+    FilterFactory::updateHighShelf(filter_chain_right_, high_shelf_, sample_rate);
+
+    FilterFactory::updatePeak(filter_chain_left_, FilterFactory::PEAK_1, peak_1_, sample_rate);
+    FilterFactory::updatePeak(filter_chain_right_, FilterFactory::PEAK_1, peak_1_, sample_rate);
+
+    FilterFactory::updatePeak(filter_chain_left_, FilterFactory::PEAK_2, peak_2_, sample_rate);
+    FilterFactory::updatePeak(filter_chain_right_, FilterFactory::PEAK_2, peak_2_, sample_rate);
+
+    FilterFactory::updatePeak(filter_chain_left_, FilterFactory::PEAK_3, peak_3_, sample_rate);
+    FilterFactory::updatePeak(filter_chain_right_, FilterFactory::PEAK_3, peak_3_, sample_rate);
+
+    FilterFactory::updatePeak(filter_chain_left_, FilterFactory::PEAK_4, peak_4_, sample_rate);
+    FilterFactory::updatePeak(filter_chain_right_, FilterFactory::PEAK_4, peak_4_, sample_rate);
+
+    FilterFactory::updatePeak(filter_chain_left_, FilterFactory::PEAK_5, peak_5_, sample_rate);
+    FilterFactory::updatePeak(filter_chain_right_, FilterFactory::PEAK_5, peak_5_, sample_rate);
 }
 
 /*---------------------------------------------------------------------------

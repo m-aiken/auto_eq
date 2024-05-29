@@ -66,8 +66,10 @@ private:
     ShelfBand high_shelf_;
     CutBand   high_cut_;
 
+    void updateFilterCoefficients();
+
     template < typename T >
-    void assignParameter(T target, EqParams::PARAM_ID param_id)
+    void assignParameter(T& target, EqParams::PARAM_ID param_id)
     {
         auto apvts_param = dynamic_cast< T >(apvts_.getParameter(EqParams::getName(param_id)));
 
