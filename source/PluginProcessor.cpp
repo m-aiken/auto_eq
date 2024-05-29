@@ -344,47 +344,47 @@ PluginProcessor::getParameterLayout()
     //
 
     // Low Cut.
-    EqParams::addCutFreqParamToLayout(parameter_layout, EqParams::LOW_CUT_FREQ, Global::MIN_HZ);
+    EqParams::addFreqParamToLayout(parameter_layout, EqParams::LOW_CUT_FREQ);
     EqParams::addCutChoiceParamToLayout(parameter_layout, EqParams::LOW_CUT_SLOPE);
     EqParams::addEnabledParamToLayout(parameter_layout, EqParams::LOW_CUT_ENABLED);
 
     // Low Shelf.
-    EqParams::addShelfFreqParamToLayout(parameter_layout, EqParams::LOW_SHELF_FREQ, 200.f);
-    EqParams::addShelfGainParamToLayout(parameter_layout, EqParams::LOW_SHELF_GAIN);
-    EqParams::addShelfQualParamToLayout(parameter_layout, EqParams::LOW_SHELF_Q);
+    EqParams::addFreqParamToLayout(parameter_layout, EqParams::LOW_SHELF_FREQ);
+    EqParams::addGainParamToLayout(parameter_layout, EqParams::LOW_SHELF_GAIN);
+    EqParams::addQualParamToLayout(parameter_layout, EqParams::LOW_SHELF_Q);
 
     // Peak 1.
-    EqParams::addPeakFreqParamToLayout(parameter_layout, EqParams::PEAK_1_FREQ);
-    EqParams::addPeakGainParamToLayout(parameter_layout, EqParams::PEAK_1_GAIN);
-    EqParams::addPeakQualParamToLayout(parameter_layout, EqParams::PEAK_1_Q);
+    EqParams::addFreqParamToLayout(parameter_layout, EqParams::PEAK_1_FREQ);
+    EqParams::addGainParamToLayout(parameter_layout, EqParams::PEAK_1_GAIN);
+    EqParams::addQualParamToLayout(parameter_layout, EqParams::PEAK_1_Q);
 
     // Peak 2.
-    EqParams::addPeakFreqParamToLayout(parameter_layout, EqParams::PEAK_2_FREQ);
-    EqParams::addPeakGainParamToLayout(parameter_layout, EqParams::PEAK_2_GAIN);
-    EqParams::addPeakQualParamToLayout(parameter_layout, EqParams::PEAK_2_Q);
+    EqParams::addFreqParamToLayout(parameter_layout, EqParams::PEAK_2_FREQ);
+    EqParams::addGainParamToLayout(parameter_layout, EqParams::PEAK_2_GAIN);
+    EqParams::addQualParamToLayout(parameter_layout, EqParams::PEAK_2_Q);
 
     // Peak 3.
-    EqParams::addPeakFreqParamToLayout(parameter_layout, EqParams::PEAK_3_FREQ);
-    EqParams::addPeakGainParamToLayout(parameter_layout, EqParams::PEAK_3_GAIN);
-    EqParams::addPeakQualParamToLayout(parameter_layout, EqParams::PEAK_3_Q);
+    EqParams::addFreqParamToLayout(parameter_layout, EqParams::PEAK_3_FREQ);
+    EqParams::addGainParamToLayout(parameter_layout, EqParams::PEAK_3_GAIN);
+    EqParams::addQualParamToLayout(parameter_layout, EqParams::PEAK_3_Q);
 
     // Peak 4.
-    EqParams::addPeakFreqParamToLayout(parameter_layout, EqParams::PEAK_4_FREQ);
-    EqParams::addPeakGainParamToLayout(parameter_layout, EqParams::PEAK_4_GAIN);
-    EqParams::addPeakQualParamToLayout(parameter_layout, EqParams::PEAK_4_Q);
+    EqParams::addFreqParamToLayout(parameter_layout, EqParams::PEAK_4_FREQ);
+    EqParams::addGainParamToLayout(parameter_layout, EqParams::PEAK_4_GAIN);
+    EqParams::addQualParamToLayout(parameter_layout, EqParams::PEAK_4_Q);
 
     // Peak 5.
-    EqParams::addPeakFreqParamToLayout(parameter_layout, EqParams::PEAK_5_FREQ);
-    EqParams::addPeakGainParamToLayout(parameter_layout, EqParams::PEAK_5_GAIN);
-    EqParams::addPeakQualParamToLayout(parameter_layout, EqParams::PEAK_5_Q);
+    EqParams::addFreqParamToLayout(parameter_layout, EqParams::PEAK_5_FREQ);
+    EqParams::addGainParamToLayout(parameter_layout, EqParams::PEAK_5_GAIN);
+    EqParams::addQualParamToLayout(parameter_layout, EqParams::PEAK_5_Q);
 
     // High Shelf.
-    EqParams::addShelfFreqParamToLayout(parameter_layout, EqParams::HIGH_SHELF_FREQ, 12000.f);
-    EqParams::addShelfGainParamToLayout(parameter_layout, EqParams::HIGH_SHELF_GAIN);
-    EqParams::addShelfQualParamToLayout(parameter_layout, EqParams::HIGH_SHELF_Q);
+    EqParams::addFreqParamToLayout(parameter_layout, EqParams::HIGH_SHELF_FREQ);
+    EqParams::addGainParamToLayout(parameter_layout, EqParams::HIGH_SHELF_GAIN);
+    EqParams::addQualParamToLayout(parameter_layout, EqParams::HIGH_SHELF_Q);
 
     // High Cut.
-    EqParams::addCutFreqParamToLayout(parameter_layout, EqParams::HIGH_CUT_FREQ, Global::MAX_HZ);
+    EqParams::addFreqParamToLayout(parameter_layout, EqParams::HIGH_CUT_FREQ);
     EqParams::addCutChoiceParamToLayout(parameter_layout, EqParams::HIGH_CUT_SLOPE);
     EqParams::addEnabledParamToLayout(parameter_layout, EqParams::HIGH_CUT_ENABLED);
 

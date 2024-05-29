@@ -117,9 +117,15 @@ EqParams::getSlopeChoices()
 **
 */
 /*static*/ float
-EqParams::getDefaultPeakFrequency(PARAM_ID param_id)
+EqParams::getDefaultFrequency(PARAM_ID param_id)
 {
-    if (param_id == PEAK_1_FREQ) {
+    if (param_id == LOW_CUT_FREQ) {
+        return Global::MIN_HZ;
+    }
+    else if (param_id == LOW_SHELF_FREQ) {
+        return 200.f;
+    }
+    else if (param_id == PEAK_1_FREQ) {
         return 100.f;
     }
     else if (param_id == PEAK_2_FREQ) {
@@ -134,6 +140,12 @@ EqParams::getDefaultPeakFrequency(PARAM_ID param_id)
     else if (param_id == PEAK_5_FREQ) {
         return 5000.f;
     }
+    else if (param_id == HIGH_SHELF_FREQ) {
+        return 12000.f;
+    }
+    else if (param_id == HIGH_CUT_FREQ) {
+        return Global::MAX_HZ;
+    }
 
     return Global::NEG_INF;
 }
@@ -142,20 +154,20 @@ EqParams::getDefaultPeakFrequency(PARAM_ID param_id)
 **
 */
 /*static*/ void
-EqParams::addPeakFreqParamToLayout(ParamLayout& pl, PARAM_ID id)
+EqParams::addFreqParamToLayout(ParamLayout& pl, PARAM_ID id)
 {
     ValueRange range(Global::MIN_HZ, Global::MAX_HZ, 1.f, 1.f);
     pl.add(std::make_unique< juce::AudioParameterFloat >(getVersionedParameterId(id),
                                                          getName(id),
                                                          range,
-                                                         getDefaultPeakFrequency(id)));
+                                                         getDefaultFrequency(id)));
 }
 
 /*---------------------------------------------------------------------------
 **
 */
 /*static*/ void
-EqParams::addPeakGainParamToLayout(ParamLayout& pl, PARAM_ID id)
+EqParams::addGainParamToLayout(ParamLayout& pl, PARAM_ID id)
 {
     ValueRange range(Global::NEG_INF, Global::MAX_DB, 0.5f, 1.f);
     pl.add(std::make_unique< juce::AudioParameterFloat >(getVersionedParameterId(id), getName(id), range, 0.f));
@@ -165,7 +177,7 @@ EqParams::addPeakGainParamToLayout(ParamLayout& pl, PARAM_ID id)
 **
 */
 /*static*/ void
-EqParams::addPeakQualParamToLayout(ParamLayout& pl, PARAM_ID id)
+EqParams::addQualParamToLayout(ParamLayout& pl, PARAM_ID id)
 {
     ValueRange range(MIN_Q, MAX_Q, 0.05f, 1.f);
     pl.add(std::make_unique< juce::AudioParameterFloat >(getVersionedParameterId(id), getName(id), range, DEFAULT_Q));
@@ -184,52 +196,12 @@ EqParams::addEnabledParamToLayout(ParamLayout& pl, PARAM_ID id)
 **
 */
 /*static*/ void
-EqParams::addCutFreqParamToLayout(ParamLayout& pl, PARAM_ID id, const float default_value)
-{
-    ValueRange range(Global::MIN_HZ, Global::MAX_HZ, 1.f, 1.f);
-    pl.add(std::make_unique< juce::AudioParameterFloat >(getVersionedParameterId(id), getName(id), range, default_value));
-}
-
-/*---------------------------------------------------------------------------
-**
-*/
-/*static*/ void
 EqParams::addCutChoiceParamToLayout(ParamLayout& pl, PARAM_ID id)
 {
     pl.add(std::make_unique< juce::AudioParameterChoice >(getVersionedParameterId(id),
                                                           getName(id),
                                                           getSlopeChoices(),
                                                           DB_PER_OCT_12));
-}
-
-/*---------------------------------------------------------------------------
-**
-*/
-/*static*/ void
-EqParams::addShelfFreqParamToLayout(ParamLayout& pl, PARAM_ID id, const float default_value)
-{
-    ValueRange range(Global::MIN_HZ, Global::MAX_HZ, 1.f, 1.f);
-    pl.add(std::make_unique< juce::AudioParameterFloat >(getVersionedParameterId(id), getName(id), range, default_value));
-}
-
-/*---------------------------------------------------------------------------
-**
-*/
-/*static*/ void
-EqParams::addShelfGainParamToLayout(ParamLayout& pl, PARAM_ID id)
-{
-    ValueRange range(Global::NEG_INF, Global::MAX_DB, 0.5f, 1.f);
-    pl.add(std::make_unique< juce::AudioParameterFloat >(getVersionedParameterId(id), getName(id), range, 0.f));
-}
-
-/*---------------------------------------------------------------------------
-**
-*/
-/*static*/ void
-EqParams::addShelfQualParamToLayout(ParamLayout& pl, PARAM_ID id)
-{
-    ValueRange range(MIN_Q, MAX_Q, 0.05f, 1.f);
-    pl.add(std::make_unique< juce::AudioParameterFloat >(getVersionedParameterId(id), getName(id), range, DEFAULT_Q));
 }
 
 /*---------------------------------------------------------------------------

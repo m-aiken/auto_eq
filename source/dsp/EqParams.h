@@ -60,20 +60,16 @@ public:
 
     static const juce::String getName(PARAM_ID param_id);
     static juce::StringArray  getSlopeChoices();
-    static float              getDefaultPeakFrequency(PARAM_ID param_id);
+    static float              getDefaultFrequency(PARAM_ID param_id);
 
     typedef juce::AudioProcessorValueTreeState::ParameterLayout ParamLayout;
     typedef juce::NormalisableRange< float >                    ValueRange;
 
-    static void addPeakFreqParamToLayout(ParamLayout& pl, PARAM_ID id);
-    static void addPeakGainParamToLayout(ParamLayout& pl, PARAM_ID id);
-    static void addPeakQualParamToLayout(ParamLayout& pl, PARAM_ID id);
+    static void addFreqParamToLayout(ParamLayout& pl, PARAM_ID id);
+    static void addGainParamToLayout(ParamLayout& pl, PARAM_ID id);
+    static void addQualParamToLayout(ParamLayout& pl, PARAM_ID id);
     static void addEnabledParamToLayout(ParamLayout& pl, PARAM_ID id);
-    static void addCutFreqParamToLayout(ParamLayout& pl, PARAM_ID id, const float default_value);
     static void addCutChoiceParamToLayout(ParamLayout& pl, PARAM_ID id);
-    static void addShelfFreqParamToLayout(ParamLayout& pl, PARAM_ID id, const float default_value);
-    static void addShelfGainParamToLayout(ParamLayout& pl, PARAM_ID id);
-    static void addShelfQualParamToLayout(ParamLayout& pl, PARAM_ID id);
 
     static juce::ParameterID getVersionedParameterId(PARAM_ID id);
 
