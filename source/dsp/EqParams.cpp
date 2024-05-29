@@ -107,52 +107,6 @@ EqParams::getName(PARAM_ID param_id)
 /*---------------------------------------------------------------------------
 **
 */
-/*static*/ juce::StringArray
-EqParams::getSlopeChoices()
-{
-    return juce::StringArray("12dB/Oct", "24dB/Oct", "36dB/Oct", "48dB/Oct");
-}
-
-/*---------------------------------------------------------------------------
-**
-*/
-/*static*/ float
-EqParams::getDefaultFrequency(PARAM_ID param_id)
-{
-    if (param_id == LOW_CUT_FREQ) {
-        return Global::MIN_HZ;
-    }
-    else if (param_id == LOW_SHELF_FREQ) {
-        return 200.f;
-    }
-    else if (param_id == PEAK_1_FREQ) {
-        return 100.f;
-    }
-    else if (param_id == PEAK_2_FREQ) {
-        return 500.f;
-    }
-    else if (param_id == PEAK_3_FREQ) {
-        return 1000.f;
-    }
-    else if (param_id == PEAK_4_FREQ) {
-        return 2000.f;
-    }
-    else if (param_id == PEAK_5_FREQ) {
-        return 5000.f;
-    }
-    else if (param_id == HIGH_SHELF_FREQ) {
-        return 12000.f;
-    }
-    else if (param_id == HIGH_CUT_FREQ) {
-        return Global::MAX_HZ;
-    }
-
-    return Global::NEG_INF;
-}
-
-/*---------------------------------------------------------------------------
-**
-*/
 /*static*/ void
 EqParams::addFreqParamToLayout(ParamLayout& pl, PARAM_ID id)
 {
@@ -211,6 +165,52 @@ EqParams::addCutChoiceParamToLayout(ParamLayout& pl, PARAM_ID id)
 EqParams::getVersionedParameterId(PARAM_ID id)
 {
     return juce::ParameterID(getName(id), VERSION_HINT);
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
+/*static*/ juce::StringArray
+EqParams::getSlopeChoices()
+{
+    return juce::StringArray("12dB/Oct", "24dB/Oct", "36dB/Oct", "48dB/Oct");
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
+/*static*/ float
+EqParams::getDefaultFrequency(PARAM_ID param_id)
+{
+    if (param_id == LOW_CUT_FREQ) {
+        return Global::MIN_HZ;
+    }
+    else if (param_id == LOW_SHELF_FREQ) {
+        return 200.f;
+    }
+    else if (param_id == PEAK_1_FREQ) {
+        return 100.f;
+    }
+    else if (param_id == PEAK_2_FREQ) {
+        return 500.f;
+    }
+    else if (param_id == PEAK_3_FREQ) {
+        return 1000.f;
+    }
+    else if (param_id == PEAK_4_FREQ) {
+        return 2000.f;
+    }
+    else if (param_id == PEAK_5_FREQ) {
+        return 5000.f;
+    }
+    else if (param_id == HIGH_SHELF_FREQ) {
+        return 12000.f;
+    }
+    else if (param_id == HIGH_CUT_FREQ) {
+        return Global::MAX_HZ;
+    }
+
+    return Global::NEG_INF;
 }
 
 /*---------------------------------------------------------------------------

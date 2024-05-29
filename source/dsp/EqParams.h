@@ -59,8 +59,6 @@ public:
     };
 
     static const juce::String getName(PARAM_ID param_id);
-    static juce::StringArray  getSlopeChoices();
-    static float              getDefaultFrequency(PARAM_ID param_id);
 
     typedef juce::AudioProcessorValueTreeState::ParameterLayout ParamLayout;
     typedef juce::NormalisableRange< float >                    ValueRange;
@@ -71,7 +69,10 @@ public:
     static void addEnabledParamToLayout(ParamLayout& pl, PARAM_ID id);
     static void addCutChoiceParamToLayout(ParamLayout& pl, PARAM_ID id);
 
+private:
     static juce::ParameterID getVersionedParameterId(PARAM_ID id);
+    static juce::StringArray getSlopeChoices();
+    static float             getDefaultFrequency(PARAM_ID param_id);
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(EqParams)
 };
