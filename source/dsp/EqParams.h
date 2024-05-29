@@ -18,6 +18,10 @@ public:
         LOW_CUT_SLOPE,
         LOW_CUT_ENABLED,
         //
+        LOW_SHELF_FREQ,
+        LOW_SHELF_GAIN,
+        LOW_SHELF_Q,
+        //
         PEAK_1_FREQ,
         PEAK_1_GAIN,
         PEAK_1_Q,
@@ -38,9 +42,9 @@ public:
         PEAK_5_GAIN,
         PEAK_5_Q,
         //
-        PEAK_6_FREQ,
-        PEAK_6_GAIN,
-        PEAK_6_Q,
+        HIGH_SHELF_FREQ,
+        HIGH_SHELF_GAIN,
+        HIGH_SHELF_Q,
         //
         HIGH_CUT_FREQ,
         HIGH_CUT_SLOPE,
@@ -67,6 +71,9 @@ public:
     static void addEnabledParamToLayout(ParamLayout& pl, PARAM_ID id);
     static void addCutFreqParamToLayout(ParamLayout& pl, PARAM_ID id, const float default_value);
     static void addCutChoiceParamToLayout(ParamLayout& pl, PARAM_ID id);
+    static void addShelfFreqParamToLayout(ParamLayout& pl, PARAM_ID id, const float default_value);
+    static void addShelfGainParamToLayout(ParamLayout& pl, PARAM_ID id);
+    static void addShelfQualParamToLayout(ParamLayout& pl, PARAM_ID id);
 
     static juce::ParameterID getVersionedParameterId(PARAM_ID id);
 

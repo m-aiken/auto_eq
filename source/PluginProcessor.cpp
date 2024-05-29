@@ -20,26 +20,31 @@ PluginProcessor::PluginProcessor()
     assignParameter< juce::AudioParameterChoice* >(low_cut_.slope_, EqParams::LOW_CUT_SLOPE);
     assignParameter< juce::AudioParameterBool* >(low_cut_.enabled_, EqParams::LOW_CUT_ENABLED);
 
+    assignParameter< juce::AudioParameterFloat* >(low_shelf_.freq_, EqParams::LOW_SHELF_FREQ);
+    assignParameter< juce::AudioParameterFloat* >(low_shelf_.gain_, EqParams::LOW_SHELF_GAIN);
+    assignParameter< juce::AudioParameterFloat* >(low_shelf_.q_, EqParams::LOW_SHELF_Q);
+
     assignParameter< juce::AudioParameterFloat* >(peak_1_.freq_, EqParams::PEAK_1_FREQ);
     assignParameter< juce::AudioParameterFloat* >(peak_2_.freq_, EqParams::PEAK_2_FREQ);
     assignParameter< juce::AudioParameterFloat* >(peak_3_.freq_, EqParams::PEAK_3_FREQ);
     assignParameter< juce::AudioParameterFloat* >(peak_4_.freq_, EqParams::PEAK_4_FREQ);
     assignParameter< juce::AudioParameterFloat* >(peak_5_.freq_, EqParams::PEAK_5_FREQ);
-    assignParameter< juce::AudioParameterFloat* >(peak_6_.freq_, EqParams::PEAK_6_FREQ);
 
     assignParameter< juce::AudioParameterFloat* >(peak_1_.gain_, EqParams::PEAK_1_GAIN);
     assignParameter< juce::AudioParameterFloat* >(peak_2_.gain_, EqParams::PEAK_2_GAIN);
     assignParameter< juce::AudioParameterFloat* >(peak_3_.gain_, EqParams::PEAK_3_GAIN);
     assignParameter< juce::AudioParameterFloat* >(peak_4_.gain_, EqParams::PEAK_4_GAIN);
     assignParameter< juce::AudioParameterFloat* >(peak_5_.gain_, EqParams::PEAK_5_GAIN);
-    assignParameter< juce::AudioParameterFloat* >(peak_6_.gain_, EqParams::PEAK_6_GAIN);
 
     assignParameter< juce::AudioParameterFloat* >(peak_1_.q_, EqParams::PEAK_1_Q);
     assignParameter< juce::AudioParameterFloat* >(peak_2_.q_, EqParams::PEAK_2_Q);
     assignParameter< juce::AudioParameterFloat* >(peak_3_.q_, EqParams::PEAK_3_Q);
     assignParameter< juce::AudioParameterFloat* >(peak_4_.q_, EqParams::PEAK_4_Q);
     assignParameter< juce::AudioParameterFloat* >(peak_5_.q_, EqParams::PEAK_5_Q);
-    assignParameter< juce::AudioParameterFloat* >(peak_6_.q_, EqParams::PEAK_6_Q);
+
+    assignParameter< juce::AudioParameterFloat* >(high_shelf_.freq_, EqParams::HIGH_SHELF_FREQ);
+    assignParameter< juce::AudioParameterFloat* >(high_shelf_.gain_, EqParams::HIGH_SHELF_GAIN);
+    assignParameter< juce::AudioParameterFloat* >(high_shelf_.q_, EqParams::HIGH_SHELF_Q);
 
     assignParameter< juce::AudioParameterFloat* >(high_cut_.freq_, EqParams::HIGH_CUT_FREQ);
     assignParameter< juce::AudioParameterChoice* >(high_cut_.slope_, EqParams::HIGH_CUT_SLOPE);
@@ -54,6 +59,10 @@ PluginProcessor::~PluginProcessor()
     low_cut_.freq_    = nullptr;
     low_cut_.slope_   = nullptr;
     low_cut_.enabled_ = nullptr;
+
+    low_shelf_.freq_ = nullptr;
+    low_shelf_.gain_ = nullptr;
+    low_shelf_.q_    = nullptr;
 
     peak_1_.freq_ = nullptr;
     peak_1_.gain_ = nullptr;
@@ -75,9 +84,9 @@ PluginProcessor::~PluginProcessor()
     peak_5_.gain_ = nullptr;
     peak_5_.q_    = nullptr;
 
-    peak_6_.freq_ = nullptr;
-    peak_6_.gain_ = nullptr;
-    peak_6_.q_    = nullptr;
+    high_shelf_.freq_ = nullptr;
+    high_shelf_.gain_ = nullptr;
+    high_shelf_.q_    = nullptr;
 
     high_cut_.freq_    = nullptr;
     high_cut_.slope_   = nullptr;
@@ -339,6 +348,11 @@ PluginProcessor::getParameterLayout()
     EqParams::addCutChoiceParamToLayout(parameter_layout, EqParams::LOW_CUT_SLOPE);
     EqParams::addEnabledParamToLayout(parameter_layout, EqParams::LOW_CUT_ENABLED);
 
+    // Low Shelf.
+    EqParams::addShelfFreqParamToLayout(parameter_layout, EqParams::LOW_SHELF_FREQ, 200.f);
+    EqParams::addShelfGainParamToLayout(parameter_layout, EqParams::LOW_SHELF_GAIN);
+    EqParams::addShelfQualParamToLayout(parameter_layout, EqParams::LOW_SHELF_Q);
+
     // Peak 1.
     EqParams::addPeakFreqParamToLayout(parameter_layout, EqParams::PEAK_1_FREQ);
     EqParams::addPeakGainParamToLayout(parameter_layout, EqParams::PEAK_1_GAIN);
@@ -364,10 +378,10 @@ PluginProcessor::getParameterLayout()
     EqParams::addPeakGainParamToLayout(parameter_layout, EqParams::PEAK_5_GAIN);
     EqParams::addPeakQualParamToLayout(parameter_layout, EqParams::PEAK_5_Q);
 
-    // Peak 6.
-    EqParams::addPeakFreqParamToLayout(parameter_layout, EqParams::PEAK_6_FREQ);
-    EqParams::addPeakGainParamToLayout(parameter_layout, EqParams::PEAK_6_GAIN);
-    EqParams::addPeakQualParamToLayout(parameter_layout, EqParams::PEAK_6_Q);
+    // High Shelf.
+    EqParams::addShelfFreqParamToLayout(parameter_layout, EqParams::HIGH_SHELF_FREQ, 12000.f);
+    EqParams::addShelfGainParamToLayout(parameter_layout, EqParams::HIGH_SHELF_GAIN);
+    EqParams::addShelfQualParamToLayout(parameter_layout, EqParams::HIGH_SHELF_Q);
 
     // High Cut.
     EqParams::addCutFreqParamToLayout(parameter_layout, EqParams::HIGH_CUT_FREQ, Global::MAX_HZ);

@@ -7,6 +7,7 @@
 #include "dsp/FilterFactory.h"
 #include "dsp/MonoFftBuffer.h"
 #include "dsp/PeakBand.h"
+#include "dsp/ShelfBand.h"
 #include "utility/GlobalConstants.h"
 
 class PluginProcessor final : public juce::AudioProcessor
@@ -55,14 +56,15 @@ private:
     FilterFactory::MonoChain filter_chain_left_;
     FilterFactory::MonoChain filter_chain_right_;
 
-    CutBand  low_cut_;
-    PeakBand peak_1_;
-    PeakBand peak_2_;
-    PeakBand peak_3_;
-    PeakBand peak_4_;
-    PeakBand peak_5_;
-    PeakBand peak_6_;
-    CutBand  high_cut_;
+    CutBand   low_cut_;
+    ShelfBand low_shelf_;
+    PeakBand  peak_1_;
+    PeakBand  peak_2_;
+    PeakBand  peak_3_;
+    PeakBand  peak_4_;
+    PeakBand  peak_5_;
+    ShelfBand high_shelf_;
+    CutBand   high_cut_;
 
     template < typename T >
     void assignParameter(T target, EqParams::PARAM_ID param_id)
