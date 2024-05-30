@@ -2,12 +2,9 @@
 
 #include <juce_audio_processors/juce_audio_processors.h>
 
-#include "dsp/CutBand.h"
 #include "dsp/EqParams.h"
 #include "dsp/FilterFactory.h"
 #include "dsp/MonoFftBuffer.h"
-#include "dsp/PeakBand.h"
-#include "dsp/ShelfBand.h"
 #include "utility/GlobalConstants.h"
 
 class PluginProcessor final : public juce::AudioProcessor
@@ -56,15 +53,15 @@ private:
     FilterFactory::MonoChain filter_chain_left_;
     FilterFactory::MonoChain filter_chain_right_;
 
-    CutBand   low_cut_;
-    ShelfBand low_shelf_;
-    PeakBand  peak_1_;
-    PeakBand  peak_2_;
-    PeakBand  peak_3_;
-    PeakBand  peak_4_;
-    PeakBand  peak_5_;
-    ShelfBand high_shelf_;
-    CutBand   high_cut_;
+    FilterFactory::CutBand   low_cut_;
+    FilterFactory::ShelfBand low_shelf_;
+    FilterFactory::PeakBand  peak_1_;
+    FilterFactory::PeakBand  peak_2_;
+    FilterFactory::PeakBand  peak_3_;
+    FilterFactory::PeakBand  peak_4_;
+    FilterFactory::PeakBand  peak_5_;
+    FilterFactory::ShelfBand high_shelf_;
+    FilterFactory::CutBand   high_cut_;
 
     void updateFilterCoefficients();
 

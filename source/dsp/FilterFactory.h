@@ -2,10 +2,6 @@
 
 #include <JuceHeader.h>
 
-#include "CutBand.h"
-#include "PeakBand.h"
-#include "ShelfBand.h"
-
 class FilterFactory
 {
 public:
@@ -34,6 +30,24 @@ public:
         SLOPE_24,
         SLOPE_36,
         SLOPE_48,
+    };
+
+    struct CutBand {
+        juce::AudioParameterFloat*  freq_ { nullptr };
+        juce::AudioParameterChoice* slope_ { nullptr };
+        juce::AudioParameterBool*   enabled_ { nullptr };
+    };
+
+    struct ShelfBand {
+        juce::AudioParameterFloat* freq_ { nullptr };
+        juce::AudioParameterFloat* gain_ { nullptr };
+        juce::AudioParameterFloat* q_ { nullptr };
+    };
+
+    struct PeakBand {
+        juce::AudioParameterFloat* freq_ { nullptr };
+        juce::AudioParameterFloat* gain_ { nullptr };
+        juce::AudioParameterFloat* q_ { nullptr };
     };
 
 public:
