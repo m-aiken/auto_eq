@@ -1,4 +1,5 @@
 #include "Analyser.h"
+#include "../Theme.h"
 #include "../../utility/GlobalConstants.h"
 
 /*---------------------------------------------------------------------------
@@ -10,22 +11,22 @@ Analyser::Analyser(PluginProcessor& p)
 
     fft_paths_.at(
         Global::Channels::PRIMARY_LEFT) = std::make_unique< MonoFftPath >(fft_buffers.at(Global::Channels::PRIMARY_LEFT),
-                                                                          juce::Colours::aquamarine,
-                                                                          Global::PATH_STROKE);
+                                                                          Theme::getColour(Theme::FFT_PRIMARY),
+                                                                          Global::PATH_FILL);
 
-    fft_paths_.at(Global::Channels::PRIMARY_RIGHT) = std::make_unique< MonoFftPath >(fft_buffers.at(
-                                                                                         Global::Channels::PRIMARY_RIGHT),
-                                                                                     juce::Colours::red,
-                                                                                     Global::PATH_STROKE);
+    fft_paths_.at(
+        Global::Channels::PRIMARY_RIGHT) = std::make_unique< MonoFftPath >(fft_buffers.at(Global::Channels::PRIMARY_RIGHT),
+                                                                           Theme::getColour(Theme::FFT_PRIMARY),
+                                                                           Global::PATH_FILL);
 
     fft_paths_.at(Global::Channels::SIDECHAIN_LEFT) =
         std::make_unique< MonoFftPath >(fft_buffers.at(Global::Channels::SIDECHAIN_LEFT),
-                                        juce::Colours::orange.withAlpha(0.2f),
+                                        Theme::getColour(Theme::FFT_SIDECHAIN).withAlpha(0.2f),
                                         Global::PATH_FILL);
 
     fft_paths_.at(Global::Channels::SIDECHAIN_RIGHT) =
         std::make_unique< MonoFftPath >(fft_buffers.at(Global::Channels::SIDECHAIN_RIGHT),
-                                        juce::Colours::green.withAlpha(0.2f),
+                                        Theme::getColour(Theme::FFT_SIDECHAIN).withAlpha(0.2f),
                                         Global::PATH_FILL);
 
     addAndMakeVisible(db_markers_);

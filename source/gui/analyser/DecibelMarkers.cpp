@@ -1,4 +1,5 @@
 #include "DecibelMarkers.h"
+#include "../Theme.h"
 #include "../../utility/GlobalConstants.h"
 
 /*static*/ const uint8 DecibelMarkers::DB_INTERVAL = 12;
@@ -28,7 +29,7 @@ DecibelMarkers::paint(juce::Graphics& g)
     const int min_db = static_cast< int >(Global::NEG_INF);
     const int max_db = static_cast< int >(Global::MAX_DB);
 
-    g.setColour(juce::Colours::grey);
+    g.setColour(Theme::getColour(Theme::TEXT));
 
     for (int db = min_db; db <= max_db; db += DB_INTERVAL) {
         auto y_coord = juce::jmap< int >(db, min_db, max_db, height, 0);

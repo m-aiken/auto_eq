@@ -1,4 +1,5 @@
 #include "AnalyserCanvas.h"
+#include "../Theme.h"
 #include "../../utility/GlobalConstants.h"
 
 /*static*/ const uint8 AnalyserCanvas::DB_INTERVAL = 6;
@@ -26,7 +27,7 @@ AnalyserCanvas::paint(juce::Graphics& g)
     const int max_db        = static_cast< int >(Global::MAX_DB);
     const int min_hz        = static_cast< int >(Global::MIN_HZ);
     const int max_hz        = static_cast< int >(Global::MAX_HZ);
-    auto      line_colour   = juce::Colours::grey;
+    auto      line_colour   = Theme::getColour(Theme::TEXT);
 
     g.setFont(font_);
 

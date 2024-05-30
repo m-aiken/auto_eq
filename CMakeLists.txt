@@ -41,6 +41,7 @@ target_sources(${PROJECT_NAME}
         source/dsp/EqParams.cpp
         source/dsp/FilterFactory.cpp
         source/dsp/MonoFftBuffer.cpp
+        source/gui/Theme.cpp
         source/gui/analyser/Analyser.cpp
         source/gui/analyser/AnalyserCanvas.cpp
         source/gui/analyser/DecibelMarkers.cpp

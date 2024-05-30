@@ -1,4 +1,5 @@
 #include "FrequencyMarkers.h"
+#include "../Theme.h"
 #include "../../utility/GlobalConstants.h"
 
 /*---------------------------------------------------------------------------
@@ -24,7 +25,7 @@ FrequencyMarkers::paint(juce::Graphics& g)
     const int min_hz = static_cast< int >(Global::MIN_HZ);
     const int max_hz = static_cast< int >(Global::MAX_HZ);
 
-    g.setColour(juce::Colours::grey);
+    g.setColour(Theme::getColour(Theme::TEXT));
 
     for (int i = min_hz; i <= max_hz; ++i) {
         if (shouldDrawFrequency(i)) {
