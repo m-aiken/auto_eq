@@ -3,6 +3,8 @@
 #include <JuceHeader.h>
 
 #include "AnalyserCanvas.h"
+#include "DecibelMarkers.h"
+#include "FrequencyMarkers.h"
 #include "MonoFftPath.h"
 #include "../../PluginProcessor.h"
 #include "../../utility/GlobalConstants.h"
@@ -15,7 +17,10 @@ public:
     void resized() override;
 
 private:
-    AnalyserCanvas                                                             backdrop_;
+    DecibelMarkers   db_markers_;
+    FrequencyMarkers hz_markers_;
+    AnalyserCanvas   backdrop_;
+
     std::array< std::unique_ptr< MonoFftPath >, Global::Channels::NUM_INPUTS > fft_paths_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Analyser)

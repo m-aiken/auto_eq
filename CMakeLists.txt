@@ -43,6 +43,8 @@ target_sources(${PROJECT_NAME}
         source/dsp/MonoFftBuffer.cpp
         source/gui/analyser/Analyser.cpp
         source/gui/analyser/AnalyserCanvas.cpp
+        source/gui/analyser/DecibelMarkers.cpp
+        source/gui/analyser/FrequencyMarkers.cpp
         source/gui/analyser/MonoFftPath.cpp)
 
 # JUCE modules make use of compile definitions to switch certain features on/off.

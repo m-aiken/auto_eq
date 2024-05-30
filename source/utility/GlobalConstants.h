@@ -16,6 +16,8 @@ enum PATH_DISPLAY_MODE {
     PATH_FILL,
 };
 
+static const uint8 ANALYSER_PADDING = 30;
+
 namespace Channels
 {
 
