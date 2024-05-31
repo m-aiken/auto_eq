@@ -16,12 +16,6 @@ PluginEditor::PluginEditor(PluginProcessor& p)
     addAndMakeVisible(primary_analyser_);
     addAndMakeVisible(sidechain_analyser_);
 
-    theme_button_.setToggleState(Theme::dark_mode, juce::dontSendNotification);
-    theme_button_.onClick = [this]() {
-        Theme::toggleTheme();
-        repaint();
-    };
-
     setSize(800, 600);
 }
 
@@ -49,13 +43,14 @@ void
 PluginEditor::resized()
 {
     auto        bounds              = getLocalBounds();
-    const uint8 theme_button_width  = 20;
+    const uint8 theme_button_width  = 64;
+    const uint8 theme_button_height = 32;
     const uint8 theme_button_margin = 10;
 
     theme_button_.setBounds(bounds.getRight() - theme_button_width - theme_button_margin,
                             theme_button_margin,
                             theme_button_width,
-                            theme_button_width);
+                            theme_button_height);
 
     juce::Grid grid;
 
