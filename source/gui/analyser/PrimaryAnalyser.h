@@ -7,12 +7,11 @@
 #include "FrequencyMarkers.h"
 #include "MonoFftPath.h"
 #include "../../PluginProcessor.h"
-#include "../../utility/GlobalConstants.h"
 
-class Analyser : public juce::Component
+class PrimaryAnalyser : public juce::Component
 {
 public:
-    Analyser(PluginProcessor& p);
+    PrimaryAnalyser(PluginProcessor& p);
 
     void resized() override;
 
@@ -21,7 +20,8 @@ private:
     FrequencyMarkers hz_markers_;
     AnalyserCanvas   backdrop_;
 
-    std::array< std::unique_ptr< MonoFftPath >, Global::Channels::NUM_INPUTS > fft_paths_;
+    std::unique_ptr< MonoFftPath > fft_path_primary_pre_eq_l_;
+    std::unique_ptr< MonoFftPath > fft_path_primary_pre_eq_r_;
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Analyser)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PrimaryAnalyser)
 };

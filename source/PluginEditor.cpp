@@ -9,10 +9,12 @@ PluginEditor::PluginEditor(PluginProcessor& p)
     : AudioProcessorEditor(&p)
     , processor_ref_(p)
     , theme_button_()
-    , analyser_(p)
+    , primary_analyser_(p)
+    , sidechain_analyser_(p)
 {
     addAndMakeVisible(theme_button_);
-    addAndMakeVisible(analyser_);
+    addAndMakeVisible(primary_analyser_);
+    addAndMakeVisible(sidechain_analyser_);
 
     theme_button_.setToggleState(Theme::dark_mode, juce::dontSendNotification);
     theme_button_.onClick = [this]() {
@@ -38,10 +40,6 @@ PluginEditor::paint(juce::Graphics& g)
 {
     // (Our component is opaque, so we must completely fill the background with a solid colour)
     g.fillAll(Theme::getColour(Theme::MAIN_BG));
-
-    g.setColour(Theme::getColour(Theme::TEXT));
-    g.setFont(15.0f);
-    g.drawFittedText("ReLufs", getLocalBounds(), juce::Justification::centredTop, 1);
 }
 
 /*---------------------------------------------------------------------------
@@ -50,15 +48,31 @@ PluginEditor::paint(juce::Graphics& g)
 void
 PluginEditor::resized()
 {
-    auto        bounds             = getLocalBounds();
-    const uint8 theme_button_width = 20;
+    auto        bounds              = getLocalBounds();
+    const uint8 theme_button_width  = 20;
+    const uint8 theme_button_margin = 10;
 
-    theme_button_.setBounds(bounds.getRight() - (theme_button_width * 2),
-                            theme_button_width,
+    theme_button_.setBounds(bounds.getRight() - theme_button_width - theme_button_margin,
+                            theme_button_margin,
                             theme_button_width,
                             theme_button_width);
 
-    analyser_.setBounds(bounds.reduced(30));
+    juce::Grid grid;
+
+    using Track = juce::Grid::TrackInfo;
+    using Fr    = juce::Grid::Fr;
+
+    grid.autoColumns  = Track(Fr(1));
+    grid.templateRows = {
+        Track(Fr(1)),
+        Track(Fr(1)),
+    };
+
+    grid.items.add(juce::GridItem(primary_analyser_));
+    grid.items.add(juce::GridItem(sidechain_analyser_));
+
+    //    grid.setGap(juce::Grid::Px { 4 });
+    grid.performLayout(bounds.reduced(30));
 }
 
 /*---------------------------------------------------------------------------

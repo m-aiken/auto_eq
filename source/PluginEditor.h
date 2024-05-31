@@ -1,7 +1,8 @@
 #pragma once
 
 #include "PluginProcessor.h"
-#include "gui/analyser/Analyser.h"
+#include "gui/analyser/PrimaryAnalyser.h"
+#include "gui/analyser/SidechainAnalyser.h"
 
 class PluginEditor final : public juce::AudioProcessorEditor
 {
@@ -18,7 +19,8 @@ private:
     PluginProcessor& processor_ref_;
 
     juce::ToggleButton theme_button_;
-    Analyser           analyser_;
+    PrimaryAnalyser    primary_analyser_;
+    SidechainAnalyser  sidechain_analyser_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PluginEditor)
 };
