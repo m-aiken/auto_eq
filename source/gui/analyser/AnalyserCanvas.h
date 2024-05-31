@@ -13,8 +13,6 @@ private:
     bool shouldDrawFrequency(int freq) const;
     bool shouldBeBold(int freq) const;
 
-    juce::Font font_;
-
     static const uint8 DB_INTERVAL;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AnalyserCanvas)

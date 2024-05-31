@@ -8,7 +8,6 @@
 **
 */
 AnalyserCanvas::AnalyserCanvas()
-    : font_(12.f, juce::Font::bold)
 {
 }
 
@@ -30,8 +29,6 @@ AnalyserCanvas::paint(juce::Graphics& g)
     auto      line_colour   = Theme::getColour(Theme::ANALYSER_GRID);
     auto      alpha_bold    = Theme::dark_mode ? 0.1f : 0.2f;
     auto      alpha_faint   = Theme::dark_mode ? 0.05f : 0.1f;
-
-    g.setFont(font_);
 
     // dB markers (horizontal).
     g.setColour(line_colour.withAlpha(alpha_bold));
