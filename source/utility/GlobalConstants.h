@@ -46,4 +46,20 @@ namespace Channels
 
 }  // namespace Channels
 
+namespace FFT
+{
+
+    static const uint8 NUM_BUFFERS = 6;
+
+    enum BUFFER_ID {
+        PRIMARY_LEFT_PRE_EQ,
+        PRIMARY_RIGHT_PRE_EQ,
+        PRIMARY_LEFT_POST_EQ,
+        PRIMARY_RIGHT_POST_EQ,
+        SIDECHAIN_LEFT,
+        SIDECHAIN_RIGHT,
+    };
+
+}  // namespace FFT
+
 }  // namespace Global

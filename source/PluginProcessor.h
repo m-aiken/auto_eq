@@ -40,7 +40,7 @@ public:
     void getStateInformation(juce::MemoryBlock& dest_data) override;
     void setStateInformation(const void* data, int size_in_bytes) override;
 
-    typedef std::array< MonoFftBuffer, Global::Channels::NUM_INPUTS > FftBuffers;
+    typedef std::array< MonoFftBuffer, Global::FFT::NUM_BUFFERS > FftBuffers;
 
     FftBuffers& getFftBuffers();
 

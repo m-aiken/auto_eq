@@ -9,11 +9,11 @@ SidechainAnalyser::SidechainAnalyser(PluginProcessor& p)
 {
     PluginProcessor::FftBuffers& fft_buffers = p.getFftBuffers();
 
-    fft_path_sidechain_l_ = std::make_unique< MonoFftPath >(fft_buffers.at(Global::Channels::SIDECHAIN_LEFT),
+    fft_path_sidechain_l_ = std::make_unique< MonoFftPath >(fft_buffers.at(Global::FFT::SIDECHAIN_LEFT),
                                                             Theme::getColour(Theme::FFT_SIDECHAIN),
                                                             Global::PATH_FILL);
 
-    fft_path_sidechain_r_ = std::make_unique< MonoFftPath >(fft_buffers.at(Global::Channels::SIDECHAIN_RIGHT),
+    fft_path_sidechain_r_ = std::make_unique< MonoFftPath >(fft_buffers.at(Global::FFT::SIDECHAIN_RIGHT),
                                                             Theme::getColour(Theme::FFT_SIDECHAIN),
                                                             Global::PATH_FILL);
 

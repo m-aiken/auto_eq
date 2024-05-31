@@ -22,6 +22,8 @@ private:
 
     std::unique_ptr< MonoFftPath > fft_path_primary_pre_eq_l_;
     std::unique_ptr< MonoFftPath > fft_path_primary_pre_eq_r_;
+    std::unique_ptr< MonoFftPath > fft_path_primary_post_eq_l_;
+    std::unique_ptr< MonoFftPath > fft_path_primary_post_eq_r_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PrimaryAnalyser)
 };

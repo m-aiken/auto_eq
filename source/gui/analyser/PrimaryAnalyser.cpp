@@ -9,19 +9,29 @@ PrimaryAnalyser::PrimaryAnalyser(PluginProcessor& p)
 {
     PluginProcessor::FftBuffers& fft_buffers = p.getFftBuffers();
 
-    fft_path_primary_pre_eq_l_ = std::make_unique< MonoFftPath >(fft_buffers.at(Global::Channels::PRIMARY_LEFT),
+    fft_path_primary_pre_eq_l_ = std::make_unique< MonoFftPath >(fft_buffers.at(Global::FFT::PRIMARY_LEFT_PRE_EQ),
                                                                  Theme::getColour(Theme::FFT_PRIMARY_PRE_EQ),
                                                                  Global::PATH_FILL);
 
-    fft_path_primary_pre_eq_r_ = std::make_unique< MonoFftPath >(fft_buffers.at(Global::Channels::PRIMARY_RIGHT),
+    fft_path_primary_pre_eq_r_ = std::make_unique< MonoFftPath >(fft_buffers.at(Global::FFT::PRIMARY_RIGHT_PRE_EQ),
                                                                  Theme::getColour(Theme::FFT_PRIMARY_PRE_EQ),
                                                                  Global::PATH_FILL);
+
+    fft_path_primary_post_eq_l_ = std::make_unique< MonoFftPath >(fft_buffers.at(Global::FFT::PRIMARY_LEFT_POST_EQ),
+                                                                  Theme::getColour(Theme::FFT_PRIMARY_POST_EQ),
+                                                                  Global::PATH_STROKE);
+
+    fft_path_primary_post_eq_r_ = std::make_unique< MonoFftPath >(fft_buffers.at(Global::FFT::PRIMARY_RIGHT_POST_EQ),
+                                                                  Theme::getColour(Theme::FFT_PRIMARY_POST_EQ),
+                                                                  Global::PATH_STROKE);
 
     addAndMakeVisible(db_markers_);
     addAndMakeVisible(hz_markers_);
     addAndMakeVisible(backdrop_);
     addAndMakeVisible(fft_path_primary_pre_eq_l_.get());
     addAndMakeVisible(fft_path_primary_pre_eq_r_.get());
+    addAndMakeVisible(fft_path_primary_post_eq_l_.get());
+    addAndMakeVisible(fft_path_primary_post_eq_r_.get());
 }
 
 /*---------------------------------------------------------------------------
@@ -39,10 +49,13 @@ PrimaryAnalyser::resized()
                                                  Global::ANALYSER_PADDING));
 
     auto padded_bounds = bounds.reduced(Global::ANALYSER_PADDING);
+
     backdrop_.setBounds(padded_bounds);
 
     fft_path_primary_pre_eq_l_->setBounds(padded_bounds);
     fft_path_primary_pre_eq_r_->setBounds(padded_bounds);
+    fft_path_primary_post_eq_l_->setBounds(padded_bounds);
+    fft_path_primary_post_eq_r_->setBounds(padded_bounds);
 }
 
 /*---------------------------------------------------------------------------

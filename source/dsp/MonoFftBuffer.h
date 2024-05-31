@@ -13,7 +13,7 @@ public:
     };
 
     // FFT constants.
-    static constexpr uint8  FFT_ORDER = SIZE_2048;
+    static constexpr uint8  FFT_ORDER = SIZE_4096;
     static constexpr size_t FFT_SIZE  = 1 << FFT_ORDER;
     static constexpr size_t NUM_BINS  = FFT_SIZE * 0.5;
 
