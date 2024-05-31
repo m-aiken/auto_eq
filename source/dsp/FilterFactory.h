@@ -50,6 +50,18 @@ public:
         juce::AudioParameterFloat* q_ { nullptr };
     };
 
+    struct BandSet {
+        CutBand   low_cut_;
+        ShelfBand low_shelf_;
+        PeakBand  peak_1_;
+        PeakBand  peak_2_;
+        PeakBand  peak_3_;
+        PeakBand  peak_4_;
+        PeakBand  peak_5_;
+        ShelfBand high_shelf_;
+        CutBand   high_cut_;
+    };
+
 public:
     FilterFactory();
 

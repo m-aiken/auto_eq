@@ -16,39 +16,39 @@ PluginProcessor::PluginProcessor()
             .withOutput("Output", juce::AudioChannelSet::stereo(), true))
     , apvts_(*this, nullptr, "APVTS", getParameterLayout())
 {
-    assignParameter< juce::AudioParameterFloat* >(low_cut_.freq_, EqParams::LOW_CUT_FREQ);
-    assignParameter< juce::AudioParameterChoice* >(low_cut_.slope_, EqParams::LOW_CUT_SLOPE);
-    assignParameter< juce::AudioParameterBool* >(low_cut_.enabled_, EqParams::LOW_CUT_ENABLED);
+    assignParameter< juce::AudioParameterFloat* >(filter_bands_.low_cut_.freq_, EqParams::LOW_CUT_FREQ);
+    assignParameter< juce::AudioParameterChoice* >(filter_bands_.low_cut_.slope_, EqParams::LOW_CUT_SLOPE);
+    assignParameter< juce::AudioParameterBool* >(filter_bands_.low_cut_.enabled_, EqParams::LOW_CUT_ENABLED);
 
-    assignParameter< juce::AudioParameterFloat* >(low_shelf_.freq_, EqParams::LOW_SHELF_FREQ);
-    assignParameter< juce::AudioParameterFloat* >(low_shelf_.gain_, EqParams::LOW_SHELF_GAIN);
-    assignParameter< juce::AudioParameterFloat* >(low_shelf_.q_, EqParams::LOW_SHELF_Q);
+    assignParameter< juce::AudioParameterFloat* >(filter_bands_.low_shelf_.freq_, EqParams::LOW_SHELF_FREQ);
+    assignParameter< juce::AudioParameterFloat* >(filter_bands_.low_shelf_.gain_, EqParams::LOW_SHELF_GAIN);
+    assignParameter< juce::AudioParameterFloat* >(filter_bands_.low_shelf_.q_, EqParams::LOW_SHELF_Q);
 
-    assignParameter< juce::AudioParameterFloat* >(peak_1_.freq_, EqParams::PEAK_1_FREQ);
-    assignParameter< juce::AudioParameterFloat* >(peak_2_.freq_, EqParams::PEAK_2_FREQ);
-    assignParameter< juce::AudioParameterFloat* >(peak_3_.freq_, EqParams::PEAK_3_FREQ);
-    assignParameter< juce::AudioParameterFloat* >(peak_4_.freq_, EqParams::PEAK_4_FREQ);
-    assignParameter< juce::AudioParameterFloat* >(peak_5_.freq_, EqParams::PEAK_5_FREQ);
+    assignParameter< juce::AudioParameterFloat* >(filter_bands_.peak_1_.freq_, EqParams::PEAK_1_FREQ);
+    assignParameter< juce::AudioParameterFloat* >(filter_bands_.peak_2_.freq_, EqParams::PEAK_2_FREQ);
+    assignParameter< juce::AudioParameterFloat* >(filter_bands_.peak_3_.freq_, EqParams::PEAK_3_FREQ);
+    assignParameter< juce::AudioParameterFloat* >(filter_bands_.peak_4_.freq_, EqParams::PEAK_4_FREQ);
+    assignParameter< juce::AudioParameterFloat* >(filter_bands_.peak_5_.freq_, EqParams::PEAK_5_FREQ);
 
-    assignParameter< juce::AudioParameterFloat* >(peak_1_.gain_, EqParams::PEAK_1_GAIN);
-    assignParameter< juce::AudioParameterFloat* >(peak_2_.gain_, EqParams::PEAK_2_GAIN);
-    assignParameter< juce::AudioParameterFloat* >(peak_3_.gain_, EqParams::PEAK_3_GAIN);
-    assignParameter< juce::AudioParameterFloat* >(peak_4_.gain_, EqParams::PEAK_4_GAIN);
-    assignParameter< juce::AudioParameterFloat* >(peak_5_.gain_, EqParams::PEAK_5_GAIN);
+    assignParameter< juce::AudioParameterFloat* >(filter_bands_.peak_1_.gain_, EqParams::PEAK_1_GAIN);
+    assignParameter< juce::AudioParameterFloat* >(filter_bands_.peak_2_.gain_, EqParams::PEAK_2_GAIN);
+    assignParameter< juce::AudioParameterFloat* >(filter_bands_.peak_3_.gain_, EqParams::PEAK_3_GAIN);
+    assignParameter< juce::AudioParameterFloat* >(filter_bands_.peak_4_.gain_, EqParams::PEAK_4_GAIN);
+    assignParameter< juce::AudioParameterFloat* >(filter_bands_.peak_5_.gain_, EqParams::PEAK_5_GAIN);
 
-    assignParameter< juce::AudioParameterFloat* >(peak_1_.q_, EqParams::PEAK_1_Q);
-    assignParameter< juce::AudioParameterFloat* >(peak_2_.q_, EqParams::PEAK_2_Q);
-    assignParameter< juce::AudioParameterFloat* >(peak_3_.q_, EqParams::PEAK_3_Q);
-    assignParameter< juce::AudioParameterFloat* >(peak_4_.q_, EqParams::PEAK_4_Q);
-    assignParameter< juce::AudioParameterFloat* >(peak_5_.q_, EqParams::PEAK_5_Q);
+    assignParameter< juce::AudioParameterFloat* >(filter_bands_.peak_1_.q_, EqParams::PEAK_1_Q);
+    assignParameter< juce::AudioParameterFloat* >(filter_bands_.peak_2_.q_, EqParams::PEAK_2_Q);
+    assignParameter< juce::AudioParameterFloat* >(filter_bands_.peak_3_.q_, EqParams::PEAK_3_Q);
+    assignParameter< juce::AudioParameterFloat* >(filter_bands_.peak_4_.q_, EqParams::PEAK_4_Q);
+    assignParameter< juce::AudioParameterFloat* >(filter_bands_.peak_5_.q_, EqParams::PEAK_5_Q);
 
-    assignParameter< juce::AudioParameterFloat* >(high_shelf_.freq_, EqParams::HIGH_SHELF_FREQ);
-    assignParameter< juce::AudioParameterFloat* >(high_shelf_.gain_, EqParams::HIGH_SHELF_GAIN);
-    assignParameter< juce::AudioParameterFloat* >(high_shelf_.q_, EqParams::HIGH_SHELF_Q);
+    assignParameter< juce::AudioParameterFloat* >(filter_bands_.high_shelf_.freq_, EqParams::HIGH_SHELF_FREQ);
+    assignParameter< juce::AudioParameterFloat* >(filter_bands_.high_shelf_.gain_, EqParams::HIGH_SHELF_GAIN);
+    assignParameter< juce::AudioParameterFloat* >(filter_bands_.high_shelf_.q_, EqParams::HIGH_SHELF_Q);
 
-    assignParameter< juce::AudioParameterFloat* >(high_cut_.freq_, EqParams::HIGH_CUT_FREQ);
-    assignParameter< juce::AudioParameterChoice* >(high_cut_.slope_, EqParams::HIGH_CUT_SLOPE);
-    assignParameter< juce::AudioParameterBool* >(high_cut_.enabled_, EqParams::HIGH_CUT_ENABLED);
+    assignParameter< juce::AudioParameterFloat* >(filter_bands_.high_cut_.freq_, EqParams::HIGH_CUT_FREQ);
+    assignParameter< juce::AudioParameterChoice* >(filter_bands_.high_cut_.slope_, EqParams::HIGH_CUT_SLOPE);
+    assignParameter< juce::AudioParameterBool* >(filter_bands_.high_cut_.enabled_, EqParams::HIGH_CUT_ENABLED);
 }
 
 /*---------------------------------------------------------------------------
@@ -56,41 +56,41 @@ PluginProcessor::PluginProcessor()
 */
 PluginProcessor::~PluginProcessor()
 {
-    low_cut_.freq_    = nullptr;
-    low_cut_.slope_   = nullptr;
-    low_cut_.enabled_ = nullptr;
+    filter_bands_.low_cut_.freq_    = nullptr;
+    filter_bands_.low_cut_.slope_   = nullptr;
+    filter_bands_.low_cut_.enabled_ = nullptr;
 
-    low_shelf_.freq_ = nullptr;
-    low_shelf_.gain_ = nullptr;
-    low_shelf_.q_    = nullptr;
+    filter_bands_.low_shelf_.freq_ = nullptr;
+    filter_bands_.low_shelf_.gain_ = nullptr;
+    filter_bands_.low_shelf_.q_    = nullptr;
 
-    peak_1_.freq_ = nullptr;
-    peak_1_.gain_ = nullptr;
-    peak_1_.q_    = nullptr;
+    filter_bands_.peak_1_.freq_ = nullptr;
+    filter_bands_.peak_1_.gain_ = nullptr;
+    filter_bands_.peak_1_.q_    = nullptr;
 
-    peak_2_.freq_ = nullptr;
-    peak_2_.gain_ = nullptr;
-    peak_2_.q_    = nullptr;
+    filter_bands_.peak_2_.freq_ = nullptr;
+    filter_bands_.peak_2_.gain_ = nullptr;
+    filter_bands_.peak_2_.q_    = nullptr;
 
-    peak_3_.freq_ = nullptr;
-    peak_3_.gain_ = nullptr;
-    peak_3_.q_    = nullptr;
+    filter_bands_.peak_3_.freq_ = nullptr;
+    filter_bands_.peak_3_.gain_ = nullptr;
+    filter_bands_.peak_3_.q_    = nullptr;
 
-    peak_4_.freq_ = nullptr;
-    peak_4_.gain_ = nullptr;
-    peak_4_.q_    = nullptr;
+    filter_bands_.peak_4_.freq_ = nullptr;
+    filter_bands_.peak_4_.gain_ = nullptr;
+    filter_bands_.peak_4_.q_    = nullptr;
 
-    peak_5_.freq_ = nullptr;
-    peak_5_.gain_ = nullptr;
-    peak_5_.q_    = nullptr;
+    filter_bands_.peak_5_.freq_ = nullptr;
+    filter_bands_.peak_5_.gain_ = nullptr;
+    filter_bands_.peak_5_.q_    = nullptr;
 
-    high_shelf_.freq_ = nullptr;
-    high_shelf_.gain_ = nullptr;
-    high_shelf_.q_    = nullptr;
+    filter_bands_.high_shelf_.freq_ = nullptr;
+    filter_bands_.high_shelf_.gain_ = nullptr;
+    filter_bands_.high_shelf_.q_    = nullptr;
 
-    high_cut_.freq_    = nullptr;
-    high_cut_.slope_   = nullptr;
-    high_cut_.enabled_ = nullptr;
+    filter_bands_.high_cut_.freq_    = nullptr;
+    filter_bands_.high_cut_.slope_   = nullptr;
+    filter_bands_.high_cut_.enabled_ = nullptr;
 }
 
 /*---------------------------------------------------------------------------
@@ -343,10 +343,28 @@ PluginProcessor::setStateInformation(const void* data, int size_in_bytes)
 /*---------------------------------------------------------------------------
 **
 */
+juce::AudioProcessorValueTreeState&
+PluginProcessor::getApvts()
+{
+    return apvts_;
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
 PluginProcessor::FftBuffers&
 PluginProcessor::getFftBuffers()
 {
     return fft_buffers_;
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
+FilterFactory::BandSet&
+PluginProcessor::getFilterBands()
+{
+    return filter_bands_;
 }
 
 /*---------------------------------------------------------------------------
@@ -417,36 +435,36 @@ PluginProcessor::updateFilterCoefficients()
 {
     double sample_rate = getSampleRate();
 
-    if (low_cut_.enabled_ != nullptr && low_cut_.enabled_->get()) {
-        FilterFactory::updateLowCut(filter_chain_left_, low_cut_, sample_rate);
-        FilterFactory::updateLowCut(filter_chain_right_, low_cut_, sample_rate);
+    if (filter_bands_.low_cut_.enabled_ != nullptr && filter_bands_.low_cut_.enabled_->get()) {
+        FilterFactory::updateLowCut(filter_chain_left_, filter_bands_.low_cut_, sample_rate);
+        FilterFactory::updateLowCut(filter_chain_right_, filter_bands_.low_cut_, sample_rate);
     }
 
-    if (high_cut_.enabled_ != nullptr && high_cut_.enabled_->get()) {
-        FilterFactory::updateHighCut(filter_chain_left_, high_cut_, sample_rate);
-        FilterFactory::updateHighCut(filter_chain_right_, high_cut_, sample_rate);
+    if (filter_bands_.high_cut_.enabled_ != nullptr && filter_bands_.high_cut_.enabled_->get()) {
+        FilterFactory::updateHighCut(filter_chain_left_, filter_bands_.high_cut_, sample_rate);
+        FilterFactory::updateHighCut(filter_chain_right_, filter_bands_.high_cut_, sample_rate);
     }
 
-    FilterFactory::updateLowShelf(filter_chain_left_, low_shelf_, sample_rate);
-    FilterFactory::updateLowShelf(filter_chain_right_, low_shelf_, sample_rate);
+    FilterFactory::updateLowShelf(filter_chain_left_, filter_bands_.low_shelf_, sample_rate);
+    FilterFactory::updateLowShelf(filter_chain_right_, filter_bands_.low_shelf_, sample_rate);
 
-    FilterFactory::updateHighShelf(filter_chain_left_, high_shelf_, sample_rate);
-    FilterFactory::updateHighShelf(filter_chain_right_, high_shelf_, sample_rate);
+    FilterFactory::updateHighShelf(filter_chain_left_, filter_bands_.high_shelf_, sample_rate);
+    FilterFactory::updateHighShelf(filter_chain_right_, filter_bands_.high_shelf_, sample_rate);
 
-    FilterFactory::updatePeak(filter_chain_left_, FilterFactory::PEAK_1, peak_1_, sample_rate);
-    FilterFactory::updatePeak(filter_chain_right_, FilterFactory::PEAK_1, peak_1_, sample_rate);
+    FilterFactory::updatePeak(filter_chain_left_, FilterFactory::PEAK_1, filter_bands_.peak_1_, sample_rate);
+    FilterFactory::updatePeak(filter_chain_right_, FilterFactory::PEAK_1, filter_bands_.peak_1_, sample_rate);
 
-    FilterFactory::updatePeak(filter_chain_left_, FilterFactory::PEAK_2, peak_2_, sample_rate);
-    FilterFactory::updatePeak(filter_chain_right_, FilterFactory::PEAK_2, peak_2_, sample_rate);
+    FilterFactory::updatePeak(filter_chain_left_, FilterFactory::PEAK_2, filter_bands_.peak_2_, sample_rate);
+    FilterFactory::updatePeak(filter_chain_right_, FilterFactory::PEAK_2, filter_bands_.peak_2_, sample_rate);
 
-    FilterFactory::updatePeak(filter_chain_left_, FilterFactory::PEAK_3, peak_3_, sample_rate);
-    FilterFactory::updatePeak(filter_chain_right_, FilterFactory::PEAK_3, peak_3_, sample_rate);
+    FilterFactory::updatePeak(filter_chain_left_, FilterFactory::PEAK_3, filter_bands_.peak_3_, sample_rate);
+    FilterFactory::updatePeak(filter_chain_right_, FilterFactory::PEAK_3, filter_bands_.peak_3_, sample_rate);
 
-    FilterFactory::updatePeak(filter_chain_left_, FilterFactory::PEAK_4, peak_4_, sample_rate);
-    FilterFactory::updatePeak(filter_chain_right_, FilterFactory::PEAK_4, peak_4_, sample_rate);
+    FilterFactory::updatePeak(filter_chain_left_, FilterFactory::PEAK_4, filter_bands_.peak_4_, sample_rate);
+    FilterFactory::updatePeak(filter_chain_right_, FilterFactory::PEAK_4, filter_bands_.peak_4_, sample_rate);
 
-    FilterFactory::updatePeak(filter_chain_left_, FilterFactory::PEAK_5, peak_5_, sample_rate);
-    FilterFactory::updatePeak(filter_chain_right_, FilterFactory::PEAK_5, peak_5_, sample_rate);
+    FilterFactory::updatePeak(filter_chain_left_, FilterFactory::PEAK_5, filter_bands_.peak_5_, sample_rate);
+    FilterFactory::updatePeak(filter_chain_right_, FilterFactory::PEAK_5, filter_bands_.peak_5_, sample_rate);
 }
 
 /*---------------------------------------------------------------------------

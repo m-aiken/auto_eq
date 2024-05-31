@@ -45,6 +45,7 @@ target_sources(${PROJECT_NAME}
         source/gui/ThemeButton.cpp
         source/gui/analyser/AnalyserCanvas.cpp
         source/gui/analyser/DecibelMarkers.cpp
+        source/gui/analyser/FilterResponseCurve.cpp
         source/gui/analyser/FrequencyMarkers.cpp
         source/gui/analyser/MonoFftPath.cpp
         source/gui/analyser/PrimaryAnalyser.cpp

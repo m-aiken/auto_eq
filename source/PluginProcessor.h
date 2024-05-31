@@ -42,7 +42,11 @@ public:
 
     typedef std::array< MonoFftBuffer, Global::FFT::NUM_BUFFERS > FftBuffers;
 
+    juce::AudioProcessorValueTreeState& getApvts();
+
     FftBuffers& getFftBuffers();
+
+    FilterFactory::BandSet& getFilterBands();
 
 private:
     static juce::AudioProcessorValueTreeState::ParameterLayout getParameterLayout();
@@ -53,15 +57,7 @@ private:
     FilterFactory::MonoChain filter_chain_left_;
     FilterFactory::MonoChain filter_chain_right_;
 
-    FilterFactory::CutBand   low_cut_;
-    FilterFactory::ShelfBand low_shelf_;
-    FilterFactory::PeakBand  peak_1_;
-    FilterFactory::PeakBand  peak_2_;
-    FilterFactory::PeakBand  peak_3_;
-    FilterFactory::PeakBand  peak_4_;
-    FilterFactory::PeakBand  peak_5_;
-    FilterFactory::ShelfBand high_shelf_;
-    FilterFactory::CutBand   high_cut_;
+    FilterFactory::BandSet filter_bands_;
 
     void updateFilterCoefficients();
 
