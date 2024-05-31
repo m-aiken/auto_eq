@@ -16,6 +16,8 @@ PluginEditor::PluginEditor(PluginProcessor& p)
     addAndMakeVisible(primary_analyser_);
     addAndMakeVisible(sidechain_analyser_);
 
+    theme_button_.addListener(this);
+
     setSize(800, 600);
 }
 
@@ -24,6 +26,7 @@ PluginEditor::PluginEditor(PluginProcessor& p)
 */
 PluginEditor::~PluginEditor()
 {
+    theme_button_.removeListener(this);
 }
 
 /*---------------------------------------------------------------------------
@@ -68,6 +71,21 @@ PluginEditor::resized()
 
     //    grid.setGap(juce::Grid::Px { 4 });
     grid.performLayout(bounds.reduced(30));
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
+void
+PluginEditor::buttonClicked(juce::Button* button)
+{
+    if (button == nullptr) {
+        return;
+    }
+
+    if (button == &theme_button_) {
+        repaint();
+    }
 }
 
 /*---------------------------------------------------------------------------

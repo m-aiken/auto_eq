@@ -5,7 +5,9 @@
 #include "gui/analyser/PrimaryAnalyser.h"
 #include "gui/analyser/SidechainAnalyser.h"
 
-class PluginEditor final : public juce::AudioProcessorEditor
+class PluginEditor final
+    : public juce::AudioProcessorEditor
+    , public juce::Button::Listener
 {
 public:
     explicit PluginEditor(PluginProcessor& p);
@@ -13,6 +15,8 @@ public:
 
     void paint(juce::Graphics& g) override;
     void resized() override;
+
+    void buttonClicked(juce::Button* button) override;
 
 private:
     // This reference is provided as a quick way for your editor to

@@ -25,5 +25,16 @@ ThemeButton::paint(juce::Graphics& g)
 }
 
 /*---------------------------------------------------------------------------
+**
+*/
+void
+ThemeButton::mouseEnter(const juce::MouseEvent& e)
+{
+    juce::ignoreUnused(e);
+
+    setMouseCursor(juce::MouseCursor::PointingHandCursor);
+}
+
+/*---------------------------------------------------------------------------
 ** End of File
 */
