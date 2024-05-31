@@ -16,7 +16,9 @@ public:
 
     static const DarkLightPair MAIN_BG;
     static const DarkLightPair TEXT;
-    static const DarkLightPair FFT_PRIMARY;
+    static const DarkLightPair ANALYSER_GRID;
+    static const DarkLightPair FFT_PRIMARY_PRE_EQ;
+    static const DarkLightPair FFT_PRIMARY_POST_EQ;
     static const DarkLightPair FFT_SIDECHAIN;
 
     static bool dark_mode;

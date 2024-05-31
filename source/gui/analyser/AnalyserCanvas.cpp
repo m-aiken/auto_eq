@@ -27,12 +27,14 @@ AnalyserCanvas::paint(juce::Graphics& g)
     const int max_db        = static_cast< int >(Global::MAX_DB);
     const int min_hz        = static_cast< int >(Global::MIN_HZ);
     const int max_hz        = static_cast< int >(Global::MAX_HZ);
-    auto      line_colour   = Theme::getColour(Theme::TEXT);
+    auto      line_colour   = Theme::getColour(Theme::ANALYSER_GRID);
+    auto      alpha_bold    = Theme::dark_mode ? 0.1f : 0.2f;
+    auto      alpha_faint   = Theme::dark_mode ? 0.05f : 0.1f;
 
     g.setFont(font_);
 
     // dB markers (horizontal).
-    g.setColour(line_colour);
+    g.setColour(line_colour.withAlpha(alpha_bold));
 
     for (int i = min_db; i <= max_db; i += DB_INTERVAL) {
         int y = juce::roundToInt(juce::jmap< float >(i, min_db, max_db, bounds_bottom, bounds_y));
@@ -45,7 +47,7 @@ AnalyserCanvas::paint(juce::Graphics& g)
         if (shouldDrawFrequency(i)) {
             auto normalised_freq = juce::mapFromLog10< float >(i, min_hz, max_hz);
             auto x               = bounds_x + (bounds_width * normalised_freq);
-            auto alpha           = shouldBeBold(i) ? 0.3f : 0.1f;
+            auto alpha           = shouldBeBold(i) ? alpha_bold : alpha_faint;
 
             g.setColour(line_colour.withAlpha(alpha));
             g.drawVerticalLine(x, bounds_y, bounds_bottom);

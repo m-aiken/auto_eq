@@ -10,11 +10,11 @@ PrimaryAnalyser::PrimaryAnalyser(PluginProcessor& p)
     PluginProcessor::FftBuffers& fft_buffers = p.getFftBuffers();
 
     fft_path_primary_pre_eq_l_ = std::make_unique< MonoFftPath >(fft_buffers.at(Global::Channels::PRIMARY_LEFT),
-                                                                 Theme::getColour(Theme::FFT_PRIMARY),
+                                                                 Theme::getColour(Theme::FFT_PRIMARY_PRE_EQ),
                                                                  Global::PATH_FILL);
 
     fft_path_primary_pre_eq_r_ = std::make_unique< MonoFftPath >(fft_buffers.at(Global::Channels::PRIMARY_RIGHT),
-                                                                 Theme::getColour(Theme::FFT_PRIMARY),
+                                                                 Theme::getColour(Theme::FFT_PRIMARY_PRE_EQ),
                                                                  Global::PATH_FILL);
 
     addAndMakeVisible(db_markers_);
