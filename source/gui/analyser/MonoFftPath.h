@@ -12,7 +12,7 @@ class MonoFftPath
 {
 public:
     MonoFftPath(MonoFftBuffer& fft_buffer, Theme::DarkLightPair path_colour, Global::PATH_DISPLAY_MODE display_mode);
-    ~MonoFftPath();
+    ~MonoFftPath() override;
 
     void paint(juce::Graphics& g) override;
 

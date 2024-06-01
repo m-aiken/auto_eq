@@ -89,9 +89,9 @@ FilterResponseCurve::timerCallback()
 void
 FilterResponseCurve::resetMagnitudesVector()
 {
-    auto num_x_pixels = getLocalBounds().getWidth();
+    size_t num_x_pixels = static_cast< size_t >(getLocalBounds().getWidth());
 
-    if (magnitudes_.size() != static_cast< size_t >(num_x_pixels)) {
+    if (magnitudes_.size() != num_x_pixels) {
         magnitudes_.resize(num_x_pixels);
     }
 
@@ -126,7 +126,7 @@ FilterResponseCurve::calculateMagnitudes()
     auto   num_x_pixels = getLocalBounds().getWidth();
     double sample_rate  = processor_ref_.getSampleRate();
 
-    for (auto i = 0; i < num_x_pixels; ++i) {
+    for (size_t i = 0; i < num_x_pixels; ++i) {
         double mag = 1.0;
 
         // Get the frequency that this x coordinate represents in the analyser.
