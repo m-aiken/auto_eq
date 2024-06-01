@@ -1,5 +1,4 @@
 #include "EqParams.h"
-#include "../utility/GlobalConstants.h"
 
 /*static*/ const int EqParams::VERSION_HINT = 1;
 
@@ -108,9 +107,9 @@ EqParams::getName(PARAM_ID param_id)
 **
 */
 /*static*/ void
-EqParams::addFreqParamToLayout(ParamLayout& pl, PARAM_ID id)
+EqParams::addFreqParamToLayout(ParamLayout& pl, PARAM_ID id, float min_hz, float max_hz)
 {
-    ValueRange range(Global::MIN_HZ, Global::MAX_HZ, 1.f, 1.f);
+    ValueRange range(min_hz, max_hz, 1.f, 1.f);
     pl.add(std::make_unique< juce::AudioParameterFloat >(getVersionedParameterId(id),
                                                          getName(id),
                                                          range,
@@ -204,7 +203,7 @@ EqParams::getDefaultFrequency(PARAM_ID param_id)
         return 5000.f;
     }
     else if (param_id == HIGH_SHELF_FREQ) {
-        return 12000.f;
+        return 10000.f;
     }
     else if (param_id == HIGH_CUT_FREQ) {
         return Global::MAX_HZ;

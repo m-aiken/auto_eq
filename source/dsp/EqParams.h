@@ -2,6 +2,8 @@
 
 #include <JuceHeader.h>
 
+#include "../utility/GlobalConstants.h"
+
 class EqParams
 {
 public:
@@ -63,7 +65,8 @@ public:
     typedef juce::AudioProcessorValueTreeState::ParameterLayout ParamLayout;
     typedef juce::NormalisableRange< float >                    ValueRange;
 
-    static void addFreqParamToLayout(ParamLayout& pl, PARAM_ID id);
+    static void
+    addFreqParamToLayout(ParamLayout& pl, PARAM_ID id, float min_hz = Global::MIN_HZ, float max_hz = Global::MAX_HZ);
     static void addGainParamToLayout(ParamLayout& pl, PARAM_ID id);
     static void addQualParamToLayout(ParamLayout& pl, PARAM_ID id);
     static void addEnabledParamToLayout(ParamLayout& pl, PARAM_ID id);

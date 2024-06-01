@@ -392,12 +392,12 @@ PluginProcessor::getParameterLayout()
     //
 
     // Low Cut.
-    EqParams::addFreqParamToLayout(parameter_layout, EqParams::LOW_CUT_FREQ);
+    EqParams::addFreqParamToLayout(parameter_layout, EqParams::LOW_CUT_FREQ, Global::MIN_HZ, 500.f);
     EqParams::addCutChoiceParamToLayout(parameter_layout, EqParams::LOW_CUT_SLOPE);
     EqParams::addEnabledParamToLayout(parameter_layout, EqParams::LOW_CUT_ENABLED);
 
     // Low Shelf.
-    EqParams::addFreqParamToLayout(parameter_layout, EqParams::LOW_SHELF_FREQ);
+    EqParams::addFreqParamToLayout(parameter_layout, EqParams::LOW_SHELF_FREQ, Global::MIN_HZ, 500.f);
     EqParams::addGainParamToLayout(parameter_layout, EqParams::LOW_SHELF_GAIN);
     EqParams::addQualParamToLayout(parameter_layout, EqParams::LOW_SHELF_Q);
 
@@ -427,12 +427,12 @@ PluginProcessor::getParameterLayout()
     EqParams::addQualParamToLayout(parameter_layout, EqParams::PEAK_5_Q);
 
     // High Shelf.
-    EqParams::addFreqParamToLayout(parameter_layout, EqParams::HIGH_SHELF_FREQ);
+    EqParams::addFreqParamToLayout(parameter_layout, EqParams::HIGH_SHELF_FREQ, 1000.f, Global::MAX_HZ);
     EqParams::addGainParamToLayout(parameter_layout, EqParams::HIGH_SHELF_GAIN);
     EqParams::addQualParamToLayout(parameter_layout, EqParams::HIGH_SHELF_Q);
 
     // High Cut.
-    EqParams::addFreqParamToLayout(parameter_layout, EqParams::HIGH_CUT_FREQ);
+    EqParams::addFreqParamToLayout(parameter_layout, EqParams::HIGH_CUT_FREQ, 1000.f, Global::MAX_HZ);
     EqParams::addCutChoiceParamToLayout(parameter_layout, EqParams::HIGH_CUT_SLOPE);
     EqParams::addEnabledParamToLayout(parameter_layout, EqParams::HIGH_CUT_ENABLED);
 
