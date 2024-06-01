@@ -24,13 +24,13 @@ public:
     void timerCallback() override;
 
 private:
-    void addApvtsListeners();
-    void removeApvtsListeners();
-
     void resetMagnitudesVector();
     void calculateMagnitudes();
     int  getYCoordinateFromMagnitude(double magnitude);
     void plotPath();
+
+    void addApvtsListeners();
+    void removeApvtsListeners();
 
 private:
     PluginProcessor& processor_ref_;
