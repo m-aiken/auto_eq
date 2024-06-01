@@ -154,7 +154,7 @@ EqParams::addCutChoiceParamToLayout(ParamLayout& pl, PARAM_ID id)
     pl.add(std::make_unique< juce::AudioParameterChoice >(getVersionedParameterId(id),
                                                           getName(id),
                                                           getSlopeChoices(),
-                                                          DB_PER_OCT_12));
+                                                          DB_PER_OCT_48));
 }
 
 /*---------------------------------------------------------------------------
