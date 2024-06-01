@@ -7,14 +7,16 @@
 /*static*/ const juce::Colour Theme::EGGSHELL   = juce::Colour(254, 239, 221);
 /*static*/ const juce::Colour Theme::TEAL       = juce::Colour(80, 178, 192);
 
-/*static*/ const Theme::DarkLightPair Theme::MAIN_BG             = DarkLightPair(DARK_GREY, WHITE);
-/*static*/ const Theme::DarkLightPair Theme::TEXT                = DarkLightPair(EGGSHELL, DARK_GREY);
-/*static*/ const Theme::DarkLightPair Theme::ANALYSER_GRID       = DarkLightPair(EGGSHELL, DARK_GREY);
-/*static*/ const Theme::DarkLightPair Theme::FFT_PRIMARY_PRE_EQ  = DarkLightPair(TEAL.withAlpha(0.2f),
+/*static*/ const Theme::DarkLightPair Theme::MAIN_BG              = DarkLightPair(DARK_GREY, WHITE);
+/*static*/ const Theme::DarkLightPair Theme::TEXT                 = DarkLightPair(EGGSHELL, DARK_GREY);
+/*static*/ const Theme::DarkLightPair Theme::ANALYSER_GRID        = DarkLightPair(EGGSHELL, DARK_GREY);
+/*static*/ const Theme::DarkLightPair Theme::FFT_PRIMARY_PRE_EQ   = DarkLightPair(TEAL.withAlpha(0.2f),
                                                                                 TEAL.withAlpha(0.2f));
-/*static*/ const Theme::DarkLightPair Theme::FFT_PRIMARY_POST_EQ = DarkLightPair(TEAL, TEAL);
-/*static*/ const Theme::DarkLightPair Theme::FFT_SIDECHAIN       = DarkLightPair(SOFT_PINK.withAlpha(0.2f),
-                                                                           SOFT_PINK.withAlpha(0.2f));
+/*static*/ const Theme::DarkLightPair Theme::FFT_PRIMARY_POST_EQ  = DarkLightPair(TEAL, TEAL);
+/*static*/ const Theme::DarkLightPair Theme::FFT_SIDECHAIN        = DarkLightPair(EGGSHELL.withAlpha(0.2f),
+                                                                           DARK_GREY.withAlpha(0.1f));
+/*static*/ const Theme::DarkLightPair Theme::FILTER_RESPONSE_PATH = DarkLightPair(RED_ORANGE.withAlpha(0.4f),
+                                                                                  RED_ORANGE.withAlpha(0.4f));
 
 /*static*/ bool Theme::dark_mode = true;
 

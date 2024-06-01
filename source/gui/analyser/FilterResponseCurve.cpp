@@ -31,8 +31,8 @@ FilterResponseCurve::paint(juce::Graphics& g)
         return;
     }
 
-    g.setColour(Theme::getColour(Theme::TEXT));
-    g.strokePath(path_, juce::PathStrokeType(1.f));
+    g.setColour(Theme::getColour(Theme::FILTER_RESPONSE_PATH));
+    g.strokePath(path_, juce::PathStrokeType(2.f));
 }
 
 /*---------------------------------------------------------------------------

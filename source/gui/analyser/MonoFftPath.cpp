@@ -3,7 +3,7 @@
 /*---------------------------------------------------------------------------
 **
 */
-MonoFftPath::MonoFftPath(MonoFftBuffer& fft_buffer, const juce::Colour& path_colour, Global::PATH_DISPLAY_MODE display_mode)
+MonoFftPath::MonoFftPath(MonoFftBuffer& fft_buffer, Theme::DarkLightPair path_colour, Global::PATH_DISPLAY_MODE display_mode)
     : fft_(MonoFftBuffer::FFT_ORDER)
     , windowing_fn_(MonoFftBuffer::FFT_SIZE, juce::dsp::WindowingFunction< float >::blackmanHarris)
     , fft_buffer_(fft_buffer)
@@ -33,7 +33,7 @@ MonoFftPath::paint(juce::Graphics& g)
         return;
     }
 
-    g.setColour(path_colour_);
+    g.setColour(Theme::getColour(path_colour_));
 
     if (display_mode_ == Global::PATH_STROKE) {
         g.strokePath(path_, juce::PathStrokeType(1.f));

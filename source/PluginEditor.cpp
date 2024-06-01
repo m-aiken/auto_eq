@@ -9,12 +9,10 @@ PluginEditor::PluginEditor(PluginProcessor& p)
     : AudioProcessorEditor(&p)
     , processor_ref_(p)
     , theme_button_()
-    , primary_analyser_(p)
-    , sidechain_analyser_(p)
+    , analyser_(p)
 {
     addAndMakeVisible(theme_button_);
-    addAndMakeVisible(primary_analyser_);
-    addAndMakeVisible(sidechain_analyser_);
+    addAndMakeVisible(analyser_);
 
     theme_button_.addListener(this);
 
@@ -35,7 +33,6 @@ PluginEditor::~PluginEditor()
 void
 PluginEditor::paint(juce::Graphics& g)
 {
-    // (Our component is opaque, so we must completely fill the background with a solid colour)
     g.fillAll(Theme::getColour(Theme::MAIN_BG));
 }
 
@@ -55,22 +52,7 @@ PluginEditor::resized()
                             theme_button_width,
                             theme_button_height);
 
-    juce::Grid grid;
-
-    using Track = juce::Grid::TrackInfo;
-    using Fr    = juce::Grid::Fr;
-
-    grid.autoColumns  = Track(Fr(1));
-    grid.templateRows = {
-        Track(Fr(1)),
-        Track(Fr(1)),
-    };
-
-    grid.items.add(juce::GridItem(primary_analyser_));
-    grid.items.add(juce::GridItem(sidechain_analyser_));
-
-    //    grid.setGap(juce::Grid::Px { 4 });
-    grid.performLayout(bounds.reduced(30));
+    analyser_.setBounds(bounds.reduced(30));
 }
 
 /*---------------------------------------------------------------------------
