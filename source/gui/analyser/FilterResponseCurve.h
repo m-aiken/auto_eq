@@ -14,6 +14,7 @@ public:
     ~FilterResponseCurve();
 
     void paint(juce::Graphics& g) override;
+    void resized() override;
 
     // juce::AudioProcessorParameter::Listener pure virtual functions.
     void parameterValueChanged(int parameter_index, float new_value) override;
@@ -29,11 +30,13 @@ private:
     void resetMagnitudesVector();
     void calculateMagnitudes();
     int  getYCoordinateFromMagnitude(double magnitude);
+    void plotPath();
 
 private:
     PluginProcessor& processor_ref_;
 
     std::vector< double > magnitudes_;
+    juce::Path            path_;
     juce::Atomic< bool >  should_repaint_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(FilterResponseCurve)

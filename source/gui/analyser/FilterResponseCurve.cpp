@@ -27,20 +27,26 @@ FilterResponseCurve::~FilterResponseCurve()
 void
 FilterResponseCurve::paint(juce::Graphics& g)
 {
-    if (magnitudes_.size() == 0) {
+    if (path_.isEmpty()) {
         return;
     }
 
-    juce::Path path;
-
-    path.startNewSubPath(0, getYCoordinateFromMagnitude(magnitudes_.front()));
-
-    for (size_t i = 1; i < magnitudes_.size(); ++i) {
-        path.lineTo(i, getYCoordinateFromMagnitude(magnitudes_.at(i)));
-    }
-
     g.setColour(Theme::getColour(Theme::TEXT));
-    g.strokePath(path, juce::PathStrokeType(1.f));
+    g.strokePath(path_, juce::PathStrokeType(1.f));
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
+void
+FilterResponseCurve::resized()
+{
+    // Initialise the magnitudes vector and the subsequent path.
+    // We're doing this via the resized method because the vector needs to be
+    // initialised to the size of the component bounds width.
+    // The bounds aren't known in the constructor.
+    resetMagnitudesVector();
+    plotPath();
 }
 
 /*---------------------------------------------------------------------------
@@ -72,6 +78,7 @@ FilterResponseCurve::timerCallback()
 {
     if (should_repaint_.compareAndSetBool(false, true)) {
         calculateMagnitudes();
+        plotPath();
         repaint();
     }
 }
@@ -257,6 +264,25 @@ FilterResponseCurve::getYCoordinateFromMagnitude(double magnitude)
     double y = juce::jmap< double >(magnitude, Global::NEG_INF, Global::MAX_DB, bounds_bottom, bounds_top);
 
     return static_cast< int >(std::floor(y));
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
+void
+FilterResponseCurve::plotPath()
+{
+    if (magnitudes_.size() == 0) {
+        return;
+    }
+
+    path_.clear();
+
+    path_.startNewSubPath(0, getYCoordinateFromMagnitude(magnitudes_.front()));
+
+    for (size_t i = 1; i < magnitudes_.size(); ++i) {
+        path_.lineTo(i, getYCoordinateFromMagnitude(magnitudes_.at(i)));
+    }
 }
 
 /*---------------------------------------------------------------------------

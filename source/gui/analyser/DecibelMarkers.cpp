@@ -2,7 +2,7 @@
 #include "../Theme.h"
 #include "../../utility/GlobalConstants.h"
 
-/*static*/ const uint8 DecibelMarkers::DB_INTERVAL = 12;
+/*static*/ const uint8 DecibelMarkers::DB_INTERVAL = 6;
 
 /*---------------------------------------------------------------------------
 **
