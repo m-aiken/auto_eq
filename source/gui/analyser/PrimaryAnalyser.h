@@ -4,6 +4,7 @@
 
 #include "AnalyserCanvas.h"
 #include "DecibelMarkers.h"
+#include "FilterResponseCurve.h"
 #include "FrequencyMarkers.h"
 #include "MonoFftPath.h"
 #include "../../PluginProcessor.h"
@@ -24,6 +25,8 @@ private:
     std::unique_ptr< MonoFftPath > fft_path_primary_pre_eq_r_;
     std::unique_ptr< MonoFftPath > fft_path_primary_post_eq_l_;
     std::unique_ptr< MonoFftPath > fft_path_primary_post_eq_r_;
+
+    FilterResponseCurve response_curve_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PrimaryAnalyser)
 };

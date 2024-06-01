@@ -361,6 +361,18 @@ PluginProcessor::getFftBuffers()
 /*---------------------------------------------------------------------------
 **
 */
+FilterFactory::MonoChain&
+PluginProcessor::getFilterChain()
+{
+    // For the benefit of the analyser's filter response curve.
+    // We're currently just returning a mono chain as left and right
+    // are processed identically.
+    return filter_chain_left_;
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
 FilterFactory::BandSet&
 PluginProcessor::getFilterBands()
 {

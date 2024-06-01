@@ -46,6 +46,8 @@ public:
 
     FftBuffers& getFftBuffers();
 
+    FilterFactory::MonoChain& getFilterChain();
+
     FilterFactory::BandSet& getFilterBands();
 
 private:

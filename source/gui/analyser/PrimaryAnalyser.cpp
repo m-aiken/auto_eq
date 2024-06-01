@@ -6,6 +6,7 @@
 **
 */
 PrimaryAnalyser::PrimaryAnalyser(PluginProcessor& p)
+    : response_curve_(p)
 {
     PluginProcessor::FftBuffers& fft_buffers = p.getFftBuffers();
 
@@ -32,6 +33,7 @@ PrimaryAnalyser::PrimaryAnalyser(PluginProcessor& p)
     addAndMakeVisible(fft_path_primary_pre_eq_r_.get());
     addAndMakeVisible(fft_path_primary_post_eq_l_.get());
     addAndMakeVisible(fft_path_primary_post_eq_r_.get());
+    addAndMakeVisible(response_curve_);
 }
 
 /*---------------------------------------------------------------------------
@@ -56,6 +58,8 @@ PrimaryAnalyser::resized()
     fft_path_primary_pre_eq_r_->setBounds(padded_bounds);
     fft_path_primary_post_eq_l_->setBounds(padded_bounds);
     fft_path_primary_post_eq_r_->setBounds(padded_bounds);
+
+    response_curve_.setBounds(padded_bounds);
 }
 
 /*---------------------------------------------------------------------------
