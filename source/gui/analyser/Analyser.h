@@ -3,10 +3,10 @@
 #include <JuceHeader.h>
 
 #include "AnalyserCanvas.h"
-#include "DecibelMarkers.h"
 #include "FilterResponseCurve.h"
 #include "FrequencyMarkers.h"
 #include "MonoFftPath.h"
+#include "../DecibelMarkers.h"
 #include "../../PluginProcessor.h"
 
 class Analyser : public juce::Component

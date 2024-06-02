@@ -50,6 +50,8 @@ public:
 
     FilterFactory::BandSet& getFilterBands();
 
+    float getMeterValue(Global::METER_TYPE meter_type, Global::Channels::CHANNEL_ID channel_id) const;
+
 private:
     static juce::AudioProcessorValueTreeState::ParameterLayout getParameterLayout();
     juce::AudioProcessorValueTreeState                         apvts_;
@@ -72,6 +74,13 @@ private:
             target = apvts_param;
         }
     }
+
+    float peak_l_;
+    float peak_r_;
+    float rms_l_;
+    float rms_r_;
+    float lufs_l_;
+    float lufs_r_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PluginProcessor)
 };

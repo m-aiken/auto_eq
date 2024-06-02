@@ -15,6 +15,12 @@ PluginProcessor::PluginProcessor()
             .withInput(Global::Channels::getName(Global::Channels::SIDECHAIN_RIGHT), juce::AudioChannelSet::mono(), true)
             .withOutput("Output", juce::AudioChannelSet::stereo(), true))
     , apvts_(*this, nullptr, "APVTS", getParameterLayout())
+    , peak_l_(0.f)
+    , peak_r_(0.f)
+    , rms_l_(0.f)
+    , rms_r_(0.f)
+    , lufs_l_(0.f)
+    , lufs_r_(0.f)
 {
     assignParameter< juce::AudioParameterFloat* >(filter_bands_.low_cut_.freq_, EqParams::LOW_CUT_FREQ);
     assignParameter< juce::AudioParameterChoice* >(filter_bands_.low_cut_.slope_, EqParams::LOW_CUT_SLOPE);
@@ -297,6 +303,20 @@ PluginProcessor::processBlock(juce::AudioBuffer< float >& buffer, juce::MidiBuff
         fft_buffers_.at(Global::FFT::PRIMARY_RIGHT_POST_EQ)
             .pushNextSample(buffer.getSample(Global::Channels::PRIMARY_RIGHT, i));
     }
+
+    // Get the Peak, RMS, and LUFS.
+    peak_l_ = juce::Decibels::gainToDecibels(buffer.getMagnitude(Global::Channels::PRIMARY_LEFT, 0, buffer.getNumSamples()),
+                                             Global::NEG_INF);
+
+    peak_r_ =
+        juce::Decibels::gainToDecibels(buffer.getMagnitude(Global::Channels::PRIMARY_RIGHT, 0, buffer.getNumSamples()),
+                                       Global::NEG_INF);
+
+    rms_l_ = juce::Decibels::gainToDecibels(buffer.getRMSLevel(Global::Channels::PRIMARY_LEFT, 0, buffer.getNumSamples()),
+                                            Global::NEG_INF);
+
+    rms_r_ = juce::Decibels::gainToDecibels(buffer.getRMSLevel(Global::Channels::PRIMARY_LEFT, 0, buffer.getNumSamples()),
+                                            Global::NEG_INF);
 }
 
 /*---------------------------------------------------------------------------
@@ -377,6 +397,31 @@ FilterFactory::BandSet&
 PluginProcessor::getFilterBands()
 {
     return filter_bands_;
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
+float
+PluginProcessor::getMeterValue(Global::METER_TYPE meter_type, Global::Channels::CHANNEL_ID channel_id) const
+{
+    if (channel_id != Global::Channels::PRIMARY_LEFT && channel_id != Global::Channels::PRIMARY_RIGHT) {
+        return 0.f;
+    }
+
+    switch (meter_type) {
+    case Global::PEAK_METER:
+        return (channel_id == Global::Channels::PRIMARY_LEFT) ? peak_l_ : peak_r_;
+
+    case Global::RMS_METER:
+        return (channel_id == Global::Channels::PRIMARY_LEFT) ? rms_l_ : rms_r_;
+
+    case Global::LUFS_METER:
+        return (channel_id == Global::Channels::PRIMARY_LEFT) ? lufs_l_ : lufs_r_;
+
+    default:
+        return 0.f;
+    }
 }
 
 /*---------------------------------------------------------------------------
