@@ -3,7 +3,7 @@
 #include "PluginProcessor.h"
 #include "gui/ThemeButton.h"
 #include "gui/analyser/Analyser.h"
-#include "gui/meter/StereoMeter.h"
+#include "gui/meters/StereoMeter.h"
 
 class PluginEditor final
     : public juce::AudioProcessorEditor

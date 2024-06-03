@@ -49,8 +49,8 @@ target_sources(${PROJECT_NAME}
         source/gui/analyser/FilterResponseCurve.cpp
         source/gui/analyser/FrequencyMarkers.cpp
         source/gui/analyser/MonoFftPath.cpp
-        source/gui/meter/StereoMeter.cpp
-        source/gui/meter/MonoMeter.cpp
+        source/gui/meters/StereoMeter.cpp
+        source/gui/meters/MonoMeter.cpp
         )
 
 # JUCE modules make use of compile definitions to switch certain features on/off.
