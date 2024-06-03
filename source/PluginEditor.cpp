@@ -11,19 +11,15 @@ PluginEditor::PluginEditor(PluginProcessor& p)
     , processor_ref_(p)
     , theme_button_()
     , analyser_(p)
-    , peak_meter_(Global::PEAK_METER, p)
-    , rms_meter_(Global::RMS_METER, p)
-    , lufs_meter_(Global::LUFS_METER, p)
+    , meter_group_(p)
 {
     addAndMakeVisible(theme_button_);
     addAndMakeVisible(analyser_);
-    addAndMakeVisible(peak_meter_);
-    addAndMakeVisible(rms_meter_);
-    addAndMakeVisible(lufs_meter_);
+    addAndMakeVisible(meter_group_);
 
     theme_button_.addListener(this);
 
-    setSize(1000, 600);
+    setSize(1000, 500);
 }
 
 /*---------------------------------------------------------------------------
@@ -63,22 +59,15 @@ PluginEditor::resized()
 
     using Track = juce::Grid::TrackInfo;
     using Fr    = juce::Grid::Fr;
-    using Px    = juce::Grid::Px;
 
     grid.autoRows        = Track(Fr(1));
     grid.templateColumns = {
-        Track(Fr(7)),
-        Track(Fr(1)),
-        Track(Fr(1)),
-        Track(Fr(1)),
+        Track(Fr(75)),
+        Track(Fr(25)),
     };
 
     grid.items.add(juce::GridItem(analyser_));
-    grid.items.add(juce::GridItem(peak_meter_));
-    grid.items.add(juce::GridItem(rms_meter_));
-    grid.items.add(juce::GridItem(lufs_meter_));
-
-    grid.setGap(Px { 4 });
+    grid.items.add(juce::GridItem(meter_group_));
 
     grid.performLayout(bounds.reduced(30));
 }

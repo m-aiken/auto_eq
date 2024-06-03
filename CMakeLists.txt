@@ -49,7 +49,9 @@ target_sources(${PROJECT_NAME}
         source/gui/analyser/FilterResponseCurve.cpp
         source/gui/analyser/FrequencyMarkers.cpp
         source/gui/analyser/MonoFftPath.cpp
-        source/gui/meters/StereoMeter.cpp
+        source/gui/meters/MeterCanvas.cpp
+        source/gui/meters/MeterGroup.cpp
+        source/gui/meters/MeterLabel.cpp
         source/gui/meters/MonoMeter.cpp
         )
 

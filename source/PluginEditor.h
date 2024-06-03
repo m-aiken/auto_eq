@@ -3,7 +3,7 @@
 #include "PluginProcessor.h"
 #include "gui/ThemeButton.h"
 #include "gui/analyser/Analyser.h"
-#include "gui/meters/StereoMeter.h"
+#include "gui/meters/MeterGroup.h"
 
 class PluginEditor final
     : public juce::AudioProcessorEditor
@@ -25,9 +25,7 @@ private:
 
     ThemeButton theme_button_;
     Analyser    analyser_;
-    StereoMeter peak_meter_;
-    StereoMeter rms_meter_;
-    StereoMeter lufs_meter_;
+    MeterGroup  meter_group_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PluginEditor)
 };

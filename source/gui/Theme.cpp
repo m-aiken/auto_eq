@@ -18,6 +18,10 @@
 /*static*/ const Theme::DarkLightPair Theme::FILTER_RESPONSE_PATH = DarkLightPair(RED_ORANGE.withAlpha(0.4f),
                                                                                   RED_ORANGE.withAlpha(0.4f));
 
+/*static*/ const Theme::DarkLightPair Theme::METER_COLD = DarkLightPair(TEAL.withAlpha(0.5f), TEAL.withAlpha(0.5f));
+/*static*/ const Theme::DarkLightPair Theme::METER_HOT  = DarkLightPair(RED_ORANGE.withAlpha(0.5f),
+                                                                       RED_ORANGE.withAlpha(0.5f));
+
 /*static*/ bool Theme::dark_mode = true;
 
 /*---------------------------------------------------------------------------

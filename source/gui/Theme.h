@@ -22,6 +22,9 @@ public:
     static const DarkLightPair FFT_SIDECHAIN;
     static const DarkLightPair FILTER_RESPONSE_PATH;
 
+    static const DarkLightPair METER_COLD;
+    static const DarkLightPair METER_HOT;
+
     static bool dark_mode;
 
 public:

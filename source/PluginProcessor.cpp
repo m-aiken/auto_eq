@@ -15,12 +15,12 @@ PluginProcessor::PluginProcessor()
             .withInput(Global::Channels::getName(Global::Channels::SIDECHAIN_RIGHT), juce::AudioChannelSet::mono(), true)
             .withOutput("Output", juce::AudioChannelSet::stereo(), true))
     , apvts_(*this, nullptr, "APVTS", getParameterLayout())
-    , peak_l_(0.f)
-    , peak_r_(0.f)
-    , rms_l_(0.f)
-    , rms_r_(0.f)
-    , lufs_l_(0.f)
-    , lufs_r_(0.f)
+    , peak_l_(Global::NEG_INF)
+    , peak_r_(Global::NEG_INF)
+    , rms_l_(Global::NEG_INF)
+    , rms_r_(Global::NEG_INF)
+    , lufs_l_(Global::NEG_INF)
+    , lufs_r_(Global::NEG_INF)
 {
     assignParameter< juce::AudioParameterFloat* >(filter_bands_.low_cut_.freq_, EqParams::LOW_CUT_FREQ);
     assignParameter< juce::AudioParameterChoice* >(filter_bands_.low_cut_.slope_, EqParams::LOW_CUT_SLOPE);
