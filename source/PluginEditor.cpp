@@ -19,6 +19,8 @@ PluginEditor::PluginEditor(PluginProcessor& p)
 
     theme_button_.addListener(this);
 
+    setResizable(true, true);
+    setResizeLimits(768, 400, 1100, 600);
     setSize(1000, 500);
 }
 
