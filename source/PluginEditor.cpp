@@ -50,12 +50,9 @@ PluginEditor::resized()
     auto        bounds              = getLocalBounds();
     const uint8 theme_button_width  = 64;
     const uint8 theme_button_height = 32;
-    const uint8 theme_button_margin = 10;
+    const uint8 theme_button_margin = 8;
 
-    theme_button_.setBounds(bounds.getRight() - theme_button_width - theme_button_margin,
-                            theme_button_margin,
-                            theme_button_width,
-                            theme_button_height);
+    theme_button_.setBounds(theme_button_margin, theme_button_margin, theme_button_width, theme_button_height);
 
     juce::Grid grid;
 
