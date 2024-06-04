@@ -3,6 +3,8 @@
 
 #include "dsp/EqParams.h"
 
+/*static*/ const double PluginProcessor::SMOOTHED_VALUE_RAMP_TIME_SECONDS = 0.2;
+
 /*---------------------------------------------------------------------------
 **
 */
@@ -15,12 +17,6 @@ PluginProcessor::PluginProcessor()
             .withInput(Global::Channels::getName(Global::Channels::SIDECHAIN_RIGHT), juce::AudioChannelSet::mono(), true)
             .withOutput("Output", juce::AudioChannelSet::stereo(), true))
     , apvts_(*this, nullptr, "APVTS", getParameterLayout())
-    , peak_l_(Global::NEG_INF)
-    , peak_r_(Global::NEG_INF)
-    , rms_l_(Global::NEG_INF)
-    , rms_r_(Global::NEG_INF)
-    , lufs_l_(Global::NEG_INF)
-    , lufs_r_(Global::NEG_INF)
 {
     assignParameter< juce::AudioParameterFloat* >(filter_bands_.low_cut_.freq_, EqParams::LOW_CUT_FREQ);
     assignParameter< juce::AudioParameterChoice* >(filter_bands_.low_cut_.slope_, EqParams::LOW_CUT_SLOPE);
@@ -219,6 +215,21 @@ PluginProcessor::prepareToPlay(double sample_rate, int samples_per_block)
 
     // EQ bands (filters).
     updateFilterCoefficients();
+
+    // Meter values.
+    peak_l_.reset(sample_rate, SMOOTHED_VALUE_RAMP_TIME_SECONDS);
+    peak_r_.reset(sample_rate, SMOOTHED_VALUE_RAMP_TIME_SECONDS);
+    rms_l_.reset(sample_rate, SMOOTHED_VALUE_RAMP_TIME_SECONDS);
+    rms_r_.reset(sample_rate, SMOOTHED_VALUE_RAMP_TIME_SECONDS);
+    lufs_l_.reset(sample_rate, SMOOTHED_VALUE_RAMP_TIME_SECONDS);
+    lufs_r_.reset(sample_rate, SMOOTHED_VALUE_RAMP_TIME_SECONDS);
+
+    peak_l_.setCurrentAndTargetValue(Global::NEG_INF);
+    peak_r_.setCurrentAndTargetValue(Global::NEG_INF);
+    rms_l_.setCurrentAndTargetValue(Global::NEG_INF);
+    rms_r_.setCurrentAndTargetValue(Global::NEG_INF);
+    lufs_l_.setCurrentAndTargetValue(Global::NEG_INF);
+    lufs_r_.setCurrentAndTargetValue(Global::NEG_INF);
 }
 
 /*---------------------------------------------------------------------------
@@ -304,19 +315,15 @@ PluginProcessor::processBlock(juce::AudioBuffer< float >& buffer, juce::MidiBuff
             .pushNextSample(buffer.getSample(Global::Channels::PRIMARY_RIGHT, i));
     }
 
-    // Get the Peak, RMS, and LUFS.
-    peak_l_ = juce::Decibels::gainToDecibels(buffer.getMagnitude(Global::Channels::PRIMARY_LEFT, 0, buffer.getNumSamples()),
-                                             Global::NEG_INF);
+    // Update the Peak, RMS, and LUFS.
+    setPeak(peak_l_, buffer, Global::Channels::PRIMARY_LEFT);
+    setPeak(peak_r_, buffer, Global::Channels::PRIMARY_RIGHT);
 
-    peak_r_ =
-        juce::Decibels::gainToDecibels(buffer.getMagnitude(Global::Channels::PRIMARY_RIGHT, 0, buffer.getNumSamples()),
-                                       Global::NEG_INF);
+    setRms(rms_l_, buffer, Global::Channels::PRIMARY_LEFT);
+    setRms(rms_r_, buffer, Global::Channels::PRIMARY_RIGHT);
 
-    rms_l_ = juce::Decibels::gainToDecibels(buffer.getRMSLevel(Global::Channels::PRIMARY_LEFT, 0, buffer.getNumSamples()),
-                                            Global::NEG_INF);
-
-    rms_r_ = juce::Decibels::gainToDecibels(buffer.getRMSLevel(Global::Channels::PRIMARY_LEFT, 0, buffer.getNumSamples()),
-                                            Global::NEG_INF);
+    setLufs(lufs_l_, buffer, Global::Channels::PRIMARY_LEFT);
+    setLufs(lufs_r_, buffer, Global::Channels::PRIMARY_RIGHT);
 }
 
 /*---------------------------------------------------------------------------
@@ -406,21 +413,21 @@ float
 PluginProcessor::getMeterValue(Global::METER_TYPE meter_type, Global::Channels::CHANNEL_ID channel_id) const
 {
     if (channel_id != Global::Channels::PRIMARY_LEFT && channel_id != Global::Channels::PRIMARY_RIGHT) {
-        return 0.f;
+        return Global::NEG_INF;
     }
 
     switch (meter_type) {
     case Global::PEAK_METER:
-        return (channel_id == Global::Channels::PRIMARY_LEFT) ? peak_l_ : peak_r_;
+        return (channel_id == Global::Channels::PRIMARY_LEFT) ? peak_l_.getCurrentValue() : peak_r_.getCurrentValue();
 
     case Global::RMS_METER:
-        return (channel_id == Global::Channels::PRIMARY_LEFT) ? rms_l_ : rms_r_;
+        return (channel_id == Global::Channels::PRIMARY_LEFT) ? rms_l_.getCurrentValue() : rms_r_.getCurrentValue();
 
     case Global::LUFS_METER:
-        return (channel_id == Global::Channels::PRIMARY_LEFT) ? lufs_l_ : lufs_r_;
+        return (channel_id == Global::Channels::PRIMARY_LEFT) ? lufs_l_.getCurrentValue() : lufs_r_.getCurrentValue();
 
     default:
-        return 0.f;
+        return Global::NEG_INF;
     }
 }
 
@@ -522,6 +529,47 @@ PluginProcessor::updateFilterCoefficients()
 
     FilterFactory::updatePeak(filter_chain_left_, FilterFactory::PEAK_5, filter_bands_.peak_5_, sample_rate);
     FilterFactory::updatePeak(filter_chain_right_, FilterFactory::PEAK_5, filter_bands_.peak_5_, sample_rate);
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
+void
+PluginProcessor::setPeak(SmoothedFloat& val, juce::AudioBuffer< float >& buffer, Global::Channels::CHANNEL_ID channel)
+{
+    int   num_samples = buffer.getNumSamples();
+    float new_value   = juce::Decibels::gainToDecibels(buffer.getMagnitude(channel, 0, num_samples), Global::NEG_INF);
+
+    val.skip(num_samples);
+
+    // new value >  current value: jump to it immediately.
+    // new value <= current value: ramp to it gradually.
+    new_value > val.getCurrentValue() ? val.setCurrentAndTargetValue(new_value) : val.setTargetValue(new_value);
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
+void
+PluginProcessor::setRms(SmoothedFloat& val, juce::AudioBuffer< float >& buffer, Global::Channels::CHANNEL_ID channel)
+{
+    int   num_samples = buffer.getNumSamples();
+    float new_value   = juce::Decibels::gainToDecibels(buffer.getRMSLevel(channel, 0, num_samples), Global::NEG_INF);
+
+    val.skip(num_samples);
+
+    // new value >  current value: jump to it immediately.
+    // new value <= current value: ramp to it gradually.
+    new_value > val.getCurrentValue() ? val.setCurrentAndTargetValue(new_value) : val.setTargetValue(new_value);
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
+void
+PluginProcessor::setLufs(SmoothedFloat& val, juce::AudioBuffer< float >& buffer, Global::Channels::CHANNEL_ID channel)
+{
+    juce::ignoreUnused(val, buffer, channel);
 }
 
 /*---------------------------------------------------------------------------

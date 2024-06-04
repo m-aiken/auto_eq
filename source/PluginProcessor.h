@@ -75,12 +75,19 @@ private:
         }
     }
 
-    float peak_l_;
-    float peak_r_;
-    float rms_l_;
-    float rms_r_;
-    float lufs_l_;
-    float lufs_r_;
+    typedef juce::SmoothedValue< float, juce::ValueSmoothingTypes::Linear > SmoothedFloat;
+
+    static const double SMOOTHED_VALUE_RAMP_TIME_SECONDS;
+    SmoothedFloat       peak_l_;
+    SmoothedFloat       peak_r_;
+    SmoothedFloat       rms_l_;
+    SmoothedFloat       rms_r_;
+    SmoothedFloat       lufs_l_;
+    SmoothedFloat       lufs_r_;
+
+    void setPeak(SmoothedFloat& val, juce::AudioBuffer< float >& buffer, Global::Channels::CHANNEL_ID channel);
+    void setRms(SmoothedFloat& val, juce::AudioBuffer< float >& buffer, Global::Channels::CHANNEL_ID channel);
+    void setLufs(SmoothedFloat& val, juce::AudioBuffer< float >& buffer, Global::Channels::CHANNEL_ID channel);
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PluginProcessor)
 };
