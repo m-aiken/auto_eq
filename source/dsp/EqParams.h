@@ -9,10 +9,7 @@ class EqParams
 public:
     EqParams();
 
-    static const int VERSION_HINT;
-
-    static const float MIN_Q;
-    static const float MAX_Q;
+    static const int   VERSION_HINT;
     static const float DEFAULT_Q;
 
     enum PARAM_ID {
@@ -53,13 +50,6 @@ public:
         HIGH_CUT_ENABLED,
     };
 
-    enum SLOPE_CHOICE {
-        DB_PER_OCT_12,
-        DB_PER_OCT_24,
-        DB_PER_OCT_36,
-        DB_PER_OCT_48,
-    };
-
     static const juce::String getName(PARAM_ID param_id);
 
     typedef juce::AudioProcessorValueTreeState::ParameterLayout ParamLayout;
@@ -69,13 +59,9 @@ public:
     addFreqParamToLayout(ParamLayout& pl, PARAM_ID id, float min_hz = Global::MIN_HZ, float max_hz = Global::MAX_HZ);
     static void addGainParamToLayout(ParamLayout& pl, PARAM_ID id);
     static void addQualParamToLayout(ParamLayout& pl, PARAM_ID id);
-    static void addEnabledParamToLayout(ParamLayout& pl, PARAM_ID id);
-    static void addCutChoiceParamToLayout(ParamLayout& pl, PARAM_ID id);
 
 private:
     static juce::ParameterID getVersionedParameterId(PARAM_ID id);
-    static juce::StringArray getSlopeChoices();
-    static float             getDefaultFrequency(PARAM_ID param_id);
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(EqParams)
 };

@@ -443,6 +443,7 @@ PluginProcessor::getParameterLayout()
     // EQ.
     //
 
+#if 0
     // Low Cut.
     EqParams::addFreqParamToLayout(parameter_layout, EqParams::LOW_CUT_FREQ, Global::MIN_HZ, 500.f);
     EqParams::addCutChoiceParamToLayout(parameter_layout, EqParams::LOW_CUT_SLOPE);
@@ -487,6 +488,11 @@ PluginProcessor::getParameterLayout()
     EqParams::addFreqParamToLayout(parameter_layout, EqParams::HIGH_CUT_FREQ, 1000.f, Global::MAX_HZ);
     EqParams::addCutChoiceParamToLayout(parameter_layout, EqParams::HIGH_CUT_SLOPE);
     EqParams::addEnabledParamToLayout(parameter_layout, EqParams::HIGH_CUT_ENABLED);
+#endif
+
+    for (uint8 i = 0; i < FilterFactory::NUM_BANDS; ++i) {
+        FilterFactory::addBandToParameterLayout(parameter_layout, static_cast< FilterFactory::Band >(i));
+    }
 
     return parameter_layout;
 }

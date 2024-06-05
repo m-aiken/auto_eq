@@ -1,5 +1,9 @@
 #include "FilterFactory.h"
 
+/*static*/ const uint8 FilterFactory::NUM_BANDS         = 31;
+/*static*/ const float FilterFactory::MAX_BAND_DB_BOOST = 12.f;
+/*static*/ const float FilterFactory::MAX_BAND_DB_CUT   = -12.f;
+
 /*---------------------------------------------------------------------------
 **
 */
@@ -86,117 +90,7 @@ FilterFactory::getHzForBand(Band band)
 **
 */
 /*static*/ void
-FilterFactory::updateLowCut(MonoChain& chain, CutBand& params, double sample_rate)
-{
-    if (params.freq_ == nullptr || params.slope_ == nullptr || params.enabled_ == nullptr) {
-        return;
-    }
-
-    auto& cut_filter_chain = chain.get< ChainPosition::LOW_CUT >();
-
-    cut_filter_chain.setBypassed< SLOPE_12 >(true);
-    cut_filter_chain.setBypassed< SLOPE_24 >(true);
-    cut_filter_chain.setBypassed< SLOPE_36 >(true);
-    cut_filter_chain.setBypassed< SLOPE_48 >(true);
-
-    auto coefficients = getLowCutCoefficients(sample_rate, params);
-
-    switch (params.slope_->getIndex()) {
-    case SLOPE_48:
-        *cut_filter_chain.get< SLOPE_48 >().coefficients = *coefficients[SLOPE_48];
-        cut_filter_chain.setBypassed< SLOPE_48 >(false);
-
-    case SLOPE_36:
-        *cut_filter_chain.get< SLOPE_36 >().coefficients = *coefficients[SLOPE_36];
-        cut_filter_chain.setBypassed< SLOPE_36 >(false);
-
-    case SLOPE_24:
-        *cut_filter_chain.get< SLOPE_24 >().coefficients = *coefficients[SLOPE_24];
-        cut_filter_chain.setBypassed< SLOPE_24 >(false);
-
-    case SLOPE_12:
-        *cut_filter_chain.get< SLOPE_12 >().coefficients = *coefficients[SLOPE_12];
-        cut_filter_chain.setBypassed< SLOPE_12 >(false);
-        break;
-
-    default:
-        break;
-    }
-}
-
-/*---------------------------------------------------------------------------
-**
-*/
-/*static*/ void
-FilterFactory::updateHighCut(MonoChain& chain, CutBand& params, double sample_rate)
-{
-    if (params.freq_ == nullptr || params.slope_ == nullptr || params.enabled_ == nullptr) {
-        return;
-    }
-
-    auto& cut_filter_chain = chain.get< ChainPosition::HIGH_CUT >();
-
-    cut_filter_chain.setBypassed< SLOPE_12 >(true);
-    cut_filter_chain.setBypassed< SLOPE_24 >(true);
-    cut_filter_chain.setBypassed< SLOPE_36 >(true);
-    cut_filter_chain.setBypassed< SLOPE_48 >(true);
-
-    auto coefficients = getHighCutCoefficients(sample_rate, params);
-
-    switch (params.slope_->getIndex()) {
-    case SLOPE_48:
-        *cut_filter_chain.get< SLOPE_48 >().coefficients = *coefficients[SLOPE_48];
-        cut_filter_chain.setBypassed< SLOPE_48 >(false);
-
-    case SLOPE_36:
-        *cut_filter_chain.get< SLOPE_36 >().coefficients = *coefficients[SLOPE_36];
-        cut_filter_chain.setBypassed< SLOPE_36 >(false);
-
-    case SLOPE_24:
-        *cut_filter_chain.get< SLOPE_24 >().coefficients = *coefficients[SLOPE_24];
-        cut_filter_chain.setBypassed< SLOPE_24 >(false);
-
-    case SLOPE_12:
-        *cut_filter_chain.get< SLOPE_12 >().coefficients = *coefficients[SLOPE_12];
-        cut_filter_chain.setBypassed< SLOPE_12 >(false);
-        break;
-
-    default:
-        break;
-    }
-}
-
-/*---------------------------------------------------------------------------
-**
-*/
-/*static*/ void
-FilterFactory::updateLowShelf(MonoChain& chain, ShelfBand& params, double sample_rate)
-{
-    if (params.freq_ == nullptr || params.gain_ == nullptr || params.q_ == nullptr) {
-        return;
-    }
-
-    *chain.get< ChainPosition::LOW_SHELF >().coefficients = *getLowShelfCoefficients(sample_rate, params);
-}
-
-/*---------------------------------------------------------------------------
-**
-*/
-/*static*/ void
-FilterFactory::updateHighShelf(MonoChain& chain, ShelfBand& params, double sample_rate)
-{
-    if (params.freq_ == nullptr || params.gain_ == nullptr || params.q_ == nullptr) {
-        return;
-    }
-
-    *chain.get< ChainPosition::HIGH_SHELF >().coefficients = *getHighShelfCoefficients(sample_rate, params);
-}
-
-/*---------------------------------------------------------------------------
-**
-*/
-/*static*/ void
-FilterFactory::updatePeak(MonoChain& chain, const ChainPosition& position, PeakBand& params, double sample_rate)
+FilterFactory::updatePeak(MonoChain& chain, const Band& band_id, PeakBand& params, double sample_rate)
 {
     if (params.freq_ == nullptr || params.gain_ == nullptr || params.q_ == nullptr) {
         return;
@@ -204,31 +98,129 @@ FilterFactory::updatePeak(MonoChain& chain, const ChainPosition& position, PeakB
 
     auto coefficients = getPeakCoefficients(sample_rate, params);
 
-    switch (position) {
-    case ChainPosition::PEAK_1:
-        *chain.get< ChainPosition::PEAK_1 >().coefficients = *coefficients;
+    switch (band_id) {
+    case Band::B1:
+        *chain.get< Band::B1 >().coefficients = *coefficients;
         break;
 
-    case ChainPosition::PEAK_2:
-        *chain.get< ChainPosition::PEAK_2 >().coefficients = *coefficients;
+    case Band::B2:
+        *chain.get< Band::B2 >().coefficients = *coefficients;
         break;
 
-    case ChainPosition::PEAK_3:
-        *chain.get< ChainPosition::PEAK_3 >().coefficients = *coefficients;
+    case Band::B3:
+        *chain.get< Band::B3 >().coefficients = *coefficients;
         break;
 
-    case ChainPosition::PEAK_4:
-        *chain.get< ChainPosition::PEAK_4 >().coefficients = *coefficients;
+    case Band::B4:
+        *chain.get< Band::B4 >().coefficients = *coefficients;
         break;
 
-    case ChainPosition::PEAK_5:
-        *chain.get< ChainPosition::PEAK_5 >().coefficients = *coefficients;
+    case Band::B5:
+        *chain.get< Band::B5 >().coefficients = *coefficients;
         break;
 
-    case ChainPosition::LOW_CUT:
-    case ChainPosition::HIGH_CUT:
-    case ChainPosition::LOW_SHELF:
-    case ChainPosition::HIGH_SHELF:
+    case Band::B6:
+        *chain.get< Band::B6 >().coefficients = *coefficients;
+        break;
+
+    case Band::B7:
+        *chain.get< Band::B7 >().coefficients = *coefficients;
+        break;
+
+    case Band::B8:
+        *chain.get< Band::B8 >().coefficients = *coefficients;
+        break;
+
+    case Band::B9:
+        *chain.get< Band::B9 >().coefficients = *coefficients;
+        break;
+
+    case Band::B10:
+        *chain.get< Band::B10 >().coefficients = *coefficients;
+        break;
+
+    case Band::B11:
+        *chain.get< Band::B11 >().coefficients = *coefficients;
+        break;
+
+    case Band::B12:
+        *chain.get< Band::B12 >().coefficients = *coefficients;
+        break;
+
+    case Band::B13:
+        *chain.get< Band::B13 >().coefficients = *coefficients;
+        break;
+
+    case Band::B14:
+        *chain.get< Band::B14 >().coefficients = *coefficients;
+        break;
+
+    case Band::B15:
+        *chain.get< Band::B15 >().coefficients = *coefficients;
+        break;
+
+    case Band::B16:
+        *chain.get< Band::B16 >().coefficients = *coefficients;
+        break;
+
+    case Band::B17:
+        *chain.get< Band::B17 >().coefficients = *coefficients;
+        break;
+
+    case Band::B18:
+        *chain.get< Band::B18 >().coefficients = *coefficients;
+        break;
+
+    case Band::B19:
+        *chain.get< Band::B19 >().coefficients = *coefficients;
+        break;
+
+    case Band::B20:
+        *chain.get< Band::B20 >().coefficients = *coefficients;
+        break;
+
+    case Band::B21:
+        *chain.get< Band::B21 >().coefficients = *coefficients;
+        break;
+
+    case Band::B22:
+        *chain.get< Band::B22 >().coefficients = *coefficients;
+        break;
+
+    case Band::B23:
+        *chain.get< Band::B23 >().coefficients = *coefficients;
+        break;
+
+    case Band::B24:
+        *chain.get< Band::B24 >().coefficients = *coefficients;
+        break;
+
+    case Band::B25:
+        *chain.get< Band::B25 >().coefficients = *coefficients;
+        break;
+
+    case Band::B26:
+        *chain.get< Band::B26 >().coefficients = *coefficients;
+        break;
+
+    case Band::B27:
+        *chain.get< Band::B27 >().coefficients = *coefficients;
+        break;
+
+    case Band::B28:
+        *chain.get< Band::B28 >().coefficients = *coefficients;
+        break;
+
+    case Band::B29:
+        *chain.get< Band::B29 >().coefficients = *coefficients;
+        break;
+
+    case Band::B30:
+        *chain.get< Band::B30 >().coefficients = *coefficients;
+        break;
+
+    case Band::B31:
+        *chain.get< Band::B31 >().coefficients = *coefficients;
         break;
 
     default:
@@ -239,55 +231,7 @@ FilterFactory::updatePeak(MonoChain& chain, const ChainPosition& position, PeakB
 /*---------------------------------------------------------------------------
 **
 */
-/*static*/ FilterFactory::RefCtArrCoefficients
-FilterFactory::getLowCutCoefficients(double sample_rate, CutBand& params)
-{
-    return juce::dsp::FilterDesign< float >::designIIRHighpassHighOrderButterworthMethod(params.freq_->get(),
-                                                                                         sample_rate,
-                                                                                         (params.slope_->getIndex() + 1)
-                                                                                             * 2);
-}
-
-/*---------------------------------------------------------------------------
-**
-*/
-/*static*/ FilterFactory::RefCtArrCoefficients
-FilterFactory::getHighCutCoefficients(double sample_rate, CutBand& params)
-{
-    return juce::dsp::FilterDesign< float >::designIIRLowpassHighOrderButterworthMethod(params.freq_->get(),
-                                                                                        sample_rate,
-                                                                                        (params.slope_->getIndex() + 1)
-                                                                                            * 2);
-}
-
-/*---------------------------------------------------------------------------
-**
-*/
-/*static*/ FilterFactory::RefCtObjCoefficients
-FilterFactory::getLowShelfCoefficients(double sample_rate, ShelfBand& params)
-{
-    return juce::dsp::IIR::Coefficients< float >::makeLowShelf(sample_rate,
-                                                               params.freq_->get(),
-                                                               params.q_->get(),
-                                                               juce::Decibels::decibelsToGain(params.gain_->get()));
-}
-
-/*---------------------------------------------------------------------------
-**
-*/
-/*static*/ FilterFactory::RefCtObjCoefficients
-FilterFactory::getHighShelfCoefficients(double sample_rate, ShelfBand& params)
-{
-    return juce::dsp::IIR::Coefficients< float >::makeHighShelf(sample_rate,
-                                                                params.freq_->get(),
-                                                                params.q_->get(),
-                                                                juce::Decibels::decibelsToGain(params.gain_->get()));
-}
-
-/*---------------------------------------------------------------------------
-**
-*/
-/*static*/ FilterFactory::RefCtObjCoefficients
+/*static*/ FilterFactory::BandCoefficients
 FilterFactory::getPeakCoefficients(double sample_rate, PeakBand& params)
 {
     return juce::dsp::IIR::Coefficients< float >::makePeakFilter(sample_rate,

@@ -1,10 +1,7 @@
 #include "EqParams.h"
 
-/*static*/ const int EqParams::VERSION_HINT = 1;
-
-/*static*/ const float EqParams::MIN_Q     = 0.1f;
-/*static*/ const float EqParams::MAX_Q     = 10.f;
-/*static*/ const float EqParams::DEFAULT_Q = 1.f;
+/*static*/ const int   EqParams::VERSION_HINT = 1;
+/*static*/ const float EqParams::DEFAULT_Q    = 1.f;
 
 /*---------------------------------------------------------------------------
 **
@@ -13,6 +10,9 @@ EqParams::EqParams()
 {
 }
 
+/*---------------------------------------------------------------------------
+**
+*/
 /*static*/ const juce::String
 EqParams::getName(PARAM_ID param_id)
 {
@@ -132,29 +132,8 @@ EqParams::addGainParamToLayout(ParamLayout& pl, PARAM_ID id)
 /*static*/ void
 EqParams::addQualParamToLayout(ParamLayout& pl, PARAM_ID id)
 {
-    ValueRange range(MIN_Q, MAX_Q, 0.05f, 1.f);
+    ValueRange range(DEFAULT_Q, DEFAULT_Q, 0.05f, DEFAULT_Q);
     pl.add(std::make_unique< juce::AudioParameterFloat >(getVersionedParameterId(id), getName(id), range, DEFAULT_Q));
-}
-
-/*---------------------------------------------------------------------------
-**
-*/
-/*static*/ void
-EqParams::addEnabledParamToLayout(ParamLayout& pl, PARAM_ID id)
-{
-    pl.add(std::make_unique< juce::AudioParameterBool >(getVersionedParameterId(id), getName(id), false));
-}
-
-/*---------------------------------------------------------------------------
-**
-*/
-/*static*/ void
-EqParams::addCutChoiceParamToLayout(ParamLayout& pl, PARAM_ID id)
-{
-    pl.add(std::make_unique< juce::AudioParameterChoice >(getVersionedParameterId(id),
-                                                          getName(id),
-                                                          getSlopeChoices(),
-                                                          DB_PER_OCT_48));
 }
 
 /*---------------------------------------------------------------------------
@@ -164,52 +143,6 @@ EqParams::addCutChoiceParamToLayout(ParamLayout& pl, PARAM_ID id)
 EqParams::getVersionedParameterId(PARAM_ID id)
 {
     return juce::ParameterID(getName(id), VERSION_HINT);
-}
-
-/*---------------------------------------------------------------------------
-**
-*/
-/*static*/ juce::StringArray
-EqParams::getSlopeChoices()
-{
-    return juce::StringArray("12dB/Oct", "24dB/Oct", "36dB/Oct", "48dB/Oct");
-}
-
-/*---------------------------------------------------------------------------
-**
-*/
-/*static*/ float
-EqParams::getDefaultFrequency(PARAM_ID param_id)
-{
-    if (param_id == LOW_CUT_FREQ) {
-        return Global::MIN_HZ;
-    }
-    else if (param_id == LOW_SHELF_FREQ) {
-        return 200.f;
-    }
-    else if (param_id == PEAK_1_FREQ) {
-        return 100.f;
-    }
-    else if (param_id == PEAK_2_FREQ) {
-        return 500.f;
-    }
-    else if (param_id == PEAK_3_FREQ) {
-        return 1000.f;
-    }
-    else if (param_id == PEAK_4_FREQ) {
-        return 2000.f;
-    }
-    else if (param_id == PEAK_5_FREQ) {
-        return 5000.f;
-    }
-    else if (param_id == HIGH_SHELF_FREQ) {
-        return 10000.f;
-    }
-    else if (param_id == HIGH_CUT_FREQ) {
-        return Global::MAX_HZ;
-    }
-
-    return Global::NEG_INF;
 }
 
 /*---------------------------------------------------------------------------
