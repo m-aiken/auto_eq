@@ -10,6 +10,81 @@ FilterFactory::FilterFactory()
 /*---------------------------------------------------------------------------
 **
 */
+/*static*/ float
+FilterFactory::getHzForBand(Band band)
+{
+    switch (band) {
+    case B1:
+        return 20.f;
+    case B2:
+        return 25.f;
+    case B3:
+        return 31.5f;
+    case B4:
+        return 40.f;
+    case B5:
+        return 50.f;
+    case B6:
+        return 63.f;
+    case B7:
+        return 80.f;
+    case B8:
+        return 100.f;
+    case B9:
+        return 125.f;
+    case B10:
+        return 160.f;
+    case B11:
+        return 200.f;
+    case B12:
+        return 250.f;
+    case B13:
+        return 315.f;
+    case B14:
+        return 400.f;
+    case B15:
+        return 500.f;
+    case B16:
+        return 630.f;
+    case B17:
+        return 800.f;
+    case B18:
+        return 1000.f;
+    case B19:
+        return 1250.f;
+    case B20:
+        return 1600.f;
+    case B21:
+        return 2000.f;
+    case B22:
+        return 2500.f;
+    case B23:
+        return 3150.f;
+    case B24:
+        return 4000.f;
+    case B25:
+        return 5000.f;
+    case B26:
+        return 6300.f;
+    case B27:
+        return 8000.f;
+    case B28:
+        return 10000.f;
+    case B29:
+        return 12500.f;
+    case B30:
+        return 16000.f;
+    case B31:
+        return 20000.f;
+
+    default:
+        return 0.f;
+    }
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
 /*static*/ void
 FilterFactory::updateLowCut(MonoChain& chain, CutBand& params, double sample_rate)
 {
