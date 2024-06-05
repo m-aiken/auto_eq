@@ -77,8 +77,8 @@ MeterGroup::resized()
     // Meter Grid.
     juce::Grid meter_grid;
 
-    const uint8 meter_fr   = 10;
-    const uint8 padding_fr = 6;
+    const uint8 meter_fr   = 6;
+    const uint8 padding_fr = 10;
 
     meter_grid.templateColumns = {
         Track(Fr(padding_fr)),
