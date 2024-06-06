@@ -39,15 +39,13 @@ public:
                                                  IIRFilter,
                                                  IIRFilter >;
 
-    struct PeakBand {
-        juce::AudioParameterFloat* freq_ { nullptr };
-        juce::AudioParameterFloat* gain_ { nullptr };
-        juce::AudioParameterFloat* q_ { nullptr };
-    };
-
     static const uint8 NUM_BANDS;
     static const float MAX_BAND_DB_BOOST;
     static const float MAX_BAND_DB_CUT;
+    static const float DEFAULT_BAND_DB;
+    static const float DEFAULT_BAND_Q;
+
+    static const juce::NormalisableRange< float > BAND_DB_RANGE;
 
     enum Band {
         B1,
@@ -88,13 +86,17 @@ public:
 
     static float getHzForBand(Band band);
 
-    static void
-    addBandToParameterLayout(juce::AudioProcessorValueTreeState::ParameterLayout& parameter_layout, Band band);
+    static void addBandToParameterLayout(juce::AudioProcessorValueTreeState::ParameterLayout& pl, Band band_id);
 
-    static void updatePeak(MonoChain& chain, const Band& band_id, PeakBand& params, double sample_rate);
+    static juce::String getBandName(Band band_id);
+
+    static void updatePeak(MonoChain& chain, const Band& band_id, float gain, double sample_rate);
 
 private:
-    static BandCoefficients getPeakCoefficients(double sample_rate, PeakBand& params);
+    static BandCoefficients getPeakCoefficients(double sample_rate, Band band_id, float gain);
+
+    static const int         PARAMETERS_VERSION_HINT;
+    static juce::ParameterID getVersionedParameterId(Band band_id);
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(FilterFactory)
 };

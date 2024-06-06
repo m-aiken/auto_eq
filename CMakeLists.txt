@@ -38,7 +38,6 @@ target_sources(${PROJECT_NAME}
         PRIVATE
         source/PluginEditor.cpp
         source/PluginProcessor.cpp
-        source/dsp/EqParams.cpp
         source/dsp/FilterFactory.cpp
         source/dsp/MonoFftBuffer.cpp
         source/gui/DecibelMarkers.cpp

@@ -1,5 +1,6 @@
 #include "FilterResponseCurve.h"
 #include "../Theme.h"
+#include "../../dsp/FilterFactory.h"
 
 /*---------------------------------------------------------------------------
 **
@@ -112,20 +113,10 @@ FilterResponseCurve::calculateMagnitudes()
     // Get the filters.
     FilterFactory::MonoChain& filter_chain = processor_ref_.getFilterChain();
 
-    auto& lc = filter_chain.get< FilterFactory::LOW_CUT >();
-    auto& ls = filter_chain.get< FilterFactory::LOW_SHELF >();
-    auto& p1 = filter_chain.get< FilterFactory::PEAK_1 >();
-    auto& p2 = filter_chain.get< FilterFactory::PEAK_2 >();
-    auto& p3 = filter_chain.get< FilterFactory::PEAK_3 >();
-    auto& p4 = filter_chain.get< FilterFactory::PEAK_4 >();
-    auto& p5 = filter_chain.get< FilterFactory::PEAK_5 >();
-    auto& hs = filter_chain.get< FilterFactory::HIGH_SHELF >();
-    auto& hc = filter_chain.get< FilterFactory::HIGH_CUT >();
-
-    // Calculate the magnitudes.
     auto   num_x_pixels = getLocalBounds().getWidth();
     double sample_rate  = processor_ref_.getSampleRate();
 
+    // Calculate the magnitudes.
     for (size_t i = 0; i < num_x_pixels; ++i) {
         double mag = 1.0;
 
@@ -134,34 +125,38 @@ FilterResponseCurve::calculateMagnitudes()
                                                  Global::MIN_HZ,
                                                  Global::MAX_HZ);
 
-        // Low Cut.
-        if (static_cast< bool >(apvts.getParameter(EqParams::getName(EqParams::LOW_CUT_ENABLED))->getValue())) {
-            mag *= lc.get< FilterFactory::SLOPE_12 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
-            mag *= lc.get< FilterFactory::SLOPE_24 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
-            mag *= lc.get< FilterFactory::SLOPE_36 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
-            mag *= lc.get< FilterFactory::SLOPE_48 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
-        }
-
-        // Low Shelf.
-        mag *= ls.coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
-
-        // Peak bands.
-        mag *= p1.coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
-        mag *= p2.coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
-        mag *= p3.coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
-        mag *= p4.coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
-        mag *= p5.coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
-
-        // High Shelf.
-        mag *= hs.coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
-
-        // High Cut.
-        if (static_cast< bool >(apvts.getParameter(EqParams::getName(EqParams::HIGH_CUT_ENABLED))->getValue())) {
-            mag *= hc.get< FilterFactory::SLOPE_12 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
-            mag *= hc.get< FilterFactory::SLOPE_24 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
-            mag *= hc.get< FilterFactory::SLOPE_36 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
-            mag *= hc.get< FilterFactory::SLOPE_48 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
-        }
+        // Magnitude per band.
+        mag *= filter_chain.get< FilterFactory::B1 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
+        mag *= filter_chain.get< FilterFactory::B2 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
+        mag *= filter_chain.get< FilterFactory::B3 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
+        mag *= filter_chain.get< FilterFactory::B4 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
+        mag *= filter_chain.get< FilterFactory::B5 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
+        mag *= filter_chain.get< FilterFactory::B6 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
+        mag *= filter_chain.get< FilterFactory::B7 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
+        mag *= filter_chain.get< FilterFactory::B8 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
+        mag *= filter_chain.get< FilterFactory::B9 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
+        mag *= filter_chain.get< FilterFactory::B10 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
+        mag *= filter_chain.get< FilterFactory::B11 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
+        mag *= filter_chain.get< FilterFactory::B12 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
+        mag *= filter_chain.get< FilterFactory::B13 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
+        mag *= filter_chain.get< FilterFactory::B14 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
+        mag *= filter_chain.get< FilterFactory::B15 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
+        mag *= filter_chain.get< FilterFactory::B16 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
+        mag *= filter_chain.get< FilterFactory::B17 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
+        mag *= filter_chain.get< FilterFactory::B18 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
+        mag *= filter_chain.get< FilterFactory::B19 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
+        mag *= filter_chain.get< FilterFactory::B20 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
+        mag *= filter_chain.get< FilterFactory::B21 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
+        mag *= filter_chain.get< FilterFactory::B22 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
+        mag *= filter_chain.get< FilterFactory::B23 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
+        mag *= filter_chain.get< FilterFactory::B24 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
+        mag *= filter_chain.get< FilterFactory::B25 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
+        mag *= filter_chain.get< FilterFactory::B26 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
+        mag *= filter_chain.get< FilterFactory::B27 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
+        mag *= filter_chain.get< FilterFactory::B28 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
+        mag *= filter_chain.get< FilterFactory::B29 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
+        mag *= filter_chain.get< FilterFactory::B30 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
+        mag *= filter_chain.get< FilterFactory::B31 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
 
         magnitudes_.at(i) = juce::Decibels::gainToDecibels< double >(mag, Global::NEG_INF);
     }
@@ -209,41 +204,12 @@ FilterResponseCurve::addApvtsListeners()
 {
     juce::AudioProcessorValueTreeState& apvts = processor_ref_.getApvts();
 
-    apvts.getParameter(EqParams::getName(EqParams::LOW_CUT_FREQ))->addListener(this);
-    apvts.getParameter(EqParams::getName(EqParams::LOW_CUT_SLOPE))->addListener(this);
-    apvts.getParameter(EqParams::getName(EqParams::LOW_CUT_ENABLED))->addListener(this);
-    //
-    apvts.getParameter(EqParams::getName(EqParams::LOW_SHELF_FREQ))->addListener(this);
-    apvts.getParameter(EqParams::getName(EqParams::LOW_SHELF_GAIN))->addListener(this);
-    apvts.getParameter(EqParams::getName(EqParams::LOW_SHELF_Q))->addListener(this);
-    //
-    apvts.getParameter(EqParams::getName(EqParams::PEAK_1_FREQ))->addListener(this);
-    apvts.getParameter(EqParams::getName(EqParams::PEAK_1_GAIN))->addListener(this);
-    apvts.getParameter(EqParams::getName(EqParams::PEAK_1_Q))->addListener(this);
-    //
-    apvts.getParameter(EqParams::getName(EqParams::PEAK_2_FREQ))->addListener(this);
-    apvts.getParameter(EqParams::getName(EqParams::PEAK_2_GAIN))->addListener(this);
-    apvts.getParameter(EqParams::getName(EqParams::PEAK_2_Q))->addListener(this);
-    //
-    apvts.getParameter(EqParams::getName(EqParams::PEAK_3_FREQ))->addListener(this);
-    apvts.getParameter(EqParams::getName(EqParams::PEAK_3_GAIN))->addListener(this);
-    apvts.getParameter(EqParams::getName(EqParams::PEAK_3_Q))->addListener(this);
-    //
-    apvts.getParameter(EqParams::getName(EqParams::PEAK_4_FREQ))->addListener(this);
-    apvts.getParameter(EqParams::getName(EqParams::PEAK_4_GAIN))->addListener(this);
-    apvts.getParameter(EqParams::getName(EqParams::PEAK_4_Q))->addListener(this);
-    //
-    apvts.getParameter(EqParams::getName(EqParams::PEAK_5_FREQ))->addListener(this);
-    apvts.getParameter(EqParams::getName(EqParams::PEAK_5_GAIN))->addListener(this);
-    apvts.getParameter(EqParams::getName(EqParams::PEAK_5_Q))->addListener(this);
-    //
-    apvts.getParameter(EqParams::getName(EqParams::HIGH_SHELF_FREQ))->addListener(this);
-    apvts.getParameter(EqParams::getName(EqParams::HIGH_SHELF_GAIN))->addListener(this);
-    apvts.getParameter(EqParams::getName(EqParams::HIGH_SHELF_Q))->addListener(this);
-    //
-    apvts.getParameter(EqParams::getName(EqParams::HIGH_CUT_FREQ))->addListener(this);
-    apvts.getParameter(EqParams::getName(EqParams::HIGH_CUT_SLOPE))->addListener(this);
-    apvts.getParameter(EqParams::getName(EqParams::HIGH_CUT_ENABLED))->addListener(this);
+    for (uint8 i = 0; i < FilterFactory::NUM_BANDS; ++i) {
+        FilterFactory::Band band_id  = static_cast< FilterFactory::Band >(i);
+        juce::String        param_id = FilterFactory::getBandName(band_id);
+
+        apvts.getParameter(param_id)->addListener(this);
+    }
 }
 
 /*---------------------------------------------------------------------------
@@ -254,41 +220,12 @@ FilterResponseCurve::removeApvtsListeners()
 {
     juce::AudioProcessorValueTreeState& apvts = processor_ref_.getApvts();
 
-    apvts.getParameter(EqParams::getName(EqParams::LOW_CUT_FREQ))->removeListener(this);
-    apvts.getParameter(EqParams::getName(EqParams::LOW_CUT_SLOPE))->removeListener(this);
-    apvts.getParameter(EqParams::getName(EqParams::LOW_CUT_ENABLED))->removeListener(this);
-    //
-    apvts.getParameter(EqParams::getName(EqParams::LOW_SHELF_FREQ))->removeListener(this);
-    apvts.getParameter(EqParams::getName(EqParams::LOW_SHELF_GAIN))->removeListener(this);
-    apvts.getParameter(EqParams::getName(EqParams::LOW_SHELF_Q))->removeListener(this);
-    //
-    apvts.getParameter(EqParams::getName(EqParams::PEAK_1_FREQ))->removeListener(this);
-    apvts.getParameter(EqParams::getName(EqParams::PEAK_1_GAIN))->removeListener(this);
-    apvts.getParameter(EqParams::getName(EqParams::PEAK_1_Q))->removeListener(this);
-    //
-    apvts.getParameter(EqParams::getName(EqParams::PEAK_2_FREQ))->removeListener(this);
-    apvts.getParameter(EqParams::getName(EqParams::PEAK_2_GAIN))->removeListener(this);
-    apvts.getParameter(EqParams::getName(EqParams::PEAK_2_Q))->removeListener(this);
-    //
-    apvts.getParameter(EqParams::getName(EqParams::PEAK_3_FREQ))->removeListener(this);
-    apvts.getParameter(EqParams::getName(EqParams::PEAK_3_GAIN))->removeListener(this);
-    apvts.getParameter(EqParams::getName(EqParams::PEAK_3_Q))->removeListener(this);
-    //
-    apvts.getParameter(EqParams::getName(EqParams::PEAK_4_FREQ))->removeListener(this);
-    apvts.getParameter(EqParams::getName(EqParams::PEAK_4_GAIN))->removeListener(this);
-    apvts.getParameter(EqParams::getName(EqParams::PEAK_4_Q))->removeListener(this);
-    //
-    apvts.getParameter(EqParams::getName(EqParams::PEAK_5_FREQ))->removeListener(this);
-    apvts.getParameter(EqParams::getName(EqParams::PEAK_5_GAIN))->removeListener(this);
-    apvts.getParameter(EqParams::getName(EqParams::PEAK_5_Q))->removeListener(this);
-    //
-    apvts.getParameter(EqParams::getName(EqParams::HIGH_SHELF_FREQ))->removeListener(this);
-    apvts.getParameter(EqParams::getName(EqParams::HIGH_SHELF_GAIN))->removeListener(this);
-    apvts.getParameter(EqParams::getName(EqParams::HIGH_SHELF_Q))->removeListener(this);
-    //
-    apvts.getParameter(EqParams::getName(EqParams::HIGH_CUT_FREQ))->removeListener(this);
-    apvts.getParameter(EqParams::getName(EqParams::HIGH_CUT_SLOPE))->removeListener(this);
-    apvts.getParameter(EqParams::getName(EqParams::HIGH_CUT_ENABLED))->removeListener(this);
+    for (uint8 i = 0; i < FilterFactory::NUM_BANDS; ++i) {
+        FilterFactory::Band band_id  = static_cast< FilterFactory::Band >(i);
+        juce::String        param_id = FilterFactory::getBandName(band_id);
+
+        apvts.getParameter(param_id)->removeListener(this);
+    }
 }
 
 /*---------------------------------------------------------------------------

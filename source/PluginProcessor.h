@@ -2,7 +2,6 @@
 
 #include <juce_audio_processors/juce_audio_processors.h>
 
-#include "dsp/EqParams.h"
 #include "dsp/FilterFactory.h"
 #include "dsp/MonoFftBuffer.h"
 #include "utility/GlobalConstants.h"
@@ -48,8 +47,6 @@ public:
 
     FilterFactory::MonoChain& getFilterChain();
 
-    FilterFactory::BandSet& getFilterBands();
-
     float getMeterValue(Global::METER_TYPE meter_type, Global::Channels::CHANNEL_ID channel_id) const;
 
 private:
@@ -61,19 +58,8 @@ private:
     FilterFactory::MonoChain filter_chain_left_;
     FilterFactory::MonoChain filter_chain_right_;
 
-    FilterFactory::BandSet filter_bands_;
-
-    void updateFilterCoefficients();
-
-    template < typename T >
-    void assignParameter(T& target, EqParams::PARAM_ID param_id)
-    {
-        auto apvts_param = dynamic_cast< T >(apvts_.getParameter(EqParams::getName(param_id)));
-
-        if (apvts_param != nullptr) {
-            target = apvts_param;
-        }
-    }
+    void  updateFilterCoefficients();
+    float getBandGain(FilterFactory::Band band_id) const;
 
     typedef juce::SmoothedValue< float, juce::ValueSmoothingTypes::Linear > SmoothedFloat;
 

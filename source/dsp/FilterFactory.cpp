@@ -3,6 +3,13 @@
 /*static*/ const uint8 FilterFactory::NUM_BANDS         = 31;
 /*static*/ const float FilterFactory::MAX_BAND_DB_BOOST = 12.f;
 /*static*/ const float FilterFactory::MAX_BAND_DB_CUT   = -12.f;
+/*static*/ const float FilterFactory::DEFAULT_BAND_DB   = 0.f;
+/*static*/ const float FilterFactory::DEFAULT_BAND_Q    = 2.f;
+
+/*static*/ const juce::NormalisableRange< float > FilterFactory::BAND_DB_RANGE =
+    juce::NormalisableRange< float >(MAX_BAND_DB_CUT, MAX_BAND_DB_BOOST, 0.5f, 1.f);
+
+/*static*/ const int FilterFactory::PARAMETERS_VERSION_HINT = 1;
 
 /*---------------------------------------------------------------------------
 **
@@ -90,13 +97,30 @@ FilterFactory::getHzForBand(Band band)
 **
 */
 /*static*/ void
-FilterFactory::updatePeak(MonoChain& chain, const Band& band_id, PeakBand& params, double sample_rate)
+FilterFactory::addBandToParameterLayout(juce::AudioProcessorValueTreeState::ParameterLayout& pl, Band band_id)
 {
-    if (params.freq_ == nullptr || params.gain_ == nullptr || params.q_ == nullptr) {
-        return;
-    }
+    pl.add(std::make_unique< juce::AudioParameterFloat >(getVersionedParameterId(band_id),
+                                                         getBandName(band_id),
+                                                         BAND_DB_RANGE,
+                                                         DEFAULT_BAND_DB));
+}
 
-    auto coefficients = getPeakCoefficients(sample_rate, params);
+/*---------------------------------------------------------------------------
+**
+*/
+/*static*/ juce::String
+FilterFactory::getBandName(Band band_id)
+{
+    return juce::String("B") + juce::String(band_id + 1);
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
+/*static*/ void
+FilterFactory::updatePeak(MonoChain& chain, const Band& band_id, float gain, double sample_rate)
+{
+    auto coefficients = getPeakCoefficients(sample_rate, band_id, gain);
 
     switch (band_id) {
     case Band::B1:
@@ -232,12 +256,18 @@ FilterFactory::updatePeak(MonoChain& chain, const Band& band_id, PeakBand& param
 **
 */
 /*static*/ FilterFactory::BandCoefficients
-FilterFactory::getPeakCoefficients(double sample_rate, PeakBand& params)
+FilterFactory::getPeakCoefficients(double sample_rate, Band band_id, float gain)
 {
-    return juce::dsp::IIR::Coefficients< float >::makePeakFilter(sample_rate,
-                                                                 params.freq_->get(),
-                                                                 params.q_->get(),
-                                                                 juce::Decibels::decibelsToGain(params.gain_->get()));
+    return juce::dsp::IIR::Coefficients< float >::makePeakFilter(sample_rate, getHzForBand(band_id), DEFAULT_BAND_Q, gain);
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
+/*static*/ juce::ParameterID
+FilterFactory::getVersionedParameterId(Band band_id)
+{
+    return juce::ParameterID(getBandName(band_id), PARAMETERS_VERSION_HINT);
 }
 
 /*---------------------------------------------------------------------------
