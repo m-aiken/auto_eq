@@ -59,7 +59,7 @@ private:
     FilterFactory::MonoChain filter_chain_right_;
 
     void  updateFilterCoefficients();
-    float getBandGain(FilterFactory::Band band_id) const;
+    float getBandGain(FilterFactory::BAND_ID band_id) const;
 
     typedef juce::SmoothedValue< float, juce::ValueSmoothingTypes::Linear > SmoothedFloat;
 

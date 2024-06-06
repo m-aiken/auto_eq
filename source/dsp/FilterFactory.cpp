@@ -21,8 +21,17 @@ FilterFactory::FilterFactory()
 /*---------------------------------------------------------------------------
 **
 */
+/*static*/ juce::String
+FilterFactory::getBandName(BAND_ID band_id)
+{
+    return juce::String("B") + juce::String(band_id + 1);
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
 /*static*/ float
-FilterFactory::getHzForBand(Band band)
+FilterFactory::getBandHz(BAND_ID band)
 {
     switch (band) {
     case B1:
@@ -97,7 +106,7 @@ FilterFactory::getHzForBand(Band band)
 **
 */
 /*static*/ void
-FilterFactory::addBandToParameterLayout(juce::AudioProcessorValueTreeState::ParameterLayout& pl, Band band_id)
+FilterFactory::addBandToParameterLayout(juce::AudioProcessorValueTreeState::ParameterLayout& pl, BAND_ID band_id)
 {
     pl.add(std::make_unique< juce::AudioParameterFloat >(getVersionedParameterId(band_id),
                                                          getBandName(band_id),
@@ -108,143 +117,134 @@ FilterFactory::addBandToParameterLayout(juce::AudioProcessorValueTreeState::Para
 /*---------------------------------------------------------------------------
 **
 */
-/*static*/ juce::String
-FilterFactory::getBandName(Band band_id)
-{
-    return juce::String("B") + juce::String(band_id + 1);
-}
-
-/*---------------------------------------------------------------------------
-**
-*/
 /*static*/ void
-FilterFactory::updatePeak(MonoChain& chain, const Band& band_id, float gain, double sample_rate)
+FilterFactory::updateBandCoefficients(MonoChain& chain, const BAND_ID& band_id, float gain, double sample_rate)
 {
-    auto coefficients = getPeakCoefficients(sample_rate, band_id, gain);
+    auto cf = juce::dsp::IIR::Coefficients< float >::makePeakFilter(sample_rate, getBandHz(band_id), DEFAULT_BAND_Q, gain);
 
     switch (band_id) {
-    case Band::B1:
-        *chain.get< Band::B1 >().coefficients = *coefficients;
+    case BAND_ID::B1:
+        *chain.get< BAND_ID::B1 >().coefficients = *cf;
         break;
 
-    case Band::B2:
-        *chain.get< Band::B2 >().coefficients = *coefficients;
+    case BAND_ID::B2:
+        *chain.get< BAND_ID::B2 >().coefficients = *cf;
         break;
 
-    case Band::B3:
-        *chain.get< Band::B3 >().coefficients = *coefficients;
+    case BAND_ID::B3:
+        *chain.get< BAND_ID::B3 >().coefficients = *cf;
         break;
 
-    case Band::B4:
-        *chain.get< Band::B4 >().coefficients = *coefficients;
+    case BAND_ID::B4:
+        *chain.get< BAND_ID::B4 >().coefficients = *cf;
         break;
 
-    case Band::B5:
-        *chain.get< Band::B5 >().coefficients = *coefficients;
+    case BAND_ID::B5:
+        *chain.get< BAND_ID::B5 >().coefficients = *cf;
         break;
 
-    case Band::B6:
-        *chain.get< Band::B6 >().coefficients = *coefficients;
+    case BAND_ID::B6:
+        *chain.get< BAND_ID::B6 >().coefficients = *cf;
         break;
 
-    case Band::B7:
-        *chain.get< Band::B7 >().coefficients = *coefficients;
+    case BAND_ID::B7:
+        *chain.get< BAND_ID::B7 >().coefficients = *cf;
         break;
 
-    case Band::B8:
-        *chain.get< Band::B8 >().coefficients = *coefficients;
+    case BAND_ID::B8:
+        *chain.get< BAND_ID::B8 >().coefficients = *cf;
         break;
 
-    case Band::B9:
-        *chain.get< Band::B9 >().coefficients = *coefficients;
+    case BAND_ID::B9:
+        *chain.get< BAND_ID::B9 >().coefficients = *cf;
         break;
 
-    case Band::B10:
-        *chain.get< Band::B10 >().coefficients = *coefficients;
+    case BAND_ID::B10:
+        *chain.get< BAND_ID::B10 >().coefficients = *cf;
         break;
 
-    case Band::B11:
-        *chain.get< Band::B11 >().coefficients = *coefficients;
+    case BAND_ID::B11:
+        *chain.get< BAND_ID::B11 >().coefficients = *cf;
         break;
 
-    case Band::B12:
-        *chain.get< Band::B12 >().coefficients = *coefficients;
+    case BAND_ID::B12:
+        *chain.get< BAND_ID::B12 >().coefficients = *cf;
         break;
 
-    case Band::B13:
-        *chain.get< Band::B13 >().coefficients = *coefficients;
+    case BAND_ID::B13:
+        *chain.get< BAND_ID::B13 >().coefficients = *cf;
         break;
 
-    case Band::B14:
-        *chain.get< Band::B14 >().coefficients = *coefficients;
+    case BAND_ID::B14:
+        *chain.get< BAND_ID::B14 >().coefficients = *cf;
         break;
 
-    case Band::B15:
-        *chain.get< Band::B15 >().coefficients = *coefficients;
+    case BAND_ID::B15:
+        *chain.get< BAND_ID::B15 >().coefficients = *cf;
         break;
 
-    case Band::B16:
-        *chain.get< Band::B16 >().coefficients = *coefficients;
+    case BAND_ID::B16:
+        *chain.get< BAND_ID::B16 >().coefficients = *cf;
         break;
 
-    case Band::B17:
-        *chain.get< Band::B17 >().coefficients = *coefficients;
+    case BAND_ID::B17:
+        *chain.get< BAND_ID::B17 >().coefficients = *cf;
         break;
 
-    case Band::B18:
-        *chain.get< Band::B18 >().coefficients = *coefficients;
+    case BAND_ID::B18:
+        *chain.get< BAND_ID::B18 >().coefficients = *cf;
         break;
 
-    case Band::B19:
-        *chain.get< Band::B19 >().coefficients = *coefficients;
+    case BAND_ID::B19:
+        *chain.get< BAND_ID::B19 >().coefficients = *cf;
         break;
 
-    case Band::B20:
-        *chain.get< Band::B20 >().coefficients = *coefficients;
+    case BAND_ID::B20:
+        *chain.get< BAND_ID::B20 >().coefficients = *cf;
         break;
 
-    case Band::B21:
-        *chain.get< Band::B21 >().coefficients = *coefficients;
+    case BAND_ID::B21:
+        *chain.get< BAND_ID::B21 >().coefficients = *cf;
         break;
 
-    case Band::B22:
-        *chain.get< Band::B22 >().coefficients = *coefficients;
+    case BAND_ID::B22:
+        *chain.get< BAND_ID::B22 >().coefficients = *cf;
         break;
 
-    case Band::B23:
-        *chain.get< Band::B23 >().coefficients = *coefficients;
+    case BAND_ID::B23:
+        *chain.get< BAND_ID::B23 >().coefficients = *cf;
         break;
 
-    case Band::B24:
-        *chain.get< Band::B24 >().coefficients = *coefficients;
+    case BAND_ID::B24:
+        *chain.get< BAND_ID::B24 >().coefficients = *cf;
         break;
 
-    case Band::B25:
-        *chain.get< Band::B25 >().coefficients = *coefficients;
+    case BAND_ID::B25:
+        *chain.get< BAND_ID::B25 >().coefficients = *cf;
         break;
 
-    case Band::B26:
-        *chain.get< Band::B26 >().coefficients = *coefficients;
+    case BAND_ID::B26:
+        *chain.get< BAND_ID::B26 >().coefficients = *cf;
         break;
 
-    case Band::B27:
-        *chain.get< Band::B27 >().coefficients = *coefficients;
+    case BAND_ID::B27:
+        *chain.get< BAND_ID::B27 >().coefficients = *cf;
         break;
 
-    case Band::B28:
-        *chain.get< Band::B28 >().coefficients = *coefficients;
+    case BAND_ID::B28:
+        *chain.get< BAND_ID::B28 >().coefficients = *cf;
         break;
 
-    case Band::B29:
-        *chain.get< Band::B29 >().coefficients = *coefficients;
+    case BAND_ID::B29:
+        *chain.get< BAND_ID::B29 >().coefficients = *cf;
         break;
 
-    case Band::B30:
-        *chain.get< Band::B30 >().coefficients = *coefficients;
+    case BAND_ID::B30:
+        *chain.get< BAND_ID::B30 >().coefficients = *cf;
         break;
 
-    case Band::B31:
-        *chain.get< Band::B31 >().coefficients = *coefficients;
+    case BAND_ID::B31:
+        *chain.get< BAND_ID::B31 >().coefficients = *cf;
         break;
 
     default:
@@ -255,17 +255,8 @@ FilterFactory::updatePeak(MonoChain& chain, const Band& band_id, float gain, dou
 /*---------------------------------------------------------------------------
 **
 */
-/*static*/ FilterFactory::BandCoefficients
-FilterFactory::getPeakCoefficients(double sample_rate, Band band_id, float gain)
-{
-    return juce::dsp::IIR::Coefficients< float >::makePeakFilter(sample_rate, getHzForBand(band_id), DEFAULT_BAND_Q, gain);
-}
-
-/*---------------------------------------------------------------------------
-**
-*/
 /*static*/ juce::ParameterID
-FilterFactory::getVersionedParameterId(Band band_id)
+FilterFactory::getVersionedParameterId(BAND_ID band_id)
 {
     return juce::ParameterID(getBandName(band_id), PARAMETERS_VERSION_HINT);
 }

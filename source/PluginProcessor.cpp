@@ -362,7 +362,7 @@ PluginProcessor::getParameterLayout()
 
     // EQ bands.
     for (uint8 i = 0; i < FilterFactory::NUM_BANDS; ++i) {
-        FilterFactory::addBandToParameterLayout(parameter_layout, static_cast< FilterFactory::Band >(i));
+        FilterFactory::addBandToParameterLayout(parameter_layout, static_cast< FilterFactory::BAND_ID >(i));
     }
 
     return parameter_layout;
@@ -377,11 +377,11 @@ PluginProcessor::updateFilterCoefficients()
     double sample_rate = getSampleRate();
 
     for (uint8 i = 0; i < FilterFactory::NUM_BANDS; ++i) {
-        FilterFactory::Band band_id = static_cast< FilterFactory::Band >(i);
-        float               gain    = getBandGain(band_id);
+        FilterFactory::BAND_ID band_id = static_cast< FilterFactory::BAND_ID >(i);
+        float                  gain    = getBandGain(band_id);
 
-        FilterFactory::updatePeak(filter_chain_left_, band_id, gain, sample_rate);
-        FilterFactory::updatePeak(filter_chain_right_, band_id, gain, sample_rate);
+        FilterFactory::updateBandCoefficients(filter_chain_left_, band_id, gain, sample_rate);
+        FilterFactory::updateBandCoefficients(filter_chain_right_, band_id, gain, sample_rate);
     }
 }
 
@@ -389,7 +389,7 @@ PluginProcessor::updateFilterCoefficients()
 **
 */
 float
-PluginProcessor::getBandGain(FilterFactory::Band band_id) const
+PluginProcessor::getBandGain(FilterFactory::BAND_ID band_id) const
 {
     juce::String         param_id    = FilterFactory::getBandName(band_id);
     AudioParameterFloat* float_param = dynamic_cast< juce::AudioParameterFloat* >(apvts_.getParameter(param_id));

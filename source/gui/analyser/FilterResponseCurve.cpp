@@ -205,8 +205,8 @@ FilterResponseCurve::addApvtsListeners()
     juce::AudioProcessorValueTreeState& apvts = processor_ref_.getApvts();
 
     for (uint8 i = 0; i < FilterFactory::NUM_BANDS; ++i) {
-        FilterFactory::Band band_id  = static_cast< FilterFactory::Band >(i);
-        juce::String        param_id = FilterFactory::getBandName(band_id);
+        FilterFactory::BAND_ID band_id  = static_cast< FilterFactory::BAND_ID >(i);
+        juce::String           param_id = FilterFactory::getBandName(band_id);
 
         apvts.getParameter(param_id)->addListener(this);
     }
@@ -221,8 +221,8 @@ FilterResponseCurve::removeApvtsListeners()
     juce::AudioProcessorValueTreeState& apvts = processor_ref_.getApvts();
 
     for (uint8 i = 0; i < FilterFactory::NUM_BANDS; ++i) {
-        FilterFactory::Band band_id  = static_cast< FilterFactory::Band >(i);
-        juce::String        param_id = FilterFactory::getBandName(band_id);
+        FilterFactory::BAND_ID band_id  = static_cast< FilterFactory::BAND_ID >(i);
+        juce::String           param_id = FilterFactory::getBandName(band_id);
 
         apvts.getParameter(param_id)->removeListener(this);
     }

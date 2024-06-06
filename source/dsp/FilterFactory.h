@@ -5,9 +5,8 @@
 class FilterFactory
 {
 public:
-    using BandCoefficients = juce::ReferenceCountedObjectPtr< juce::dsp::IIR::Coefficients< float > >;
-    using IIRFilter        = juce::dsp::IIR::Filter< float >;
-    using MonoChain        = juce::dsp::ProcessorChain< IIRFilter,
+    using IIRFilter = juce::dsp::IIR::Filter< float >;
+    using MonoChain = juce::dsp::ProcessorChain< IIRFilter,
                                                  IIRFilter,
                                                  IIRFilter,
                                                  IIRFilter,
@@ -47,7 +46,7 @@ public:
 
     static const juce::NormalisableRange< float > BAND_DB_RANGE;
 
-    enum Band {
+    enum BAND_ID {
         B1,
         B2,
         B3,
@@ -84,19 +83,16 @@ public:
 public:
     FilterFactory();
 
-    static float getHzForBand(Band band);
+    static juce::String getBandName(BAND_ID band_id);
+    static float        getBandHz(BAND_ID band);
 
-    static void addBandToParameterLayout(juce::AudioProcessorValueTreeState::ParameterLayout& pl, Band band_id);
+    static void addBandToParameterLayout(juce::AudioProcessorValueTreeState::ParameterLayout& pl, BAND_ID band_id);
 
-    static juce::String getBandName(Band band_id);
-
-    static void updatePeak(MonoChain& chain, const Band& band_id, float gain, double sample_rate);
+    static void updateBandCoefficients(MonoChain& chain, const BAND_ID& band_id, float gain, double sample_rate);
 
 private:
-    static BandCoefficients getPeakCoefficients(double sample_rate, Band band_id, float gain);
-
     static const int         PARAMETERS_VERSION_HINT;
-    static juce::ParameterID getVersionedParameterId(Band band_id);
+    static juce::ParameterID getVersionedParameterId(BAND_ID band_id);
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(FilterFactory)
 };
