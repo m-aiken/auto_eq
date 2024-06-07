@@ -6,7 +6,6 @@
 **
 */
 FrequencyMarkers::FrequencyMarkers()
-    : font_(Global::ANALYSER_MARKER_FONT_SIZE, juce::Font::bold)
 {
 }
 
@@ -26,7 +25,7 @@ FrequencyMarkers::paint(juce::Graphics& g)
     const int min_hz = static_cast< int >(Global::MIN_HZ);
     const int max_hz = static_cast< int >(Global::MAX_HZ);
 
-    g.setFont(font_);
+    g.setFont(Theme::getFont());
     g.setColour(Theme::getColour(Theme::TEXT));
 
     for (int i = min_hz; i <= max_hz; ++i) {

@@ -50,5 +50,14 @@ Theme::getColour(DarkLightPair c)
 }
 
 /*---------------------------------------------------------------------------
+**
+*/
+/*static*/ const juce::Font
+Theme::getFont()
+{
+    return juce::Font(juce::Font::getDefaultMonospacedFontName(), 12.f, 0);
+}
+
+/*---------------------------------------------------------------------------
 ** End of File
 */

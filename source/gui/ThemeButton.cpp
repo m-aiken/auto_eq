@@ -20,6 +20,7 @@ ThemeButton::ThemeButton()
 void
 ThemeButton::paint(juce::Graphics& g)
 {
+    g.setFont(Theme::getFont());
     g.setColour(Theme::getColour(Theme::TEXT));
     g.drawFittedText(Theme::dark_mode ? "LIGHT" : "DARK", getLocalBounds(), juce::Justification::centred, 1);
 }

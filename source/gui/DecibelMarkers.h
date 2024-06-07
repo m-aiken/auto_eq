@@ -10,8 +10,6 @@ public:
     void paint(juce::Graphics& g) override;
 
 private:
-    juce::Font font_;
-
     float min_value_;
     float max_value_;
     uint8 db_interval_;

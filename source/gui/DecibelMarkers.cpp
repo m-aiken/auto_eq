@@ -6,8 +6,7 @@
 **
 */
 DecibelMarkers::DecibelMarkers(float min_value, float max_value, uint8 db_interval)
-    : font_(Global::ANALYSER_MARKER_FONT_SIZE, juce::Font::bold)
-    , min_value_(min_value)
+    : min_value_(min_value)
     , max_value_(max_value)
     , db_interval_(db_interval)
 {
@@ -28,7 +27,7 @@ DecibelMarkers::paint(juce::Graphics& g)
 
     float text_height = g.getCurrentFont().getHeight();
 
-    g.setFont(font_);
+    g.setFont(Theme::getFont());
     g.setColour(Theme::getColour(Theme::TEXT));
 
     for (int db = min_value_; db <= max_value_; db += db_interval_) {
