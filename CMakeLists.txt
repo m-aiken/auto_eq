@@ -41,18 +41,19 @@ target_sources(${PROJECT_NAME}
         source/dsp/FilterFactory.cpp
         source/dsp/MonoFftBuffer.cpp
         source/gui/DecibelMarkers.cpp
+        source/gui/FrequencyMarkers.cpp
         source/gui/Theme.cpp
         source/gui/ThemeButton.cpp
         source/gui/analyser/Analyser.cpp
         source/gui/analyser/AnalyserCanvas.cpp
-        source/gui/analyser/FilterResponseCurve.cpp
-        source/gui/analyser/FilterResponseGraph.cpp
-        source/gui/analyser/FrequencyMarkers.cpp
         source/gui/analyser/MonoFftPath.cpp
         source/gui/meters/MeterCanvas.cpp
         source/gui/meters/MeterGroup.cpp
         source/gui/meters/MeterLabel.cpp
         source/gui/meters/MonoMeter.cpp
+        source/gui/response_graph/FilterResponseCanvas.cpp
+        source/gui/response_graph/FilterResponseCurve.cpp
+        source/gui/response_graph/FilterResponseGraph.cpp
         )
 
 # JUCE modules make use of compile definitions to switch certain features on/off.

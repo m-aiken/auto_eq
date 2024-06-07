@@ -1,6 +1,6 @@
 #include "FrequencyMarkers.h"
-#include "../Theme.h"
-#include "../../utility/GlobalConstants.h"
+#include "Theme.h"
+#include "../utility/GlobalConstants.h"
 
 /*---------------------------------------------------------------------------
 **

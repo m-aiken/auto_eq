@@ -3,7 +3,7 @@
 #include <JuceHeader.h>
 
 #include "AnalyserCanvas.h"
-#include "FrequencyMarkers.h"
+#include "../FrequencyMarkers.h"
 #include "MonoFftPath.h"
 #include "../DecibelMarkers.h"
 #include "../../PluginProcessor.h"

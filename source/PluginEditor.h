@@ -3,7 +3,7 @@
 #include "PluginProcessor.h"
 #include "gui/ThemeButton.h"
 #include "gui/analyser/Analyser.h"
-#include "gui/analyser/FilterResponseGraph.h"
+#include "gui/response_graph/FilterResponseGraph.h"
 #include "gui/meters/MeterGroup.h"
 
 class PluginEditor final
