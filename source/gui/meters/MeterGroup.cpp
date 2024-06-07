@@ -5,7 +5,8 @@
 **
 */
 MeterGroup::MeterGroup(PluginProcessor& p)
-    : peak_label_("PEAK")
+    : db_scale_(Global::NEG_INF, Global::MAX_DB, 6)
+    , peak_label_("PEAK")
     , rms_label_("RMS")
     , lufs_label_("LUFS")
     , peak_meter_l_([&]() { return p.getMeterValue(Global::PEAK_METER, Global::Channels::PRIMARY_LEFT); })

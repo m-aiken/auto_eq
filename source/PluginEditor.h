@@ -3,6 +3,7 @@
 #include "PluginProcessor.h"
 #include "gui/ThemeButton.h"
 #include "gui/analyser/Analyser.h"
+#include "gui/analyser/FilterResponseGraph.h"
 #include "gui/meters/MeterGroup.h"
 
 class PluginEditor final
@@ -23,9 +24,10 @@ private:
     // access the processor object that created it.
     PluginProcessor& processor_ref_;
 
-    ThemeButton theme_button_;
-    Analyser    analyser_;
-    MeterGroup  meter_group_;
+    ThemeButton         theme_button_;
+    FilterResponseGraph filter_res_graph_;
+    Analyser            analyser_;
+    MeterGroup          meter_group_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PluginEditor)
 };

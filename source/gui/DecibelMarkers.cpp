@@ -2,13 +2,14 @@
 #include "Theme.h"
 #include "../utility/GlobalConstants.h"
 
-/*static*/ const uint8 DecibelMarkers::DB_INTERVAL = 6;
-
 /*---------------------------------------------------------------------------
 **
 */
-DecibelMarkers::DecibelMarkers()
+DecibelMarkers::DecibelMarkers(float min_value, float max_value, uint8 db_interval)
     : font_(Global::ANALYSER_MARKER_FONT_SIZE, juce::Font::bold)
+    , min_value_(min_value)
+    , max_value_(max_value)
+    , db_interval_(db_interval)
 {
 }
 
@@ -27,14 +28,11 @@ DecibelMarkers::paint(juce::Graphics& g)
 
     float text_height = g.getCurrentFont().getHeight();
 
-    const int min_db = static_cast< int >(Global::NEG_INF);
-    const int max_db = static_cast< int >(Global::MAX_DB);
-
     g.setFont(font_);
     g.setColour(Theme::getColour(Theme::TEXT));
 
-    for (int db = min_db; db <= max_db; db += DB_INTERVAL) {
-        int          y_coord = juce::jmap< int >(db, min_db, max_db, height, 0);
+    for (int db = min_value_; db <= max_value_; db += db_interval_) {
+        int          y_coord = juce::jmap< int >(db, min_value_, max_value_, height, 0);
         int          text_y  = y_coord + y - static_cast< int >(std::floor(text_height * 0.5));
         juce::String label   = juce::String(db) + "dB";
 

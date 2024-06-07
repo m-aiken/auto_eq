@@ -46,6 +46,7 @@ target_sources(${PROJECT_NAME}
         source/gui/analyser/Analyser.cpp
         source/gui/analyser/AnalyserCanvas.cpp
         source/gui/analyser/FilterResponseCurve.cpp
+        source/gui/analyser/FilterResponseGraph.cpp
         source/gui/analyser/FrequencyMarkers.cpp
         source/gui/analyser/MonoFftPath.cpp
         source/gui/meters/MeterCanvas.cpp

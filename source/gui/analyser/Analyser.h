@@ -3,7 +3,6 @@
 #include <JuceHeader.h>
 
 #include "AnalyserCanvas.h"
-#include "FilterResponseCurve.h"
 #include "FrequencyMarkers.h"
 #include "MonoFftPath.h"
 #include "../DecibelMarkers.h"
@@ -27,8 +26,6 @@ private:
     std::unique_ptr< MonoFftPath > fft_path_primary_post_eq_r_;
     std::unique_ptr< MonoFftPath > fft_path_sidechain_l_;
     std::unique_ptr< MonoFftPath > fft_path_sidechain_r_;
-
-    FilterResponseCurve response_curve_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Analyser)
 };

@@ -6,7 +6,7 @@
 **
 */
 Analyser::Analyser(PluginProcessor& p)
-    : response_curve_(p)
+    : db_markers_(Global::NEG_INF, Global::MAX_DB, 6)
 {
     PluginProcessor::FftBuffers& fft_buffers = p.getFftBuffers();
 
@@ -43,7 +43,6 @@ Analyser::Analyser(PluginProcessor& p)
     addAndMakeVisible(fft_path_primary_post_eq_r_.get());
     addAndMakeVisible(fft_path_sidechain_l_.get());
     addAndMakeVisible(fft_path_sidechain_r_.get());
-    addAndMakeVisible(response_curve_);
 }
 
 /*---------------------------------------------------------------------------
@@ -70,8 +69,6 @@ Analyser::resized()
     fft_path_primary_post_eq_r_->setBounds(padded_bounds);
     fft_path_sidechain_l_->setBounds(padded_bounds);
     fft_path_sidechain_r_->setBounds(padded_bounds);
-
-    response_curve_.setBounds(padded_bounds);
 }
 
 /*---------------------------------------------------------------------------

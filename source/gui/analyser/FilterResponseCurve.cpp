@@ -172,7 +172,11 @@ FilterResponseCurve::getYCoordinateFromMagnitude(double magnitude)
     auto bounds_top    = bounds.getY();
     auto bounds_bottom = bounds.getBottom();
 
-    double y = juce::jmap< double >(magnitude, Global::NEG_INF, Global::MAX_DB, bounds_bottom, bounds_top);
+    double y = juce::jmap< double >(magnitude,
+                                    FilterFactory::MAX_BAND_DB_CUT,
+                                    FilterFactory::MAX_BAND_DB_BOOST,
+                                    bounds_bottom,
+                                    bounds_top);
 
     return static_cast< int >(std::floor(y));
 }

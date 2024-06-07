@@ -10,10 +10,12 @@ PluginEditor::PluginEditor(PluginProcessor& p)
     : AudioProcessorEditor(&p)
     , processor_ref_(p)
     , theme_button_()
+    , filter_res_graph_(p)
     , analyser_(p)
     , meter_group_(p)
 {
     addAndMakeVisible(theme_button_);
+    addAndMakeVisible(filter_res_graph_);
     addAndMakeVisible(analyser_);
     addAndMakeVisible(meter_group_);
 
@@ -59,12 +61,18 @@ PluginEditor::resized()
     using Track = juce::Grid::TrackInfo;
     using Fr    = juce::Grid::Fr;
 
-    grid.autoRows        = Track(Fr(1));
     grid.templateColumns = {
         Track(Fr(75)),
         Track(Fr(25)),
     };
 
+    grid.templateRows = {
+        Track(Fr(40)),
+        Track(Fr(60)),
+    };
+
+    grid.items.add(juce::GridItem(filter_res_graph_));
+    grid.items.add(juce::GridItem());
     grid.items.add(juce::GridItem(analyser_));
     grid.items.add(juce::GridItem(meter_group_));
 
