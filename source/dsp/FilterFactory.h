@@ -84,7 +84,9 @@ public:
     FilterFactory();
 
     static juce::String getBandName(BAND_ID band_id);
-    static float        getBandHz(BAND_ID band);
+    static float        getBandHz(BAND_ID band_id);
+
+    static float getBandTargetDb(BAND_ID band_id);
 
     static void addBandToParameterLayout(juce::AudioProcessorValueTreeState::ParameterLayout& pl, BAND_ID band_id);
 
