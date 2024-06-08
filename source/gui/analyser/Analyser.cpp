@@ -6,7 +6,6 @@
 **
 */
 Analyser::Analyser(PluginProcessor& p)
-    : db_markers_(Global::NEG_INF, Global::MAX_DB, 6)
 {
     PluginProcessor::FftBuffers& fft_buffers = p.getFftBuffers();
 
@@ -34,8 +33,6 @@ Analyser::Analyser(PluginProcessor& p)
                                                             Theme::FFT_SIDECHAIN,
                                                             Global::PATH_FILL);
 
-    addAndMakeVisible(db_markers_);
-    addAndMakeVisible(hz_markers_);
     addAndMakeVisible(fft_path_primary_pre_eq_l_.get());
     addAndMakeVisible(fft_path_primary_pre_eq_r_.get());
     addAndMakeVisible(fft_path_primary_post_eq_l_.get());
@@ -50,14 +47,7 @@ Analyser::Analyser(PluginProcessor& p)
 void
 Analyser::resized()
 {
-    auto bounds = getLocalBounds();
-
-    db_markers_.setBounds(juce::Rectangle< int >(0, 0, Global::ANALYSER_PADDING, bounds.getHeight()));
-    hz_markers_.setBounds(juce::Rectangle< int >(Global::ANALYSER_PADDING,
-                                                 0,
-                                                 bounds.getWidth() - (Global::ANALYSER_PADDING * 2),
-                                                 Global::ANALYSER_PADDING));
-
+    auto bounds        = getLocalBounds();
     auto padded_bounds = bounds.reduced(Global::ANALYSER_PADDING);
 
     fft_path_primary_pre_eq_l_->setBounds(padded_bounds);
