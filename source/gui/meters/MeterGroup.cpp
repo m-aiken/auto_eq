@@ -16,7 +16,7 @@ MeterGroup::MeterGroup(PluginProcessor& p)
     , lufs_meter_l_([&]() { return p.getMeterValue(Global::LUFS_METER, Global::Channels::PRIMARY_LEFT); })
     , lufs_meter_r_([&]() { return p.getMeterValue(Global::LUFS_METER, Global::Channels::PRIMARY_RIGHT); })
 {
-    addAndMakeVisible(db_scale_);
+    //    addAndMakeVisible(db_scale_);
 
     addAndMakeVisible(peak_label_);
     addAndMakeVisible(rms_label_);
@@ -34,46 +34,33 @@ MeterGroup::MeterGroup(PluginProcessor& p)
 **
 */
 void
+MeterGroup::paint(juce::Graphics& g)
+{
+    if (Global::SHOW_DEBUG_BOUNDS) {
+        g.setColour(juce::Colours::red);
+        g.drawRect(getLocalBounds());
+    }
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
+void
 MeterGroup::resized()
 {
     using Track = juce::Grid::TrackInfo;
     using Fr    = juce::Grid::Fr;
     using Px    = juce::Grid::Px;
 
-    auto bounds              = getLocalBounds();
-    auto bounds_width        = bounds.getWidth();
-    auto bounds_height       = bounds.getHeight();
-    auto db_scale_width      = bounds_width * 0.25;
-    auto meter_section_width = bounds_width * 0.75;
+    auto bounds        = getLocalBounds();
+    auto bounds_width  = bounds.getWidth();
+    auto bounds_height = bounds.getHeight();
 
-    db_scale_.setBounds(0, 0, db_scale_width, bounds_height);
+    int meter_section_width = static_cast< int >(std::floor(bounds_width * 0.8));
+    int label_section_width = static_cast< int >(std::floor(bounds_width * 0.2));
 
-    juce::Rectangle< int > label_section =
-        juce::Rectangle< int >(db_scale_width, 0, meter_section_width, Global::ANALYSER_PADDING);
-
-    juce::Rectangle< int > meter_section = juce::Rectangle< int >(db_scale_width,
-                                                                  Global::ANALYSER_PADDING,
-                                                                  meter_section_width,
-                                                                  bounds_height - (Global::ANALYSER_PADDING * 2));
-
-    // Label Grid.
-    juce::Grid label_grid;
-
-    label_grid.templateColumns = {
-        Track(Fr(1)),
-        Track(Fr(1)),
-        Track(Fr(1)),
-    };
-
-    label_grid.autoRows = {
-        Track(Fr(1)),
-    };
-
-    label_grid.items.add(juce::GridItem(peak_label_));
-    label_grid.items.add(juce::GridItem(rms_label_));
-    label_grid.items.add(juce::GridItem(lufs_label_));
-
-    label_grid.performLayout(label_section);
+    juce::Rectangle< int > meter_section(0, 0, meter_section_width, bounds_height);
+    juce::Rectangle< int > label_section(meter_section_width, 0, label_section_width, bounds_height);
 
     // Meter Grid.
     juce::Grid meter_grid;
@@ -82,24 +69,24 @@ MeterGroup::resized()
     const uint8 padding_fr = 10;
 
     meter_grid.templateColumns = {
-        Track(Fr(padding_fr)),
-        Track(Fr(meter_fr)),
-        Track(Fr(meter_fr)),
-        Track(Fr(padding_fr)),
-        //
-        Track(Fr(padding_fr)),
-        Track(Fr(meter_fr)),
-        Track(Fr(meter_fr)),
-        Track(Fr(padding_fr)),
-        //
-        Track(Fr(padding_fr)),
-        Track(Fr(meter_fr)),
-        Track(Fr(meter_fr)),
-        Track(Fr(padding_fr)),
+        Track(Fr(1)),
     };
 
-    meter_grid.autoRows = {
-        Track(Fr(1)),
+    meter_grid.templateRows = {
+        Track(Fr(padding_fr)),
+        Track(Fr(meter_fr)),
+        Track(Fr(meter_fr)),
+        Track(Fr(padding_fr)),
+        //
+        Track(Fr(padding_fr)),
+        Track(Fr(meter_fr)),
+        Track(Fr(meter_fr)),
+        Track(Fr(padding_fr)),
+        //
+        Track(Fr(padding_fr)),
+        Track(Fr(meter_fr)),
+        Track(Fr(meter_fr)),
+        Track(Fr(padding_fr)),
     };
 
     meter_grid.items.add(juce::GridItem());
@@ -119,6 +106,25 @@ MeterGroup::resized()
 
     meter_grid.setGap(Px { 4 });
     meter_grid.performLayout(meter_section);
+
+    // Label Grid.
+    juce::Grid label_grid;
+
+    label_grid.templateColumns = {
+        Track(Fr(1)),
+    };
+
+    label_grid.templateRows = {
+        Track(Fr(1)),
+        Track(Fr(1)),
+        Track(Fr(1)),
+    };
+
+    label_grid.items.add(juce::GridItem(peak_label_));
+    label_grid.items.add(juce::GridItem(rms_label_));
+    label_grid.items.add(juce::GridItem(lufs_label_));
+
+    label_grid.performLayout(label_section);
 }
 
 /*---------------------------------------------------------------------------

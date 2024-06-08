@@ -1,4 +1,5 @@
 #include "Menu.h"
+#include "../../utility/GlobalConstants.h"
 
 /*---------------------------------------------------------------------------
 **
@@ -6,6 +7,18 @@
 Menu::Menu()
 {
     addAndMakeVisible(theme_button_);
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
+void
+Menu::paint(juce::Graphics& g)
+{
+    if (Global::SHOW_DEBUG_BOUNDS) {
+        g.setColour(juce::Colours::green);
+        g.drawRect(getLocalBounds());
+    }
 }
 
 /*---------------------------------------------------------------------------

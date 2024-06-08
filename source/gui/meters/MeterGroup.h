@@ -12,6 +12,7 @@ class MeterGroup : public juce::Component
 public:
     MeterGroup(PluginProcessor& p);
 
+    void paint(juce::Graphics& g) override;
     void resized() override;
 
 private:

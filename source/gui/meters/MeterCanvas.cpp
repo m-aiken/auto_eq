@@ -18,9 +18,8 @@ void
 MeterCanvas::paint(juce::Graphics& g)
 {
     auto      bounds        = getLocalBounds();
-    auto      bounds_y      = bounds.getY();
     auto      bounds_width  = bounds.getWidth();
-    auto      bounds_bottom = bounds.getBottom();
+    auto      bounds_height = bounds.getHeight();
     const int min_db        = static_cast< int >(Global::NEG_INF);
     const int max_db        = static_cast< int >(Global::MAX_DB);
     auto      line_colour   = Theme::getColour(Theme::ANALYSER_GRID);
@@ -31,11 +30,11 @@ MeterCanvas::paint(juce::Graphics& g)
     // Draw the outline.
     g.drawRect(bounds);
 
-    // dB markers (horizontal).
+    // dB markers (vertical - the meters are horizontal).
     for (int i = min_db; i <= max_db; i += DB_INTERVAL) {
-        int y = juce::roundToInt(juce::jmap< float >(i, min_db, max_db, bounds_bottom, bounds_y));
+        int x = juce::roundToInt(juce::jmap< float >(i, min_db, max_db, 0, bounds_width));
 
-        g.fillRect(0, y, bounds_width, 1);
+        g.fillRect(x, 0, 1, bounds_height);
     }
 }
 

@@ -9,6 +9,7 @@ class Menu : public juce::Component
 public:
     Menu();
 
+    void paint(juce::Graphics& g) override;
     void resized() override;
 
     ThemeButton& getThemeButtonRef();

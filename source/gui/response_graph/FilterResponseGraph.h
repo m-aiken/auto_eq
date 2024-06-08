@@ -14,6 +14,7 @@ class FilterResponseGraph : public juce::Component
 public:
     FilterResponseGraph(PluginProcessor& p);
 
+    void paint(juce::Graphics& g) override;
     void resized() override;
 
 private:

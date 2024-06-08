@@ -47,35 +47,26 @@ PluginEditor::paint(juce::Graphics& g)
 void
 PluginEditor::resized()
 {
-    auto        bounds      = getLocalBounds();
-    const uint8 menu_height = 32;
-
-    menu_.setBounds(0, 0, bounds.getWidth(), menu_height);
-    filter_res_graph_.setBounds(0, menu_.getBottom(), bounds.getWidth(), bounds.getHeight() * 0.5);
-
-#if 0
-    juce::Grid grid;
-
     using Track = juce::Grid::TrackInfo;
     using Fr    = juce::Grid::Fr;
 
+    juce::Grid grid;
+
     grid.templateColumns = {
-        Track(Fr(75)),
-        Track(Fr(25)),
+        Track(Fr(1)),
     };
 
     grid.templateRows = {
+        Track(Fr(5)),
+        Track(Fr(55)),
         Track(Fr(40)),
-        Track(Fr(60)),
     };
 
+    grid.items.add(juce::GridItem(menu_));
     grid.items.add(juce::GridItem(filter_res_graph_));
-    grid.items.add(juce::GridItem());
-    grid.items.add(juce::GridItem(analyser_));
     grid.items.add(juce::GridItem(meter_group_));
 
-    grid.performLayout(bounds.reduced(30));
-#endif
+    grid.performLayout(getLocalBounds());
 }
 
 /*---------------------------------------------------------------------------
