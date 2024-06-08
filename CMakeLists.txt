@@ -44,7 +44,6 @@ target_sources(${PROJECT_NAME}
         source/gui/FrequencyMarkers.cpp
         source/gui/Theme.cpp
         source/gui/analyser/Analyser.cpp
-        source/gui/analyser/MonoFftPath.cpp
         source/gui/menu/Menu.cpp
         source/gui/menu/ThemeButton.cpp
         source/gui/meters/MeterCanvas.cpp
@@ -54,6 +53,7 @@ target_sources(${PROJECT_NAME}
         source/gui/response_graph/FilterResponseCanvas.cpp
         source/gui/response_graph/FilterResponseCurve.cpp
         source/gui/response_graph/FilterResponseGraph.cpp
+        source/gui/response_graph/MonoFftPath.cpp
         )
 
 # JUCE modules make use of compile definitions to switch certain features on/off.

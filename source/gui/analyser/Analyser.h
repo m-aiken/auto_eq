@@ -2,7 +2,7 @@
 
 #include <JuceHeader.h>
 
-#include "MonoFftPath.h"
+#include "../response_graph/MonoFftPath.h"
 #include "../../PluginProcessor.h"
 
 class Analyser : public juce::Component
