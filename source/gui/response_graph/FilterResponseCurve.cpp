@@ -7,7 +7,7 @@
 */
 FilterResponseCurve::FilterResponseCurve(PluginProcessor& p)
     : processor_ref_(p)
-    , should_repaint_(false)
+    , should_repaint_(true)
 {
     addApvtsListeners();
     startTimerHz(60);
@@ -28,12 +28,49 @@ FilterResponseCurve::~FilterResponseCurve()
 void
 FilterResponseCurve::paint(juce::Graphics& g)
 {
-    if (path_.isEmpty()) {
+    if (path_.isEmpty() || magnitudes_.size() == 0) {
         return;
     }
 
+    auto bounds       = getLocalBounds();
+    auto bounds_width = bounds.getWidth();
+    auto centre_y     = bounds.getCentreY();
+
+    //    g.strokePath(path_, juce::PathStrokeType(2.f));
+
+    // Draw the filter response at each band.
     g.setColour(Theme::getColour(Theme::FILTER_RESPONSE_PATH));
-    g.strokePath(path_, juce::PathStrokeType(2.f));
+
+    for (uint8 i = 0; i < FilterFactory::NUM_BANDS; ++i) {
+        float band_hz   = FilterFactory::getBandHz(static_cast< FilterFactory::BAND_ID >(i));
+        float scaled_hz = juce::mapFromLog10< float >(band_hz, Global::MIN_HZ, Global::MAX_HZ);
+        int   x_raw     = static_cast< int >(std::floor(bounds_width * scaled_hz));
+        int   x         = juce::jmin< int >(x_raw, magnitudes_.size() - 1);
+        int   y         = getYCoordinateFromMagnitude(magnitudes_.at(x));
+
+        int bar_width      = 16;
+        int half_bar_width = 8;
+        int bar_height     = getBandBarHeight(magnitudes_.at(x));
+
+        int left_edge  = (x - half_bar_width);
+        int right_edge = (x + half_bar_width);
+
+        if (left_edge < 0) {
+            bar_width += left_edge;
+            x = 0;
+        }
+        else if (right_edge > bounds_width) {
+            bar_width -= right_edge;
+            x = bounds_width - bar_width;
+        }
+
+        juce::Rectangle< int > rect(x, juce::jmin< int >(y, centre_y), bar_width, bar_height);
+        g.fillRoundedRectangle(rect.toFloat(), 2.f);
+    }
+
+    // Draw a solid line at 0dB across the entire graph.
+    g.setColour(Theme::getColour(Theme::GRAPH_0DB_MARKER));
+    g.drawRect(0, centre_y - 1, bounds_width, 2);
 }
 
 /*---------------------------------------------------------------------------
@@ -179,6 +216,19 @@ FilterResponseCurve::getYCoordinateFromMagnitude(double magnitude)
                                     bounds_top);
 
     return static_cast< int >(std::floor(y));
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
+int
+FilterResponseCurve::getBandBarHeight(double magnitude)
+{
+    juce::Rectangle< int > bounds      = getLocalBounds();
+    int                    centre_y    = bounds.getCentreY();
+    int                    abs_y_coord = getYCoordinateFromMagnitude(std::abs(magnitude));
+
+    return (centre_y - abs_y_coord);
 }
 
 /*---------------------------------------------------------------------------

@@ -106,6 +106,51 @@ FilterFactory::getBandHz(BAND_ID band_id)
 **
 */
 /*static*/ float
+FilterFactory::getBandTestDb(BAND_ID band_id)
+{
+    switch (band_id) {
+    case B1:
+    case B2:
+    case B3:
+    case B4:
+    case B5:
+    case B6:
+    case B7:
+    case B8:
+    case B9:
+    case B10:
+    case B11:
+    case B12:
+    case B13:
+    case B14:
+    case B15:
+    case B16:
+    case B17:
+    case B18:
+    case B19:
+    case B20:
+    case B21:
+    case B22:
+    case B23:
+    case B24:
+    case B25:
+    case B26:
+    case B27:
+    case B28:
+    case B29:
+    case B30:
+    case B31:
+        return 3.f;
+
+    default:
+        return 3.f;
+    }
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
+/*static*/ float
 FilterFactory::getBandTargetDb(BAND_ID band_id)
 {
     // TODO find the correct magnitude target for each band/frequency.

@@ -27,6 +27,7 @@ private:
     void resetMagnitudesVector();
     void calculateMagnitudes();
     int  getYCoordinateFromMagnitude(double magnitude);
+    int  getBandBarHeight(double magnitude);
     void plotPath();
 
     void addApvtsListeners();
