@@ -1,10 +1,10 @@
 #pragma once
 
 #include "PluginProcessor.h"
-#include "gui/ThemeButton.h"
 #include "gui/analyser/Analyser.h"
-#include "gui/response_graph/FilterResponseGraph.h"
+#include "gui/menu/Menu.h"
 #include "gui/meters/MeterGroup.h"
+#include "gui/response_graph/FilterResponseGraph.h"
 
 class PluginEditor final
     : public juce::AudioProcessorEditor
@@ -24,7 +24,7 @@ private:
     // access the processor object that created it.
     PluginProcessor& processor_ref_;
 
-    ThemeButton         theme_button_;
+    Menu                menu_;
     FilterResponseGraph filter_res_graph_;
     Analyser            analyser_;
     MeterGroup          meter_group_;

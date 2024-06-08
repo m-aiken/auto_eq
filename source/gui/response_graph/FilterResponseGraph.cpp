@@ -20,16 +20,18 @@ FilterResponseGraph::FilterResponseGraph(PluginProcessor& p)
 void
 FilterResponseGraph::resized()
 {
-    auto        bounds  = getLocalBounds();
-    const uint8 padding = Global::ANALYSER_PADDING;
+    auto                   bounds        = getLocalBounds();
+    auto                   bounds_width  = bounds.getWidth();
+    auto                   bounds_height = bounds.getHeight();
+    const uint8            padding       = Global::ANALYSER_PADDING;
+    juce::Rectangle< int > y_padded_bounds(0, padding, bounds_width, bounds_height - (padding * 2));
+    juce::Rectangle< int > db_scale_bounds(8, 0, padding, bounds_height);
+    juce::Rectangle< int > hz_scale_bounds(0, bounds.getBottom() - padding, bounds_width, padding);
 
-    db_scale_.setBounds(juce::Rectangle< int >(0, 0, padding, bounds.getHeight()));
-    hz_scale_.setBounds(juce::Rectangle< int >(padding, 0, bounds.getWidth() - (padding * 2), padding));
-
-    auto padded_bounds = bounds.reduced(padding);
-
-    backdrop_.setBounds(padded_bounds);
-    response_curve_.setBounds(padded_bounds);
+    backdrop_.setBounds(y_padded_bounds);
+    response_curve_.setBounds(y_padded_bounds);
+    db_scale_.setBounds(db_scale_bounds);
+    hz_scale_.setBounds(hz_scale_bounds);
 }
 
 /*---------------------------------------------------------------------------

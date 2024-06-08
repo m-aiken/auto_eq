@@ -43,10 +43,11 @@ target_sources(${PROJECT_NAME}
         source/gui/DecibelMarkers.cpp
         source/gui/FrequencyMarkers.cpp
         source/gui/Theme.cpp
-        source/gui/ThemeButton.cpp
         source/gui/analyser/Analyser.cpp
         source/gui/analyser/AnalyserCanvas.cpp
         source/gui/analyser/MonoFftPath.cpp
+        source/gui/menu/Menu.cpp
+        source/gui/menu/ThemeButton.cpp
         source/gui/meters/MeterCanvas.cpp
         source/gui/meters/MeterGroup.cpp
         source/gui/meters/MeterLabel.cpp

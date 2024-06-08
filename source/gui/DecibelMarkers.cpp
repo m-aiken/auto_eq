@@ -20,19 +20,19 @@ DecibelMarkers::paint(juce::Graphics& g)
 {
     auto bounds = getLocalBounds();
 
-    int x      = bounds.getX();
-    int y      = bounds.getY() + Global::ANALYSER_PADDING;
-    int width  = bounds.getWidth();
-    int height = bounds.getHeight() - (Global::ANALYSER_PADDING * 2);
-
-    float text_height = g.getCurrentFont().getHeight();
+    int x          = bounds.getX();
+    int offset_top = bounds.getY() + Global::ANALYSER_PADDING;
+    int width      = bounds.getWidth();
+    int height     = bounds.getHeight() - (Global::ANALYSER_PADDING * 2);
 
     g.setFont(Theme::getFont());
     g.setColour(Theme::getColour(Theme::TEXT));
 
+    float text_height = g.getCurrentFont().getHeight();
+
     for (int db = min_value_; db <= max_value_; db += db_interval_) {
         int          y_coord = juce::jmap< int >(db, min_value_, max_value_, height, 0);
-        int          text_y  = y_coord + y - static_cast< int >(std::floor(text_height * 0.5));
+        int          text_y  = y_coord + offset_top - static_cast< int >(text_height);
         juce::String label   = juce::String(db) + "dB";
 
         g.drawFittedText((db > 0 ? "+" + label : label), x, text_y, width, text_height, juce::Justification::centred, 1);

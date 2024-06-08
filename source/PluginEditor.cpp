@@ -9,17 +9,17 @@
 PluginEditor::PluginEditor(PluginProcessor& p)
     : AudioProcessorEditor(&p)
     , processor_ref_(p)
-    , theme_button_()
+    , menu_()
     , filter_res_graph_(p)
     , analyser_(p)
     , meter_group_(p)
 {
-    addAndMakeVisible(theme_button_);
+    addAndMakeVisible(menu_);
     addAndMakeVisible(filter_res_graph_);
     addAndMakeVisible(analyser_);
     addAndMakeVisible(meter_group_);
 
-    theme_button_.addListener(this);
+    menu_.getThemeButtonRef().addListener(this);
 
     setResizable(true, true);
     setResizeLimits(768, 400, 1100, 600);
@@ -31,7 +31,7 @@ PluginEditor::PluginEditor(PluginProcessor& p)
 */
 PluginEditor::~PluginEditor()
 {
-    theme_button_.removeListener(this);
+    menu_.getThemeButtonRef().removeListener(this);
 }
 
 /*---------------------------------------------------------------------------
@@ -49,13 +49,13 @@ PluginEditor::paint(juce::Graphics& g)
 void
 PluginEditor::resized()
 {
-    auto        bounds              = getLocalBounds();
-    const uint8 theme_button_width  = 64;
-    const uint8 theme_button_height = 32;
-    const uint8 theme_button_margin = 8;
+    auto        bounds      = getLocalBounds();
+    const uint8 menu_height = 32;
 
-    theme_button_.setBounds(theme_button_margin, theme_button_margin, theme_button_width, theme_button_height);
+    menu_.setBounds(0, 0, bounds.getWidth(), menu_height);
+    filter_res_graph_.setBounds(0, menu_.getBottom(), bounds.getWidth(), bounds.getHeight() * 0.5);
 
+#if 0
     juce::Grid grid;
 
     using Track = juce::Grid::TrackInfo;
@@ -77,6 +77,7 @@ PluginEditor::resized()
     grid.items.add(juce::GridItem(meter_group_));
 
     grid.performLayout(bounds.reduced(30));
+#endif
 }
 
 /*---------------------------------------------------------------------------
@@ -89,7 +90,7 @@ PluginEditor::buttonClicked(juce::Button* button)
         return;
     }
 
-    if (button == &theme_button_) {
+    if (button == &menu_.getThemeButtonRef()) {
         repaint();
     }
 }
