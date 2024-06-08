@@ -36,7 +36,6 @@ Analyser::Analyser(PluginProcessor& p)
 
     addAndMakeVisible(db_markers_);
     addAndMakeVisible(hz_markers_);
-    addAndMakeVisible(backdrop_);
     addAndMakeVisible(fft_path_primary_pre_eq_l_.get());
     addAndMakeVisible(fft_path_primary_pre_eq_r_.get());
     addAndMakeVisible(fft_path_primary_post_eq_l_.get());
@@ -60,8 +59,6 @@ Analyser::resized()
                                                  Global::ANALYSER_PADDING));
 
     auto padded_bounds = bounds.reduced(Global::ANALYSER_PADDING);
-
-    backdrop_.setBounds(padded_bounds);
 
     fft_path_primary_pre_eq_l_->setBounds(padded_bounds);
     fft_path_primary_pre_eq_r_->setBounds(padded_bounds);

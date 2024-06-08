@@ -44,7 +44,6 @@ target_sources(${PROJECT_NAME}
         source/gui/FrequencyMarkers.cpp
         source/gui/Theme.cpp
         source/gui/analyser/Analyser.cpp
-        source/gui/analyser/AnalyserCanvas.cpp
         source/gui/analyser/MonoFftPath.cpp
         source/gui/menu/Menu.cpp
         source/gui/menu/ThemeButton.cpp

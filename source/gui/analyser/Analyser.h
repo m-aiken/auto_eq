@@ -2,7 +2,6 @@
 
 #include <JuceHeader.h>
 
-#include "AnalyserCanvas.h"
 #include "../FrequencyMarkers.h"
 #include "MonoFftPath.h"
 #include "../DecibelMarkers.h"
@@ -18,7 +17,6 @@ public:
 private:
     DecibelMarkers   db_markers_;
     FrequencyMarkers hz_markers_;
-    AnalyserCanvas   backdrop_;
 
     std::unique_ptr< MonoFftPath > fft_path_primary_pre_eq_l_;
     std::unique_ptr< MonoFftPath > fft_path_primary_pre_eq_r_;
