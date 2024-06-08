@@ -2,9 +2,9 @@
 
 #include "JuceHeader.h"
 
+#include "MeterDbScale.h"
 #include "MeterLabel.h"
 #include "MonoMeter.h"
-#include "../DecibelMarkers.h"
 #include "../../PluginProcessor.h"
 
 class MeterGroup : public juce::Component
@@ -16,7 +16,7 @@ public:
     void resized() override;
 
 private:
-    DecibelMarkers db_scale_;
+    MeterDbScale db_scale_;
 
     MeterLabel peak_label_;
     MeterLabel rms_label_;

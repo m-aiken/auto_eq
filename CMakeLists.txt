@@ -46,6 +46,7 @@ target_sources(${PROJECT_NAME}
         source/gui/menu/Menu.cpp
         source/gui/menu/ThemeButton.cpp
         source/gui/meters/MeterCanvas.cpp
+        source/gui/meters/MeterDbScale.cpp
         source/gui/meters/MeterGroup.cpp
         source/gui/meters/MeterLabel.cpp
         source/gui/meters/MonoMeter.cpp

@@ -5,7 +5,7 @@
 **
 */
 MeterGroup::MeterGroup(PluginProcessor& p)
-    : db_scale_(Global::NEG_INF, Global::MAX_DB, 6)
+    : db_scale_()
     , peak_label_("PEAK")
     , rms_label_("RMS")
     , lufs_label_("LUFS")
@@ -16,7 +16,7 @@ MeterGroup::MeterGroup(PluginProcessor& p)
     , lufs_meter_l_([&]() { return p.getMeterValue(Global::LUFS_METER, Global::Channels::PRIMARY_LEFT); })
     , lufs_meter_r_([&]() { return p.getMeterValue(Global::LUFS_METER, Global::Channels::PRIMARY_RIGHT); })
 {
-    //    addAndMakeVisible(db_scale_);
+    addAndMakeVisible(db_scale_);
 
     addAndMakeVisible(peak_label_);
     addAndMakeVisible(rms_label_);
@@ -59,8 +59,17 @@ MeterGroup::resized()
     int meter_section_width = static_cast< int >(std::floor(bounds_width * 0.8));
     int label_section_width = static_cast< int >(std::floor(bounds_width * 0.2));
 
-    juce::Rectangle< int > meter_section(0, 0, meter_section_width, bounds_height);
-    juce::Rectangle< int > label_section(meter_section_width, 0, label_section_width, bounds_height);
+    db_scale_.setBounds(0, 0, meter_section_width, Global::ANALYSER_PADDING);
+
+    juce::Rectangle< int > meter_section(Global::ANALYSER_PADDING,
+                                         Global::ANALYSER_PADDING,
+                                         meter_section_width - (Global::ANALYSER_PADDING * 2),
+                                         bounds_height - Global::ANALYSER_PADDING);
+
+    juce::Rectangle< int > label_section(meter_section_width,
+                                         Global::ANALYSER_PADDING,
+                                         label_section_width,
+                                         bounds_height - Global::ANALYSER_PADDING);
 
     // Meter Grid.
     juce::Grid meter_grid;
