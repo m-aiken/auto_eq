@@ -43,7 +43,6 @@ target_sources(${PROJECT_NAME}
         source/gui/DecibelMarkers.cpp
         source/gui/FrequencyMarkers.cpp
         source/gui/Theme.cpp
-        source/gui/analyser/Analyser.cpp
         source/gui/menu/Menu.cpp
         source/gui/menu/ThemeButton.cpp
         source/gui/meters/MeterCanvas.cpp

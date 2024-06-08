@@ -1,7 +1,6 @@
 #pragma once
 
 #include "PluginProcessor.h"
-#include "gui/analyser/Analyser.h"
 #include "gui/menu/Menu.h"
 #include "gui/meters/MeterGroup.h"
 #include "gui/response_graph/FilterResponseGraph.h"
@@ -26,7 +25,6 @@ private:
 
     Menu                menu_;
     FilterResponseGraph filter_res_graph_;
-    Analyser            analyser_;
     MeterGroup          meter_group_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PluginEditor)

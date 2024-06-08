@@ -11,12 +11,10 @@ PluginEditor::PluginEditor(PluginProcessor& p)
     , processor_ref_(p)
     , menu_()
     , filter_res_graph_(p)
-    , analyser_(p)
     , meter_group_(p)
 {
     addAndMakeVisible(menu_);
     addAndMakeVisible(filter_res_graph_);
-    addAndMakeVisible(analyser_);
     addAndMakeVisible(meter_group_);
 
     menu_.getThemeButtonRef().addListener(this);

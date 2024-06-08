@@ -4,6 +4,7 @@
 
 #include "FilterResponseCanvas.h"
 #include "FilterResponseCurve.h"
+#include "MonoFftPath.h"
 #include "../FrequencyMarkers.h"
 #include "../DecibelMarkers.h"
 #include "../../PluginProcessor.h"
@@ -20,6 +21,13 @@ private:
     DecibelMarkers       db_scale_;
     FrequencyMarkers     hz_scale_;
     FilterResponseCurve  response_curve_;
+
+    std::unique_ptr< MonoFftPath > fft_path_primary_pre_eq_l_;
+    std::unique_ptr< MonoFftPath > fft_path_primary_pre_eq_r_;
+    std::unique_ptr< MonoFftPath > fft_path_primary_post_eq_l_;
+    std::unique_ptr< MonoFftPath > fft_path_primary_post_eq_r_;
+    std::unique_ptr< MonoFftPath > fft_path_sidechain_l_;
+    std::unique_ptr< MonoFftPath > fft_path_sidechain_r_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(FilterResponseGraph)
 };
