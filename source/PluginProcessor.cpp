@@ -239,7 +239,10 @@ PluginProcessor::processBlock(juce::AudioBuffer< float >& buffer, juce::MidiBuff
         }
     }
 
-    // EQ bands (filters).
+    // Adjust the EQ band values based on the input analysis.
+    updateBandValues();
+
+    // Update the filters from the new band values.
     updateFilterCoefficients();
 
     // Filter chains.
@@ -404,6 +407,52 @@ PluginProcessor::processInputForAnalysis(juce::AudioBuffer< float >& buffer)
 
     input_analysis_filter_l_.process(analysis_context_l);
     input_analysis_filter_r_.process(analysis_context_r);
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
+void
+PluginProcessor::updateBandValues()
+{
+    double sample_rate = getSampleRate();
+
+    for (uint8 i = 0; i < FilterFactory::NUM_BANDS; ++i) {
+        FilterFactory::BAND_ID band_id = static_cast< FilterFactory::BAND_ID >(i);
+
+        juce::AudioParameterFloat* param = getBandParameter(band_id);
+
+        if (param == nullptr) {
+            continue;
+        }
+
+        // Get the frequency for this band.
+        float band_hz = FilterFactory::getBandHz(band_id);
+
+        // Get the input magnitudes at that frequency.
+        // We want the average of both channels (left and right);
+        double input_mag_l   = input_analysis_filter_l_.coefficients->getMagnitudeForFrequency(band_hz, sample_rate);
+        double input_mag_r   = input_analysis_filter_r_.coefficients->getMagnitudeForFrequency(band_hz, sample_rate);
+        double input_mav_avg = (input_mag_l + input_mag_r) * 0.5;
+
+        // Get the decibel value.
+        float input_db = juce::Decibels::gainToDecibels(static_cast< float >(input_mav_avg), Global::NEG_INF);
+
+        // Get the target decibel value for this band's frequency.
+        float target_db = FilterFactory::getBandTargetDb(band_id);
+
+        // Adjust the band's decibel value up/down to the target.
+        param->setValueNotifyingHost(target_db - input_db);
+    }
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
+juce::AudioParameterFloat*
+PluginProcessor::getBandParameter(FilterFactory::BAND_ID band_id)
+{
+    return dynamic_cast< juce::AudioParameterFloat* >(apvts_.getParameter(FilterFactory::getBandName(band_id)));
 }
 
 /*---------------------------------------------------------------------------

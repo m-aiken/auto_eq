@@ -57,6 +57,9 @@ private:
     juce::dsp::IIR::Filter< float > input_analysis_filter_r_;
 
     void processInputForAnalysis(juce::AudioBuffer< float >& buffer);
+    void updateBandValues();
+
+    juce::AudioParameterFloat* getBandParameter(FilterFactory::BAND_ID band_id);
 
     FftBuffers fft_buffers_;
 
