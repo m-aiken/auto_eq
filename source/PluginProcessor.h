@@ -53,6 +53,11 @@ private:
     static juce::AudioProcessorValueTreeState::ParameterLayout getParameterLayout();
     juce::AudioProcessorValueTreeState                         apvts_;
 
+    juce::dsp::IIR::Filter< float > input_analysis_filter_l_;
+    juce::dsp::IIR::Filter< float > input_analysis_filter_r_;
+
+    void processInputForAnalysis(juce::AudioBuffer< float >& buffer);
+
     FftBuffers fft_buffers_;
 
     FilterFactory::MonoChain filter_chain_left_;

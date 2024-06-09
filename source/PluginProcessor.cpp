@@ -125,6 +125,21 @@ PluginProcessor::prepareToPlay(double sample_rate, int samples_per_block)
 {
     // Pre-playback initialisation.
 
+    juce::dsp::ProcessSpec process_spec;
+
+    process_spec.sampleRate       = sample_rate;
+    process_spec.maximumBlockSize = samples_per_block;
+    process_spec.numChannels      = getTotalNumOutputChannels();
+
+    // Input analysis filters.
+    input_analysis_filter_l_.prepare(process_spec);
+    input_analysis_filter_r_.prepare(process_spec);
+
+    input_analysis_filter_l_.coefficients = juce::dsp::IIR::Coefficients< float >::makeAllPass(sample_rate,
+                                                                                               (sample_rate * 0.5));
+    input_analysis_filter_r_.coefficients = juce::dsp::IIR::Coefficients< float >::makeAllPass(sample_rate,
+                                                                                               (sample_rate * 0.5));
+
     // FFT buffers.
     fft_buffers_.at(Global::FFT::PRIMARY_LEFT_PRE_EQ).prepare(sample_rate);
     fft_buffers_.at(Global::FFT::PRIMARY_RIGHT_PRE_EQ).prepare(sample_rate);
@@ -134,14 +149,8 @@ PluginProcessor::prepareToPlay(double sample_rate, int samples_per_block)
     fft_buffers_.at(Global::FFT::SIDECHAIN_RIGHT).prepare(sample_rate);
 
     // Filter chains.
-    juce::dsp::ProcessSpec filter_chain_spec;
-
-    filter_chain_spec.sampleRate       = sample_rate;
-    filter_chain_spec.maximumBlockSize = samples_per_block;
-    filter_chain_spec.numChannels      = getTotalNumOutputChannels();
-
-    filter_chain_left_.prepare(filter_chain_spec);
-    filter_chain_right_.prepare(filter_chain_spec);
+    filter_chain_left_.prepare(process_spec);
+    filter_chain_right_.prepare(process_spec);
 
     // EQ bands (filters).
     updateFilterCoefficients();
@@ -205,6 +214,9 @@ PluginProcessor::processBlock(juce::AudioBuffer< float >& buffer, juce::MidiBuff
     for (int i = total_num_input_channels; i < total_num_output_channels; ++i) {
         buffer.clear(i, 0, buffer.getNumSamples());
     }
+
+    // Give the untouched input signal to the analysis filters.
+    processInputForAnalysis(buffer);
 
     // Sidechain/Ambient FFT buffers (not affected by EQ).
     for (int i = 0; i < buffer.getNumSamples(); ++i) {
@@ -366,6 +378,24 @@ PluginProcessor::getParameterLayout()
     }
 
     return parameter_layout;
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
+void
+PluginProcessor::processInputForAnalysis(juce::AudioBuffer< float >& buffer)
+{
+    juce::dsp::AudioBlock< float > analysis_block(buffer);
+
+    auto analysis_block_l = analysis_block.getSingleChannelBlock(Global::Channels::PRIMARY_LEFT);
+    auto analysis_block_r = analysis_block.getSingleChannelBlock(Global::Channels::PRIMARY_RIGHT);
+
+    juce::dsp::ProcessContextReplacing< float > analysis_context_l(analysis_block_l);
+    juce::dsp::ProcessContextReplacing< float > analysis_context_r(analysis_block_r);
+
+    input_analysis_filter_l_.process(analysis_context_l);
+    input_analysis_filter_r_.process(analysis_context_r);
 }
 
 /*---------------------------------------------------------------------------
