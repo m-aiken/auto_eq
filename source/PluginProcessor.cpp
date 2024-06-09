@@ -442,7 +442,7 @@ PluginProcessor::updateBandValues()
         float target_db = FilterFactory::getBandTargetDb(band_id);
 
         // Adjust the band's decibel value up/down to the target.
-        param->setValueNotifyingHost(target_db - input_db);
+        *param = (target_db - input_db);
     }
 }
 

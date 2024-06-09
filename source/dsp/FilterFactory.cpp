@@ -186,10 +186,10 @@ FilterFactory::getBandTargetDb(BAND_ID band_id)
     case B29:
     case B30:
     case B31:
-        return 3.f;
+        return 0.f;
 
     default:
-        return 3.f;
+        return 0.f;
     }
 }
 
