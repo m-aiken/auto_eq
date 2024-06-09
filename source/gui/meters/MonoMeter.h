@@ -1,15 +1,17 @@
 #pragma once
 
-#include "JuceHeader.h"
+#include <JuceHeader.h>
 
 #include "MeterCanvas.h"
+#include "../../PluginProcessor.h"
+#include "../../utility/GlobalConstants.h"
 
 class MonoMeter
     : public juce::Component
     , public juce::Timer
 {
 public:
-    MonoMeter(std::function< float() >&& callback_fn);
+    MonoMeter(PluginProcessor& p, Global::METER_TYPE meter_type, Global::Channels::CHANNEL_ID channel);
     ~MonoMeter() override;
 
     void paint(juce::Graphics& g) override;
@@ -18,7 +20,9 @@ public:
     void timerCallback() override;
 
 private:
-    std::function< float() > getValue;
+    PluginProcessor&             processor_ref_;
+    Global::METER_TYPE           meter_type_;
+    Global::Channels::CHANNEL_ID channel_;
 
     MeterCanvas backdrop_;
 

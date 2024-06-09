@@ -59,11 +59,13 @@ PluginEditor::resized()
     grid.templateRows = {
         Track(Fr(5)),
         Track(Fr(55)),
-        Track(Fr(40)),
+        Track(Fr(15)),
+        Track(Fr(25)),
     };
 
     grid.items.add(juce::GridItem(menu_));
     grid.items.add(juce::GridItem(filter_res_graph_));
+    grid.items.add(juce::GridItem());
     grid.items.add(juce::GridItem(meter_group_));
 
     grid.performLayout(getLocalBounds());
