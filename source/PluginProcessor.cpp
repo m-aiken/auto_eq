@@ -218,19 +218,25 @@ PluginProcessor::processBlock(juce::AudioBuffer< float >& buffer, juce::MidiBuff
     // Give the untouched input signal to the analysis filters.
     processInputForAnalysis(buffer);
 
-    // Sidechain/Ambient FFT buffers (not affected by EQ).
-    for (int i = 0; i < buffer.getNumSamples(); ++i) {
-        fft_buffers_.at(Global::FFT::SIDECHAIN_LEFT).pushNextSample(buffer.getSample(Global::Channels::SIDECHAIN_LEFT, i));
-        fft_buffers_.at(Global::FFT::SIDECHAIN_RIGHT).pushNextSample(buffer.getSample(Global::Channels::SIDECHAIN_RIGHT, i));
+    if (Global::PROCESS_FFT) {
+        // Sidechain/Ambient FFT buffers (not affected by EQ).
+        for (int i = 0; i < buffer.getNumSamples(); ++i) {
+            fft_buffers_.at(Global::FFT::SIDECHAIN_LEFT)
+                .pushNextSample(buffer.getSample(Global::Channels::SIDECHAIN_LEFT, i));
+            fft_buffers_.at(Global::FFT::SIDECHAIN_RIGHT)
+                .pushNextSample(buffer.getSample(Global::Channels::SIDECHAIN_RIGHT, i));
+        }
     }
 
-    // Primary/Playback FFT buffers (PRE EQ).
-    for (int i = 0; i < buffer.getNumSamples(); ++i) {
-        fft_buffers_.at(Global::FFT::PRIMARY_LEFT_PRE_EQ)
-            .pushNextSample(buffer.getSample(Global::Channels::PRIMARY_LEFT, i));
+    if (Global::PROCESS_FFT) {
+        // Primary/Playback FFT buffers (PRE EQ).
+        for (int i = 0; i < buffer.getNumSamples(); ++i) {
+            fft_buffers_.at(Global::FFT::PRIMARY_LEFT_PRE_EQ)
+                .pushNextSample(buffer.getSample(Global::Channels::PRIMARY_LEFT, i));
 
-        fft_buffers_.at(Global::FFT::PRIMARY_RIGHT_PRE_EQ)
-            .pushNextSample(buffer.getSample(Global::Channels::PRIMARY_RIGHT, i));
+            fft_buffers_.at(Global::FFT::PRIMARY_RIGHT_PRE_EQ)
+                .pushNextSample(buffer.getSample(Global::Channels::PRIMARY_RIGHT, i));
+        }
     }
 
     // EQ bands (filters).
@@ -248,13 +254,15 @@ PluginProcessor::processBlock(juce::AudioBuffer< float >& buffer, juce::MidiBuff
     filter_chain_left_.process(process_context_left);
     filter_chain_right_.process(process_context_right);
 
-    // Primary/Playback FFT buffers (POST EQ).
-    for (int i = 0; i < buffer.getNumSamples(); ++i) {
-        fft_buffers_.at(Global::FFT::PRIMARY_LEFT_POST_EQ)
-            .pushNextSample(buffer.getSample(Global::Channels::PRIMARY_LEFT, i));
+    if (Global::PROCESS_FFT) {
+        // Primary/Playback FFT buffers (POST EQ).
+        for (int i = 0; i < buffer.getNumSamples(); ++i) {
+            fft_buffers_.at(Global::FFT::PRIMARY_LEFT_POST_EQ)
+                .pushNextSample(buffer.getSample(Global::Channels::PRIMARY_LEFT, i));
 
-        fft_buffers_.at(Global::FFT::PRIMARY_RIGHT_POST_EQ)
-            .pushNextSample(buffer.getSample(Global::Channels::PRIMARY_RIGHT, i));
+            fft_buffers_.at(Global::FFT::PRIMARY_RIGHT_POST_EQ)
+                .pushNextSample(buffer.getSample(Global::Channels::PRIMARY_RIGHT, i));
+        }
     }
 
     // Update the Peak, RMS, and LUFS.
