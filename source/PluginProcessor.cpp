@@ -216,7 +216,7 @@ PluginProcessor::processBlock(juce::AudioBuffer< float >& buffer, juce::MidiBuff
     }
 
     // Give the untouched input signal to the analysis filters.
-    processInputForAnalysis(buffer);
+    //    processInputForAnalysis(buffer);
 
     if (Global::PROCESS_FFT) {
         // Sidechain/Ambient FFT buffers (not affected by EQ).
@@ -240,7 +240,7 @@ PluginProcessor::processBlock(juce::AudioBuffer< float >& buffer, juce::MidiBuff
     }
 
     // Adjust the EQ band values based on the input analysis.
-    updateBandValues();
+    //    updateBandValues();
 
     // Update the filters from the new band values.
     updateFilterCoefficients();
