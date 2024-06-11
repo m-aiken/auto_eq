@@ -1,6 +1,6 @@
 #pragma once
 
-#include "JuceHeader.h"
+#include <JuceHeader.h>
 
 #include "../Theme.h"
 #include "../../dsp/MonoFftBuffer.h"
@@ -18,10 +18,10 @@ public:
 
     void timerCallback() override;
 
+private:
     void processFftData();
     void generatePath();
 
-private:
     juce::dsp::FFT                        fft_;
     MonoFftBuffer::FftDataBlock           fft_data_;
     juce::dsp::WindowingFunction< float > windowing_fn_;
