@@ -1,6 +1,6 @@
 #include "FilterResponseCanvas.h"
 #include "../Theme.h"
-#include "../../dsp/FilterFactory.h"
+#include "../../dsp/Equalizer.h"
 #include "../../utility/GlobalConstants.h"
 
 /*static*/ const uint8 FilterResponseCanvas::DB_INTERVAL = 3;
@@ -23,8 +23,8 @@ FilterResponseCanvas::paint(juce::Graphics& g)
     auto      bounds_y      = bounds.getY();
     auto      bounds_width  = bounds.getWidth();
     auto      bounds_bottom = bounds.getBottom();
-    const int min_db        = static_cast< int >(FilterFactory::MAX_BAND_DB_CUT);
-    const int max_db        = static_cast< int >(FilterFactory::MAX_BAND_DB_BOOST);
+    const int min_db        = static_cast< int >(Equalizer::MAX_BAND_DB_CUT);
+    const int max_db        = static_cast< int >(Equalizer::MAX_BAND_DB_BOOST);
     const int min_hz        = static_cast< int >(Global::MIN_HZ);
     const int max_hz        = static_cast< int >(Global::MAX_HZ);
     auto      line_colour   = Theme::getColour(Theme::ANALYSER_GRID);

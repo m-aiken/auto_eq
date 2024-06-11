@@ -341,7 +341,7 @@ PluginProcessor::getFftBuffers()
 /*---------------------------------------------------------------------------
 **
 */
-FilterFactory::MonoChain&
+Equalizer::MonoChain&
 PluginProcessor::getFilterChain()
 {
     // For the benefit of the analyser's filter response curve.
@@ -384,8 +384,8 @@ PluginProcessor::getParameterLayout()
     juce::AudioProcessorValueTreeState::ParameterLayout parameter_layout;
 
     // EQ bands.
-    for (uint8 i = 0; i < FilterFactory::NUM_BANDS; ++i) {
-        FilterFactory::addBandToParameterLayout(parameter_layout, static_cast< FilterFactory::BAND_ID >(i));
+    for (uint8 i = 0; i < Equalizer::NUM_BANDS; ++i) {
+        Equalizer::addBandToParameterLayout(parameter_layout, static_cast< Equalizer::BAND_ID >(i));
     }
 
     return parameter_layout;
@@ -417,8 +417,8 @@ PluginProcessor::updateBandValues()
 {
     double sample_rate = getSampleRate();
 
-    for (uint8 i = 0; i < FilterFactory::NUM_BANDS; ++i) {
-        FilterFactory::BAND_ID band_id = static_cast< FilterFactory::BAND_ID >(i);
+    for (uint8 i = 0; i < Equalizer::NUM_BANDS; ++i) {
+        Equalizer::BAND_ID band_id = static_cast< Equalizer::BAND_ID >(i);
 
         juce::AudioParameterFloat* param = getBandParameter(band_id);
 
@@ -427,7 +427,7 @@ PluginProcessor::updateBandValues()
         }
 
         // Get the frequency for this band.
-        float band_hz = FilterFactory::getBandHz(band_id);
+        float band_hz = Equalizer::getBandHz(band_id);
 
         // Get the input magnitudes at that frequency.
         // We want the average of both channels (left and right);
@@ -439,7 +439,7 @@ PluginProcessor::updateBandValues()
         float input_db = juce::Decibels::gainToDecibels(static_cast< float >(input_mav_avg), Global::NEG_INF);
 
         // Get the target decibel value for this band's frequency.
-        float target_db = FilterFactory::getBandTargetDb(band_id);
+        float target_db = Equalizer::getBandTargetDb(band_id);
 
         // Adjust the band's decibel value up/down to the target.
         *param = (target_db - input_db);
@@ -450,9 +450,9 @@ PluginProcessor::updateBandValues()
 **
 */
 juce::AudioParameterFloat*
-PluginProcessor::getBandParameter(FilterFactory::BAND_ID band_id)
+PluginProcessor::getBandParameter(Equalizer::BAND_ID band_id)
 {
-    return dynamic_cast< juce::AudioParameterFloat* >(apvts_.getParameter(FilterFactory::getBandName(band_id)));
+    return dynamic_cast< juce::AudioParameterFloat* >(apvts_.getParameter(Equalizer::getBandName(band_id)));
 }
 
 /*---------------------------------------------------------------------------
@@ -463,12 +463,12 @@ PluginProcessor::updateFilterCoefficients()
 {
     double sample_rate = getSampleRate();
 
-    for (uint8 i = 0; i < FilterFactory::NUM_BANDS; ++i) {
-        FilterFactory::BAND_ID band_id = static_cast< FilterFactory::BAND_ID >(i);
-        float                  gain    = getBandGain(band_id);
+    for (uint8 i = 0; i < Equalizer::NUM_BANDS; ++i) {
+        Equalizer::BAND_ID band_id = static_cast< Equalizer::BAND_ID >(i);
+        float              gain    = getBandGain(band_id);
 
-        FilterFactory::updateBandCoefficients(filter_chain_left_, band_id, gain, sample_rate);
-        FilterFactory::updateBandCoefficients(filter_chain_right_, band_id, gain, sample_rate);
+        Equalizer::updateBandCoefficients(filter_chain_left_, band_id, gain, sample_rate);
+        Equalizer::updateBandCoefficients(filter_chain_right_, band_id, gain, sample_rate);
     }
 }
 
@@ -476,9 +476,9 @@ PluginProcessor::updateFilterCoefficients()
 **
 */
 float
-PluginProcessor::getBandGain(FilterFactory::BAND_ID band_id) const
+PluginProcessor::getBandGain(Equalizer::BAND_ID band_id) const
 {
-    juce::String         param_id    = FilterFactory::getBandName(band_id);
+    juce::String         param_id    = Equalizer::getBandName(band_id);
     AudioParameterFloat* float_param = dynamic_cast< juce::AudioParameterFloat* >(apvts_.getParameter(param_id));
 
     return (float_param != nullptr) ? juce::Decibels::decibelsToGain(float_param->get()) : 0.f;

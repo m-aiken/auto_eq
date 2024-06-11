@@ -2,7 +2,7 @@
 
 #include <juce_audio_processors/juce_audio_processors.h>
 
-#include "dsp/FilterFactory.h"
+#include "dsp/Equalizer.h"
 #include "dsp/MonoFftBuffer.h"
 #include "utility/GlobalConstants.h"
 
@@ -45,7 +45,7 @@ public:
 
     FftBuffers& getFftBuffers();
 
-    FilterFactory::MonoChain& getFilterChain();
+    Equalizer::MonoChain& getFilterChain();
 
     float getMeterValue(Global::METER_TYPE meter_type, Global::Channels::CHANNEL_ID channel_id) const;
 
@@ -59,15 +59,15 @@ private:
     void processInputForAnalysis(juce::AudioBuffer< float >& buffer);
     void updateBandValues();
 
-    juce::AudioParameterFloat* getBandParameter(FilterFactory::BAND_ID band_id);
+    juce::AudioParameterFloat* getBandParameter(Equalizer::BAND_ID band_id);
 
     FftBuffers fft_buffers_;
 
-    FilterFactory::MonoChain filter_chain_left_;
-    FilterFactory::MonoChain filter_chain_right_;
+    Equalizer::MonoChain filter_chain_left_;
+    Equalizer::MonoChain filter_chain_right_;
 
     void  updateFilterCoefficients();
-    float getBandGain(FilterFactory::BAND_ID band_id) const;
+    float getBandGain(Equalizer::BAND_ID band_id) const;
 
     typedef juce::SmoothedValue< float, juce::ValueSmoothingTypes::Linear > SmoothedFloat;
 

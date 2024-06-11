@@ -2,7 +2,7 @@
 
 #include <JuceHeader.h>
 
-class FilterFactory
+class Equalizer
 {
 public:
     using IIRFilter = juce::dsp::IIR::Filter< float >;
@@ -81,7 +81,7 @@ public:
     };
 
 public:
-    FilterFactory();
+    Equalizer();
 
     static juce::String getBandName(BAND_ID band_id);
     static float        getBandHz(BAND_ID band_id);
@@ -97,5 +97,5 @@ private:
     static const int         PARAMETERS_VERSION_HINT;
     static juce::ParameterID getVersionedParameterId(BAND_ID band_id);
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(FilterFactory)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Equalizer)
 };

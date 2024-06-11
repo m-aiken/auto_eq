@@ -1,6 +1,6 @@
 #include "FilterResponseCurve.h"
 #include "../Theme.h"
-#include "../../dsp/FilterFactory.h"
+#include "../../dsp/Equalizer.h"
 
 /*---------------------------------------------------------------------------
 **
@@ -41,8 +41,8 @@ FilterResponseCurve::paint(juce::Graphics& g)
     // Draw the filter response at each band.
     g.setColour(Theme::getColour(Theme::FILTER_RESPONSE_PATH));
 
-    for (uint8 i = 0; i < FilterFactory::NUM_BANDS; ++i) {
-        float band_hz   = FilterFactory::getBandHz(static_cast< FilterFactory::BAND_ID >(i));
+    for (uint8 i = 0; i < Equalizer::NUM_BANDS; ++i) {
+        float band_hz   = Equalizer::getBandHz(static_cast< Equalizer::BAND_ID >(i));
         float scaled_hz = juce::mapFromLog10< float >(band_hz, Global::MIN_HZ, Global::MAX_HZ);
         int   x_raw     = static_cast< int >(std::floor(bounds_width * scaled_hz));
         int   x         = juce::jmin< int >(x_raw, magnitudes_.size() - 1);
@@ -148,7 +148,7 @@ FilterResponseCurve::calculateMagnitudes()
     resetMagnitudesVector();
 
     // Get the filters.
-    FilterFactory::MonoChain& filter_chain = processor_ref_.getFilterChain();
+    Equalizer::MonoChain& filter_chain = processor_ref_.getFilterChain();
 
     auto   num_x_pixels = getLocalBounds().getWidth();
     double sample_rate  = processor_ref_.getSampleRate();
@@ -163,37 +163,37 @@ FilterResponseCurve::calculateMagnitudes()
                                                  Global::MAX_HZ);
 
         // Magnitude per band.
-        mag *= filter_chain.get< FilterFactory::B1 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
-        mag *= filter_chain.get< FilterFactory::B2 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
-        mag *= filter_chain.get< FilterFactory::B3 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
-        mag *= filter_chain.get< FilterFactory::B4 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
-        mag *= filter_chain.get< FilterFactory::B5 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
-        mag *= filter_chain.get< FilterFactory::B6 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
-        mag *= filter_chain.get< FilterFactory::B7 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
-        mag *= filter_chain.get< FilterFactory::B8 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
-        mag *= filter_chain.get< FilterFactory::B9 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
-        mag *= filter_chain.get< FilterFactory::B10 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
-        mag *= filter_chain.get< FilterFactory::B11 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
-        mag *= filter_chain.get< FilterFactory::B12 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
-        mag *= filter_chain.get< FilterFactory::B13 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
-        mag *= filter_chain.get< FilterFactory::B14 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
-        mag *= filter_chain.get< FilterFactory::B15 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
-        mag *= filter_chain.get< FilterFactory::B16 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
-        mag *= filter_chain.get< FilterFactory::B17 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
-        mag *= filter_chain.get< FilterFactory::B18 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
-        mag *= filter_chain.get< FilterFactory::B19 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
-        mag *= filter_chain.get< FilterFactory::B20 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
-        mag *= filter_chain.get< FilterFactory::B21 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
-        mag *= filter_chain.get< FilterFactory::B22 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
-        mag *= filter_chain.get< FilterFactory::B23 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
-        mag *= filter_chain.get< FilterFactory::B24 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
-        mag *= filter_chain.get< FilterFactory::B25 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
-        mag *= filter_chain.get< FilterFactory::B26 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
-        mag *= filter_chain.get< FilterFactory::B27 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
-        mag *= filter_chain.get< FilterFactory::B28 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
-        mag *= filter_chain.get< FilterFactory::B29 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
-        mag *= filter_chain.get< FilterFactory::B30 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
-        mag *= filter_chain.get< FilterFactory::B31 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
+        mag *= filter_chain.get< Equalizer::B1 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
+        mag *= filter_chain.get< Equalizer::B2 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
+        mag *= filter_chain.get< Equalizer::B3 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
+        mag *= filter_chain.get< Equalizer::B4 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
+        mag *= filter_chain.get< Equalizer::B5 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
+        mag *= filter_chain.get< Equalizer::B6 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
+        mag *= filter_chain.get< Equalizer::B7 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
+        mag *= filter_chain.get< Equalizer::B8 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
+        mag *= filter_chain.get< Equalizer::B9 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
+        mag *= filter_chain.get< Equalizer::B10 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
+        mag *= filter_chain.get< Equalizer::B11 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
+        mag *= filter_chain.get< Equalizer::B12 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
+        mag *= filter_chain.get< Equalizer::B13 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
+        mag *= filter_chain.get< Equalizer::B14 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
+        mag *= filter_chain.get< Equalizer::B15 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
+        mag *= filter_chain.get< Equalizer::B16 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
+        mag *= filter_chain.get< Equalizer::B17 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
+        mag *= filter_chain.get< Equalizer::B18 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
+        mag *= filter_chain.get< Equalizer::B19 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
+        mag *= filter_chain.get< Equalizer::B20 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
+        mag *= filter_chain.get< Equalizer::B21 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
+        mag *= filter_chain.get< Equalizer::B22 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
+        mag *= filter_chain.get< Equalizer::B23 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
+        mag *= filter_chain.get< Equalizer::B24 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
+        mag *= filter_chain.get< Equalizer::B25 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
+        mag *= filter_chain.get< Equalizer::B26 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
+        mag *= filter_chain.get< Equalizer::B27 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
+        mag *= filter_chain.get< Equalizer::B28 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
+        mag *= filter_chain.get< Equalizer::B29 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
+        mag *= filter_chain.get< Equalizer::B30 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
+        mag *= filter_chain.get< Equalizer::B31 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
 
         magnitudes_.at(i) = juce::Decibels::gainToDecibels< double >(mag, Global::NEG_INF);
     }
@@ -210,8 +210,8 @@ FilterResponseCurve::getYCoordinateFromMagnitude(double magnitude)
     auto bounds_bottom = bounds.getBottom();
 
     double y = juce::jmap< double >(magnitude,
-                                    FilterFactory::MAX_BAND_DB_CUT,
-                                    FilterFactory::MAX_BAND_DB_BOOST,
+                                    Equalizer::MAX_BAND_DB_CUT,
+                                    Equalizer::MAX_BAND_DB_BOOST,
                                     bounds_bottom,
                                     bounds_top);
 
@@ -258,9 +258,9 @@ FilterResponseCurve::addApvtsListeners()
 {
     juce::AudioProcessorValueTreeState& apvts = processor_ref_.getApvts();
 
-    for (uint8 i = 0; i < FilterFactory::NUM_BANDS; ++i) {
-        FilterFactory::BAND_ID band_id  = static_cast< FilterFactory::BAND_ID >(i);
-        juce::String           param_id = FilterFactory::getBandName(band_id);
+    for (uint8 i = 0; i < Equalizer::NUM_BANDS; ++i) {
+        Equalizer::BAND_ID band_id  = static_cast< Equalizer::BAND_ID >(i);
+        juce::String       param_id = Equalizer::getBandName(band_id);
 
         apvts.getParameter(param_id)->addListener(this);
     }
@@ -274,9 +274,9 @@ FilterResponseCurve::removeApvtsListeners()
 {
     juce::AudioProcessorValueTreeState& apvts = processor_ref_.getApvts();
 
-    for (uint8 i = 0; i < FilterFactory::NUM_BANDS; ++i) {
-        FilterFactory::BAND_ID band_id  = static_cast< FilterFactory::BAND_ID >(i);
-        juce::String           param_id = FilterFactory::getBandName(band_id);
+    for (uint8 i = 0; i < Equalizer::NUM_BANDS; ++i) {
+        Equalizer::BAND_ID band_id  = static_cast< Equalizer::BAND_ID >(i);
+        juce::String       param_id = Equalizer::getBandName(band_id);
 
         apvts.getParameter(param_id)->removeListener(this);
     }

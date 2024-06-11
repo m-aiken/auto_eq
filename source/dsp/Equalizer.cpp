@@ -1,20 +1,20 @@
-#include "FilterFactory.h"
+#include "Equalizer.h"
 
-/*static*/ const uint8 FilterFactory::NUM_BANDS         = 31;
-/*static*/ const float FilterFactory::MAX_BAND_DB_BOOST = 12.f;
-/*static*/ const float FilterFactory::MAX_BAND_DB_CUT   = -12.f;
-/*static*/ const float FilterFactory::DEFAULT_BAND_DB   = 0.f;
-/*static*/ const float FilterFactory::DEFAULT_BAND_Q    = 2.f;
+/*static*/ const uint8 Equalizer::NUM_BANDS         = 31;
+/*static*/ const float Equalizer::MAX_BAND_DB_BOOST = 12.f;
+/*static*/ const float Equalizer::MAX_BAND_DB_CUT   = -12.f;
+/*static*/ const float Equalizer::DEFAULT_BAND_DB   = 0.f;
+/*static*/ const float Equalizer::DEFAULT_BAND_Q    = 2.f;
 
-/*static*/ const juce::NormalisableRange< float > FilterFactory::BAND_DB_RANGE =
+/*static*/ const juce::NormalisableRange< float > Equalizer::BAND_DB_RANGE =
     juce::NormalisableRange< float >(MAX_BAND_DB_CUT, MAX_BAND_DB_BOOST, 0.5f, 1.f);
 
-/*static*/ const int FilterFactory::PARAMETERS_VERSION_HINT = 1;
+/*static*/ const int Equalizer::PARAMETERS_VERSION_HINT = 1;
 
 /*---------------------------------------------------------------------------
 **
 */
-FilterFactory::FilterFactory()
+Equalizer::Equalizer()
 {
 }
 
@@ -22,7 +22,7 @@ FilterFactory::FilterFactory()
 **
 */
 /*static*/ juce::String
-FilterFactory::getBandName(BAND_ID band_id)
+Equalizer::getBandName(BAND_ID band_id)
 {
     return juce::String("B") + juce::String(band_id + 1);
 }
@@ -31,7 +31,7 @@ FilterFactory::getBandName(BAND_ID band_id)
 **
 */
 /*static*/ float
-FilterFactory::getBandHz(BAND_ID band_id)
+Equalizer::getBandHz(BAND_ID band_id)
 {
     switch (band_id) {
     case B1:
@@ -106,7 +106,7 @@ FilterFactory::getBandHz(BAND_ID band_id)
 **
 */
 /*static*/ float
-FilterFactory::getBandTestDb(BAND_ID band_id)
+Equalizer::getBandTestDb(BAND_ID band_id)
 {
     switch (band_id) {
     case B1:
@@ -151,7 +151,7 @@ FilterFactory::getBandTestDb(BAND_ID band_id)
 **
 */
 /*static*/ float
-FilterFactory::getBandTargetDb(BAND_ID band_id)
+Equalizer::getBandTargetDb(BAND_ID band_id)
 {
     // TODO find the correct magnitude target for each band/frequency.
     switch (band_id) {
@@ -197,7 +197,7 @@ FilterFactory::getBandTargetDb(BAND_ID band_id)
 **
 */
 /*static*/ void
-FilterFactory::addBandToParameterLayout(juce::AudioProcessorValueTreeState::ParameterLayout& pl, BAND_ID band_id)
+Equalizer::addBandToParameterLayout(juce::AudioProcessorValueTreeState::ParameterLayout& pl, BAND_ID band_id)
 {
     pl.add(std::make_unique< juce::AudioParameterFloat >(getVersionedParameterId(band_id),
                                                          getBandName(band_id),
@@ -209,7 +209,7 @@ FilterFactory::addBandToParameterLayout(juce::AudioProcessorValueTreeState::Para
 **
 */
 /*static*/ void
-FilterFactory::updateBandCoefficients(MonoChain& chain, const BAND_ID& band_id, float gain, double sample_rate)
+Equalizer::updateBandCoefficients(MonoChain& chain, const BAND_ID& band_id, float gain, double sample_rate)
 {
     auto cf = juce::dsp::IIR::Coefficients< float >::makePeakFilter(sample_rate, getBandHz(band_id), DEFAULT_BAND_Q, gain);
 
@@ -347,7 +347,7 @@ FilterFactory::updateBandCoefficients(MonoChain& chain, const BAND_ID& band_id, 
 **
 */
 /*static*/ juce::ParameterID
-FilterFactory::getVersionedParameterId(BAND_ID band_id)
+Equalizer::getVersionedParameterId(BAND_ID band_id)
 {
     return juce::ParameterID(getBandName(band_id), PARAMETERS_VERSION_HINT);
 }
