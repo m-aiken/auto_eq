@@ -15,6 +15,7 @@ PluginProcessor::PluginProcessor()
             .withInput(Global::Channels::getName(Global::Channels::SIDECHAIN_RIGHT), juce::AudioChannelSet::mono(), true)
             .withOutput("Output", juce::AudioChannelSet::stereo(), true))
     , apvts_(*this, nullptr, "APVTS", getParameterLayout())
+    , input_analysis_filter_()
 {
 }
 
@@ -123,22 +124,18 @@ PluginProcessor::changeProgramName(int index, const juce::String& new_name)
 void
 PluginProcessor::prepareToPlay(double sample_rate, int samples_per_block)
 {
+    //
     // Pre-playback initialisation.
+    //
 
-    juce::dsp::ProcessSpec process_spec;
+    // Input analysis filter.
+    juce::dsp::ProcessSpec analysis_spec;
 
-    process_spec.sampleRate       = sample_rate;
-    process_spec.maximumBlockSize = samples_per_block;
-    process_spec.numChannels      = getTotalNumOutputChannels();
+    analysis_spec.sampleRate       = sample_rate;
+    analysis_spec.maximumBlockSize = samples_per_block;
+    analysis_spec.numChannels      = getTotalNumInputChannels();
 
-    // Input analysis filters.
-    input_analysis_filter_l_.prepare(process_spec);
-    input_analysis_filter_r_.prepare(process_spec);
-
-    input_analysis_filter_l_.coefficients = juce::dsp::IIR::Coefficients< float >::makeAllPass(sample_rate,
-                                                                                               (sample_rate * 0.5));
-    input_analysis_filter_r_.coefficients = juce::dsp::IIR::Coefficients< float >::makeAllPass(sample_rate,
-                                                                                               (sample_rate * 0.5));
+    input_analysis_filter_.prepare(analysis_spec);
 
     // FFT buffers.
     fft_buffers_.at(Global::FFT::PRIMARY_LEFT_PRE_EQ).prepare(sample_rate);
@@ -149,8 +146,14 @@ PluginProcessor::prepareToPlay(double sample_rate, int samples_per_block)
     fft_buffers_.at(Global::FFT::SIDECHAIN_RIGHT).prepare(sample_rate);
 
     // Filter chains.
-    filter_chain_left_.prepare(process_spec);
-    filter_chain_right_.prepare(process_spec);
+    juce::dsp::ProcessSpec filter_chain_spec;
+
+    filter_chain_spec.sampleRate       = sample_rate;
+    filter_chain_spec.maximumBlockSize = samples_per_block;
+    filter_chain_spec.numChannels      = 1;
+
+    filter_chain_left_.prepare(filter_chain_spec);
+    filter_chain_right_.prepare(filter_chain_spec);
 
     // EQ bands (filters).
     updateFilterCoefficients();
@@ -216,7 +219,7 @@ PluginProcessor::processBlock(juce::AudioBuffer< float >& buffer, juce::MidiBuff
     }
 
     // Give the untouched input signal to the analysis filters.
-    //    processInputForAnalysis(buffer);
+    input_analysis_filter_.pushBufferForAnalysis(buffer);
 
     if (Global::PROCESS_FFT) {
         // Sidechain/Ambient FFT buffers (not affected by EQ).
@@ -233,7 +236,6 @@ PluginProcessor::processBlock(juce::AudioBuffer< float >& buffer, juce::MidiBuff
         for (int i = 0; i < buffer.getNumSamples(); ++i) {
             fft_buffers_.at(Global::FFT::PRIMARY_LEFT_PRE_EQ)
                 .pushNextSample(buffer.getSample(Global::Channels::PRIMARY_LEFT, i));
-
             fft_buffers_.at(Global::FFT::PRIMARY_RIGHT_PRE_EQ)
                 .pushNextSample(buffer.getSample(Global::Channels::PRIMARY_RIGHT, i));
         }
@@ -262,7 +264,6 @@ PluginProcessor::processBlock(juce::AudioBuffer< float >& buffer, juce::MidiBuff
         for (int i = 0; i < buffer.getNumSamples(); ++i) {
             fft_buffers_.at(Global::FFT::PRIMARY_LEFT_POST_EQ)
                 .pushNextSample(buffer.getSample(Global::Channels::PRIMARY_LEFT, i));
-
             fft_buffers_.at(Global::FFT::PRIMARY_RIGHT_POST_EQ)
                 .pushNextSample(buffer.getSample(Global::Channels::PRIMARY_RIGHT, i));
         }
@@ -354,20 +355,20 @@ PluginProcessor::getFilterChain()
 **
 */
 float
-PluginProcessor::getMeterValue(Global::METER_TYPE meter_type, Global::Channels::CHANNEL_ID channel_id) const
+PluginProcessor::getMeterValue(Global::Meters::METER_TYPE meter_type, Global::Channels::CHANNEL_ID channel_id) const
 {
     if (channel_id != Global::Channels::PRIMARY_LEFT && channel_id != Global::Channels::PRIMARY_RIGHT) {
         return Global::NEG_INF;
     }
 
     switch (meter_type) {
-    case Global::PEAK_METER:
+    case Global::Meters::PEAK_METER:
         return (channel_id == Global::Channels::PRIMARY_LEFT) ? peak_l_.getCurrentValue() : peak_r_.getCurrentValue();
 
-    case Global::RMS_METER:
+    case Global::Meters::RMS_METER:
         return (channel_id == Global::Channels::PRIMARY_LEFT) ? rms_l_.getCurrentValue() : rms_r_.getCurrentValue();
 
-    case Global::LUFS_METER:
+    case Global::Meters::LUFS_METER:
         return (channel_id == Global::Channels::PRIMARY_LEFT) ? lufs_l_.getCurrentValue() : lufs_r_.getCurrentValue();
 
     default:
@@ -395,28 +396,8 @@ PluginProcessor::getParameterLayout()
 **
 */
 void
-PluginProcessor::processInputForAnalysis(juce::AudioBuffer< float >& buffer)
-{
-    juce::dsp::AudioBlock< float > analysis_block(buffer);
-
-    auto analysis_block_l = analysis_block.getSingleChannelBlock(Global::Channels::PRIMARY_LEFT);
-    auto analysis_block_r = analysis_block.getSingleChannelBlock(Global::Channels::PRIMARY_RIGHT);
-
-    juce::dsp::ProcessContextReplacing< float > analysis_context_l(analysis_block_l);
-    juce::dsp::ProcessContextReplacing< float > analysis_context_r(analysis_block_r);
-
-    input_analysis_filter_l_.process(analysis_context_l);
-    input_analysis_filter_r_.process(analysis_context_r);
-}
-
-/*---------------------------------------------------------------------------
-**
-*/
-void
 PluginProcessor::updateBandValues()
 {
-    double sample_rate = getSampleRate();
-
     for (uint8 i = 0; i < Equalizer::NUM_BANDS; ++i) {
         Equalizer::BAND_ID band_id = static_cast< Equalizer::BAND_ID >(i);
 
@@ -426,23 +407,9 @@ PluginProcessor::updateBandValues()
             continue;
         }
 
-        // Get the frequency for this band.
-        float band_hz = Equalizer::getBandHz(band_id);
-
-        // Get the input magnitudes at that frequency.
-        // We want the average of both channels (left and right);
-        double input_mag_l   = input_analysis_filter_l_.coefficients->getMagnitudeForFrequency(band_hz, sample_rate);
-        double input_mag_r   = input_analysis_filter_r_.coefficients->getMagnitudeForFrequency(band_hz, sample_rate);
-        double input_mav_avg = (input_mag_l + input_mag_r) * 0.5;
-
-        // Get the decibel value.
-        float input_db = juce::Decibels::gainToDecibels(static_cast< float >(input_mav_avg), Global::NEG_INF);
-
-        // Get the target decibel value for this band's frequency.
-        float target_db = Equalizer::getBandTargetDb(band_id);
-
         // Adjust the band's decibel value up/down to the target.
-        *param = (target_db - input_db);
+        float new_value = param->get() + input_analysis_filter_.getBandDbAdjustment(band_id);
+        *param          = new_value;
     }
 }
 

@@ -5,7 +5,7 @@
 class FrequencyMarkers : public juce::Component
 {
 public:
-    FrequencyMarkers();
+    FrequencyMarkers() = default;
 
     void paint(juce::Graphics& g) override;
 

@@ -1,6 +1,7 @@
 #include "FilterResponseCurve.h"
 #include "../Theme.h"
 #include "../../dsp/Equalizer.h"
+#include "../../utility/GlobalConstants.h"
 
 /*---------------------------------------------------------------------------
 **

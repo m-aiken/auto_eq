@@ -5,7 +5,7 @@
 class MeterCanvas : public juce::Component
 {
 public:
-    MeterCanvas();
+    MeterCanvas() = default;
 
     void paint(juce::Graphics& g) override;
 

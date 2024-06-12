@@ -1,7 +1,6 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 #include "gui/Theme.h"
-#include "utility/GlobalConstants.h"
 
 /*---------------------------------------------------------------------------
 **

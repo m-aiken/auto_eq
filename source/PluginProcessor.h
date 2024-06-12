@@ -3,6 +3,7 @@
 #include <juce_audio_processors/juce_audio_processors.h>
 
 #include "dsp/Equalizer.h"
+#include "dsp/InputAnalysisFilter.h"
 #include "dsp/MonoFftBuffer.h"
 #include "utility/GlobalConstants.h"
 
@@ -47,16 +48,14 @@ public:
 
     Equalizer::MonoChain& getFilterChain();
 
-    float getMeterValue(Global::METER_TYPE meter_type, Global::Channels::CHANNEL_ID channel_id) const;
+    float getMeterValue(Global::Meters::METER_TYPE meter_type, Global::Channels::CHANNEL_ID channel_id) const;
 
 private:
     static juce::AudioProcessorValueTreeState::ParameterLayout getParameterLayout();
     juce::AudioProcessorValueTreeState                         apvts_;
 
-    juce::dsp::IIR::Filter< float > input_analysis_filter_l_;
-    juce::dsp::IIR::Filter< float > input_analysis_filter_r_;
+    InputAnalysisFilter input_analysis_filter_;
 
-    void processInputForAnalysis(juce::AudioBuffer< float >& buffer);
     void updateBandValues();
 
     juce::AudioParameterFloat* getBandParameter(Equalizer::BAND_ID band_id);

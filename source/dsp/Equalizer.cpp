@@ -1,22 +1,11 @@
 #include "Equalizer.h"
 
-/*static*/ const uint8 Equalizer::NUM_BANDS         = 31;
 /*static*/ const float Equalizer::MAX_BAND_DB_BOOST = 12.f;
 /*static*/ const float Equalizer::MAX_BAND_DB_CUT   = -12.f;
 /*static*/ const float Equalizer::DEFAULT_BAND_DB   = 0.f;
 /*static*/ const float Equalizer::DEFAULT_BAND_Q    = 2.f;
 
-/*static*/ const juce::NormalisableRange< float > Equalizer::BAND_DB_RANGE =
-    juce::NormalisableRange< float >(MAX_BAND_DB_CUT, MAX_BAND_DB_BOOST, 0.5f, 1.f);
-
 /*static*/ const int Equalizer::PARAMETERS_VERSION_HINT = 1;
-
-/*---------------------------------------------------------------------------
-**
-*/
-Equalizer::Equalizer()
-{
-}
 
 /*---------------------------------------------------------------------------
 **
@@ -186,10 +175,10 @@ Equalizer::getBandTargetDb(BAND_ID band_id)
     case B29:
     case B30:
     case B31:
-        return 0.f;
+        return -12.f;
 
     default:
-        return 0.f;
+        return -12.f;
     }
 }
 
@@ -199,9 +188,11 @@ Equalizer::getBandTargetDb(BAND_ID band_id)
 /*static*/ void
 Equalizer::addBandToParameterLayout(juce::AudioProcessorValueTreeState::ParameterLayout& pl, BAND_ID band_id)
 {
+    auto db_range = juce::NormalisableRange< float >(MAX_BAND_DB_CUT, MAX_BAND_DB_BOOST, 0.5f, 1.f);
+
     pl.add(std::make_unique< juce::AudioParameterFloat >(getVersionedParameterId(band_id),
                                                          getBandName(band_id),
-                                                         BAND_DB_RANGE,
+                                                         db_range,
                                                          DEFAULT_BAND_DB));
 }
 
@@ -214,128 +205,128 @@ Equalizer::updateBandCoefficients(MonoChain& chain, const BAND_ID& band_id, floa
     auto cf = juce::dsp::IIR::Coefficients< float >::makePeakFilter(sample_rate, getBandHz(band_id), DEFAULT_BAND_Q, gain);
 
     switch (band_id) {
-    case BAND_ID::B1:
-        *chain.get< BAND_ID::B1 >().coefficients = *cf;
+    case B1:
+        *chain.get< B1 >().coefficients = *cf;
         break;
 
-    case BAND_ID::B2:
-        *chain.get< BAND_ID::B2 >().coefficients = *cf;
+    case B2:
+        *chain.get< B2 >().coefficients = *cf;
         break;
 
-    case BAND_ID::B3:
-        *chain.get< BAND_ID::B3 >().coefficients = *cf;
+    case B3:
+        *chain.get< B3 >().coefficients = *cf;
         break;
 
-    case BAND_ID::B4:
-        *chain.get< BAND_ID::B4 >().coefficients = *cf;
+    case B4:
+        *chain.get< B4 >().coefficients = *cf;
         break;
 
-    case BAND_ID::B5:
-        *chain.get< BAND_ID::B5 >().coefficients = *cf;
+    case B5:
+        *chain.get< B5 >().coefficients = *cf;
         break;
 
-    case BAND_ID::B6:
-        *chain.get< BAND_ID::B6 >().coefficients = *cf;
+    case B6:
+        *chain.get< B6 >().coefficients = *cf;
         break;
 
-    case BAND_ID::B7:
-        *chain.get< BAND_ID::B7 >().coefficients = *cf;
+    case B7:
+        *chain.get< B7 >().coefficients = *cf;
         break;
 
-    case BAND_ID::B8:
-        *chain.get< BAND_ID::B8 >().coefficients = *cf;
+    case B8:
+        *chain.get< B8 >().coefficients = *cf;
         break;
 
-    case BAND_ID::B9:
-        *chain.get< BAND_ID::B9 >().coefficients = *cf;
+    case B9:
+        *chain.get< B9 >().coefficients = *cf;
         break;
 
-    case BAND_ID::B10:
-        *chain.get< BAND_ID::B10 >().coefficients = *cf;
+    case B10:
+        *chain.get< B10 >().coefficients = *cf;
         break;
 
-    case BAND_ID::B11:
-        *chain.get< BAND_ID::B11 >().coefficients = *cf;
+    case B11:
+        *chain.get< B11 >().coefficients = *cf;
         break;
 
-    case BAND_ID::B12:
-        *chain.get< BAND_ID::B12 >().coefficients = *cf;
+    case B12:
+        *chain.get< B12 >().coefficients = *cf;
         break;
 
-    case BAND_ID::B13:
-        *chain.get< BAND_ID::B13 >().coefficients = *cf;
+    case B13:
+        *chain.get< B13 >().coefficients = *cf;
         break;
 
-    case BAND_ID::B14:
-        *chain.get< BAND_ID::B14 >().coefficients = *cf;
+    case B14:
+        *chain.get< B14 >().coefficients = *cf;
         break;
 
-    case BAND_ID::B15:
-        *chain.get< BAND_ID::B15 >().coefficients = *cf;
+    case B15:
+        *chain.get< B15 >().coefficients = *cf;
         break;
 
-    case BAND_ID::B16:
-        *chain.get< BAND_ID::B16 >().coefficients = *cf;
+    case B16:
+        *chain.get< B16 >().coefficients = *cf;
         break;
 
-    case BAND_ID::B17:
-        *chain.get< BAND_ID::B17 >().coefficients = *cf;
+    case B17:
+        *chain.get< B17 >().coefficients = *cf;
         break;
 
-    case BAND_ID::B18:
-        *chain.get< BAND_ID::B18 >().coefficients = *cf;
+    case B18:
+        *chain.get< B18 >().coefficients = *cf;
         break;
 
-    case BAND_ID::B19:
-        *chain.get< BAND_ID::B19 >().coefficients = *cf;
+    case B19:
+        *chain.get< B19 >().coefficients = *cf;
         break;
 
-    case BAND_ID::B20:
-        *chain.get< BAND_ID::B20 >().coefficients = *cf;
+    case B20:
+        *chain.get< B20 >().coefficients = *cf;
         break;
 
-    case BAND_ID::B21:
-        *chain.get< BAND_ID::B21 >().coefficients = *cf;
+    case B21:
+        *chain.get< B21 >().coefficients = *cf;
         break;
 
-    case BAND_ID::B22:
-        *chain.get< BAND_ID::B22 >().coefficients = *cf;
+    case B22:
+        *chain.get< B22 >().coefficients = *cf;
         break;
 
-    case BAND_ID::B23:
-        *chain.get< BAND_ID::B23 >().coefficients = *cf;
+    case B23:
+        *chain.get< B23 >().coefficients = *cf;
         break;
 
-    case BAND_ID::B24:
-        *chain.get< BAND_ID::B24 >().coefficients = *cf;
+    case B24:
+        *chain.get< B24 >().coefficients = *cf;
         break;
 
-    case BAND_ID::B25:
-        *chain.get< BAND_ID::B25 >().coefficients = *cf;
+    case B25:
+        *chain.get< B25 >().coefficients = *cf;
         break;
 
-    case BAND_ID::B26:
-        *chain.get< BAND_ID::B26 >().coefficients = *cf;
+    case B26:
+        *chain.get< B26 >().coefficients = *cf;
         break;
 
-    case BAND_ID::B27:
-        *chain.get< BAND_ID::B27 >().coefficients = *cf;
+    case B27:
+        *chain.get< B27 >().coefficients = *cf;
         break;
 
-    case BAND_ID::B28:
-        *chain.get< BAND_ID::B28 >().coefficients = *cf;
+    case B28:
+        *chain.get< B28 >().coefficients = *cf;
         break;
 
-    case BAND_ID::B29:
-        *chain.get< BAND_ID::B29 >().coefficients = *cf;
+    case B29:
+        *chain.get< B29 >().coefficients = *cf;
         break;
 
-    case BAND_ID::B30:
-        *chain.get< BAND_ID::B30 >().coefficients = *cf;
+    case B30:
+        *chain.get< B30 >().coefficients = *cf;
         break;
 
-    case BAND_ID::B31:
-        *chain.get< BAND_ID::B31 >().coefficients = *cf;
+    case B31:
+        *chain.get< B31 >().coefficients = *cf;
         break;
 
     default:

@@ -1,5 +1,4 @@
 #include "MeterGroup.h"
-#include "../../utility/GlobalConstants.h"
 
 /*---------------------------------------------------------------------------
 **
@@ -8,9 +7,9 @@ MeterGroup::MeterGroup(PluginProcessor& p)
     : peak_label_("PEAK")
     , rms_label_("RMS")
     , lufs_label_("LUFS")
-    , peak_meters_(p, Global::PEAK_METER)
-    , rms_meters_(p, Global::RMS_METER)
-    , lufs_meters_(p, Global::LUFS_METER)
+    , peak_meters_(p, Global::Meters::PEAK_METER)
+    , rms_meters_(p, Global::Meters::RMS_METER)
+    , lufs_meters_(p, Global::Meters::LUFS_METER)
 {
     addAndMakeVisible(peak_label_);
     addAndMakeVisible(rms_label_);

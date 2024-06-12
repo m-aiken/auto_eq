@@ -22,12 +22,6 @@ enum PATH_DISPLAY_MODE {
 static const uint8 ANALYSER_PADDING          = 32;
 static const float ANALYSER_MARKER_FONT_SIZE = 12.f;
 
-enum METER_TYPE {
-    PEAK_METER,
-    RMS_METER,
-    LUFS_METER,
-};
-
 namespace Channels
 {
 
@@ -55,6 +49,17 @@ namespace Channels
 
 }  // namespace Channels
 
+namespace Meters
+{
+
+    enum METER_TYPE {
+        PEAK_METER,
+        RMS_METER,
+        LUFS_METER,
+    };
+
+}  // namespace Meters
+
 namespace FFT
 {
 
@@ -71,4 +76,4 @@ namespace FFT
 
 }  // namespace FFT
 
-}  // namespace Global
+}  //namespace Global

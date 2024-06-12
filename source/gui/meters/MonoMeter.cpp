@@ -1,11 +1,10 @@
 #include "MonoMeter.h"
 #include "../Theme.h"
-#include "../../utility/GlobalConstants.h"
 
 /*---------------------------------------------------------------------------
 **
 */
-MonoMeter::MonoMeter(PluginProcessor& p, Global::METER_TYPE meter_type, Global::Channels::CHANNEL_ID channel)
+MonoMeter::MonoMeter(PluginProcessor& p, Global::Meters::METER_TYPE meter_type, Global::Channels::CHANNEL_ID channel)
     : processor_ref_(p)
     , meter_type_(meter_type)
     , channel_(channel)

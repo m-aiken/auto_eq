@@ -11,7 +11,7 @@ class MonoMeter
     , public juce::Timer
 {
 public:
-    MonoMeter(PluginProcessor& p, Global::METER_TYPE meter_type, Global::Channels::CHANNEL_ID channel);
+    MonoMeter(PluginProcessor& p, Global::Meters::METER_TYPE meter_type, Global::Channels::CHANNEL_ID channel);
     ~MonoMeter() override;
 
     void paint(juce::Graphics& g) override;
@@ -21,7 +21,7 @@ public:
 
 private:
     PluginProcessor&             processor_ref_;
-    Global::METER_TYPE           meter_type_;
+    Global::Meters::METER_TYPE   meter_type_;
     Global::Channels::CHANNEL_ID channel_;
 
     MeterCanvas backdrop_;

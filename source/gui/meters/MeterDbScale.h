@@ -5,7 +5,7 @@
 class MeterDbScale : public juce::Component
 {
 public:
-    MeterDbScale();
+    MeterDbScale() = default;
 
     void paint(juce::Graphics& g) override;
 

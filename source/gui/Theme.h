@@ -29,7 +29,7 @@ public:
     static bool dark_mode;
 
 public:
-    Theme();
+    Theme() = default;
 
     static void         toggleTheme();
     static juce::Colour getColour(DarkLightPair c);

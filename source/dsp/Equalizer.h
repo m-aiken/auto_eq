@@ -38,13 +38,13 @@ public:
                                                  IIRFilter,
                                                  IIRFilter >;
 
-    static const uint8 NUM_BANDS;
+public:
+    static constexpr uint8 NUM_BANDS = 31;
+
     static const float MAX_BAND_DB_BOOST;
     static const float MAX_BAND_DB_CUT;
     static const float DEFAULT_BAND_DB;
     static const float DEFAULT_BAND_Q;
-
-    static const juce::NormalisableRange< float > BAND_DB_RANGE;
 
     enum BAND_ID {
         B1,
@@ -81,16 +81,14 @@ public:
     };
 
 public:
-    Equalizer();
+    Equalizer() = default;
 
     static juce::String getBandName(BAND_ID band_id);
     static float        getBandHz(BAND_ID band_id);
-
-    static float getBandTestDb(BAND_ID band_id);
-    static float getBandTargetDb(BAND_ID band_id);
+    static float        getBandTestDb(BAND_ID band_id);
+    static float        getBandTargetDb(BAND_ID band_id);
 
     static void addBandToParameterLayout(juce::AudioProcessorValueTreeState::ParameterLayout& pl, BAND_ID band_id);
-
     static void updateBandCoefficients(MonoChain& chain, const BAND_ID& band_id, float gain, double sample_rate);
 
 private:

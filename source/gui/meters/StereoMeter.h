@@ -10,7 +10,7 @@
 class StereoMeter : public juce::Component
 {
 public:
-    StereoMeter(PluginProcessor& p, Global::METER_TYPE meter_type);
+    StereoMeter(PluginProcessor& p, Global::Meters::METER_TYPE meter_type);
 
     void paint(juce::Graphics& g) override;
     void resized() override;

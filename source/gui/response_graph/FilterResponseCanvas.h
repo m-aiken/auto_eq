@@ -5,7 +5,7 @@
 class FilterResponseCanvas : public juce::Component
 {
 public:
-    FilterResponseCanvas();
+    FilterResponseCanvas() = default;
 
     void paint(juce::Graphics& g) override;
 

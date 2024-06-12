@@ -3,7 +3,7 @@
 /*---------------------------------------------------------------------------
 **
 */
-StereoMeter::StereoMeter(PluginProcessor& p, Global::METER_TYPE meter_type)
+StereoMeter::StereoMeter(PluginProcessor& p, Global::Meters::METER_TYPE meter_type)
     : meter_l_(p, meter_type, Global::Channels::PRIMARY_LEFT)
     , meter_r_(p, meter_type, Global::Channels::PRIMARY_RIGHT)
 {
