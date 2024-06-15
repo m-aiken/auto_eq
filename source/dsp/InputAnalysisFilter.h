@@ -25,6 +25,8 @@ private:
     void  processInputBuffer();
     float getBandInputDb(Equalizer::BAND_ID band_id) const;
 
+    static const uint16 ANALYSIS_FREQUENCY_MS;  //! How frequently the analysis is performed (in milliseconds).
+
     typedef std::array< Filter, Equalizer::NUM_BANDS >                   SingleBandFilterSequence;
     typedef std::array< SingleBandFilterSequence, Equalizer::NUM_BANDS > FilterMatrix;
 

@@ -1,6 +1,8 @@
 #include "InputAnalysisFilter.h"
 #include "../utility/GlobalConstants.h"
 
+/*static*/ const uint16 InputAnalysisFilter::ANALYSIS_FREQUENCY_MS = 500;
+
 /*---------------------------------------------------------------------------
 **
 */
@@ -55,7 +57,7 @@ InputAnalysisFilter::prepare(juce::dsp::ProcessSpec& process_spec)
 
     is_prepared_ = true;
 
-    startTimerHz(1);
+    startTimer(ANALYSIS_FREQUENCY_MS);
 }
 
 /*---------------------------------------------------------------------------
