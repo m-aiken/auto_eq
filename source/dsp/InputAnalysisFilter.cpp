@@ -7,7 +7,8 @@
 **
 */
 InputAnalysisFilter::InputAnalysisFilter()
-    : is_prepared_(false)
+    : juce::Thread("THREAD_input_analysis_filter")
+    , is_prepared_(false)
     , fifo_write_idx_(1)
     , fifo_read_idx_(0)
 {
@@ -23,16 +24,20 @@ InputAnalysisFilter::InputAnalysisFilter()
 */
 InputAnalysisFilter::~InputAnalysisFilter()
 {
-    stopTimer();
+    stopThread(ANALYSIS_FREQUENCY_MS);
 }
 
 /*---------------------------------------------------------------------------
 **
 */
 void
-InputAnalysisFilter::timerCallback()
+InputAnalysisFilter::run()
 {
-    processInputBuffer();
+    while (!threadShouldExit()) {
+        processInputBuffer();
+
+        wait(ANALYSIS_FREQUENCY_MS);
+    }
 }
 
 /*---------------------------------------------------------------------------
@@ -57,7 +62,7 @@ InputAnalysisFilter::prepare(juce::dsp::ProcessSpec& process_spec)
 
     is_prepared_ = true;
 
-    startTimer(ANALYSIS_FREQUENCY_MS);
+    startThread();
 }
 
 /*---------------------------------------------------------------------------

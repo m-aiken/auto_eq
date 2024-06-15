@@ -4,7 +4,7 @@
 
 #include "Equalizer.h"
 
-class InputAnalysisFilter : public juce::Timer
+class InputAnalysisFilter : public juce::Thread
 {
     using Filter = juce::dsp::LinkwitzRileyFilter< float >;
 
@@ -12,7 +12,7 @@ public:
     InputAnalysisFilter();
     ~InputAnalysisFilter();
 
-    void timerCallback() override;
+    void run() override;
 
     void prepare(juce::dsp::ProcessSpec& process_spec);
     void pushBufferForAnalysis(juce::AudioBuffer< float > buffer);
