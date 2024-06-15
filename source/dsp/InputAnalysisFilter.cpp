@@ -185,11 +185,10 @@ InputAnalysisFilter::getBandInputDb(Equalizer::BAND_ID band_id) const
     const juce::AudioBuffer< float >& buffer      = band_buffers_.at(band_id);
     const int                         num_samples = buffer.getNumSamples();
 
-    const float rms_l   = buffer.getRMSLevel(Global::Channels::PRIMARY_LEFT, 0, num_samples);
-    const float rms_r   = buffer.getRMSLevel(Global::Channels::PRIMARY_RIGHT, 0, num_samples);
-    const float rms_avg = (rms_l + rms_r) / 2.f;
+    const float rms_l = buffer.getMagnitude(Global::Channels::PRIMARY_LEFT, 0, num_samples);
+    const float rms_r = buffer.getMagnitude(Global::Channels::PRIMARY_RIGHT, 0, num_samples);
 
-    return juce::Decibels::gainToDecibels(rms_avg, Global::NEG_INF);
+    return juce::Decibels::gainToDecibels(std::max(rms_l, rms_r), Global::NEG_INF);
 }
 
 /*---------------------------------------------------------------------------
