@@ -9,7 +9,7 @@ class InputAnalysisFilter : public juce::Thread
     using Filter = juce::dsp::LinkwitzRileyFilter< float >;
 
 public:
-    InputAnalysisFilter();
+    InputAnalysisFilter(const juce::AudioProcessorValueTreeState& apvts);
     ~InputAnalysisFilter();
 
     void run() override;
@@ -17,13 +17,13 @@ public:
     void prepare(juce::dsp::ProcessSpec& process_spec);
     void pushBufferForAnalysis(juce::AudioBuffer< float > buffer);
 
-    float getBandDbAdjustment(Equalizer::BAND_ID band_id) const;
-
 private:
-    void initFilters();
-
-    void  processInputBuffer();
-    float getBandInputDb(Equalizer::BAND_ID band_id) const;
+    void                       initFilters();
+    void                       processInputBuffer();
+    void                       updateBandValues();
+    float                      getBandInputDb(Equalizer::BAND_ID band_id) const;
+    float                      getBandDbAdjustment(Equalizer::BAND_ID band_id) const;
+    juce::AudioParameterFloat* getBandParameter(Equalizer::BAND_ID band_id);
 
     static const uint16 ANALYSIS_FREQUENCY_MS;  //! How frequently the analysis is performed (in milliseconds).
 
@@ -34,8 +34,6 @@ private:
     std::array< juce::AudioBuffer< float >, Equalizer::NUM_BANDS > band_buffers_;
     std::array< float, Equalizer::NUM_BANDS >                      band_adjustments_;
 
-    bool is_prepared_;
-
     // Audio buffer FIFO.
     // The audio thread pushes buffers into this FIFO (by copy).
     // On the timer callback we grab one of the buffers and perform the analysis.
@@ -45,6 +43,10 @@ private:
     std::array< juce::AudioBuffer< float >, FIFO_SIZE > fifo_;
     size_t                                              fifo_write_idx_;
     size_t                                              fifo_read_idx_;
+
+    const juce::AudioProcessorValueTreeState& apvts_;
+
+    bool is_prepared_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(InputAnalysisFilter)
 };

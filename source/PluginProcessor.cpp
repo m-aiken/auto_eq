@@ -15,7 +15,7 @@ PluginProcessor::PluginProcessor()
             .withInput(Global::Channels::getName(Global::Channels::SIDECHAIN_RIGHT), juce::AudioChannelSet::mono(), true)
             .withOutput("Output", juce::AudioChannelSet::stereo(), true))
     , apvts_(*this, nullptr, "APVTS", getParameterLayout())
-    , input_analysis_filter_()
+    , input_analysis_filter_(apvts_)
 {
 }
 
@@ -241,9 +241,6 @@ PluginProcessor::processBlock(juce::AudioBuffer< float >& buffer, juce::MidiBuff
         }
     }
 
-    // Adjust the EQ band values based on the input analysis.
-    //    updateBandValues();
-
     // Update the filters from the new band values.
     updateFilterCoefficients();
 
@@ -390,36 +387,6 @@ PluginProcessor::getParameterLayout()
     }
 
     return parameter_layout;
-}
-
-/*---------------------------------------------------------------------------
-**
-*/
-void
-PluginProcessor::updateBandValues()
-{
-    for (uint8 i = 0; i < Equalizer::NUM_BANDS; ++i) {
-        Equalizer::BAND_ID band_id = static_cast< Equalizer::BAND_ID >(i);
-
-        juce::AudioParameterFloat* param = getBandParameter(band_id);
-
-        if (param == nullptr) {
-            continue;
-        }
-
-        // Adjust the band's decibel value up/down to the target.
-        float new_value = param->get() + input_analysis_filter_.getBandDbAdjustment(band_id);
-        *param          = new_value;
-    }
-}
-
-/*---------------------------------------------------------------------------
-**
-*/
-juce::AudioParameterFloat*
-PluginProcessor::getBandParameter(Equalizer::BAND_ID band_id)
-{
-    return dynamic_cast< juce::AudioParameterFloat* >(apvts_.getParameter(Equalizer::getBandName(band_id)));
 }
 
 /*---------------------------------------------------------------------------

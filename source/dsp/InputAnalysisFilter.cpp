@@ -1,16 +1,17 @@
 #include "InputAnalysisFilter.h"
 #include "../utility/GlobalConstants.h"
 
-/*static*/ const uint16 InputAnalysisFilter::ANALYSIS_FREQUENCY_MS = 500;
+/*static*/ const uint16 InputAnalysisFilter::ANALYSIS_FREQUENCY_MS = 200;
 
 /*---------------------------------------------------------------------------
 **
 */
-InputAnalysisFilter::InputAnalysisFilter()
+InputAnalysisFilter::InputAnalysisFilter(const juce::AudioProcessorValueTreeState& apvts)
     : juce::Thread("THREAD_input_analysis_filter")
-    , is_prepared_(false)
     , fifo_write_idx_(1)
     , fifo_read_idx_(0)
+    , apvts_(apvts)
+    , is_prepared_(false)
 {
     initFilters();
 
@@ -35,6 +36,7 @@ InputAnalysisFilter::run()
 {
     while (!threadShouldExit()) {
         processInputBuffer();
+        updateBandValues();
 
         wait(ANALYSIS_FREQUENCY_MS);
     }
@@ -81,15 +83,6 @@ InputAnalysisFilter::pushBufferForAnalysis(juce::AudioBuffer< float > buffer)
     if (++fifo_read_idx_ == FIFO_SIZE) {
         fifo_read_idx_ = 0;
     }
-}
-
-/*---------------------------------------------------------------------------
-**
-*/
-float
-InputAnalysisFilter::getBandDbAdjustment(Equalizer::BAND_ID band_id) const
-{
-    return band_adjustments_.at(band_id);
 }
 
 /*---------------------------------------------------------------------------
@@ -179,6 +172,23 @@ InputAnalysisFilter::processInputBuffer()
 /*---------------------------------------------------------------------------
 **
 */
+void
+InputAnalysisFilter::updateBandValues()
+{
+    for (uint8 i = 0; i < Equalizer::NUM_BANDS; ++i) {
+        Equalizer::BAND_ID band_id = static_cast< Equalizer::BAND_ID >(i);
+
+        juce::AudioParameterFloat* param = getBandParameter(band_id);
+
+        if (param != nullptr) {
+            *param = getBandDbAdjustment(band_id);
+        }
+    }
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
 float
 InputAnalysisFilter::getBandInputDb(Equalizer::BAND_ID band_id) const
 {
@@ -189,6 +199,24 @@ InputAnalysisFilter::getBandInputDb(Equalizer::BAND_ID band_id) const
     const float rms_r = buffer.getMagnitude(Global::Channels::PRIMARY_RIGHT, 0, num_samples);
 
     return juce::Decibels::gainToDecibels(std::max(rms_l, rms_r), Global::NEG_INF);
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
+float
+InputAnalysisFilter::getBandDbAdjustment(Equalizer::BAND_ID band_id) const
+{
+    return band_adjustments_.at(band_id);
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
+juce::AudioParameterFloat*
+InputAnalysisFilter::getBandParameter(Equalizer::BAND_ID band_id)
+{
+    return dynamic_cast< juce::AudioParameterFloat* >(apvts_.getParameter(Equalizer::getBandName(band_id)));
 }
 
 /*---------------------------------------------------------------------------

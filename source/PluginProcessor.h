@@ -56,10 +56,6 @@ private:
 
     InputAnalysisFilter input_analysis_filter_;
 
-    void updateBandValues();
-
-    juce::AudioParameterFloat* getBandParameter(Equalizer::BAND_ID band_id);
-
     FftBuffers fft_buffers_;
 
     Equalizer::MonoChain filter_chain_left_;
