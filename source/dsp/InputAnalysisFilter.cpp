@@ -167,6 +167,8 @@ InputAnalysisFilter::processInputBuffer()
 
         band_adjustments_.at(band) = (target_db - input_db);
     }
+
+    printBandMagnitudesPreProcessing();
 }
 
 /*---------------------------------------------------------------------------
@@ -217,6 +219,34 @@ juce::AudioParameterFloat*
 InputAnalysisFilter::getBandParameter(Equalizer::BAND_ID band_id)
 {
     return dynamic_cast< juce::AudioParameterFloat* >(apvts_.getParameter(Equalizer::getBandName(band_id)));
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
+void
+InputAnalysisFilter::printBandMagnitudesPreProcessing()
+{
+    DBG("--------------------------------------------------");
+
+    for (size_t band = 0; band < Equalizer::NUM_BANDS; ++band) {
+        float val = getBandInputDb(static_cast< Equalizer::BAND_ID >(band));
+        DBG("B" + juce::String(band + 1) + ": " + juce::String(val));
+    }
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
+void
+InputAnalysisFilter::printBandAdjustments()
+{
+    DBG("--------------------------------------------------");
+
+    for (size_t band = 0; band < Equalizer::NUM_BANDS; ++band) {
+        float val = getBandDbAdjustment(static_cast< Equalizer::BAND_ID >(band));
+        DBG("B" + juce::String(band + 1) + ": " + juce::String(val));
+    }
 }
 
 /*---------------------------------------------------------------------------

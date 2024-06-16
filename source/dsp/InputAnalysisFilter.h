@@ -25,6 +25,10 @@ private:
     float                      getBandDbAdjustment(Equalizer::BAND_ID band_id) const;
     juce::AudioParameterFloat* getBandParameter(Equalizer::BAND_ID band_id);
 
+    // Debug functions.
+    void printBandMagnitudesPreProcessing();
+    void printBandAdjustments();
+
     static const uint16 ANALYSIS_FREQUENCY_MS;  //! How frequently the analysis is performed (in milliseconds).
 
     typedef std::array< Filter, Equalizer::NUM_BANDS >                   SingleBandFilterSequence;
