@@ -160,12 +160,17 @@ InputAnalysisFilter::processInputBuffer()
         }
 
         // Calculate the value to bring the current value to the target for this band.
-        Equalizer::BAND_ID band_id = static_cast< Equalizer::BAND_ID >(band);
+        Equalizer::BAND_ID band_id  = static_cast< Equalizer::BAND_ID >(band);
+        float              input_db = getBandInputDb(band_id);
 
-        float target_db = Equalizer::getBandTargetDb(band_id);
-        float input_db  = getBandInputDb(band_id);
-
-        band_adjustments_.at(band) = (target_db - input_db);
+        if (input_db == Global::NEG_INF) {
+            // If the input dB for this band is essentially silent skip this band.
+            band_adjustments_.at(band) = 0.f;
+        }
+        else {
+            float target_db            = Equalizer::getBandTargetDb(band_id);
+            band_adjustments_.at(band) = (target_db - input_db);
+        }
     }
 
     //    printBandMagnitudesPreProcessing();
