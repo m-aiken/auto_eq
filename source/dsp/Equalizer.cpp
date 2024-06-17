@@ -175,10 +175,10 @@ Equalizer::getBandTargetDb(BAND_ID band_id)
     case B29:
     case B30:
     case B31:
-        return -12.f;
+        return -18.f;
 
     default:
-        return -12.f;
+        return -18.f;
     }
 }
 
