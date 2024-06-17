@@ -168,7 +168,7 @@ InputAnalysisFilter::processInputBuffer()
         band_adjustments_.at(band) = (target_db - input_db);
     }
 
-    printBandMagnitudesPreProcessing();
+    //    printBandMagnitudesPreProcessing();
 }
 
 /*---------------------------------------------------------------------------
@@ -177,13 +177,23 @@ InputAnalysisFilter::processInputBuffer()
 void
 InputAnalysisFilter::updateBandValues()
 {
+    //    printBandAdjustments();
+    //    DBG("--------------------------------------------------");
+
     for (uint8 i = 0; i < Equalizer::NUM_BANDS; ++i) {
         Equalizer::BAND_ID band_id = static_cast< Equalizer::BAND_ID >(i);
 
         juce::AudioParameterFloat* param = getBandParameter(band_id);
 
         if (param != nullptr) {
-            *param = getBandDbAdjustment(band_id);
+            float adjustment = getBandDbAdjustment(band_id);
+
+            adjustment = (adjustment >= 0) ? std::min(adjustment, Equalizer::MAX_BAND_DB_BOOST) :
+                                             std::max(adjustment, Equalizer::MAX_BAND_DB_CUT);
+
+            //            DBG("B" + juce::String(i + 1) + ": " + juce::String(adjustment));
+
+            *param = adjustment;
         }
     }
 }
