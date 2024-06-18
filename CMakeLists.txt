@@ -39,7 +39,6 @@ target_sources(${PROJECT_NAME}
         source/PluginEditor.cpp
         source/PluginProcessor.cpp
         source/dsp/Equalizer.cpp
-        source/dsp/InputAnalysisFft.cpp
         source/dsp/InputAnalysisFilter.cpp
         source/dsp/MonoFftBuffer.cpp
         source/gui/DecibelMarkers.cpp
