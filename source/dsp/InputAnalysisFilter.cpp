@@ -36,7 +36,6 @@ InputAnalysisFilter::run()
 {
     while (!threadShouldExit()) {
         processInputBuffer();
-        updateBandValues();
 
         wait(ANALYSIS_FREQUENCY_MS);
     }
@@ -83,6 +82,15 @@ InputAnalysisFilter::pushBufferForAnalysis(juce::AudioBuffer< float > buffer)
     if (++fifo_read_idx_ == FIFO_SIZE) {
         fifo_read_idx_ = 0;
     }
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
+float
+InputAnalysisFilter::getBandDbAdjustment(Equalizer::BAND_ID band_id) const
+{
+    return band_adjustments_.at(band_id);
 }
 
 /*---------------------------------------------------------------------------
@@ -179,30 +187,6 @@ InputAnalysisFilter::processInputBuffer()
 /*---------------------------------------------------------------------------
 **
 */
-void
-InputAnalysisFilter::updateBandValues()
-{
-    //    printBandAdjustments();
-
-    for (uint8 i = 0; i < Equalizer::NUM_BANDS; ++i) {
-        Equalizer::BAND_ID band_id = static_cast< Equalizer::BAND_ID >(i);
-
-        juce::AudioParameterFloat* param = getBandParameter(band_id);
-
-        if (param != nullptr) {
-            float adjustment = getBandDbAdjustment(band_id);
-
-            adjustment = (adjustment >= 0) ? std::min(adjustment, Equalizer::MAX_BAND_DB_BOOST) :
-                                             std::max(adjustment, Equalizer::MAX_BAND_DB_CUT);
-
-            *param = adjustment;
-        }
-    }
-}
-
-/*---------------------------------------------------------------------------
-**
-*/
 float
 InputAnalysisFilter::getBandInputDb(Equalizer::BAND_ID band_id) const
 {
@@ -218,24 +202,6 @@ InputAnalysisFilter::getBandInputDb(Equalizer::BAND_ID band_id) const
 /*---------------------------------------------------------------------------
 **
 */
-float
-InputAnalysisFilter::getBandDbAdjustment(Equalizer::BAND_ID band_id) const
-{
-    return band_adjustments_.at(band_id);
-}
-
-/*---------------------------------------------------------------------------
-**
-*/
-juce::AudioParameterFloat*
-InputAnalysisFilter::getBandParameter(Equalizer::BAND_ID band_id)
-{
-    return dynamic_cast< juce::AudioParameterFloat* >(apvts_.getParameter(Equalizer::getBandName(band_id)));
-}
-
-/*---------------------------------------------------------------------------
-**
-*/
 void
 InputAnalysisFilter::printBandMagnitudesPreProcessing()
 {
@@ -243,23 +209,6 @@ InputAnalysisFilter::printBandMagnitudesPreProcessing()
 
     for (size_t band = 0; band < Equalizer::NUM_BANDS; ++band) {
         float val = getBandInputDb(static_cast< Equalizer::BAND_ID >(band));
-        DBG("B" + juce::String(band + 1) + ": " + juce::String(val));
-    }
-}
-
-/*---------------------------------------------------------------------------
-**
-*/
-void
-InputAnalysisFilter::printBandAdjustments()
-{
-    DBG("--------------------------------------------------");
-
-    for (size_t band = 0; band < Equalizer::NUM_BANDS; ++band) {
-        float val = getBandDbAdjustment(static_cast< Equalizer::BAND_ID >(band));
-
-        val = (val >= 0) ? std::min(val, Equalizer::MAX_BAND_DB_BOOST) : std::max(val, Equalizer::MAX_BAND_DB_CUT);
-
         DBG("B" + juce::String(band + 1) + ": " + juce::String(val));
     }
 }

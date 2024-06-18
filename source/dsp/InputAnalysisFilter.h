@@ -10,24 +10,23 @@ class InputAnalysisFilter : public juce::Thread
 
 public:
     InputAnalysisFilter(const juce::AudioProcessorValueTreeState& apvts);
-    ~InputAnalysisFilter();
+    ~InputAnalysisFilter() override;
 
     void run() override;
 
     void prepare(juce::dsp::ProcessSpec& process_spec);
     void pushBufferForAnalysis(juce::AudioBuffer< float > buffer);
 
+    float getBandDbAdjustment(Equalizer::BAND_ID band_id) const;
+
 private:
-    void                       initFilters();
-    void                       processInputBuffer();
-    void                       updateBandValues();
-    float                      getBandInputDb(Equalizer::BAND_ID band_id) const;
-    float                      getBandDbAdjustment(Equalizer::BAND_ID band_id) const;
-    juce::AudioParameterFloat* getBandParameter(Equalizer::BAND_ID band_id);
+    void initFilters();
+    void processInputBuffer();
+
+    float getBandInputDb(Equalizer::BAND_ID band_id) const;
 
     // Debug functions.
     void printBandMagnitudesPreProcessing();
-    void printBandAdjustments();
 
     static const uint16 ANALYSIS_FREQUENCY_MS;  //! How frequently the analysis is performed (in milliseconds).
 

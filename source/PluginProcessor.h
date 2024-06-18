@@ -2,6 +2,7 @@
 
 #include <juce_audio_processors/juce_audio_processors.h>
 
+#include "dsp/BandUpdater.h"
 #include "dsp/Equalizer.h"
 #include "dsp/InputAnalysisFilter.h"
 #include "dsp/MonoFftBuffer.h"
@@ -43,10 +44,9 @@ public:
     typedef std::array< MonoFftBuffer, Global::FFT::NUM_BUFFERS > FftBuffers;
 
     juce::AudioProcessorValueTreeState& getApvts();
-
-    FftBuffers& getFftBuffers();
-
-    Equalizer::MonoChain& getFilterChain();
+    InputAnalysisFilter&                getAnalysisFilter();
+    FftBuffers&                         getFftBuffers();
+    Equalizer::MonoChain&               getFilterChain();
 
     float getMeterValue(Global::Meters::METER_TYPE meter_type, Global::Channels::CHANNEL_ID channel_id) const;
 
@@ -55,6 +55,7 @@ private:
     juce::AudioProcessorValueTreeState                         apvts_;
 
     InputAnalysisFilter input_analysis_filter_;
+    BandUpdater         band_updater_;
 
     FftBuffers fft_buffers_;
 

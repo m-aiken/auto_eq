@@ -16,6 +16,7 @@ PluginProcessor::PluginProcessor()
             .withOutput("Output", juce::AudioChannelSet::stereo(), true))
     , apvts_(*this, nullptr, "APVTS", getParameterLayout())
     , input_analysis_filter_(apvts_)
+    , band_updater_(input_analysis_filter_, apvts_)
 {
 }
 
@@ -325,6 +326,15 @@ juce::AudioProcessorValueTreeState&
 PluginProcessor::getApvts()
 {
     return apvts_;
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
+InputAnalysisFilter&
+PluginProcessor::getAnalysisFilter()
+{
+    return input_analysis_filter_;
 }
 
 /*---------------------------------------------------------------------------

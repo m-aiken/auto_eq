@@ -38,6 +38,7 @@ target_sources(${PROJECT_NAME}
         PRIVATE
         source/PluginEditor.cpp
         source/PluginProcessor.cpp
+        source/dsp/BandUpdater.cpp
         source/dsp/Equalizer.cpp
         source/dsp/InputAnalysisFilter.cpp
         source/dsp/MonoFftBuffer.cpp
