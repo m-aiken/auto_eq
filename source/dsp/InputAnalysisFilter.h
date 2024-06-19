@@ -9,7 +9,7 @@ class InputAnalysisFilter : public juce::Thread
     using Filter = juce::dsp::LinkwitzRileyFilter< float >;
 
 public:
-    InputAnalysisFilter(const juce::AudioProcessorValueTreeState& apvts);
+    InputAnalysisFilter();
     ~InputAnalysisFilter() override;
 
     void run() override;
@@ -46,8 +46,6 @@ private:
     std::array< juce::AudioBuffer< float >, FIFO_SIZE > fifo_;
     size_t                                              fifo_write_idx_;
     size_t                                              fifo_read_idx_;
-
-    const juce::AudioProcessorValueTreeState& apvts_;
 
     bool is_prepared_;
 

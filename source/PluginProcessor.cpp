@@ -14,9 +14,8 @@ PluginProcessor::PluginProcessor()
             .withInput(Global::Channels::getName(Global::Channels::SIDECHAIN_LEFT), juce::AudioChannelSet::mono(), true)
             .withInput(Global::Channels::getName(Global::Channels::SIDECHAIN_RIGHT), juce::AudioChannelSet::mono(), true)
             .withOutput("Output", juce::AudioChannelSet::stereo(), true))
-    , apvts_(*this, nullptr, "APVTS", getParameterLayout())
-    , input_analysis_filter_(apvts_)
-    , band_updater_(input_analysis_filter_, apvts_)
+    , input_analysis_filter_()
+    , band_updater_(input_analysis_filter_, band_db_values_)
 {
 }
 
@@ -129,6 +128,12 @@ PluginProcessor::prepareToPlay(double sample_rate, int samples_per_block)
     // Pre-playback initialisation.
     //
 
+    // EQ band dB values.
+    for (auto& band : band_db_values_) {
+        band.reset(sample_rate, SMOOTHED_VALUE_RAMP_TIME_SECONDS);
+        band.setCurrentAndTargetValue(0.f);
+    }
+
     // Input analysis filter.
     juce::dsp::ProcessSpec analysis_spec;
 
@@ -156,7 +161,7 @@ PluginProcessor::prepareToPlay(double sample_rate, int samples_per_block)
     filter_chain_left_.prepare(filter_chain_spec);
     filter_chain_right_.prepare(filter_chain_spec);
 
-    // EQ bands (filters).
+    // Band pass filters.
     updateFilterCoefficients();
 
     // Meter values.
@@ -173,6 +178,9 @@ PluginProcessor::prepareToPlay(double sample_rate, int samples_per_block)
     rms_r_.setCurrentAndTargetValue(Global::NEG_INF);
     lufs_l_.setCurrentAndTargetValue(Global::NEG_INF);
     lufs_r_.setCurrentAndTargetValue(Global::NEG_INF);
+
+    // Start the thread the band updater loop lives on.
+    band_updater_.startPolling();
 }
 
 /*---------------------------------------------------------------------------
@@ -322,19 +330,10 @@ PluginProcessor::setStateInformation(const void* data, int size_in_bytes)
 /*---------------------------------------------------------------------------
 **
 */
-juce::AudioProcessorValueTreeState&
-PluginProcessor::getApvts()
+PluginProcessor::BandDbValueArray&
+PluginProcessor::getBandDbValues()
 {
-    return apvts_;
-}
-
-/*---------------------------------------------------------------------------
-**
-*/
-InputAnalysisFilter&
-PluginProcessor::getAnalysisFilter()
-{
-    return input_analysis_filter_;
+    return band_db_values_;
 }
 
 /*---------------------------------------------------------------------------
@@ -386,22 +385,6 @@ PluginProcessor::getMeterValue(Global::Meters::METER_TYPE meter_type, Global::Ch
 /*---------------------------------------------------------------------------
 **
 */
-/*static*/ juce::AudioProcessorValueTreeState::ParameterLayout
-PluginProcessor::getParameterLayout()
-{
-    juce::AudioProcessorValueTreeState::ParameterLayout parameter_layout;
-
-    // EQ bands.
-    for (uint8 i = 0; i < Equalizer::NUM_BANDS; ++i) {
-        Equalizer::addBandToParameterLayout(parameter_layout, static_cast< Equalizer::BAND_ID >(i));
-    }
-
-    return parameter_layout;
-}
-
-/*---------------------------------------------------------------------------
-**
-*/
 void
 PluginProcessor::updateFilterCoefficients()
 {
@@ -420,12 +403,9 @@ PluginProcessor::updateFilterCoefficients()
 **
 */
 float
-PluginProcessor::getBandGain(Equalizer::BAND_ID band_id) const
+PluginProcessor::getBandGain(Equalizer::BAND_ID band_id)
 {
-    juce::String         param_id    = Equalizer::getBandName(band_id);
-    AudioParameterFloat* float_param = dynamic_cast< juce::AudioParameterFloat* >(apvts_.getParameter(param_id));
-
-    return (float_param != nullptr) ? juce::Decibels::decibelsToGain(float_param->get()) : 0.f;
+    return juce::Decibels::decibelsToGain(band_db_values_.at(band_id).getNextValue());
 }
 
 /*---------------------------------------------------------------------------

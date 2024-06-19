@@ -41,31 +41,27 @@ public:
     void getStateInformation(juce::MemoryBlock& dest_data) override;
     void setStateInformation(const void* data, int size_in_bytes) override;
 
-    typedef std::array< MonoFftBuffer, Global::FFT::NUM_BUFFERS > FftBuffers;
+    typedef juce::SmoothedValue< float, juce::ValueSmoothingTypes::Linear > SmoothedFloat;
+    typedef std::array< SmoothedFloat, Equalizer::NUM_BANDS >               BandDbValueArray;
+    typedef std::array< MonoFftBuffer, Global::FFT::NUM_BUFFERS >           FftBuffers;
 
-    juce::AudioProcessorValueTreeState& getApvts();
-    InputAnalysisFilter&                getAnalysisFilter();
-    FftBuffers&                         getFftBuffers();
-    Equalizer::MonoChain&               getFilterChain();
+    BandDbValueArray&     getBandDbValues();
+    FftBuffers&           getFftBuffers();
+    Equalizer::MonoChain& getFilterChain();
 
     float getMeterValue(Global::Meters::METER_TYPE meter_type, Global::Channels::CHANNEL_ID channel_id) const;
 
 private:
-    static juce::AudioProcessorValueTreeState::ParameterLayout getParameterLayout();
-    juce::AudioProcessorValueTreeState                         apvts_;
-
+    BandDbValueArray    band_db_values_;
     InputAnalysisFilter input_analysis_filter_;
     BandUpdater         band_updater_;
-
-    FftBuffers fft_buffers_;
+    FftBuffers          fft_buffers_;
 
     Equalizer::MonoChain filter_chain_left_;
     Equalizer::MonoChain filter_chain_right_;
 
     void  updateFilterCoefficients();
-    float getBandGain(Equalizer::BAND_ID band_id) const;
-
-    typedef juce::SmoothedValue< float, juce::ValueSmoothingTypes::Linear > SmoothedFloat;
+    float getBandGain(Equalizer::BAND_ID band_id);
 
     static const double SMOOTHED_VALUE_RAMP_TIME_SECONDS;
     SmoothedFloat       peak_l_;

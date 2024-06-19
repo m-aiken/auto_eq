@@ -5,12 +5,15 @@
 /*---------------------------------------------------------------------------
 **
 */
-BandUpdater::BandUpdater(InputAnalysisFilter& analysis_filter, juce::AudioProcessorValueTreeState& apvts)
+BandUpdater::BandUpdater(InputAnalysisFilter& analysis_filter, BandDbValueArray& band_values_array)
     : juce::Thread("THREAD_band_updater")
     , analysis_filter_(analysis_filter)
-    , apvts_(apvts)
+    , band_values_array_(band_values_array)
 {
-    startThread();
+    // We don't start the new thread immediately because the band values contains
+    // juce::SmoothedValue<float> (not raw float) which need special preparation.
+    // That preparation happens in PluginProcessor::prepareToPlay() after which our
+    // startPolling() method is called.
 }
 
 /*---------------------------------------------------------------------------
@@ -38,33 +41,28 @@ BandUpdater::run()
 **
 */
 void
+BandUpdater::startPolling()
+{
+    startThread();
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
+void
 BandUpdater::updateBandValues()
 {
     //    printBandAdjustments();
 
     for (uint8 i = 0; i < Equalizer::NUM_BANDS; ++i) {
         Equalizer::BAND_ID band_id = static_cast< Equalizer::BAND_ID >(i);
+        float              db_val  = analysis_filter_.getBandDbAdjustment(band_id);
 
-        juce::AudioParameterFloat* param = getBandParameter(band_id);
+        db_val = (db_val >= 0) ? std::min(db_val, Equalizer::MAX_BAND_DB_BOOST) :
+                                 std::max(db_val, Equalizer::MAX_BAND_DB_CUT);
 
-        if (param != nullptr) {
-            float adjustment = analysis_filter_.getBandDbAdjustment(band_id);
-
-            adjustment = (adjustment >= 0) ? std::min(adjustment, Equalizer::MAX_BAND_DB_BOOST) :
-                                             std::max(adjustment, Equalizer::MAX_BAND_DB_CUT);
-
-            *param = adjustment;
-        }
+        band_values_array_.at(band_id).setTargetValue(db_val);
     }
-}
-
-/*---------------------------------------------------------------------------
-**
-*/
-juce::AudioParameterFloat*
-BandUpdater::getBandParameter(Equalizer::BAND_ID band_id)
-{
-    return dynamic_cast< juce::AudioParameterFloat* >(apvts_.getParameter(Equalizer::getBandName(band_id)));
 }
 
 /*---------------------------------------------------------------------------

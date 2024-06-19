@@ -6,11 +6,10 @@
 /*---------------------------------------------------------------------------
 **
 */
-InputAnalysisFilter::InputAnalysisFilter(const juce::AudioProcessorValueTreeState& apvts)
+InputAnalysisFilter::InputAnalysisFilter()
     : juce::Thread("THREAD_input_analysis_filter")
     , fifo_write_idx_(1)
     , fifo_read_idx_(0)
-    , apvts_(apvts)
     , is_prepared_(false)
 {
     initFilters();

@@ -10,7 +10,7 @@ FilterResponseCurve::FilterResponseCurve(PluginProcessor& p)
     : processor_ref_(p)
     , should_repaint_(true)
 {
-    addApvtsListeners();
+    //    addApvtsListeners();
     startTimerHz(60);
 }
 
@@ -20,7 +20,7 @@ FilterResponseCurve::FilterResponseCurve(PluginProcessor& p)
 FilterResponseCurve::~FilterResponseCurve()
 {
     stopTimer();
-    removeApvtsListeners();
+    //    removeApvtsListeners();
 }
 
 /*---------------------------------------------------------------------------
@@ -49,8 +49,8 @@ FilterResponseCurve::paint(juce::Graphics& g)
         int   x         = juce::jmin< int >(x_raw, magnitudes_.size() - 1);
         int   y         = getYCoordinateFromMagnitude(magnitudes_.at(x));
 
-        int bar_width      = 16;
-        int half_bar_width = 8;
+        int bar_width      = 8;
+        int half_bar_width = 4;
         int bar_height     = getBandBarHeight(magnitudes_.at(x));
 
         int left_edge  = (x - half_bar_width);
@@ -87,7 +87,7 @@ FilterResponseCurve::resized()
     resetMagnitudesVector();
     plotPath();
 }
-
+#if 0
 /*---------------------------------------------------------------------------
 **
 */
@@ -108,6 +108,7 @@ FilterResponseCurve::parameterGestureChanged(int parameter_index, bool gesture_i
     // Do nothing - only implemented because it's pure virtual.
     juce::ignoreUnused(parameter_index, gesture_is_starting);
 }
+#endif
 
 /*---------------------------------------------------------------------------
 **
@@ -115,11 +116,11 @@ FilterResponseCurve::parameterGestureChanged(int parameter_index, bool gesture_i
 void
 FilterResponseCurve::timerCallback()
 {
-    if (should_repaint_.compareAndSetBool(false, true)) {
-        calculateMagnitudes();
-        plotPath();
-        repaint();
-    }
+    //    if (should_repaint_.compareAndSetBool(false, true)) {
+    calculateMagnitudes();
+    plotPath();
+    repaint();
+    //    }
 }
 
 /*---------------------------------------------------------------------------
@@ -143,8 +144,6 @@ FilterResponseCurve::resetMagnitudesVector()
 void
 FilterResponseCurve::calculateMagnitudes()
 {
-    juce::AudioProcessorValueTreeState& apvts = processor_ref_.getApvts();
-
     // Reset the magnitudes vector.
     resetMagnitudesVector();
 
@@ -250,7 +249,7 @@ FilterResponseCurve::plotPath()
         path_.lineTo(i, getYCoordinateFromMagnitude(magnitudes_.at(i)));
     }
 }
-
+#if 0
 /*---------------------------------------------------------------------------
 **
 */
@@ -282,6 +281,7 @@ FilterResponseCurve::removeApvtsListeners()
         apvts.getParameter(param_id)->removeListener(this);
     }
 }
+#endif
 
 /*---------------------------------------------------------------------------
 ** End of File
