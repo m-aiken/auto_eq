@@ -1,7 +1,8 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
-/*static*/ const double PluginProcessor::SMOOTHED_VALUE_RAMP_TIME_SECONDS = 0.2;
+/*static*/ const double PluginProcessor::BAND_DB_RAMP_TIME_SECONDS  = 0.02;
+/*static*/ const double PluginProcessor::METER_DB_RAMP_TIME_SECONDS = 0.2;
 
 /*---------------------------------------------------------------------------
 **
@@ -130,7 +131,7 @@ PluginProcessor::prepareToPlay(double sample_rate, int samples_per_block)
 
     // EQ band dB values.
     for (auto& band : band_db_values_) {
-        band.reset(sample_rate, SMOOTHED_VALUE_RAMP_TIME_SECONDS);
+        band.reset(sample_rate, BAND_DB_RAMP_TIME_SECONDS);
         band.setCurrentAndTargetValue(0.f);
     }
 
@@ -165,12 +166,12 @@ PluginProcessor::prepareToPlay(double sample_rate, int samples_per_block)
     updateFilterCoefficients();
 
     // Meter values.
-    peak_l_.reset(sample_rate, SMOOTHED_VALUE_RAMP_TIME_SECONDS);
-    peak_r_.reset(sample_rate, SMOOTHED_VALUE_RAMP_TIME_SECONDS);
-    rms_l_.reset(sample_rate, SMOOTHED_VALUE_RAMP_TIME_SECONDS);
-    rms_r_.reset(sample_rate, SMOOTHED_VALUE_RAMP_TIME_SECONDS);
-    lufs_l_.reset(sample_rate, SMOOTHED_VALUE_RAMP_TIME_SECONDS);
-    lufs_r_.reset(sample_rate, SMOOTHED_VALUE_RAMP_TIME_SECONDS);
+    peak_l_.reset(sample_rate, METER_DB_RAMP_TIME_SECONDS);
+    peak_r_.reset(sample_rate, METER_DB_RAMP_TIME_SECONDS);
+    rms_l_.reset(sample_rate, METER_DB_RAMP_TIME_SECONDS);
+    rms_r_.reset(sample_rate, METER_DB_RAMP_TIME_SECONDS);
+    lufs_l_.reset(sample_rate, METER_DB_RAMP_TIME_SECONDS);
+    lufs_r_.reset(sample_rate, METER_DB_RAMP_TIME_SECONDS);
 
     peak_l_.setCurrentAndTargetValue(Global::NEG_INF);
     peak_r_.setCurrentAndTargetValue(Global::NEG_INF);

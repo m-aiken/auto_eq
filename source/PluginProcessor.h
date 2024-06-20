@@ -52,6 +52,17 @@ public:
     float getMeterValue(Global::Meters::METER_TYPE meter_type, Global::Channels::CHANNEL_ID channel_id) const;
 
 private:
+    void  updateFilterCoefficients();
+    float getBandGain(Equalizer::BAND_ID band_id);
+
+    void setPeak(SmoothedFloat& val, juce::AudioBuffer< float >& buffer, Global::Channels::CHANNEL_ID channel);
+    void setRms(SmoothedFloat& val, juce::AudioBuffer< float >& buffer, Global::Channels::CHANNEL_ID channel);
+    void setLufs(SmoothedFloat& val, juce::AudioBuffer< float >& buffer, Global::Channels::CHANNEL_ID channel);
+
+private:
+    static const double BAND_DB_RAMP_TIME_SECONDS;
+    static const double METER_DB_RAMP_TIME_SECONDS;
+
     BandDbValueArray    band_db_values_;
     InputAnalysisFilter input_analysis_filter_;
     BandUpdater         band_updater_;
@@ -60,20 +71,12 @@ private:
     Equalizer::MonoChain filter_chain_left_;
     Equalizer::MonoChain filter_chain_right_;
 
-    void  updateFilterCoefficients();
-    float getBandGain(Equalizer::BAND_ID band_id);
-
-    static const double SMOOTHED_VALUE_RAMP_TIME_SECONDS;
-    SmoothedFloat       peak_l_;
-    SmoothedFloat       peak_r_;
-    SmoothedFloat       rms_l_;
-    SmoothedFloat       rms_r_;
-    SmoothedFloat       lufs_l_;
-    SmoothedFloat       lufs_r_;
-
-    void setPeak(SmoothedFloat& val, juce::AudioBuffer< float >& buffer, Global::Channels::CHANNEL_ID channel);
-    void setRms(SmoothedFloat& val, juce::AudioBuffer< float >& buffer, Global::Channels::CHANNEL_ID channel);
-    void setLufs(SmoothedFloat& val, juce::AudioBuffer< float >& buffer, Global::Channels::CHANNEL_ID channel);
+    SmoothedFloat peak_l_;
+    SmoothedFloat peak_r_;
+    SmoothedFloat rms_l_;
+    SmoothedFloat rms_r_;
+    SmoothedFloat lufs_l_;
+    SmoothedFloat lufs_r_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PluginProcessor)
 };
