@@ -59,7 +59,11 @@ private:
     void setRms(SmoothedFloat& val, juce::AudioBuffer< float >& buffer, Global::Channels::CHANNEL_ID channel);
     void setLufs(SmoothedFloat& val, juce::AudioBuffer< float >& buffer, Global::Channels::CHANNEL_ID channel);
 
+    static juce::AudioProcessorValueTreeState::ParameterLayout getParameterLayout();
+
 private:
+    juce::AudioProcessorValueTreeState apvts_;
+
     static const double BAND_DB_RAMP_TIME_SECONDS;
     static const double METER_DB_RAMP_TIME_SECONDS;
 

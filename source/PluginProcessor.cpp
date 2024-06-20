@@ -15,6 +15,7 @@ PluginProcessor::PluginProcessor()
             .withInput(Global::Channels::getName(Global::Channels::SIDECHAIN_LEFT), juce::AudioChannelSet::mono(), true)
             .withInput(Global::Channels::getName(Global::Channels::SIDECHAIN_RIGHT), juce::AudioChannelSet::mono(), true)
             .withOutput("Output", juce::AudioChannelSet::stereo(), true))
+    , apvts_(*this, nullptr, "APVTS", getParameterLayout())
     , input_analysis_filter_()
     , band_updater_(input_analysis_filter_, band_db_values_)
 {
@@ -390,10 +391,13 @@ void
 PluginProcessor::updateFilterCoefficients()
 {
     double sample_rate = getSampleRate();
+    float  intensity   = apvts_.getParameter("EQ_INTENSITY")->getValue();
 
     for (uint8 i = 0; i < Equalizer::NUM_BANDS; ++i) {
         Equalizer::BAND_ID band_id = static_cast< Equalizer::BAND_ID >(i);
         float              gain    = getBandGain(band_id);
+
+        DBG(gain);
 
         Equalizer::updateBandCoefficients(filter_chain_left_, band_id, gain, sample_rate);
         Equalizer::updateBandCoefficients(filter_chain_right_, band_id, gain, sample_rate);
@@ -448,6 +452,23 @@ void
 PluginProcessor::setLufs(SmoothedFloat& val, juce::AudioBuffer< float >& buffer, Global::Channels::CHANNEL_ID channel)
 {
     juce::ignoreUnused(val, buffer, channel);
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
+/*static*/
+juce::AudioProcessorValueTreeState::ParameterLayout
+PluginProcessor::getParameterLayout()
+{
+    juce::AudioProcessorValueTreeState::ParameterLayout pl;
+
+    pl.add(std::make_unique< juce::AudioParameterFloat >(juce::ParameterID("EQ_INTENSITY", 1),
+                                                         "EQ_INTENSITY",
+                                                         juce::NormalisableRange< float >(0.f, 1.f, 0.01f, 1.f),
+                                                         1.f));
+
+    return pl;
 }
 
 /*---------------------------------------------------------------------------
