@@ -53,11 +53,13 @@ public:
 
 private:
     void  updateFilterCoefficients();
-    float getBandGain(Equalizer::BAND_ID band_id);
+    float getBandDb(Equalizer::BAND_ID band_id);
 
     void setPeak(SmoothedFloat& val, juce::AudioBuffer< float >& buffer, Global::Channels::CHANNEL_ID channel);
     void setRms(SmoothedFloat& val, juce::AudioBuffer< float >& buffer, Global::Channels::CHANNEL_ID channel);
     void setLufs(SmoothedFloat& val, juce::AudioBuffer< float >& buffer, Global::Channels::CHANNEL_ID channel);
+
+    static float getNormalisedValue(float full_range_value);
 
     static juce::AudioProcessorValueTreeState::ParameterLayout getParameterLayout();
 

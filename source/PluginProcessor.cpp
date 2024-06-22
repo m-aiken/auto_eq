@@ -394,13 +394,11 @@ PluginProcessor::updateFilterCoefficients()
     float  intensity   = apvts_.getParameter("EQ_INTENSITY")->getValue();
 
     for (uint8 i = 0; i < Equalizer::NUM_BANDS; ++i) {
-        Equalizer::BAND_ID band_id = static_cast< Equalizer::BAND_ID >(i);
-        float              gain    = getBandGain(band_id);
+        Equalizer::BAND_ID band_id     = static_cast< Equalizer::BAND_ID >(i);
+        float              gain_factor = getNormalisedValue(getBandDb(band_id) * intensity);
 
-        DBG(gain);
-
-        Equalizer::updateBandCoefficients(filter_chain_left_, band_id, gain, sample_rate);
-        Equalizer::updateBandCoefficients(filter_chain_right_, band_id, gain, sample_rate);
+        Equalizer::updateBandCoefficients(filter_chain_left_, band_id, gain_factor, sample_rate);
+        Equalizer::updateBandCoefficients(filter_chain_right_, band_id, gain_factor, sample_rate);
     }
 }
 
@@ -408,9 +406,9 @@ PluginProcessor::updateFilterCoefficients()
 **
 */
 float
-PluginProcessor::getBandGain(Equalizer::BAND_ID band_id)
+PluginProcessor::getBandDb(Equalizer::BAND_ID band_id)
 {
-    return juce::Decibels::decibelsToGain(band_db_values_.at(band_id).getNextValue());
+    return band_db_values_.at(band_id).getNextValue();
 }
 
 /*---------------------------------------------------------------------------
@@ -452,6 +450,17 @@ void
 PluginProcessor::setLufs(SmoothedFloat& val, juce::AudioBuffer< float >& buffer, Global::Channels::CHANNEL_ID channel)
 {
     juce::ignoreUnused(val, buffer, channel);
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
+/*static*/ float
+PluginProcessor::getNormalisedValue(float full_range_value)
+{
+    // The gain factor that needs to be supplied to the filters works on a >1 boost, <1 attenuate basis.
+    // Map our -12 to +12 values to a 0 to 2 range (so 1 is the central "do nothing" point).
+    return juce::jmap< float >(full_range_value, Equalizer::MAX_BAND_DB_CUT, Equalizer::MAX_BAND_DB_BOOST, 0.f, 2.f);
 }
 
 /*---------------------------------------------------------------------------
