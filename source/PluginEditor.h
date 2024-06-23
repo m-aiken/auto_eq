@@ -1,7 +1,8 @@
 #pragma once
 
 #include "PluginProcessor.h"
-#include "gui/IntensityControl.h"
+#include "gui/CustomLookAndFeel.h"
+#include "gui/intensity_control/IntensityControl.h"
 #include "gui/menu/Menu.h"
 #include "gui/meters/MeterGroup.h"
 #include "gui/response_graph/FilterResponseGraph.h"
@@ -28,6 +29,8 @@ private:
     FilterResponseGraph filter_res_graph_;
     IntensityControl    intensity_control_;
     MeterGroup          meter_group_;
+
+    CustomLookAndFeel lnf_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PluginEditor)
 };

@@ -42,10 +42,12 @@ target_sources(${PROJECT_NAME}
         source/dsp/Equalizer.cpp
         source/dsp/InputAnalysisFilter.cpp
         source/dsp/MonoFftBuffer.cpp
+        source/gui/CustomLookAndFeel.cpp
         source/gui/DecibelMarkers.cpp
         source/gui/FrequencyMarkers.cpp
-        source/gui/IntensityControl.cpp
         source/gui/Theme.cpp
+        source/gui/intensity_control/IntensityControl.cpp
+        source/gui/intensity_control/IntensityLabel.cpp
         source/gui/menu/Menu.cpp
         source/gui/menu/ThemeButton.cpp
         source/gui/meters/MeterCanvas.cpp
@@ -58,6 +60,7 @@ target_sources(${PROJECT_NAME}
         source/gui/response_graph/FilterResponseCurve.cpp
         source/gui/response_graph/FilterResponseGraph.cpp
         source/gui/response_graph/MonoFftPath.cpp
+        source/gui/widgets/RotaryControl.cpp
         )
 
 # JUCE modules make use of compile definitions to switch certain features on/off.

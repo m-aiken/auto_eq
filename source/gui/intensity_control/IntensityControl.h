@@ -2,6 +2,9 @@
 
 #include <JuceHeader.h>
 
+#include "IntensityLabel.h"
+#include "../widgets/RotaryControl.h"
+
 class IntensityControl : public juce::Component
 {
 public:
@@ -11,10 +14,8 @@ public:
     void resized() override;
 
 private:
-    juce::Label  label_;
-    juce::Slider slider_;
-
-    std::unique_ptr< juce::AudioProcessorValueTreeState::SliderAttachment > slider_attachment_;
+    IntensityLabel label_;
+    RotaryControl  rotary_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(IntensityControl)
 };

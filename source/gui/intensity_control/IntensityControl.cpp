@@ -1,17 +1,14 @@
 #include "IntensityControl.h"
-#include "../utility/GlobalConstants.h"
+#include "../../utility/GlobalConstants.h"
 
 /*---------------------------------------------------------------------------
 **
 */
 IntensityControl::IntensityControl(juce::AudioProcessorValueTreeState& apvts)
-    : label_("EQ_INTENSITY_LABEL", "Intensity")
-    , slider_(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag, juce::Slider::TextEntryBoxPosition::NoTextBox)
+    : rotary_(apvts, "EQ_INTENSITY")
 {
-    slider_attachment_.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(apvts, "EQ_INTENSITY", slider_));
-
     addAndMakeVisible(label_);
-    addAndMakeVisible(slider_);
+    addAndMakeVisible(rotary_);
 }
 
 /*---------------------------------------------------------------------------
@@ -39,7 +36,7 @@ IntensityControl::resized()
     auto rotary_diameter = bounds_height - (label_height * 2);
 
     label_.setBounds(0, 0, bounds_width, label_height);
-    slider_.setBounds(label_height, label_height, rotary_diameter, rotary_diameter);
+    rotary_.setBounds(label_height, label_height, rotary_diameter, rotary_diameter);
 }
 
 /*---------------------------------------------------------------------------

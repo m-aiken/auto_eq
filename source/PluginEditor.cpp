@@ -13,6 +13,8 @@ PluginEditor::PluginEditor(PluginProcessor& p)
     , intensity_control_(p.getApvts())
     , meter_group_(p)
 {
+    setLookAndFeel(&lnf_);
+
     addAndMakeVisible(menu_);
     addAndMakeVisible(filter_res_graph_);
     addAndMakeVisible(intensity_control_);
@@ -31,6 +33,7 @@ PluginEditor::PluginEditor(PluginProcessor& p)
 PluginEditor::~PluginEditor()
 {
     menu_.getThemeButtonRef().removeListener(this);
+    setLookAndFeel(nullptr);
 }
 
 /*---------------------------------------------------------------------------

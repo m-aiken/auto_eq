@@ -26,6 +26,9 @@ public:
     static const DarkLightPair METER_COLD;
     static const DarkLightPair METER_HOT;
 
+    static const DarkLightPair ROTARY_FILL;
+    static const DarkLightPair ROTARY_ARC;
+
     static bool dark_mode;
 
 public:

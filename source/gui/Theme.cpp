@@ -23,6 +23,10 @@
 /*static*/ const Theme::DarkLightPair Theme::METER_HOT  = DarkLightPair(RED_ORANGE.withAlpha(0.5f),
                                                                        RED_ORANGE.withAlpha(0.5f));
 
+/*static*/ const Theme::DarkLightPair Theme::ROTARY_FILL = DarkLightPair(TEAL.withAlpha(0.1f),
+                                                                         RED_ORANGE.withAlpha(0.1f));
+/*static*/ const Theme::DarkLightPair Theme::ROTARY_ARC  = DarkLightPair(TEAL, RED_ORANGE);
+
 /*static*/ bool Theme::dark_mode = true;
 
 /*---------------------------------------------------------------------------
