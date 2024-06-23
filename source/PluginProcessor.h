@@ -41,6 +41,8 @@ public:
     void getStateInformation(juce::MemoryBlock& dest_data) override;
     void setStateInformation(const void* data, int size_in_bytes) override;
 
+    juce::AudioProcessorValueTreeState& getApvts();
+
     typedef juce::SmoothedValue< float, juce::ValueSmoothingTypes::Linear > SmoothedFloat;
     typedef std::array< SmoothedFloat, Equalizer::NUM_BANDS >               BandDbValueArray;
     typedef std::array< MonoFftBuffer, Global::FFT::NUM_BUFFERS >           FftBuffers;

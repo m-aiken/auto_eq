@@ -44,6 +44,7 @@ target_sources(${PROJECT_NAME}
         source/dsp/MonoFftBuffer.cpp
         source/gui/DecibelMarkers.cpp
         source/gui/FrequencyMarkers.cpp
+        source/gui/IntensityControl.cpp
         source/gui/Theme.cpp
         source/gui/menu/Menu.cpp
         source/gui/menu/ThemeButton.cpp

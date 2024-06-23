@@ -10,10 +10,12 @@ PluginEditor::PluginEditor(PluginProcessor& p)
     , processor_ref_(p)
     , menu_()
     , filter_res_graph_(p)
+    , intensity_control_(p.getApvts())
     , meter_group_(p)
 {
     addAndMakeVisible(menu_);
     addAndMakeVisible(filter_res_graph_);
+    addAndMakeVisible(intensity_control_);
     addAndMakeVisible(meter_group_);
 
     menu_.getThemeButtonRef().addListener(this);
@@ -64,7 +66,7 @@ PluginEditor::resized()
 
     grid.items.add(juce::GridItem(menu_));
     grid.items.add(juce::GridItem(filter_res_graph_));
-    grid.items.add(juce::GridItem());
+    grid.items.add(juce::GridItem(intensity_control_));
     grid.items.add(juce::GridItem(meter_group_));
 
     grid.performLayout(getLocalBounds());

@@ -332,6 +332,15 @@ PluginProcessor::setStateInformation(const void* data, int size_in_bytes)
 /*---------------------------------------------------------------------------
 **
 */
+juce::AudioProcessorValueTreeState&
+PluginProcessor::getApvts()
+{
+    return apvts_;
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
 PluginProcessor::BandDbValueArray&
 PluginProcessor::getBandDbValues()
 {
