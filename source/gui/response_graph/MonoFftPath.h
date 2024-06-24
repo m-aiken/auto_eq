@@ -2,7 +2,7 @@
 
 #include <JuceHeader.h>
 
-#include "../Theme.h"
+#include "../look_and_feel/Theme.h"
 #include "../../dsp/MonoFftBuffer.h"
 #include "../../utility/GlobalConstants.h"
 

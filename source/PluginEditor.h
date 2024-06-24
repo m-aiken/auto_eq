@@ -1,8 +1,8 @@
 #pragma once
 
 #include "PluginProcessor.h"
-#include "gui/CustomLookAndFeel.h"
 #include "gui/intensity_control/IntensityControl.h"
+#include "gui/look_and_feel/CustomLookAndFeel.h"
 #include "gui/menu/Menu.h"
 #include "gui/meters/MeterGroup.h"
 #include "gui/response_graph/FilterResponseGraph.h"

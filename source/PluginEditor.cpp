@@ -1,6 +1,6 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
-#include "gui/Theme.h"
+#include "gui/look_and_feel/Theme.h"
 
 /*---------------------------------------------------------------------------
 **

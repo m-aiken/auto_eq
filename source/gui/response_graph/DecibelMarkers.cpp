@@ -1,6 +1,6 @@
 #include "DecibelMarkers.h"
-#include "Theme.h"
-#include "../utility/GlobalConstants.h"
+#include "../look_and_feel/Theme.h"
+#include "../../utility/GlobalConstants.h"
 
 /*---------------------------------------------------------------------------
 **

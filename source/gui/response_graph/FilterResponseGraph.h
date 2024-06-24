@@ -2,11 +2,11 @@
 
 #include "JuceHeader.h"
 
+#include "DecibelMarkers.h"
 #include "FilterResponseCanvas.h"
 #include "FilterResponseCurve.h"
+#include "FrequencyMarkers.h"
 #include "MonoFftPath.h"
-#include "../FrequencyMarkers.h"
-#include "../DecibelMarkers.h"
 #include "../../PluginProcessor.h"
 
 class FilterResponseGraph : public juce::Component

@@ -1,5 +1,5 @@
 #include "MeterDbScale.h"
-#include "../Theme.h"
+#include "../look_and_feel/Theme.h"
 #include "../../utility/GlobalConstants.h"
 
 /*static*/ const uint8 MeterDbScale::DB_INTERVAL = 6;

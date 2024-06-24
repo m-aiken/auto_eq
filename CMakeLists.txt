@@ -42,12 +42,10 @@ target_sources(${PROJECT_NAME}
         source/dsp/Equalizer.cpp
         source/dsp/InputAnalysisFilter.cpp
         source/dsp/MonoFftBuffer.cpp
-        source/gui/CustomLookAndFeel.cpp
-        source/gui/DecibelMarkers.cpp
-        source/gui/FrequencyMarkers.cpp
-        source/gui/Theme.cpp
         source/gui/intensity_control/IntensityControl.cpp
         source/gui/intensity_control/IntensityLabel.cpp
+        source/gui/look_and_feel/CustomLookAndFeel.cpp
+        source/gui/look_and_feel/Theme.cpp
         source/gui/menu/Menu.cpp
         source/gui/menu/ThemeButton.cpp
         source/gui/meters/MeterCanvas.cpp
@@ -56,9 +54,11 @@ target_sources(${PROJECT_NAME}
         source/gui/meters/MeterLabel.cpp
         source/gui/meters/MonoMeter.cpp
         source/gui/meters/StereoMeter.cpp
+        source/gui/response_graph/DecibelMarkers.cpp
         source/gui/response_graph/FilterResponseCanvas.cpp
         source/gui/response_graph/FilterResponseCurve.cpp
         source/gui/response_graph/FilterResponseGraph.cpp
+        source/gui/response_graph/FrequencyMarkers.cpp
         source/gui/response_graph/MonoFftPath.cpp
         source/gui/widgets/RotaryControl.cpp
         )

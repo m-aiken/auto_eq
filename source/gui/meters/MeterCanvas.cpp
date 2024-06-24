@@ -1,5 +1,5 @@
 #include "MeterCanvas.h"
-#include "../Theme.h"
+#include "../look_and_feel/Theme.h"
 #include "../../utility/GlobalConstants.h"
 
 /*static*/ const uint8 MeterCanvas::DB_INTERVAL = 3;
