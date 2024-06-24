@@ -1,12 +1,14 @@
 #include "IntensityLabel.h"
+#include "../look_and_feel/Theme.h"
 #include "../../utility/GlobalConstants.h"
 
 /*---------------------------------------------------------------------------
 **
 */
-IntensityLabel::IntensityLabel()
-    : juce::Label("EQ_INTENSITY_LABEL", "Intensity")
+IntensityLabel::IntensityLabel(const juce::String& text)
+    : juce::Label("EQ_INTENSITY_LABEL_" + text, text)
 {
+    setFont(Theme::getFont());
 }
 
 /*---------------------------------------------------------------------------
@@ -19,6 +21,9 @@ IntensityLabel::paint(juce::Graphics& g)
         g.setColour(juce::Colours::red);
         g.drawRect(getLocalBounds());
     }
+
+    g.setColour(Theme::getColour(Theme::TEXT));
+    g.drawFittedText(getText(), getLocalBounds(), juce::Justification::centred, 1);
 }
 
 /*---------------------------------------------------------------------------

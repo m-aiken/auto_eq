@@ -5,7 +5,7 @@
 class IntensityLabel : public juce::Label
 {
 public:
-    IntensityLabel();
+    IntensityLabel(const juce::String& text);
 
     void paint(juce::Graphics& g) override;
 

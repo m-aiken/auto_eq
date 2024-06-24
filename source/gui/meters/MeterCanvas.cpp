@@ -10,6 +10,8 @@
 void
 MeterCanvas::paint(juce::Graphics& g)
 {
+    g.fillAll(Theme::getColour(Theme::METER_BACKGROUND));
+
     auto      bounds        = getLocalBounds();
     auto      bounds_width  = bounds.getWidth();
     auto      bounds_height = bounds.getHeight();
@@ -19,9 +21,6 @@ MeterCanvas::paint(juce::Graphics& g)
     auto      alpha         = Theme::dark_mode ? 0.1f : 0.2f;
 
     g.setColour(line_colour.withAlpha(alpha));
-
-    // Draw the outline.
-    g.drawRect(bounds);
 
     // dB markers (vertical - the meters are horizontal).
     for (int i = min_db; i <= max_db; i += DB_INTERVAL) {

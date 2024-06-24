@@ -65,7 +65,14 @@ MeterGroup::resized()
     grid.items.add(juce::GridItem(lufs_label_));
 
     //    grid.setGap(Px { 4 });
-    grid.performLayout(getLocalBounds());
+    auto initial_bounds = getLocalBounds();
+    auto padding        = 8;
+    auto bounds         = juce::Rectangle< int >(padding,
+                                         padding,
+                                         initial_bounds.getWidth() - (padding * 2),
+                                         initial_bounds.getHeight() - (padding * 2));
+
+    grid.performLayout(bounds);
 }
 
 /*---------------------------------------------------------------------------

@@ -1,4 +1,5 @@
 #include "RotaryControl.h"
+#include "../../utility/GlobalConstants.h"
 
 /*---------------------------------------------------------------------------
 **
@@ -28,6 +29,11 @@ RotaryControl::~RotaryControl()
 void
 RotaryControl::paint(juce::Graphics& g)
 {
+    if (Global::SHOW_DEBUG_BOUNDS) {
+        g.setColour(juce::Colours::green);
+        g.drawRect(getLocalBounds());
+    }
+
     auto bounds = getLocalBounds();
 
     getLookAndFeel().drawRotarySlider(g,

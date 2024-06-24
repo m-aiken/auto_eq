@@ -37,7 +37,7 @@ MonoMeter::paint(juce::Graphics& g)
     juce::Rectangle< float > meter_rect(0, 0, length, bounds_height);
 
     //    g.setColour(Theme::getColour(val >= -6.f ? Theme::METER_HOT : Theme::METER_COLD));
-    g.setColour(Theme::getColour(Theme::METER_COLD));
+    g.setColour(Theme::getColour(Theme::METER_VALUE));
     g.fillRect(meter_rect);
 }
 

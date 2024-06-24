@@ -51,6 +51,21 @@ PluginEditor::paint(juce::Graphics& g)
 void
 PluginEditor::resized()
 {
+    auto bounds          = getLocalBounds();
+    auto bounds_height   = bounds.getHeight();
+    auto bounds_width    = bounds.getWidth();
+    auto menu_height     = bounds_height * 0.05;
+    auto graph_height    = bounds_height * 0.65;
+    auto meters_height   = bounds_height * 0.3;
+    auto meters_width    = bounds_width * 0.75;
+    auto intensity_width = bounds_width * 0.25;
+
+    menu_.setBounds(0, 0, bounds_width, menu_height);
+    filter_res_graph_.setBounds(0, menu_.getBottom(), bounds_width, graph_height);
+    intensity_control_.setBounds(0, filter_res_graph_.getBottom(), intensity_width, meters_height);
+    meter_group_.setBounds(intensity_control_.getRight(), filter_res_graph_.getBottom(), meters_width, meters_height);
+
+#if 0
     using Track = juce::Grid::TrackInfo;
     using Fr    = juce::Grid::Fr;
 
@@ -73,6 +88,7 @@ PluginEditor::resized()
     grid.items.add(juce::GridItem(meter_group_));
 
     grid.performLayout(getLocalBounds());
+#endif
 }
 
 /*---------------------------------------------------------------------------

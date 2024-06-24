@@ -14,7 +14,9 @@ public:
     void resized() override;
 
 private:
-    IntensityLabel label_;
+    IntensityLabel widget_label_;
+    IntensityLabel min_label_;
+    IntensityLabel max_label_;
     RotaryControl  rotary_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(IntensityControl)
