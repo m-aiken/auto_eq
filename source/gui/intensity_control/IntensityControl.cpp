@@ -5,7 +5,7 @@
 **
 */
 IntensityControl::IntensityControl(juce::AudioProcessorValueTreeState& apvts)
-    : widget_label_("INTENSITY")
+    : widget_label_("INTENSITY", juce::Justification::centredLeft)
     , min_label_("OFF")
     , max_label_("MAX")
     , rotary_(apvts, "EQ_INTENSITY")
@@ -35,7 +35,7 @@ void
 IntensityControl::resized()
 {
     auto initial_bounds = getLocalBounds();
-    auto padding        = 8;
+    auto padding        = 16;
     auto bounds         = juce::Rectangle< int >(padding,
                                          padding,
                                          initial_bounds.getWidth() - (padding * 2),

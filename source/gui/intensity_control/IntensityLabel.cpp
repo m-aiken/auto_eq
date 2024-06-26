@@ -5,8 +5,9 @@
 /*---------------------------------------------------------------------------
 **
 */
-IntensityLabel::IntensityLabel(const juce::String& text)
+IntensityLabel::IntensityLabel(const juce::String& text, const juce::Justification justification)
     : juce::Label("EQ_INTENSITY_LABEL_" + text, text)
+    , justification_(justification)
 {
     setFont(Theme::getFont());
 }
@@ -23,7 +24,7 @@ IntensityLabel::paint(juce::Graphics& g)
     }
 
     g.setColour(Theme::getColour(Theme::TEXT));
-    g.drawFittedText(getText(), getLocalBounds(), juce::Justification::centred, 1);
+    g.drawFittedText(getText(), getLocalBounds(), justification_, 1);
 }
 
 /*---------------------------------------------------------------------------
