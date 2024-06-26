@@ -19,8 +19,9 @@
 /*static*/ const Theme::DarkLightPair Theme::FILTER_RESPONSE_PATH = DarkLightPair(RED_ORANGE.withAlpha(0.4f),
                                                                                   RED_ORANGE.withAlpha(0.4f));
 
-/*static*/ const Theme::DarkLightPair Theme::METER_VALUE = DarkLightPair(TEAL, TEAL);
-/*static*/ const Theme::DarkLightPair Theme::METER_BACKGROUND = DarkLightPair(TEAL.withAlpha(0.1f), TEAL.withAlpha(0.1f));
+/*static*/ const Theme::DarkLightPair Theme::METER_VALUE      = DarkLightPair(TEAL, TEAL);
+/*static*/ const Theme::DarkLightPair Theme::METER_BACKGROUND = DarkLightPair(WHITE.withAlpha(0.05f),
+                                                                              DARK_GREY.withAlpha(0.1f));
 
 /*static*/ const Theme::DarkLightPair Theme::ROTARY_FILL = DarkLightPair(TEAL.withAlpha(0.1f),
                                                                          RED_ORANGE.withAlpha(0.1f));
