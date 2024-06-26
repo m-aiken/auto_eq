@@ -1,4 +1,5 @@
 #include "IntensityControl.h"
+#include "../look_and_feel/Theme.h"
 #include "../../utility/GlobalConstants.h"
 
 /*---------------------------------------------------------------------------
@@ -26,6 +27,9 @@ IntensityControl::paint(juce::Graphics& g)
         g.setColour(juce::Colours::lightblue);
         g.drawRect(getLocalBounds());
     }
+
+    g.setColour(Theme::getColour(Theme::SECTION_BORDER));
+    g.drawRect(getLocalBounds());
 }
 
 /*---------------------------------------------------------------------------

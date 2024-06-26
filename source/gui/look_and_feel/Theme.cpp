@@ -7,8 +7,11 @@
 /*static*/ const juce::Colour Theme::EGGSHELL   = juce::Colour(254, 239, 221);
 /*static*/ const juce::Colour Theme::TEAL       = juce::Colour(80, 178, 192);
 
-/*static*/ const Theme::DarkLightPair Theme::MAIN_BG              = DarkLightPair(DARK_GREY, WHITE);
-/*static*/ const Theme::DarkLightPair Theme::TEXT                 = DarkLightPair(EGGSHELL, DARK_GREY);
+/*static*/ const Theme::DarkLightPair Theme::MAIN_BG        = DarkLightPair(DARK_GREY, WHITE);
+/*static*/ const Theme::DarkLightPair Theme::TEXT           = DarkLightPair(EGGSHELL, DARK_GREY);
+/*static*/ const Theme::DarkLightPair Theme::SECTION_BORDER = DarkLightPair(WHITE.withAlpha(0.05f),
+                                                                            DARK_GREY.withAlpha(0.1f));
+
 /*static*/ const Theme::DarkLightPair Theme::ANALYSER_GRID        = DarkLightPair(EGGSHELL, DARK_GREY);
 /*static*/ const Theme::DarkLightPair Theme::GRAPH_0DB_MARKER     = DarkLightPair(RED_ORANGE, RED_ORANGE);
 /*static*/ const Theme::DarkLightPair Theme::FFT_PRIMARY_PRE_EQ   = DarkLightPair(TEAL.withAlpha(0.2f),

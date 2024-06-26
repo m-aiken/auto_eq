@@ -1,4 +1,5 @@
 #include "Menu.h"
+#include "../look_and_feel/Theme.h"
 #include "../../utility/GlobalConstants.h"
 
 /*---------------------------------------------------------------------------
@@ -19,6 +20,9 @@ Menu::paint(juce::Graphics& g)
         g.setColour(juce::Colours::green);
         g.drawRect(getLocalBounds());
     }
+
+    g.setColour(Theme::getColour(Theme::SECTION_BORDER));
+    g.drawRect(getLocalBounds());
 }
 
 /*---------------------------------------------------------------------------
