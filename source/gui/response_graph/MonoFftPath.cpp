@@ -3,12 +3,16 @@
 /*---------------------------------------------------------------------------
 **
 */
-MonoFftPath::MonoFftPath(MonoFftBuffer& fft_buffer, Theme::DarkLightPair path_colour, Global::PATH_DISPLAY_MODE display_mode)
+MonoFftPath::MonoFftPath(MonoFftBuffer&              fft_buffer,
+                         Theme::DarkLightPair        path_colour,
+                         Global::PATH_DISPLAY_MODE   display_mode,
+                         juce::RangedAudioParameter* fft_enablement_param)
     : fft_(MonoFftBuffer::FFT_ORDER)
     , windowing_fn_(MonoFftBuffer::FFT_SIZE, juce::dsp::WindowingFunction< float >::blackmanHarris)
     , fft_buffer_(fft_buffer)
     , path_colour_(path_colour)
     , display_mode_(display_mode)
+    , fft_enablement_param_(fft_enablement_param)
 {
     std::fill(fft_data_.begin(), fft_data_.end(), 0.f);
 
@@ -29,9 +33,9 @@ MonoFftPath::~MonoFftPath()
 void
 MonoFftPath::paint(juce::Graphics& g)
 {
-    if (path_.isEmpty()) {
-        return;
-    }
+    //    if (path_.isEmpty()) {
+    //        return;
+    //    }
 
     g.setColour(Theme::getColour(path_colour_));
 
@@ -49,8 +53,14 @@ MonoFftPath::paint(juce::Graphics& g)
 void
 MonoFftPath::timerCallback()
 {
-    processFftData();
-    generatePath();
+    if (fft_enablement_param_ != nullptr && fft_enablement_param_->getValue()) {
+        processFftData();
+        generatePath();
+    }
+    else {
+        path_.clear();
+    }
+
     repaint();
 }
 

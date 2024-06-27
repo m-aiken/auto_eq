@@ -10,7 +10,9 @@ RotaryControl::RotaryControl(juce::AudioProcessorValueTreeState& apvts, const ju
 {
     slider_attachment_.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(apvts, parameter_id, *this));
 
-    param_->addListener(this);
+    if (param_ != nullptr) {
+        param_->addListener(this);
+    }
 
     setMouseCursor(juce::MouseCursor::UpDownLeftRightResizeCursor);
 }
@@ -20,7 +22,9 @@ RotaryControl::RotaryControl(juce::AudioProcessorValueTreeState& apvts, const ju
 */
 RotaryControl::~RotaryControl()
 {
-    param_->removeListener(this);
+    if (param_ != nullptr) {
+        param_->removeListener(this);
+    }
 }
 
 /*---------------------------------------------------------------------------

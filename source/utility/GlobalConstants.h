@@ -12,7 +12,6 @@ static const float MIN_HZ = 20.f;
 static const float MAX_HZ = 20000.f;
 
 static bool SHOW_DEBUG_BOUNDS = false;
-static bool PROCESS_FFT       = true;
 
 enum PATH_DISPLAY_MODE {
     PATH_STROKE,
@@ -76,4 +75,29 @@ namespace FFT
 
 }  // namespace FFT
 
-}  //namespace Global
+}  // namespace Global
+
+namespace GuiParams
+{
+
+enum PARAM_ID {
+    EQ_INTENSITY,
+    SHOW_FFT_PRIMARY_PRE_EQ,
+    SHOW_FFT_PRIMARY_POST_EQ,
+    SHOW_FFT_SIDECHAIN,
+};
+
+static const std::map< PARAM_ID, juce::String > PARAM_NAME_MAP = {
+    { EQ_INTENSITY, "EQ_INTENSITY" },
+    { SHOW_FFT_PRIMARY_PRE_EQ, "SHOW_FFT_PRIMARY_PRE_EQ" },
+    { SHOW_FFT_PRIMARY_POST_EQ, "SHOW_FFT_PRIMARY_POST_EQ" },
+    { SHOW_FFT_SIDECHAIN, "SHOW_FFT_SIDECHAIN" },
+};
+
+static const juce::String
+getName(PARAM_ID param_id)
+{
+    return PARAM_NAME_MAP.at(param_id);
+}
+
+}  // namespace GuiParams

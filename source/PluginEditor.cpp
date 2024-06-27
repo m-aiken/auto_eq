@@ -8,6 +8,7 @@
 PluginEditor::PluginEditor(PluginProcessor& p)
     : AudioProcessorEditor(&p)
     , processor_ref_(p)
+    , fft_menu_(p.getApvts())
     , menu_()
     , filter_res_graph_(p)
     , intensity_control_(p.getApvts())
@@ -15,6 +16,7 @@ PluginEditor::PluginEditor(PluginProcessor& p)
 {
     setLookAndFeel(&lnf_);
 
+    addAndMakeVisible(fft_menu_);
     addAndMakeVisible(menu_);
     addAndMakeVisible(filter_res_graph_);
     addAndMakeVisible(intensity_control_);
@@ -60,8 +62,9 @@ PluginEditor::resized()
     auto meters_width    = bounds_width * 0.75;
     auto intensity_width = bounds_width * 0.25;
 
-    menu_.setBounds(0, 0, bounds_width, menu_height);
-    filter_res_graph_.setBounds(0, menu_.getBottom(), bounds_width, graph_height);
+    fft_menu_.setBounds(0, 0, bounds_width * 0.7, menu_height);
+    //    menu_.setBounds(0, 0, bounds_width, menu_height);
+    filter_res_graph_.setBounds(0, menu_height, bounds_width, graph_height);
     intensity_control_.setBounds(0, filter_res_graph_.getBottom(), intensity_width, meters_height);
     meter_group_.setBounds(intensity_control_.getRight(), filter_res_graph_.getBottom(), meters_width, meters_height);
 

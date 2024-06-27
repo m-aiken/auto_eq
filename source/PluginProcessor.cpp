@@ -232,7 +232,7 @@ PluginProcessor::processBlock(juce::AudioBuffer< float >& buffer, juce::MidiBuff
     // Give the untouched input signal to the analysis filters.
     input_analysis_filter_.pushBufferForAnalysis(buffer);
 
-    if (Global::PROCESS_FFT) {
+    if (*apvts_.getRawParameterValue(GuiParams::getName(GuiParams::SHOW_FFT_SIDECHAIN))) {
         // Sidechain/Ambient FFT buffers (not affected by EQ).
         for (int i = 0; i < buffer.getNumSamples(); ++i) {
             fft_buffers_.at(Global::FFT::SIDECHAIN_LEFT)
@@ -242,7 +242,7 @@ PluginProcessor::processBlock(juce::AudioBuffer< float >& buffer, juce::MidiBuff
         }
     }
 
-    if (Global::PROCESS_FFT) {
+    if (*apvts_.getRawParameterValue(GuiParams::getName(GuiParams::SHOW_FFT_PRIMARY_PRE_EQ))) {
         // Primary/Playback FFT buffers (PRE EQ).
         for (int i = 0; i < buffer.getNumSamples(); ++i) {
             fft_buffers_.at(Global::FFT::PRIMARY_LEFT_PRE_EQ)
@@ -267,7 +267,7 @@ PluginProcessor::processBlock(juce::AudioBuffer< float >& buffer, juce::MidiBuff
     filter_chain_left_.process(process_context_left);
     filter_chain_right_.process(process_context_right);
 
-    if (Global::PROCESS_FFT) {
+    if (*apvts_.getRawParameterValue(GuiParams::getName(GuiParams::SHOW_FFT_PRIMARY_POST_EQ))) {
         // Primary/Playback FFT buffers (POST EQ).
         for (int i = 0; i < buffer.getNumSamples(); ++i) {
             fft_buffers_.at(Global::FFT::PRIMARY_LEFT_POST_EQ)
@@ -400,7 +400,7 @@ void
 PluginProcessor::updateFilterCoefficients()
 {
     double sample_rate = getSampleRate();
-    float  intensity   = apvts_.getParameter("EQ_INTENSITY")->getValue();
+    float  intensity   = apvts_.getParameter(GuiParams::getName(GuiParams::EQ_INTENSITY))->getValue();
 
     for (uint8 i = 0; i < Equalizer::NUM_BANDS; ++i) {
         Equalizer::BAND_ID band_id     = static_cast< Equalizer::BAND_ID >(i);
@@ -481,10 +481,19 @@ PluginProcessor::getParameterLayout()
 {
     juce::AudioProcessorValueTreeState::ParameterLayout pl;
 
-    pl.add(std::make_unique< juce::AudioParameterFloat >(juce::ParameterID("EQ_INTENSITY", 1),
-                                                         "EQ_INTENSITY",
+    juce::String intensity        = GuiParams::getName(GuiParams::EQ_INTENSITY);
+    juce::String fft_primary_pre  = GuiParams::getName(GuiParams::SHOW_FFT_PRIMARY_PRE_EQ);
+    juce::String fft_primary_post = GuiParams::getName(GuiParams::SHOW_FFT_PRIMARY_POST_EQ);
+    juce::String fft_sidechain    = GuiParams::getName(GuiParams::SHOW_FFT_SIDECHAIN);
+
+    pl.add(std::make_unique< juce::AudioParameterFloat >(juce::ParameterID(intensity, 1),
+                                                         intensity,
                                                          juce::NormalisableRange< float >(0.f, 1.f, 0.01f, 1.f),
                                                          1.f));
+
+    pl.add(std::make_unique< juce::AudioParameterBool >(juce::ParameterID(fft_primary_pre, 1), fft_primary_pre, true));
+    pl.add(std::make_unique< juce::AudioParameterBool >(juce::ParameterID(fft_primary_post, 1), fft_primary_post, true));
+    pl.add(std::make_unique< juce::AudioParameterBool >(juce::ParameterID(fft_sidechain, 1), fft_sidechain, true));
 
     return pl;
 }

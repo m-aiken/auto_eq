@@ -10,31 +10,42 @@ FilterResponseGraph::FilterResponseGraph(PluginProcessor& p)
     : db_scale_(Equalizer::MAX_BAND_DB_CUT, Equalizer::MAX_BAND_DB_BOOST, 6)
     , response_curve_(p)
 {
-    PluginProcessor::FftBuffers& fft_buffers = p.getFftBuffers();
+    PluginProcessor::FftBuffers&        fft_buffers = p.getFftBuffers();
+    juce::AudioProcessorValueTreeState& apvts       = p.getApvts();
+
+    juce::String enable_fft_primary_pre_param_id  = GuiParams::getName(GuiParams::SHOW_FFT_PRIMARY_PRE_EQ);
+    juce::String enable_fft_primary_post_param_id = GuiParams::getName(GuiParams::SHOW_FFT_PRIMARY_POST_EQ);
+    juce::String enable_fft_sidechain_param_id    = GuiParams::getName(GuiParams::SHOW_FFT_SIDECHAIN);
 
     fft_path_primary_pre_eq_l_ = std::make_unique< MonoFftPath >(fft_buffers.at(Global::FFT::PRIMARY_LEFT_PRE_EQ),
                                                                  Theme::FFT_PRIMARY_PRE_EQ,
-                                                                 Global::PATH_FILL);
+                                                                 Global::PATH_FILL,
+                                                                 apvts.getParameter(enable_fft_primary_pre_param_id));
 
     fft_path_primary_pre_eq_r_ = std::make_unique< MonoFftPath >(fft_buffers.at(Global::FFT::PRIMARY_RIGHT_PRE_EQ),
                                                                  Theme::FFT_PRIMARY_PRE_EQ,
-                                                                 Global::PATH_FILL);
+                                                                 Global::PATH_FILL,
+                                                                 apvts.getParameter(enable_fft_primary_pre_param_id));
 
     fft_path_primary_post_eq_l_ = std::make_unique< MonoFftPath >(fft_buffers.at(Global::FFT::PRIMARY_LEFT_POST_EQ),
                                                                   Theme::FFT_PRIMARY_POST_EQ,
-                                                                  Global::PATH_STROKE);
+                                                                  Global::PATH_STROKE,
+                                                                  apvts.getParameter(enable_fft_primary_post_param_id));
 
     fft_path_primary_post_eq_r_ = std::make_unique< MonoFftPath >(fft_buffers.at(Global::FFT::PRIMARY_RIGHT_POST_EQ),
                                                                   Theme::FFT_PRIMARY_POST_EQ,
-                                                                  Global::PATH_STROKE);
+                                                                  Global::PATH_STROKE,
+                                                                  apvts.getParameter(enable_fft_primary_post_param_id));
 
     fft_path_sidechain_l_ = std::make_unique< MonoFftPath >(fft_buffers.at(Global::FFT::SIDECHAIN_LEFT),
                                                             Theme::FFT_SIDECHAIN,
-                                                            Global::PATH_FILL);
+                                                            Global::PATH_FILL,
+                                                            apvts.getParameter(enable_fft_sidechain_param_id));
 
     fft_path_sidechain_r_ = std::make_unique< MonoFftPath >(fft_buffers.at(Global::FFT::SIDECHAIN_RIGHT),
                                                             Theme::FFT_SIDECHAIN,
-                                                            Global::PATH_FILL);
+                                                            Global::PATH_FILL,
+                                                            apvts.getParameter(enable_fft_sidechain_param_id));
 
     addAndMakeVisible(backdrop_);
     addAndMakeVisible(db_scale_);

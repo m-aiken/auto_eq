@@ -9,7 +9,7 @@ IntensityControl::IntensityControl(juce::AudioProcessorValueTreeState& apvts)
     : widget_label_("INTENSITY", juce::Justification::centredLeft)
     , min_label_("OFF")
     , max_label_("MAX")
-    , rotary_(apvts, "EQ_INTENSITY")
+    , rotary_(apvts, GuiParams::getName(GuiParams::EQ_INTENSITY))
 {
     addAndMakeVisible(widget_label_);
     addAndMakeVisible(min_label_);

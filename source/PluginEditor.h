@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PluginProcessor.h"
+#include "gui/fft_menu/FftMenu.h"
 #include "gui/intensity_control/IntensityControl.h"
 #include "gui/look_and_feel/CustomLookAndFeel.h"
 #include "gui/menu/Menu.h"
@@ -25,6 +26,7 @@ private:
     // access the processor object that created it.
     PluginProcessor& processor_ref_;
 
+    FftMenu             fft_menu_;
     Menu                menu_;
     FilterResponseGraph filter_res_graph_;
     IntensityControl    intensity_control_;
