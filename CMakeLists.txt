@@ -49,8 +49,6 @@ target_sources(${PROJECT_NAME}
         source/gui/intensity_control/IntensityLabel.cpp
         source/gui/look_and_feel/CustomLookAndFeel.cpp
         source/gui/look_and_feel/Theme.cpp
-        source/gui/menu/Menu.cpp
-        source/gui/menu/ThemeButton.cpp
         source/gui/meters/MeterCanvas.cpp
         source/gui/meters/MeterDbScale.cpp
         source/gui/meters/MeterGroup.cpp
@@ -63,6 +61,7 @@ target_sources(${PROJECT_NAME}
         source/gui/response_graph/FilterResponseGraph.cpp
         source/gui/response_graph/FrequencyMarkers.cpp
         source/gui/response_graph/MonoFftPath.cpp
+        source/gui/theme_button/ThemeButton.cpp
         source/gui/widgets/RotaryControl.cpp
         )
 

@@ -41,17 +41,10 @@ FftMenu::resized()
 {
     using Tr = juce::Grid::TrackInfo;
     using Fr = juce::Grid::Fr;
+    using Px = juce::Grid::Px;
 
     juce::Grid grid;
 
-#if 0
-    grid.autoColumns  = Tr(Fr(1));
-    grid.templateRows = {
-        Tr(Fr(1)),
-        Tr(Fr(1)),
-        Tr(Fr(1)),
-    };
-#endif
     grid.autoRows        = Tr(Fr(1));
     grid.templateColumns = { Tr(Fr(1)), Tr(Fr(8)), Tr(Fr(1)), Tr(Fr(8)), Tr(Fr(1)), Tr(Fr(8)) };
 
@@ -62,6 +55,7 @@ FftMenu::resized()
     grid.items.add(juce::GridItem(sidechain_button_));
     grid.items.add(juce::GridItem(sidechain_label_));
 
+    grid.setGap(Px { 4 });
     grid.performLayout(getLocalBounds());
 }
 

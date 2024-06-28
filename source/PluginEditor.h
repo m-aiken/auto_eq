@@ -4,9 +4,9 @@
 #include "gui/fft_menu/FftMenu.h"
 #include "gui/intensity_control/IntensityControl.h"
 #include "gui/look_and_feel/CustomLookAndFeel.h"
-#include "gui/menu/Menu.h"
 #include "gui/meters/MeterGroup.h"
 #include "gui/response_graph/FilterResponseGraph.h"
+#include "gui/theme_button/ThemeButton.h"
 
 class PluginEditor final
     : public juce::AudioProcessorEditor
@@ -27,7 +27,7 @@ private:
     PluginProcessor& processor_ref_;
 
     FftMenu             fft_menu_;
-    Menu                menu_;
+    ThemeButton         theme_button_;
     FilterResponseGraph filter_res_graph_;
     IntensityControl    intensity_control_;
     MeterGroup          meter_group_;
