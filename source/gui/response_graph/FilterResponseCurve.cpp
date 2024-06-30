@@ -1,6 +1,5 @@
 #include "FilterResponseCurve.h"
 #include "../look_and_feel/Theme.h"
-#include "../../dsp/Equalizer.h"
 #include "../../utility/GlobalConstants.h"
 
 /*---------------------------------------------------------------------------
@@ -8,9 +7,9 @@
 */
 FilterResponseCurve::FilterResponseCurve(PluginProcessor& p)
     : processor_ref_(p)
+    , x_coordinates_calculated_(false)
     , should_repaint_(true)
 {
-    //    addApvtsListeners();
     startTimerHz(60);
 }
 
@@ -20,7 +19,6 @@ FilterResponseCurve::FilterResponseCurve(PluginProcessor& p)
 FilterResponseCurve::~FilterResponseCurve()
 {
     stopTimer();
-    //    removeApvtsListeners();
 }
 
 /*---------------------------------------------------------------------------
@@ -29,7 +27,7 @@ FilterResponseCurve::~FilterResponseCurve()
 void
 FilterResponseCurve::paint(juce::Graphics& g)
 {
-    if (path_.isEmpty() || magnitudes_.size() == 0) {
+    if (!x_coordinates_calculated_ || magnitudes_.size() == 0) {
         return;
     }
 
@@ -37,17 +35,12 @@ FilterResponseCurve::paint(juce::Graphics& g)
     auto bounds_width = bounds.getWidth();
     auto centre_y     = bounds.getCentreY();
 
-    //    g.strokePath(path_, juce::PathStrokeType(2.f));
-
     // Draw the filter response at each band.
     g.setColour(Theme::getColour(Theme::FILTER_RESPONSE_PATH));
 
     for (uint8 i = 0; i < Equalizer::NUM_BANDS; ++i) {
-        float band_hz   = Equalizer::getBandHz(static_cast< Equalizer::BAND_ID >(i));
-        float scaled_hz = juce::mapFromLog10< float >(band_hz, Global::MIN_HZ, Global::MAX_HZ);
-        int   x_raw     = static_cast< int >(std::floor(bounds_width * scaled_hz));
-        int   x         = juce::jmin< int >(x_raw, magnitudes_.size() - 1);
-        int   y         = getYCoordinateFromMagnitude(magnitudes_.at(x));
+        int x = x_coordinates_.at(i);
+        int y = getYCoordinateFromMagnitude(magnitudes_.at(x));
 
         int bar_width      = 8;
         int half_bar_width = 4;
@@ -80,35 +73,12 @@ FilterResponseCurve::paint(juce::Graphics& g)
 void
 FilterResponseCurve::resized()
 {
-    // Initialise the magnitudes vector and the subsequent path.
-    // We're doing this via the resized method because the vector needs to be
-    // initialised to the size of the component bounds width.
-    // The bounds aren't known in the constructor.
+    // Initialise the magnitudes vector and x coordinates.
+    // We're doing this via the resized method because both need to know the
+    // component's bounds, which aren't known in the constructor.
     resetMagnitudesVector();
-    plotPath();
+    calculateXCoordinates();
 }
-#if 0
-/*---------------------------------------------------------------------------
-**
-*/
-void
-FilterResponseCurve::parameterValueChanged(int parameter_index, float new_value)
-{
-    juce::ignoreUnused(parameter_index, new_value);
-
-    should_repaint_.set(true);
-}
-
-/*---------------------------------------------------------------------------
-**
-*/
-void
-FilterResponseCurve::parameterGestureChanged(int parameter_index, bool gesture_is_starting)
-{
-    // Do nothing - only implemented because it's pure virtual.
-    juce::ignoreUnused(parameter_index, gesture_is_starting);
-}
-#endif
 
 /*---------------------------------------------------------------------------
 **
@@ -118,7 +88,6 @@ FilterResponseCurve::timerCallback()
 {
     //    if (should_repaint_.compareAndSetBool(false, true)) {
     calculateMagnitudes();
-    plotPath();
     repaint();
     //    }
 }
@@ -235,53 +204,22 @@ FilterResponseCurve::getBandBarHeight(double magnitude)
 **
 */
 void
-FilterResponseCurve::plotPath()
+FilterResponseCurve::calculateXCoordinates()
 {
-    if (magnitudes_.size() == 0) {
-        return;
-    }
-
-    path_.clear();
-
-    path_.startNewSubPath(0, getYCoordinateFromMagnitude(magnitudes_.front()));
-
-    for (size_t i = 1; i < magnitudes_.size(); ++i) {
-        path_.lineTo(i, getYCoordinateFromMagnitude(magnitudes_.at(i)));
-    }
-}
-#if 0
-/*---------------------------------------------------------------------------
-**
-*/
-void
-FilterResponseCurve::addApvtsListeners()
-{
-    juce::AudioProcessorValueTreeState& apvts = processor_ref_.getApvts();
+    auto bounds       = getLocalBounds();
+    auto bounds_width = bounds.getWidth();
 
     for (uint8 i = 0; i < Equalizer::NUM_BANDS; ++i) {
-        Equalizer::BAND_ID band_id  = static_cast< Equalizer::BAND_ID >(i);
-        juce::String       param_id = Equalizer::getBandName(band_id);
+        float band_hz   = Equalizer::getBandHz(static_cast< Equalizer::BAND_ID >(i));
+        float scaled_hz = juce::mapFromLog10< float >(band_hz, Global::MIN_HZ, Global::MAX_HZ);
+        int   x_raw     = static_cast< int >(std::floor(bounds_width * scaled_hz));
+        int   x         = juce::jmin< int >(x_raw, magnitudes_.size() - 1);
 
-        apvts.getParameter(param_id)->addListener(this);
+        x_coordinates_.at(i) = x;
     }
+
+    x_coordinates_calculated_ = true;
 }
-
-/*---------------------------------------------------------------------------
-**
-*/
-void
-FilterResponseCurve::removeApvtsListeners()
-{
-    juce::AudioProcessorValueTreeState& apvts = processor_ref_.getApvts();
-
-    for (uint8 i = 0; i < Equalizer::NUM_BANDS; ++i) {
-        Equalizer::BAND_ID band_id  = static_cast< Equalizer::BAND_ID >(i);
-        juce::String       param_id = Equalizer::getBandName(band_id);
-
-        apvts.getParameter(param_id)->removeListener(this);
-    }
-}
-#endif
 
 /*---------------------------------------------------------------------------
 ** End of File
