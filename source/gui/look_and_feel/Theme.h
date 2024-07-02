@@ -31,6 +31,8 @@ public:
     static const DarkLightPair ROTARY_FILL;
     static const DarkLightPair ROTARY_ARC;
 
+    static const DarkLightPair CHECKBOX;
+
     static bool dark_mode;
 
 public:

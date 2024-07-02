@@ -44,7 +44,6 @@ target_sources(${PROJECT_NAME}
         source/dsp/MonoFftBuffer.cpp
         source/gui/fft_menu/FftMenu.cpp
         source/gui/fft_menu/FftMenuButton.cpp
-        source/gui/fft_menu/FftMenuLabel.cpp
         source/gui/intensity_control/IntensityControl.cpp
         source/gui/intensity_control/IntensityLabel.cpp
         source/gui/look_and_feel/CustomLookAndFeel.cpp

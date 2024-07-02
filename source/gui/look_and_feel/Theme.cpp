@@ -30,6 +30,8 @@
                                                                          RED_ORANGE.withAlpha(0.1f));
 /*static*/ const Theme::DarkLightPair Theme::ROTARY_ARC  = DarkLightPair(TEAL, RED_ORANGE);
 
+/*static*/ const Theme::DarkLightPair Theme::CHECKBOX = DarkLightPair(EGGSHELL, DARK_GREY);
+
 /*static*/ bool Theme::dark_mode = true;
 
 /*---------------------------------------------------------------------------
