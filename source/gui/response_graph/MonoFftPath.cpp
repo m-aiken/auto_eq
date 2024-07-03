@@ -79,7 +79,7 @@ MonoFftPath::processFftData()
                                           MonoFftBuffer::NUM_BINS + 1);
 
     for (size_t i = 0; i < fft_data_.size(); ++i) {
-        fft_data_.at(i) = juce::Decibels::gainToDecibels(fft_data_.at(i), Global::NEG_INF);
+        fft_data_.at(i) = juce::Decibels::gainToDecibels(fft_data_.at(i), Global::MAX_DB_CUT);
     }
 }
 
@@ -96,10 +96,6 @@ MonoFftPath::generatePath()
     auto   bounds_height = bounds.getHeight();
     size_t num_bins      = MonoFftBuffer::NUM_BINS;
     float  bin_width     = static_cast< float >(fft_buffer_.getBinWidth());
-
-    auto getYCoordinate = [&](const float& sample) -> float {
-        return juce::jmap< float >(sample, Global::NEG_INF, Global::MAX_DB, bounds_height, bounds_y);
-    };
 
     auto y_coord = getYCoordinate(fft_data_.at(0));
 
@@ -132,6 +128,19 @@ MonoFftPath::generatePath()
 
     path_.lineTo(bounds_width, bounds_height);
     path_.closeSubPath();
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
+float
+MonoFftPath::getYCoordinate(const float& sample)
+{
+    auto bounds        = getLocalBounds();
+    auto bounds_y      = bounds.getY();
+    auto bounds_height = bounds.getHeight();
+
+    return juce::jmap< float >(sample, Global::MAX_DB_CUT, Global::MAX_DB_BOOST, bounds_height, bounds_y);
 }
 
 /*---------------------------------------------------------------------------

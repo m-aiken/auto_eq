@@ -86,5 +86,11 @@ private:
     SmoothedFloat lufs_l_;
     SmoothedFloat lufs_r_;
 
+#ifdef TEST_FFT_ACCURACY
+    juce::dsp::Oscillator< float > fft_test_tone_;
+    juce::dsp::Gain< float >       fft_test_tone_gain_;
+#endif
+    void updateFftTestTone();
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PluginProcessor)
 };

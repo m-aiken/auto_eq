@@ -5,10 +5,10 @@
 /*---------------------------------------------------------------------------
 **
 */
-DecibelMarkers::DecibelMarkers(float min_value, float max_value, uint8 db_interval)
-    : min_value_(min_value)
-    , max_value_(max_value)
-    , db_interval_(db_interval)
+DecibelMarkers::DecibelMarkers()
+    : min_value_(Global::MAX_DB_CUT)
+    , max_value_(Global::MAX_DB_BOOST)
+    , db_interval_(6)
 {
 }
 

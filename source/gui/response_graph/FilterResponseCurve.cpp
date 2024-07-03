@@ -164,7 +164,7 @@ FilterResponseCurve::calculateMagnitudes()
         mag *= filter_chain.get< Equalizer::B30 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
         mag *= filter_chain.get< Equalizer::B31 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
 
-        magnitudes_.at(i) = juce::Decibels::gainToDecibels< double >(mag, Global::NEG_INF);
+        magnitudes_.at(i) = juce::Decibels::gainToDecibels< double >(mag, Global::MAX_DB_CUT);
     }
 }
 
@@ -178,11 +178,7 @@ FilterResponseCurve::getYCoordinateFromMagnitude(double magnitude)
     auto bounds_top    = bounds.getY();
     auto bounds_bottom = bounds.getBottom();
 
-    double y = juce::jmap< double >(magnitude,
-                                    Equalizer::MAX_BAND_DB_CUT,
-                                    Equalizer::MAX_BAND_DB_BOOST,
-                                    bounds_bottom,
-                                    bounds_top);
+    double y = juce::jmap< double >(magnitude, Global::MAX_DB_CUT, Global::MAX_DB_BOOST, bounds_bottom, bounds_top);
 
     return static_cast< int >(std::floor(y));
 }

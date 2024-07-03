@@ -183,6 +183,20 @@ PluginProcessor::prepareToPlay(double sample_rate, int samples_per_block)
 
     // Start the thread the band updater loop lives on.
     band_updater_.startPolling();
+
+#ifdef TEST_FFT_ACCURACY
+    juce::dsp::ProcessSpec fft_test_spec;
+
+    fft_test_spec.sampleRate       = sample_rate;
+    fft_test_spec.maximumBlockSize = samples_per_block;
+    fft_test_spec.numChannels      = 1;
+
+    fft_test_tone_.prepare(fft_test_spec);
+    fft_test_tone_.initialise([](float f) { return std::sin(f); });
+    fft_test_tone_gain_.prepare(fft_test_spec);
+
+    updateFftTestTone();
+#endif
 }
 
 /*---------------------------------------------------------------------------
@@ -229,6 +243,18 @@ PluginProcessor::processBlock(juce::AudioBuffer< float >& buffer, juce::MidiBuff
         buffer.clear(i, 0, buffer.getNumSamples());
     }
 
+#ifdef TEST_FFT_ACCURACY
+    // Sine tone to test the FFT accuracy.
+    buffer.clear();
+
+    juce::dsp::AudioBlock< float >              fft_test_block(buffer);
+    juce::dsp::ProcessContextReplacing< float > fft_test_context(fft_test_block);
+
+    updateFftTestTone();
+    fft_test_tone_.process(fft_test_context);
+    fft_test_tone_gain_.process(fft_test_context);
+#endif
+
     // Give the untouched input signal to the analysis filters.
     input_analysis_filter_.pushBufferForAnalysis(buffer);
 
@@ -251,6 +277,12 @@ PluginProcessor::processBlock(juce::AudioBuffer< float >& buffer, juce::MidiBuff
                 .pushNextSample(buffer.getSample(Global::Channels::PRIMARY_RIGHT, i));
         }
     }
+
+#ifdef TEST_FFT_ACCURACY
+    // Clear the buffer so that the oscillator tone isn't processed by the filters
+    // (and we don't have to listen to it).
+    buffer.clear();
+#endif
 
     // Update the filters from the new band values.
     updateFilterCoefficients();
@@ -469,7 +501,7 @@ PluginProcessor::getNormalisedValue(float full_range_value)
 {
     // The gain factor that needs to be supplied to the filters works on a >1 boost, <1 attenuate basis.
     // Map our -12 to +12 values to a 0 to 2 range (so 1 is the central "do nothing" point).
-    return juce::jmap< float >(full_range_value, Equalizer::MAX_BAND_DB_CUT, Equalizer::MAX_BAND_DB_BOOST, 0.f, 2.f);
+    return juce::jmap< float >(full_range_value, Global::MAX_DB_CUT, Global::MAX_DB_BOOST, 0.f, 2.f);
 }
 
 /*---------------------------------------------------------------------------
@@ -495,7 +527,49 @@ PluginProcessor::getParameterLayout()
     pl.add(std::make_unique< juce::AudioParameterBool >(juce::ParameterID(fft_primary_post, 1), fft_primary_post, true));
     pl.add(std::make_unique< juce::AudioParameterBool >(juce::ParameterID(fft_sidechain, 1), fft_sidechain, true));
 
+#ifdef TEST_FFT_ACCURACY
+    juce::String fft_test_hz = GuiParams::getName(GuiParams::FFT_ACCURACY_TEST_TONE_HZ);
+    juce::String fft_test_db = GuiParams::getName(GuiParams::FFT_ACCURACY_TEST_TONE_DB);
+
+    pl.add(std::make_unique< juce::AudioParameterFloat >(
+        juce::ParameterID(fft_test_hz, 1),
+        fft_test_hz,
+        juce::NormalisableRange< float >(Global::MIN_HZ, Global::MAX_HZ, 1.f, 1.f),
+        1000.f));
+
+    pl.add(std::make_unique< juce::AudioParameterFloat >(
+        juce::ParameterID(fft_test_db, 1),
+        fft_test_db,
+        juce::NormalisableRange< float >(Global::MAX_DB_CUT, Global::MAX_DB_BOOST, 1.f, 1.f),
+        0.f));
+#endif
+
     return pl;
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
+void
+PluginProcessor::updateFftTestTone()
+{
+#ifdef TEST_FFT_ACCURACY
+    juce::RangedAudioParameter* test_tone_hz_param = apvts_.getParameter(
+        GuiParams::getName(GuiParams::FFT_ACCURACY_TEST_TONE_HZ));
+
+    juce::RangedAudioParameter* test_tone_db_param = apvts_.getParameter(
+        GuiParams::getName(GuiParams::FFT_ACCURACY_TEST_TONE_DB));
+
+    if (test_tone_hz_param != nullptr) {
+        float frequency = juce::jmap< float >(test_tone_hz_param->getValue(), 0.f, 1.f, Global::MIN_HZ, Global::MAX_HZ);
+        fft_test_tone_.setFrequency(frequency);
+    }
+
+    if (test_tone_db_param != nullptr) {
+        float db = juce::jmap< float >(test_tone_db_param->getValue(), 0.f, 1.f, Global::MAX_DB_CUT, Global::MAX_DB_BOOST);
+        fft_test_tone_gain_.setGainDecibels(db);
+    }
+#endif
 }
 
 /*---------------------------------------------------------------------------

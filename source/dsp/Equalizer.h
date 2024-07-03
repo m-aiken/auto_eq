@@ -41,8 +41,6 @@ public:
 public:
     static constexpr uint8 NUM_BANDS = 31;
 
-    static const float MAX_BAND_DB_BOOST;
-    static const float MAX_BAND_DB_CUT;
     static const float DEFAULT_BAND_DB;
     static const float DEFAULT_BAND_Q;
 

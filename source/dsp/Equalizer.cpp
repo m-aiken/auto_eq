@@ -1,9 +1,8 @@
 #include "Equalizer.h"
+#include "../utility/GlobalConstants.h"
 
-/*static*/ const float Equalizer::MAX_BAND_DB_BOOST = 12.f;
-/*static*/ const float Equalizer::MAX_BAND_DB_CUT   = -12.f;
-/*static*/ const float Equalizer::DEFAULT_BAND_DB   = 0.f;
-/*static*/ const float Equalizer::DEFAULT_BAND_Q    = 2.f;
+/*static*/ const float Equalizer::DEFAULT_BAND_DB = 0.f;
+/*static*/ const float Equalizer::DEFAULT_BAND_Q  = 2.f;
 
 /*static*/ const int Equalizer::PARAMETERS_VERSION_HINT = 1;
 
@@ -188,7 +187,7 @@ Equalizer::getBandTargetDb(BAND_ID band_id)
 /*static*/ void
 Equalizer::addBandToParameterLayout(juce::AudioProcessorValueTreeState::ParameterLayout& pl, BAND_ID band_id)
 {
-    auto db_range = juce::NormalisableRange< float >(MAX_BAND_DB_CUT, MAX_BAND_DB_BOOST, 0.5f, 1.f);
+    auto db_range = juce::NormalisableRange< float >(Global::MAX_DB_CUT, Global::MAX_DB_BOOST, 0.5f, 1.f);
 
     pl.add(std::make_unique< juce::AudioParameterFloat >(getVersionedParameterId(band_id),
                                                          getBandName(band_id),

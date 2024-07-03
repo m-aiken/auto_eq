@@ -5,12 +5,14 @@
 class MeterDbScale : public juce::Component
 {
 public:
-    MeterDbScale() = default;
+    MeterDbScale();
 
     void paint(juce::Graphics& g) override;
 
 private:
-    static const uint8 DB_INTERVAL;
+    float min_value_;
+    float max_value_;
+    uint8 db_interval_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MeterDbScale)
 };

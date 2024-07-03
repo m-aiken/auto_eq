@@ -7,8 +7,7 @@
 **
 */
 FilterResponseGraph::FilterResponseGraph(PluginProcessor& p)
-    : db_scale_(Equalizer::MAX_BAND_DB_CUT, Equalizer::MAX_BAND_DB_BOOST, 6)
-    , response_curve_(p)
+    : response_curve_(p)
 {
     PluginProcessor::FftBuffers&        fft_buffers = p.getFftBuffers();
     juce::AudioProcessorValueTreeState& apvts       = p.getApvts();

@@ -1,4 +1,5 @@
 #include "BandUpdater.h"
+#include "../utility/GlobalConstants.h"
 
 /*static*/ const uint16 BandUpdater::UPDATE_FREQUENCY_MS = 1000;
 
@@ -58,8 +59,7 @@ BandUpdater::updateBandValues()
         Equalizer::BAND_ID band_id = static_cast< Equalizer::BAND_ID >(i);
         float              db_val  = analysis_filter_.getBandDbAdjustment(band_id);
 
-        db_val = (db_val >= 0) ? std::min(db_val, Equalizer::MAX_BAND_DB_BOOST) :
-                                 std::max(db_val, Equalizer::MAX_BAND_DB_CUT);
+        db_val = (db_val >= 0) ? std::min(db_val, Global::MAX_DB_BOOST) : std::max(db_val, Global::MAX_DB_CUT);
 
         band_values_array_.at(band_id).setTargetValue(db_val);
     }
@@ -76,7 +76,7 @@ BandUpdater::printBandAdjustments()
     for (size_t band = 0; band < Equalizer::NUM_BANDS; ++band) {
         float val = analysis_filter_.getBandDbAdjustment(static_cast< Equalizer::BAND_ID >(band));
 
-        val = (val >= 0) ? std::min(val, Equalizer::MAX_BAND_DB_BOOST) : std::max(val, Equalizer::MAX_BAND_DB_CUT);
+        val = (val >= 0) ? std::min(val, Global::MAX_DB_BOOST) : std::max(val, Global::MAX_DB_CUT);
 
         DBG("B" + juce::String(band + 1) + ": " + juce::String(val));
     }

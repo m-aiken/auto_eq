@@ -5,7 +5,7 @@
 class DecibelMarkers : public juce::Component
 {
 public:
-    DecibelMarkers(float min_value, float max_value, uint8 db_interval);
+    DecibelMarkers();
 
     void paint(juce::Graphics& g) override;
 

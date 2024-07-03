@@ -2,11 +2,16 @@
 
 #include <JuceHeader.h>
 
+//#define TEST_FFT_ACCURACY 1
+
 namespace Global
 {
 
 static const float MAX_DB  = 12.f;
 static const float NEG_INF = -48.f;
+
+static const float MAX_DB_BOOST = 12.f;
+static const float MAX_DB_CUT   = -12.f;
 
 static const float MIN_HZ = 20.f;
 static const float MAX_HZ = 20000.f;
@@ -85,6 +90,8 @@ enum PARAM_ID {
     SHOW_FFT_PRIMARY_PRE_EQ,
     SHOW_FFT_PRIMARY_POST_EQ,
     SHOW_FFT_SIDECHAIN,
+    FFT_ACCURACY_TEST_TONE_HZ,
+    FFT_ACCURACY_TEST_TONE_DB,
 };
 
 static const std::map< PARAM_ID, juce::String > PARAM_NAME_MAP = {
@@ -92,6 +99,8 @@ static const std::map< PARAM_ID, juce::String > PARAM_NAME_MAP = {
     { SHOW_FFT_PRIMARY_PRE_EQ, "SHOW_FFT_PRIMARY_PRE_EQ" },
     { SHOW_FFT_PRIMARY_POST_EQ, "SHOW_FFT_PRIMARY_POST_EQ" },
     { SHOW_FFT_SIDECHAIN, "SHOW_FFT_SIDECHAIN" },
+    { FFT_ACCURACY_TEST_TONE_HZ, "FFT_ACCURACY_TEST_TONE_HZ" },
+    { FFT_ACCURACY_TEST_TONE_DB, "FFT_ACCURACY_TEST_TONE_DB" },
 };
 
 static const juce::String

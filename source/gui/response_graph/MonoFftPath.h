@@ -22,8 +22,9 @@ public:
     void timerCallback() override;
 
 private:
-    void processFftData();
-    void generatePath();
+    void  processFftData();
+    void  generatePath();
+    float getYCoordinate(const float& sample);
 
     juce::dsp::FFT                        fft_;
     MonoFftBuffer::FftDataBlock           fft_data_;
