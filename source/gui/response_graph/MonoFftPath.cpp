@@ -8,7 +8,7 @@ MonoFftPath::MonoFftPath(MonoFftBuffer&              fft_buffer,
                          Global::PATH_DISPLAY_MODE   display_mode,
                          juce::RangedAudioParameter* fft_enablement_param)
     : fft_(MonoFftBuffer::FFT_ORDER)
-    , windowing_fn_(MonoFftBuffer::FFT_SIZE, juce::dsp::WindowingFunction< float >::blackmanHarris)
+    , windowing_fn_(MonoFftBuffer::FFT_SIZE, juce::dsp::WindowingFunction< float >::rectangular)
     , fft_buffer_(fft_buffer)
     , path_colour_(path_colour)
     , display_mode_(display_mode)
@@ -79,7 +79,7 @@ MonoFftPath::processFftData()
                                           MonoFftBuffer::NUM_BINS + 1);
 
     for (size_t i = 0; i < fft_data_.size(); ++i) {
-        fft_data_.at(i) = juce::Decibels::gainToDecibels(fft_data_.at(i), Global::MAX_DB_CUT);
+        fft_data_.at(i) = juce::Decibels::gainToDecibels(fft_data_.at(i), Global::FFT_NEG_INF);
     }
 }
 
@@ -140,7 +140,7 @@ MonoFftPath::getYCoordinate(const float& sample)
     auto bounds_y      = bounds.getY();
     auto bounds_height = bounds.getHeight();
 
-    return juce::jmap< float >(sample, Global::MAX_DB_CUT, Global::MAX_DB_BOOST, bounds_height, bounds_y);
+    return juce::jmap< float >(sample, Global::FFT_NEG_INF, Global::FFT_MAX_DB, bounds_height, bounds_y);
 }
 
 /*---------------------------------------------------------------------------

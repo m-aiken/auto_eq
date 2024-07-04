@@ -2,6 +2,9 @@
 #include "../look_and_feel/Theme.h"
 #include "../../utility/GlobalConstants.h"
 
+/*static*/ const uint8 FilterResponseCurve::BAR_WIDTH      = 8;
+/*static*/ const uint8 FilterResponseCurve::HALF_BAR_WIDTH = 4;
+
 /*---------------------------------------------------------------------------
 **
 */
@@ -35,31 +38,18 @@ FilterResponseCurve::paint(juce::Graphics& g)
     auto bounds_width = bounds.getWidth();
     auto centre_y     = bounds.getCentreY();
 
+    g.setColour(Theme::getColour(Theme::BAND_VALUE));
+
     // Draw the filter response at each band.
-    g.setColour(Theme::getColour(Theme::FILTER_RESPONSE_PATH));
+    // Note: We're not drawing the 20Hz or 2kHz bands.
+    for (uint8 i = 1; i < Equalizer::NUM_BANDS - 1; ++i) {
+        int x          = x_coordinates_.at(i);
+        int y          = getYCoordinateFromMagnitude(magnitudes_.at(x));
+        int bar_height = getBandBarHeight(magnitudes_.at(x));
 
-    for (uint8 i = 0; i < Equalizer::NUM_BANDS; ++i) {
-        int x = x_coordinates_.at(i);
-        int y = getYCoordinateFromMagnitude(magnitudes_.at(x));
-
-        int bar_width      = 8;
-        int half_bar_width = 4;
-        int bar_height     = getBandBarHeight(magnitudes_.at(x));
-
-        int left_edge  = (x - half_bar_width);
-        int right_edge = (x + half_bar_width);
-
-        if (left_edge < 0) {
-            bar_width += left_edge;
-            x = 0;
-        }
-        else if (right_edge > bounds_width) {
-            bar_width -= right_edge;
-            x = bounds_width - bar_width;
-        }
-
-        juce::Rectangle< int > rect(x, juce::jmin< int >(y, centre_y), bar_width, bar_height);
-        g.fillRoundedRectangle(rect.toFloat(), 2.f);
+        // Value sub-rectangle.
+        juce::Rectangle< int > val_rect(x - HALF_BAR_WIDTH, juce::jmin< int >(y, centre_y), BAR_WIDTH, bar_height);
+        g.fillRoundedRectangle(val_rect.toFloat(), 2.f);
     }
 
     // Draw a solid line at 0dB across the entire graph.

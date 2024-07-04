@@ -32,7 +32,7 @@ MonoMeter::paint(juce::Graphics& g)
     auto  bounds_width  = bounds.getWidth();
     auto  bounds_height = bounds.getHeight();
     float val           = processor_ref_.getMeterValue(meter_type_, channel_);
-    auto  length        = juce::jmap< float >(val, Global::NEG_INF, Global::MAX_DB, 0, bounds_width);
+    auto  length        = juce::jmap< float >(val, Global::METER_NEG_INF, Global::METER_MAX_DB, 0, bounds_width);
 
     juce::Rectangle< float > meter_rect(0, 0, length, bounds_height);
 

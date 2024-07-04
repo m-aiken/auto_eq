@@ -20,13 +20,16 @@ public:
 
     static const DarkLightPair ANALYSER_GRID;
     static const DarkLightPair GRAPH_0DB_MARKER;
+
     static const DarkLightPair FFT_PRIMARY_PRE_EQ;
     static const DarkLightPair FFT_PRIMARY_POST_EQ;
     static const DarkLightPair FFT_SIDECHAIN;
-    static const DarkLightPair FILTER_RESPONSE_PATH;
 
-    static const DarkLightPair METER_VALUE;
+    static const DarkLightPair BAND_BACKGROUND;
+    static const DarkLightPair BAND_VALUE;
+
     static const DarkLightPair METER_BACKGROUND;
+    static const DarkLightPair METER_VALUE;
 
     static const DarkLightPair ROTARY_FILL;
     static const DarkLightPair ROTARY_ARC;

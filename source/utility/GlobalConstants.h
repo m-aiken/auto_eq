@@ -7,11 +7,16 @@
 namespace Global
 {
 
-static const float MAX_DB  = 12.f;
-static const float NEG_INF = -48.f;
+static const float NEG_INF = -72.f;
 
 static const float MAX_DB_BOOST = 12.f;
 static const float MAX_DB_CUT   = -12.f;
+
+static const float METER_MAX_DB  = 6.f;
+static const float METER_NEG_INF = -48.f;
+
+static const float FFT_MAX_DB  = 3.f;
+static const float FFT_NEG_INF = -96.f;
 
 static const float MIN_HZ = 20.f;
 static const float MAX_HZ = 20000.f;

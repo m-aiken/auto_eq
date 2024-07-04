@@ -6,8 +6,8 @@
 **
 */
 MeterDbScale::MeterDbScale()
-    : min_value_(Global::NEG_INF)
-    , max_value_(Global::MAX_DB)
+    : min_value_(Global::METER_NEG_INF)
+    , max_value_(Global::METER_MAX_DB)
     , db_interval_(6)
 {
 }

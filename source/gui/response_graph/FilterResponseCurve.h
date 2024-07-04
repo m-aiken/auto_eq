@@ -26,6 +26,9 @@ private:
     void calculateXCoordinates();
 
 private:
+    static const uint8 BAR_WIDTH;
+    static const uint8 HALF_BAR_WIDTH;
+
     PluginProcessor& processor_ref_;
 
     std::array< uint16, Equalizer::NUM_BANDS > x_coordinates_;

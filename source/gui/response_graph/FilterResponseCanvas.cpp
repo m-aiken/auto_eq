@@ -21,8 +21,8 @@ FilterResponseCanvas::paint(juce::Graphics& g)
     const int min_hz        = static_cast< int >(Global::MIN_HZ);
     const int max_hz        = static_cast< int >(Global::MAX_HZ);
     auto      line_colour   = Theme::getColour(Theme::ANALYSER_GRID);
-    auto      alpha_bold    = Theme::dark_mode ? 0.1f : 0.2f;
-    auto      alpha_faint   = Theme::dark_mode ? 0.05f : 0.1f;
+    auto      alpha_bold    = Theme::dark_mode ? 0.05f : 0.1f;
+    auto      alpha_faint   = Theme::dark_mode ? 0.02f : 0.05f;
 
     // dB markers (horizontal).
     g.setColour(line_colour.withAlpha(alpha_bold));

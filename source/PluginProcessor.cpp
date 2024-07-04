@@ -174,12 +174,12 @@ PluginProcessor::prepareToPlay(double sample_rate, int samples_per_block)
     lufs_l_.reset(sample_rate, METER_DB_RAMP_TIME_SECONDS);
     lufs_r_.reset(sample_rate, METER_DB_RAMP_TIME_SECONDS);
 
-    peak_l_.setCurrentAndTargetValue(Global::NEG_INF);
-    peak_r_.setCurrentAndTargetValue(Global::NEG_INF);
-    rms_l_.setCurrentAndTargetValue(Global::NEG_INF);
-    rms_r_.setCurrentAndTargetValue(Global::NEG_INF);
-    lufs_l_.setCurrentAndTargetValue(Global::NEG_INF);
-    lufs_r_.setCurrentAndTargetValue(Global::NEG_INF);
+    peak_l_.setCurrentAndTargetValue(Global::METER_NEG_INF);
+    peak_r_.setCurrentAndTargetValue(Global::METER_NEG_INF);
+    rms_l_.setCurrentAndTargetValue(Global::METER_NEG_INF);
+    rms_r_.setCurrentAndTargetValue(Global::METER_NEG_INF);
+    lufs_l_.setCurrentAndTargetValue(Global::METER_NEG_INF);
+    lufs_r_.setCurrentAndTargetValue(Global::METER_NEG_INF);
 
     // Start the thread the band updater loop lives on.
     band_updater_.startPolling();
@@ -407,7 +407,7 @@ float
 PluginProcessor::getMeterValue(Global::Meters::METER_TYPE meter_type, Global::Channels::CHANNEL_ID channel_id) const
 {
     if (channel_id != Global::Channels::PRIMARY_LEFT && channel_id != Global::Channels::PRIMARY_RIGHT) {
-        return Global::NEG_INF;
+        return Global::METER_NEG_INF;
     }
 
     switch (meter_type) {
@@ -421,7 +421,7 @@ PluginProcessor::getMeterValue(Global::Meters::METER_TYPE meter_type, Global::Ch
         return (channel_id == Global::Channels::PRIMARY_LEFT) ? lufs_l_.getCurrentValue() : lufs_r_.getCurrentValue();
 
     default:
-        return Global::NEG_INF;
+        return Global::METER_NEG_INF;
     }
 }
 
@@ -458,8 +458,8 @@ PluginProcessor::getBandDb(Equalizer::BAND_ID band_id)
 void
 PluginProcessor::setPeak(SmoothedFloat& val, juce::AudioBuffer< float >& buffer, Global::Channels::CHANNEL_ID channel)
 {
-    int   num_samples = buffer.getNumSamples();
-    float new_value   = juce::Decibels::gainToDecibels(buffer.getMagnitude(channel, 0, num_samples), Global::NEG_INF);
+    int num_samples = buffer.getNumSamples();
+    float new_value = juce::Decibels::gainToDecibels(buffer.getMagnitude(channel, 0, num_samples), Global::METER_NEG_INF);
 
     val.skip(num_samples);
 
@@ -474,8 +474,8 @@ PluginProcessor::setPeak(SmoothedFloat& val, juce::AudioBuffer< float >& buffer,
 void
 PluginProcessor::setRms(SmoothedFloat& val, juce::AudioBuffer< float >& buffer, Global::Channels::CHANNEL_ID channel)
 {
-    int   num_samples = buffer.getNumSamples();
-    float new_value   = juce::Decibels::gainToDecibels(buffer.getRMSLevel(channel, 0, num_samples), Global::NEG_INF);
+    int num_samples = buffer.getNumSamples();
+    float new_value = juce::Decibels::gainToDecibels(buffer.getRMSLevel(channel, 0, num_samples), Global::METER_NEG_INF);
 
     val.skip(num_samples);
 
@@ -521,11 +521,11 @@ PluginProcessor::getParameterLayout()
     pl.add(std::make_unique< juce::AudioParameterFloat >(juce::ParameterID(intensity, 1),
                                                          intensity,
                                                          juce::NormalisableRange< float >(0.f, 1.f, 0.01f, 1.f),
-                                                         1.f));
+                                                         0.5f));
 
     pl.add(std::make_unique< juce::AudioParameterBool >(juce::ParameterID(fft_primary_pre, 1), fft_primary_pre, true));
-    pl.add(std::make_unique< juce::AudioParameterBool >(juce::ParameterID(fft_primary_post, 1), fft_primary_post, true));
-    pl.add(std::make_unique< juce::AudioParameterBool >(juce::ParameterID(fft_sidechain, 1), fft_sidechain, true));
+    pl.add(std::make_unique< juce::AudioParameterBool >(juce::ParameterID(fft_primary_post, 1), fft_primary_post, false));
+    pl.add(std::make_unique< juce::AudioParameterBool >(juce::ParameterID(fft_sidechain, 1), fft_sidechain, false));
 
 #ifdef TEST_FFT_ACCURACY
     juce::String fft_test_hz = GuiParams::getName(GuiParams::FFT_ACCURACY_TEST_TONE_HZ);

@@ -86,7 +86,7 @@ FilterResponseGraph::resized()
     juce::Rectangle< int > hz_scale_bounds(0, bounds.getBottom() - padding, bounds_width, padding);
 
     backdrop_.setBounds(y_padded_bounds);
-    response_curve_.setBounds(y_padded_bounds);
+
     db_scale_.setBounds(db_scale_bounds);
     hz_scale_.setBounds(hz_scale_bounds);
 
@@ -96,6 +96,8 @@ FilterResponseGraph::resized()
     fft_path_primary_post_eq_r_->setBounds(y_padded_bounds);
     fft_path_sidechain_l_->setBounds(y_padded_bounds);
     fft_path_sidechain_r_->setBounds(y_padded_bounds);
+
+    response_curve_.setBounds(y_padded_bounds);
 }
 
 /*---------------------------------------------------------------------------

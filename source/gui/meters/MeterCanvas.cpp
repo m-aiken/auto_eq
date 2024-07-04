@@ -15,8 +15,8 @@ MeterCanvas::paint(juce::Graphics& g)
     auto      bounds        = getLocalBounds();
     auto      bounds_width  = bounds.getWidth();
     auto      bounds_height = bounds.getHeight();
-    const int min_db        = static_cast< int >(Global::NEG_INF);
-    const int max_db        = static_cast< int >(Global::MAX_DB);
+    const int min_db        = static_cast< int >(Global::METER_NEG_INF);
+    const int max_db        = static_cast< int >(Global::METER_MAX_DB);
     auto      line_colour   = Theme::getColour(Theme::ANALYSER_GRID);
     auto      alpha         = Theme::dark_mode ? 0.1f : 0.2f;
 
