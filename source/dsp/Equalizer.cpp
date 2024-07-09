@@ -4,17 +4,6 @@
 /*static*/ const float Equalizer::DEFAULT_BAND_DB = 0.f;
 /*static*/ const float Equalizer::DEFAULT_BAND_Q  = 2.f;
 
-/*static*/ const int Equalizer::PARAMETERS_VERSION_HINT = 1;
-
-/*---------------------------------------------------------------------------
-**
-*/
-/*static*/ juce::String
-Equalizer::getBandName(BAND_ID band_id)
-{
-    return juce::String("B") + juce::String(band_id + 1);
-}
-
 /*---------------------------------------------------------------------------
 **
 */
@@ -185,20 +174,6 @@ Equalizer::getBandTargetDb(BAND_ID band_id)
 **
 */
 /*static*/ void
-Equalizer::addBandToParameterLayout(juce::AudioProcessorValueTreeState::ParameterLayout& pl, BAND_ID band_id)
-{
-    auto db_range = juce::NormalisableRange< float >(Global::MAX_DB_CUT, Global::MAX_DB_BOOST, 0.5f, 1.f);
-
-    pl.add(std::make_unique< juce::AudioParameterFloat >(getVersionedParameterId(band_id),
-                                                         getBandName(band_id),
-                                                         db_range,
-                                                         DEFAULT_BAND_DB));
-}
-
-/*---------------------------------------------------------------------------
-**
-*/
-/*static*/ void
 Equalizer::updateBandCoefficients(MonoChain& chain, const BAND_ID& band_id, float gain, double sample_rate)
 {
     auto cf = juce::dsp::IIR::Coefficients< float >::makePeakFilter(sample_rate, getBandHz(band_id), DEFAULT_BAND_Q, gain);
@@ -331,15 +306,6 @@ Equalizer::updateBandCoefficients(MonoChain& chain, const BAND_ID& band_id, floa
     default:
         break;
     }
-}
-
-/*---------------------------------------------------------------------------
-**
-*/
-/*static*/ juce::ParameterID
-Equalizer::getVersionedParameterId(BAND_ID band_id)
-{
-    return juce::ParameterID(getBandName(band_id), PARAMETERS_VERSION_HINT);
 }
 
 /*---------------------------------------------------------------------------

@@ -81,17 +81,12 @@ public:
 public:
     Equalizer() = default;
 
-    static juce::String getBandName(BAND_ID band_id);
-    static float        getBandHz(BAND_ID band_id);
-    static float        getBandTestDb(BAND_ID band_id);
-    static float        getBandTargetDb(BAND_ID band_id);
+    static float getBandHz(BAND_ID band_id);
+    static float getBandTestDb(BAND_ID band_id);
+    static float getBandTargetDb(BAND_ID band_id);
 
-    static void addBandToParameterLayout(juce::AudioProcessorValueTreeState::ParameterLayout& pl, BAND_ID band_id);
     static void updateBandCoefficients(MonoChain& chain, const BAND_ID& band_id, float gain, double sample_rate);
 
 private:
-    static const int         PARAMETERS_VERSION_HINT;
-    static juce::ParameterID getVersionedParameterId(BAND_ID band_id);
-
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Equalizer)
 };
