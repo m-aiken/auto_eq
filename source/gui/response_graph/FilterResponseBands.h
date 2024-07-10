@@ -2,6 +2,7 @@
 
 #include <JuceHeader.h>
 
+#include "FilterMagnitudesCalculator.h"
 #include "../../PluginProcessor.h"
 #include "../../dsp/Equalizer.h"
 
@@ -19,8 +20,6 @@ public:
     void timerCallback() override;
 
 private:
-    void resetMagnitudesVector();
-    void calculateMagnitudes();
     int  getYCoordinateFromMagnitude(double magnitude);
     int  getBandBarHeight(double magnitude);
     void calculateXCoordinates();
@@ -29,13 +28,10 @@ private:
     static const uint8 BAR_WIDTH;
     static const uint8 HALF_BAR_WIDTH;
 
-    PluginProcessor& processor_ref_;
-
     std::array< uint16, Equalizer::NUM_BANDS > x_coordinates_;
     bool                                       x_coordinates_calculated_;
 
-    std::vector< double > magnitudes_;
-    juce::Atomic< bool >  should_repaint_;
+    FilterMagnitudesCalculator magnitudes_calculator_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(FilterResponseBands)
 };

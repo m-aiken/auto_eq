@@ -9,11 +9,9 @@
 **
 */
 FilterResponseBands::FilterResponseBands(PluginProcessor& p)
-    : processor_ref_(p)
-    , x_coordinates_calculated_(false)
-    , should_repaint_(true)
+    : x_coordinates_calculated_(false)
+    , magnitudes_calculator_(p)
 {
-    startTimerHz(60);
 }
 
 /*---------------------------------------------------------------------------
@@ -30,7 +28,9 @@ FilterResponseBands::~FilterResponseBands()
 void
 FilterResponseBands::paint(juce::Graphics& g)
 {
-    if (!x_coordinates_calculated_ || magnitudes_.size() == 0) {
+    FilterMagnitudesCalculator::MagnitudesVector& magnitudes = magnitudes_calculator_.getMagnitudes();
+
+    if (!x_coordinates_calculated_ || magnitudes.size() == 0) {
         return;
     }
 
@@ -44,8 +44,8 @@ FilterResponseBands::paint(juce::Graphics& g)
     // Note: We're not drawing the 20Hz or 2kHz bands.
     for (uint8 i = 1; i < Equalizer::NUM_BANDS - 1; ++i) {
         int x          = x_coordinates_.at(i);
-        int y          = getYCoordinateFromMagnitude(magnitudes_.at(x));
-        int bar_height = getBandBarHeight(magnitudes_.at(x));
+        int y          = getYCoordinateFromMagnitude(magnitudes.at(x));
+        int bar_height = getBandBarHeight(magnitudes.at(x));
 
         // Value sub-rectangle.
         juce::Rectangle< int > val_rect(x - HALF_BAR_WIDTH, juce::jmin< int >(y, centre_y), BAR_WIDTH, bar_height);
@@ -63,11 +63,13 @@ FilterResponseBands::paint(juce::Graphics& g)
 void
 FilterResponseBands::resized()
 {
-    // Initialise the magnitudes vector and x coordinates.
+    // Initialise the x coordinates and prepare the magnitudes calculator.
     // We're doing this via the resized method because both need to know the
     // component's bounds, which aren't known in the constructor.
-    resetMagnitudesVector();
     calculateXCoordinates();
+    magnitudes_calculator_.prepare(getLocalBounds().getWidth());
+
+    startTimer(static_cast< int >(Global::BAND_MAGNITUDE_CALCULATION_FREQUENCY_MS));
 }
 
 /*---------------------------------------------------------------------------
@@ -76,86 +78,7 @@ FilterResponseBands::resized()
 void
 FilterResponseBands::timerCallback()
 {
-    //    if (should_repaint_.compareAndSetBool(false, true)) {
-    calculateMagnitudes();
     repaint();
-    //    }
-}
-
-/*---------------------------------------------------------------------------
-**
-*/
-void
-FilterResponseBands::resetMagnitudesVector()
-{
-    size_t num_x_pixels = static_cast< size_t >(getLocalBounds().getWidth());
-
-    if (magnitudes_.size() != num_x_pixels) {
-        magnitudes_.resize(num_x_pixels);
-    }
-
-    std::fill(magnitudes_.begin(), magnitudes_.end(), 0.0);
-}
-
-/*---------------------------------------------------------------------------
-**
-*/
-void
-FilterResponseBands::calculateMagnitudes()
-{
-    // Reset the magnitudes vector.
-    resetMagnitudesVector();
-
-    // Get the filters.
-    Equalizer::MonoChain& filter_chain = processor_ref_.getFilterChain();
-
-    auto   num_x_pixels = getLocalBounds().getWidth();
-    double sample_rate  = processor_ref_.getSampleRate();
-
-    // Calculate the magnitudes.
-    for (size_t i = 0; i < num_x_pixels; ++i) {
-        double mag = 1.0;
-
-        // Get the frequency that this x coordinate represents in the analyser.
-        double x_hz = juce::mapToLog10< double >((static_cast< double >(i) / static_cast< double >(num_x_pixels)),
-                                                 Global::MIN_HZ,
-                                                 Global::MAX_HZ);
-
-        // Magnitude per band.
-        mag *= filter_chain.get< Equalizer::B1 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
-        mag *= filter_chain.get< Equalizer::B2 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
-        mag *= filter_chain.get< Equalizer::B3 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
-        mag *= filter_chain.get< Equalizer::B4 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
-        mag *= filter_chain.get< Equalizer::B5 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
-        mag *= filter_chain.get< Equalizer::B6 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
-        mag *= filter_chain.get< Equalizer::B7 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
-        mag *= filter_chain.get< Equalizer::B8 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
-        mag *= filter_chain.get< Equalizer::B9 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
-        mag *= filter_chain.get< Equalizer::B10 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
-        mag *= filter_chain.get< Equalizer::B11 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
-        mag *= filter_chain.get< Equalizer::B12 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
-        mag *= filter_chain.get< Equalizer::B13 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
-        mag *= filter_chain.get< Equalizer::B14 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
-        mag *= filter_chain.get< Equalizer::B15 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
-        mag *= filter_chain.get< Equalizer::B16 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
-        mag *= filter_chain.get< Equalizer::B17 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
-        mag *= filter_chain.get< Equalizer::B18 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
-        mag *= filter_chain.get< Equalizer::B19 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
-        mag *= filter_chain.get< Equalizer::B20 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
-        mag *= filter_chain.get< Equalizer::B21 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
-        mag *= filter_chain.get< Equalizer::B22 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
-        mag *= filter_chain.get< Equalizer::B23 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
-        mag *= filter_chain.get< Equalizer::B24 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
-        mag *= filter_chain.get< Equalizer::B25 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
-        mag *= filter_chain.get< Equalizer::B26 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
-        mag *= filter_chain.get< Equalizer::B27 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
-        mag *= filter_chain.get< Equalizer::B28 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
-        mag *= filter_chain.get< Equalizer::B29 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
-        mag *= filter_chain.get< Equalizer::B30 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
-        mag *= filter_chain.get< Equalizer::B31 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
-
-        magnitudes_.at(i) = juce::Decibels::gainToDecibels< double >(mag, Global::MAX_DB_CUT);
-    }
 }
 
 /*---------------------------------------------------------------------------
@@ -199,7 +122,7 @@ FilterResponseBands::calculateXCoordinates()
         float band_hz   = Equalizer::getBandHz(static_cast< Equalizer::BAND_ID >(i));
         float scaled_hz = juce::mapFromLog10< float >(band_hz, Global::MIN_HZ, Global::MAX_HZ);
         int   x_raw     = static_cast< int >(std::floor(bounds_width * scaled_hz));
-        int   x         = juce::jmin< int >(x_raw, magnitudes_.size() - 1);
+        int   x         = juce::jmin< int >(x_raw, bounds_width - 1);
 
         x_coordinates_.at(i) = x;
     }
