@@ -7,7 +7,7 @@
 **
 */
 FilterResponseGraph::FilterResponseGraph(PluginProcessor& p)
-    : response_curve_(p)
+    : eq_bands_(p)
 {
     PluginProcessor::FftBuffers&        fft_buffers = p.getFftBuffers();
     juce::AudioProcessorValueTreeState& apvts       = p.getApvts();
@@ -49,7 +49,7 @@ FilterResponseGraph::FilterResponseGraph(PluginProcessor& p)
     addAndMakeVisible(backdrop_);
     addAndMakeVisible(db_scale_);
     addAndMakeVisible(hz_scale_);
-    addAndMakeVisible(response_curve_);
+    addAndMakeVisible(eq_bands_);
 
     addAndMakeVisible(fft_path_primary_pre_eq_l_.get());
     addAndMakeVisible(fft_path_primary_pre_eq_r_.get());
@@ -97,7 +97,7 @@ FilterResponseGraph::resized()
     fft_path_sidechain_l_->setBounds(y_padded_bounds);
     fft_path_sidechain_r_->setBounds(y_padded_bounds);
 
-    response_curve_.setBounds(y_padded_bounds);
+    eq_bands_.setBounds(y_padded_bounds);
 }
 
 /*---------------------------------------------------------------------------

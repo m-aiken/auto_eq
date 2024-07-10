@@ -55,8 +55,8 @@ target_sources(${PROJECT_NAME}
         source/gui/meters/MonoMeter.cpp
         source/gui/meters/StereoMeter.cpp
         source/gui/response_graph/DecibelMarkers.cpp
+        source/gui/response_graph/FilterResponseBands.cpp
         source/gui/response_graph/FilterResponseCanvas.cpp
-        source/gui/response_graph/FilterResponseCurve.cpp
         source/gui/response_graph/FilterResponseGraph.cpp
         source/gui/response_graph/FrequencyMarkers.cpp
         source/gui/response_graph/MonoFftPath.cpp

@@ -1,14 +1,14 @@
-#include "FilterResponseCurve.h"
+#include "FilterResponseBands.h"
 #include "../look_and_feel/Theme.h"
 #include "../../utility/GlobalConstants.h"
 
-/*static*/ const uint8 FilterResponseCurve::BAR_WIDTH      = 8;
-/*static*/ const uint8 FilterResponseCurve::HALF_BAR_WIDTH = 4;
+/*static*/ const uint8 FilterResponseBands::BAR_WIDTH      = 8;
+/*static*/ const uint8 FilterResponseBands::HALF_BAR_WIDTH = 4;
 
 /*---------------------------------------------------------------------------
 **
 */
-FilterResponseCurve::FilterResponseCurve(PluginProcessor& p)
+FilterResponseBands::FilterResponseBands(PluginProcessor& p)
     : processor_ref_(p)
     , x_coordinates_calculated_(false)
     , should_repaint_(true)
@@ -19,7 +19,7 @@ FilterResponseCurve::FilterResponseCurve(PluginProcessor& p)
 /*---------------------------------------------------------------------------
 **
 */
-FilterResponseCurve::~FilterResponseCurve()
+FilterResponseBands::~FilterResponseBands()
 {
     stopTimer();
 }
@@ -28,7 +28,7 @@ FilterResponseCurve::~FilterResponseCurve()
 **
 */
 void
-FilterResponseCurve::paint(juce::Graphics& g)
+FilterResponseBands::paint(juce::Graphics& g)
 {
     if (!x_coordinates_calculated_ || magnitudes_.size() == 0) {
         return;
@@ -61,7 +61,7 @@ FilterResponseCurve::paint(juce::Graphics& g)
 **
 */
 void
-FilterResponseCurve::resized()
+FilterResponseBands::resized()
 {
     // Initialise the magnitudes vector and x coordinates.
     // We're doing this via the resized method because both need to know the
@@ -74,7 +74,7 @@ FilterResponseCurve::resized()
 **
 */
 void
-FilterResponseCurve::timerCallback()
+FilterResponseBands::timerCallback()
 {
     //    if (should_repaint_.compareAndSetBool(false, true)) {
     calculateMagnitudes();
@@ -86,7 +86,7 @@ FilterResponseCurve::timerCallback()
 **
 */
 void
-FilterResponseCurve::resetMagnitudesVector()
+FilterResponseBands::resetMagnitudesVector()
 {
     size_t num_x_pixels = static_cast< size_t >(getLocalBounds().getWidth());
 
@@ -101,7 +101,7 @@ FilterResponseCurve::resetMagnitudesVector()
 **
 */
 void
-FilterResponseCurve::calculateMagnitudes()
+FilterResponseBands::calculateMagnitudes()
 {
     // Reset the magnitudes vector.
     resetMagnitudesVector();
@@ -162,7 +162,7 @@ FilterResponseCurve::calculateMagnitudes()
 **
 */
 int
-FilterResponseCurve::getYCoordinateFromMagnitude(double magnitude)
+FilterResponseBands::getYCoordinateFromMagnitude(double magnitude)
 {
     auto bounds        = getLocalBounds();
     auto bounds_top    = bounds.getY();
@@ -177,7 +177,7 @@ FilterResponseCurve::getYCoordinateFromMagnitude(double magnitude)
 **
 */
 int
-FilterResponseCurve::getBandBarHeight(double magnitude)
+FilterResponseBands::getBandBarHeight(double magnitude)
 {
     juce::Rectangle< int > bounds      = getLocalBounds();
     int                    centre_y    = bounds.getCentreY();
@@ -190,7 +190,7 @@ FilterResponseCurve::getBandBarHeight(double magnitude)
 **
 */
 void
-FilterResponseCurve::calculateXCoordinates()
+FilterResponseBands::calculateXCoordinates()
 {
     auto bounds       = getLocalBounds();
     auto bounds_width = bounds.getWidth();

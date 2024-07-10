@@ -5,13 +5,13 @@
 #include "../../PluginProcessor.h"
 #include "../../dsp/Equalizer.h"
 
-class FilterResponseCurve
+class FilterResponseBands
     : public juce::Component
     , public juce::Timer
 {
 public:
-    FilterResponseCurve(PluginProcessor& p);
-    ~FilterResponseCurve() override;
+    FilterResponseBands(PluginProcessor& p);
+    ~FilterResponseBands() override;
 
     void paint(juce::Graphics& g) override;
     void resized() override;
@@ -37,5 +37,5 @@ private:
     std::vector< double > magnitudes_;
     juce::Atomic< bool >  should_repaint_;
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(FilterResponseCurve)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(FilterResponseBands)
 };

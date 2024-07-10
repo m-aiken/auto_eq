@@ -4,7 +4,7 @@
 
 #include "DecibelMarkers.h"
 #include "FilterResponseCanvas.h"
-#include "FilterResponseCurve.h"
+#include "FilterResponseBands.h"
 #include "FrequencyMarkers.h"
 #include "MonoFftPath.h"
 #include "../../PluginProcessor.h"
@@ -21,7 +21,7 @@ private:
     FilterResponseCanvas backdrop_;
     DecibelMarkers       db_scale_;
     FrequencyMarkers     hz_scale_;
-    FilterResponseCurve  response_curve_;
+    FilterResponseBands  eq_bands_;
 
     std::unique_ptr< MonoFftPath > fft_path_primary_pre_eq_l_;
     std::unique_ptr< MonoFftPath > fft_path_primary_pre_eq_r_;
