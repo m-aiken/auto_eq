@@ -22,6 +22,7 @@ static const float MIN_HZ = 20.f;
 static const float MAX_HZ = 20000.f;
 
 static const double BAND_MAGNITUDE_CALCULATION_FREQUENCY_MS = 20.0;
+static const double FFT_PATH_PRODUCTION_FREQUENCY_MS        = 20.0;
 
 static bool SHOW_DEBUG_BOUNDS = false;
 

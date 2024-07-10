@@ -61,6 +61,7 @@ target_sources(${PROJECT_NAME}
         source/gui/response_graph/FilterResponseGraph.cpp
         source/gui/response_graph/FrequencyMarkers.cpp
         source/gui/response_graph/MonoFftPath.cpp
+        source/gui/response_graph/MonoFftPathProducer.cpp
         source/gui/theme_button/ThemeButton.cpp
         source/gui/widgets/RotaryControl.cpp
         )

@@ -2,6 +2,7 @@
 
 #include <JuceHeader.h>
 
+#include "MonoFftPathProducer.h"
 #include "../look_and_feel/Theme.h"
 #include "../../dsp/MonoFftBuffer.h"
 #include "../../utility/GlobalConstants.h"
@@ -18,21 +19,16 @@ public:
     ~MonoFftPath() override;
 
     void paint(juce::Graphics& g) override;
+    void resized() override;
 
     void timerCallback() override;
 
 private:
-    void  processFftData();
-    void  generatePath();
-    float getYCoordinate(const float& sample);
+    MonoFftPathProducer path_producer_;
 
-    juce::dsp::FFT                        fft_;
-    MonoFftBuffer::FftDataBlock           fft_data_;
-    juce::dsp::WindowingFunction< float > windowing_fn_;
-    MonoFftBuffer&                        fft_buffer_;
-    juce::Path                            path_;
-    Theme::DarkLightPair                  path_colour_;
-    Global::PATH_DISPLAY_MODE             display_mode_;
+    juce::Path                path_;
+    Theme::DarkLightPair      path_colour_;
+    Global::PATH_DISPLAY_MODE display_mode_;
 
     juce::RangedAudioParameter* fft_enablement_param_;
 
