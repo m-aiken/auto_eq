@@ -8,7 +8,7 @@
 */
 InputAnalysisFilter::InputAnalysisFilter()
     : juce::Thread("THREAD_input_analysis_filter")
-    , fifo_write_idx_(1)
+    , fifo_write_idx_(2)
     , fifo_read_idx_(0)
     , is_prepared_(false)
 {

@@ -7,7 +7,7 @@
 */
 FilterMagnitudesCalculator::FilterMagnitudesCalculator(PluginProcessor& processor_ref)
     : juce::Thread("THREAD_filter_magnitudes_calculator")
-    , fifo_write_idx_(1)
+    , fifo_write_idx_(2)
     , fifo_read_idx_(0)
     , processor_ref_(processor_ref)
     , num_x_pixels_(0)

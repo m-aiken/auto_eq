@@ -6,7 +6,7 @@
 */
 MonoFftPathProducer::MonoFftPathProducer(MonoFftBuffer& fft_buffer)
     : juce::Thread("THREAD_mono_fft_path_producer")
-    , fifo_write_idx_(1)
+    , fifo_write_idx_(2)
     , fifo_read_idx_(0)
     , fft_(MonoFftBuffer::FFT_ORDER)
     , windowing_fn_(MonoFftBuffer::FFT_SIZE, juce::dsp::WindowingFunction< float >::rectangular)
