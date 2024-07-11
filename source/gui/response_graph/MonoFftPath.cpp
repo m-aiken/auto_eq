@@ -49,7 +49,9 @@ MonoFftPath::resized()
     // which aren't known in the constructor.
     path_producer_.prepare(getLocalBounds());
 
-    startTimer(static_cast< int >(Global::FFT_PATH_PRODUCTION_FREQUENCY_MS));
+    if (!isTimerRunning()) {
+        startTimer(static_cast< int >(Global::FFT_PATH_PRODUCTION_FREQUENCY_MS));
+    }
 }
 
 /*---------------------------------------------------------------------------

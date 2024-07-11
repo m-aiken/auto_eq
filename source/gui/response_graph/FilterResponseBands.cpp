@@ -69,7 +69,9 @@ FilterResponseBands::resized()
     calculateXCoordinates();
     magnitudes_calculator_.prepare(getLocalBounds().getWidth());
 
-    startTimer(static_cast< int >(Global::BAND_MAGNITUDE_CALCULATION_FREQUENCY_MS));
+    if (!isTimerRunning()) {
+        startTimer(static_cast< int >(Global::BAND_MAGNITUDE_CALCULATION_FREQUENCY_MS));
+    }
 }
 
 /*---------------------------------------------------------------------------

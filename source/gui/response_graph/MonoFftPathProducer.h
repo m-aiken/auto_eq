@@ -16,8 +16,6 @@ public:
 
     juce::Path& getPath();
 
-    void updateDrawableBounds(const juce::Rectangle< int >& bounds);
-
 private:
     void  processFftData();
     void  generatePath();

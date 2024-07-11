@@ -28,6 +28,10 @@ FilterMagnitudesCalculator::~FilterMagnitudesCalculator()
 void
 FilterMagnitudesCalculator::prepare(uint16 num_x_pixels)
 {
+    // This method gets called by the owning GUI class from its resized method.
+    // It will be called any time the parent widget resizes.
+    // Multiple calls to startThread don't matter.
+    // If the thread is already running startThread does nothing.
     num_x_pixels_ = num_x_pixels;
 
     resetMagnitudesVectors();

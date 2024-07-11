@@ -30,6 +30,10 @@ MonoFftPathProducer::~MonoFftPathProducer()
 void
 MonoFftPathProducer::prepare(const juce::Rectangle< int >& bounds)
 {
+    // This method gets called by the owning GUI class from its resized method.
+    // It will be called any time the parent widget resizes.
+    // Multiple calls to startThread don't matter.
+    // If the thread is already running startThread does nothing.
     drawable_bounds_ = bounds;
 
     startThread();
@@ -64,15 +68,6 @@ juce::Path&
 MonoFftPathProducer::getPath()
 {
     return fifo_.at(fifo_read_idx_);
-}
-
-/*---------------------------------------------------------------------------
-**
-*/
-void
-MonoFftPathProducer::updateDrawableBounds(const juce::Rectangle< int >& bounds)
-{
-    drawable_bounds_ = bounds;
 }
 
 /*---------------------------------------------------------------------------
