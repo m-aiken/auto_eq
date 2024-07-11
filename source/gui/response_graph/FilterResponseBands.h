@@ -28,8 +28,8 @@ private:
     static const uint8 BAR_WIDTH;
     static const uint8 HALF_BAR_WIDTH;
 
-    std::array< uint16, Equalizer::NUM_BANDS > x_coordinates_;
-    bool                                       x_coordinates_calculated_;
+    std::array< int, Equalizer::NUM_BANDS > x_coordinates_;
+    bool                                    x_coordinates_calculated_;
 
     FilterMagnitudesCalculator magnitudes_calculator_;
 

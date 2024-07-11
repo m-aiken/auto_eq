@@ -24,7 +24,7 @@ InputAnalysisFilter::InputAnalysisFilter()
 */
 InputAnalysisFilter::~InputAnalysisFilter()
 {
-    stopThread(ANALYSIS_FREQUENCY_MS);
+    stopThread(static_cast< int >(ANALYSIS_FREQUENCY_MS));
 }
 
 /*---------------------------------------------------------------------------
@@ -53,11 +53,19 @@ InputAnalysisFilter::prepare(juce::dsp::ProcessSpec& process_spec)
     }
 
     for (auto& buffer : band_buffers_) {
-        buffer.setSize(process_spec.numChannels, process_spec.maximumBlockSize, false, true, true);
+        buffer.setSize(static_cast< int >(process_spec.numChannels),
+                       static_cast< int >(process_spec.maximumBlockSize),
+                       false,
+                       true,
+                       true);
     }
 
     for (auto& buffer : fifo_) {
-        buffer.setSize(process_spec.numChannels, process_spec.maximumBlockSize, false, true, true);
+        buffer.setSize(static_cast< int >(process_spec.numChannels),
+                       static_cast< int >(process_spec.maximumBlockSize),
+                       false,
+                       true,
+                       true);
     }
 
     is_prepared_ = true;

@@ -18,19 +18,20 @@ FrequencyMarkers::FrequencyMarkers()
 void
 FrequencyMarkers::paint(juce::Graphics& g)
 {
-    auto bounds        = getLocalBounds();
-    auto bounds_x      = bounds.getX();
-    auto bounds_width  = bounds.getWidth();
-    auto bounds_height = bounds.getHeight();
+    juce::Rectangle< int > bounds = getLocalBounds();
+
+    int bounds_x      = bounds.getX();
+    int bounds_width  = bounds.getWidth();
+    int bounds_height = bounds.getHeight();
 
     g.setFont(Theme::getFont());
     g.setColour(Theme::getColour(Theme::TEXT));
 
     for (int i = min_hz_; i <= max_hz_; ++i) {
         if (shouldDrawFrequency(i)) {
-            auto normalised_freq = juce::mapFromLog10< float >(i, min_hz_, max_hz_);
-            auto label_center_x  = bounds_x + (bounds_width * normalised_freq);
-            auto label           = (i < 1000.f) ? (juce::String(i) + "Hz") : (juce::String(i / 1000.f) + "kHz");
+            float        normalised_freq = juce::mapFromLog10< float >(i, min_hz_, max_hz_);
+            int          label_center_x  = bounds_x + static_cast< int >(std::floor(bounds_width * normalised_freq));
+            juce::String label           = (i < 1000.f) ? (juce::String(i) + "Hz") : (juce::String(i / 1000.f) + "kHz");
 
             g.drawFittedText(label,
                              label_center_x - (label_width_ * 0.5),

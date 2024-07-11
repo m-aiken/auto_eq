@@ -44,8 +44,8 @@ FilterResponseBands::paint(juce::Graphics& g)
     // Note: We're not drawing the 20Hz or 2kHz bands.
     for (uint8 i = 1; i < Equalizer::NUM_BANDS - 1; ++i) {
         int x          = x_coordinates_.at(i);
-        int y          = getYCoordinateFromMagnitude(magnitudes.at(x));
-        int bar_height = getBandBarHeight(magnitudes.at(x));
+        int y          = getYCoordinateFromMagnitude(magnitudes.at(static_cast< size_t >(x)));
+        int bar_height = getBandBarHeight(magnitudes.at(static_cast< size_t >(x)));
 
         // Value sub-rectangle.
         juce::Rectangle< int > val_rect(x - HALF_BAR_WIDTH, juce::jmin< int >(y, centre_y), BAR_WIDTH, bar_height);
@@ -89,9 +89,9 @@ FilterResponseBands::timerCallback()
 int
 FilterResponseBands::getYCoordinateFromMagnitude(double magnitude)
 {
-    auto bounds        = getLocalBounds();
-    auto bounds_top    = bounds.getY();
-    auto bounds_bottom = bounds.getBottom();
+    juce::Rectangle< int > bounds        = getLocalBounds();
+    int                    bounds_top    = bounds.getY();
+    int                    bounds_bottom = bounds.getBottom();
 
     double y = juce::jmap< double >(magnitude, Global::MAX_DB_CUT, Global::MAX_DB_BOOST, bounds_bottom, bounds_top);
 
@@ -117,8 +117,8 @@ FilterResponseBands::getBandBarHeight(double magnitude)
 void
 FilterResponseBands::calculateXCoordinates()
 {
-    auto bounds       = getLocalBounds();
-    auto bounds_width = bounds.getWidth();
+    juce::Rectangle< int > bounds       = getLocalBounds();
+    int                    bounds_width = bounds.getWidth();
 
     for (uint8 i = 0; i < Equalizer::NUM_BANDS; ++i) {
         float band_hz   = Equalizer::getBandHz(static_cast< Equalizer::BAND_ID >(i));
@@ -126,7 +126,7 @@ FilterResponseBands::calculateXCoordinates()
         int   x_raw     = static_cast< int >(std::floor(bounds_width * scaled_hz));
         int   x         = juce::jmin< int >(x_raw, bounds_width - 1);
 
-        x_coordinates_.at(i) = x;
+        x_coordinates_.at(static_cast< size_t >(i)) = x;
     }
 
     x_coordinates_calculated_ = true;

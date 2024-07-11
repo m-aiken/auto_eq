@@ -84,7 +84,7 @@ RotaryControl::getNormalisedValue()
 
     juce::NormalisableRange< float > range = param_->getNormalisableRange();
 
-    return juce::jmap< float >(getValue(), range.start, range.end, START_ANGLE, END_ANGLE);
+    return juce::jmap< float >(static_cast< float >(getValue()), range.start, range.end, START_ANGLE, END_ANGLE);
 }
 
 /*---------------------------------------------------------------------------

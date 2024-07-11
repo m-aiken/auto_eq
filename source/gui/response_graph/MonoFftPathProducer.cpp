@@ -21,7 +21,7 @@ MonoFftPathProducer::MonoFftPathProducer(MonoFftBuffer& fft_buffer)
 */
 MonoFftPathProducer::~MonoFftPathProducer()
 {
-    stopThread(Global::FFT_PATH_PRODUCTION_FREQUENCY_MS);
+    stopThread(static_cast< int >(Global::FFT_PATH_PRODUCTION_FREQUENCY_MS));
 }
 
 /*---------------------------------------------------------------------------

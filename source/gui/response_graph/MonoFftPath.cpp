@@ -53,7 +53,7 @@ MonoFftPath::resized()
 void
 MonoFftPath::timerCallback()
 {
-    if (fft_enablement_param_ != nullptr && fft_enablement_param_->getValue()) {
+    if (fft_enablement_param_ != nullptr && static_cast< bool >(fft_enablement_param_->getValue())) {
         path_ = path_producer_.getPath();
     }
     else {

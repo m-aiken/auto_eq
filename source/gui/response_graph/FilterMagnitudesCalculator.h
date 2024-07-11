@@ -11,9 +11,9 @@ public:
 
 public:
     FilterMagnitudesCalculator(PluginProcessor& processor_ref);
-    ~FilterMagnitudesCalculator();
+    ~FilterMagnitudesCalculator() override;
 
-    void prepare(uint16 num_x_pixels);
+    void prepare(int num_x_pixels);
 
     void run() override;
 
@@ -31,7 +31,7 @@ private:
     size_t                                    fifo_read_idx_;
 
     PluginProcessor& processor_ref_;
-    uint16           num_x_pixels_;
+    int              num_x_pixels_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(FilterMagnitudesCalculator)
 };

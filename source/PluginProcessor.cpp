@@ -140,8 +140,8 @@ PluginProcessor::prepareToPlay(double sample_rate, int samples_per_block)
     juce::dsp::ProcessSpec analysis_spec;
 
     analysis_spec.sampleRate       = sample_rate;
-    analysis_spec.maximumBlockSize = samples_per_block;
-    analysis_spec.numChannels      = getTotalNumInputChannels();
+    analysis_spec.maximumBlockSize = static_cast< juce::uint32 >(samples_per_block);
+    analysis_spec.numChannels      = static_cast< juce::uint32 >(getTotalNumInputChannels());
 
     input_analysis_filter_.prepare(analysis_spec);
 
@@ -157,7 +157,7 @@ PluginProcessor::prepareToPlay(double sample_rate, int samples_per_block)
     juce::dsp::ProcessSpec filter_chain_spec;
 
     filter_chain_spec.sampleRate       = sample_rate;
-    filter_chain_spec.maximumBlockSize = samples_per_block;
+    filter_chain_spec.maximumBlockSize = static_cast< juce::uint32 >(samples_per_block);
     filter_chain_spec.numChannels      = 1;
 
     filter_chain_left_.prepare(filter_chain_spec);
@@ -258,7 +258,7 @@ PluginProcessor::processBlock(juce::AudioBuffer< float >& buffer, juce::MidiBuff
     // Give the untouched input signal to the analysis filters.
     input_analysis_filter_.pushBufferForAnalysis(buffer);
 
-    if (*apvts_.getRawParameterValue(GuiParams::getName(GuiParams::SHOW_FFT_SIDECHAIN))) {
+    if (static_cast< bool >(*apvts_.getRawParameterValue(GuiParams::getName(GuiParams::SHOW_FFT_SIDECHAIN)))) {
         // Sidechain/Ambient FFT buffers (not affected by EQ).
         for (int i = 0; i < buffer.getNumSamples(); ++i) {
             fft_buffers_.at(Global::FFT::SIDECHAIN_LEFT)
@@ -268,7 +268,7 @@ PluginProcessor::processBlock(juce::AudioBuffer< float >& buffer, juce::MidiBuff
         }
     }
 
-    if (*apvts_.getRawParameterValue(GuiParams::getName(GuiParams::SHOW_FFT_PRIMARY_PRE_EQ))) {
+    if (static_cast< bool >(*apvts_.getRawParameterValue(GuiParams::getName(GuiParams::SHOW_FFT_PRIMARY_PRE_EQ)))) {
         // Primary/Playback FFT buffers (PRE EQ).
         for (int i = 0; i < buffer.getNumSamples(); ++i) {
             fft_buffers_.at(Global::FFT::PRIMARY_LEFT_PRE_EQ)
@@ -299,7 +299,7 @@ PluginProcessor::processBlock(juce::AudioBuffer< float >& buffer, juce::MidiBuff
     filter_chain_left_.process(process_context_left);
     filter_chain_right_.process(process_context_right);
 
-    if (*apvts_.getRawParameterValue(GuiParams::getName(GuiParams::SHOW_FFT_PRIMARY_POST_EQ))) {
+    if (static_cast< bool >(*apvts_.getRawParameterValue(GuiParams::getName(GuiParams::SHOW_FFT_PRIMARY_POST_EQ)))) {
         // Primary/Playback FFT buffers (POST EQ).
         for (int i = 0; i < buffer.getNumSamples(); ++i) {
             fft_buffers_.at(Global::FFT::PRIMARY_LEFT_POST_EQ)

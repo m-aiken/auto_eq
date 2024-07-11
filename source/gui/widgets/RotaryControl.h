@@ -8,7 +8,7 @@ class RotaryControl
 {
 public:
     RotaryControl(juce::AudioProcessorValueTreeState& apvts, const juce::String& parameter_id);
-    ~RotaryControl();
+    ~RotaryControl() override;
 
     // Slider virtual functions.
     void paint(juce::Graphics& g) override;

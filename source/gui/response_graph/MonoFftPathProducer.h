@@ -8,7 +8,7 @@ class MonoFftPathProducer : juce::Thread
 {
 public:
     MonoFftPathProducer(MonoFftBuffer& fft_buffer);
-    ~MonoFftPathProducer();
+    ~MonoFftPathProducer() override;
 
     void prepare(const juce::Rectangle< int >& bounds);
 

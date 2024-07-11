@@ -22,10 +22,12 @@ CustomLookAndFeel::drawRotarySlider(juce::Graphics& g,
                                     float           rotary_end_angle,
                                     juce::Slider&   slider)
 {
+    juce::ignoreUnused(slider);
+
     juce::Rectangle< float > bounds(x, y, width, height);
-    auto                     radius         = juce::jmin(width, height) * 0.5;
+    float                    radius         = juce::jmin(width, height) * 0.5f;
     float                    path_thickness = 4.f;
-    auto                     arc_radius     = radius - (path_thickness * 0.5);
+    float                    arc_radius     = radius - (path_thickness * 0.5f);
 
     // Fill.
     g.setColour(Theme::getColour(Theme::ROTARY_FILL));

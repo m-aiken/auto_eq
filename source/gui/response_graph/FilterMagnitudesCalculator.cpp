@@ -19,14 +19,14 @@ FilterMagnitudesCalculator::FilterMagnitudesCalculator(PluginProcessor& processo
 */
 FilterMagnitudesCalculator::~FilterMagnitudesCalculator()
 {
-    stopThread(Global::BAND_MAGNITUDE_CALCULATION_FREQUENCY_MS);
+    stopThread(static_cast< int >(Global::BAND_MAGNITUDE_CALCULATION_FREQUENCY_MS));
 }
 
 /*---------------------------------------------------------------------------
 **
 */
 void
-FilterMagnitudesCalculator::prepare(uint16 num_x_pixels)
+FilterMagnitudesCalculator::prepare(int num_x_pixels)
 {
     // This method gets called by the owning GUI class from its resized method.
     // It will be called any time the parent widget resizes.

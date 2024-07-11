@@ -53,16 +53,16 @@ PluginEditor::paint(juce::Graphics& g)
 void
 PluginEditor::resized()
 {
-    auto bounds              = getLocalBounds();
-    auto bounds_height       = bounds.getHeight();
-    auto bounds_width        = bounds.getWidth();
-    auto top_controls_height = bounds_height * 0.05;
-    auto fft_menu_width      = bounds_width * 0.8;
-    auto theme_button_width  = bounds_width * 0.1;
-    auto graph_height        = bounds_height * 0.65;
-    auto meters_height       = bounds_height * 0.3;
-    auto meters_width        = bounds_width * 0.75;
-    auto intensity_width     = bounds_width * 0.25;
+    juce::Rectangle< int > bounds              = getLocalBounds();
+    int                    bounds_height       = bounds.getHeight();
+    int                    bounds_width        = bounds.getWidth();
+    int                    top_controls_height = static_cast< int >(std::floor(bounds_height * 0.05));
+    int                    fft_menu_width      = static_cast< int >(std::floor(bounds_width * 0.8));
+    int                    theme_button_width  = static_cast< int >(std::floor(bounds_width * 0.1));
+    int                    graph_height        = static_cast< int >(std::floor(bounds_height * 0.65));
+    int                    meters_height       = static_cast< int >(std::floor(bounds_height * 0.3));
+    int                    meters_width        = static_cast< int >(std::floor(bounds_width * 0.75));
+    int                    intensity_width     = static_cast< int >(std::floor(bounds_width * 0.25));
 
     fft_menu_.setBounds(0, 0, fft_menu_width, top_controls_height);
     theme_button_.setBounds(bounds.getRight() - theme_button_width, 0, theme_button_width, top_controls_height);

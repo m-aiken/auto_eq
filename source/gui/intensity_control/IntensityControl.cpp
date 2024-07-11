@@ -38,22 +38,23 @@ IntensityControl::paint(juce::Graphics& g)
 void
 IntensityControl::resized()
 {
-    auto initial_bounds = getLocalBounds();
-    auto padding        = 16;
-    auto bounds         = juce::Rectangle< int >(padding,
-                                         padding,
-                                         initial_bounds.getWidth() - (padding * 2),
-                                         initial_bounds.getHeight() - (padding * 2));
+    juce::Rectangle< int > initial_bounds = getLocalBounds();
+    juce::uint8            padding        = 16;
 
-    auto bounds_width        = bounds.getWidth();
-    auto bounds_height       = bounds.getHeight();
-    auto label_height        = bounds_height * 0.15;
-    auto rotary_diameter     = bounds_height - (label_height * 2);
-    auto centre_x            = bounds.getCentreX();
-    auto rotary_x            = centre_x - (rotary_diameter * 0.5);
-    auto rotary_y            = bounds.getCentreY() - (rotary_diameter * 0.5);
-    auto min_max_label_y     = bounds.getBottom() - label_height;
-    auto min_max_label_width = bounds_width * 0.4;
+    juce::Rectangle< int > bounds(padding,
+                                  padding,
+                                  initial_bounds.getWidth() - (padding * 2),
+                                  initial_bounds.getHeight() - (padding * 2));
+
+    int bounds_width        = bounds.getWidth();
+    int bounds_height       = bounds.getHeight();
+    int label_height        = static_cast< int >(std::floor(bounds_height * 0.15));
+    int rotary_diameter     = static_cast< int >(std::floor(bounds_height - (label_height * 2)));
+    int centre_x            = static_cast< int >(std::floor(bounds.getCentreX()));
+    int rotary_x            = static_cast< int >(std::floor(centre_x - (rotary_diameter * 0.5)));
+    int rotary_y            = static_cast< int >(std::floor(bounds.getCentreY() - (rotary_diameter * 0.5)));
+    int min_max_label_y     = static_cast< int >(std::floor(bounds.getBottom() - label_height));
+    int min_max_label_width = static_cast< int >(std::floor(bounds_width * 0.4));
 
     widget_label_.setBounds(bounds.getX(), bounds.getY(), bounds_width, label_height);
     rotary_.setBounds(rotary_x, rotary_y, rotary_diameter, rotary_diameter);

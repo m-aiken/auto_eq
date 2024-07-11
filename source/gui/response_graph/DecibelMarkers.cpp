@@ -6,8 +6,8 @@
 **
 */
 DecibelMarkers::DecibelMarkers()
-    : min_value_(Global::MAX_DB_CUT)
-    , max_value_(Global::MAX_DB_BOOST)
+    : min_value_(static_cast< int >(Global::MAX_DB_CUT))
+    , max_value_(static_cast< int >(Global::MAX_DB_BOOST))
     , db_interval_(6)
 {
 }
@@ -18,7 +18,7 @@ DecibelMarkers::DecibelMarkers()
 void
 DecibelMarkers::paint(juce::Graphics& g)
 {
-    auto bounds = getLocalBounds();
+    juce::Rectangle< int > bounds = getLocalBounds();
 
     int x          = bounds.getX();
     int offset_top = bounds.getY() + Global::ANALYSER_PADDING;

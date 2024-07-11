@@ -44,8 +44,7 @@ MeterGroup::resized()
 {
     using Track = juce::Grid::TrackInfo;
     using Fr    = juce::Grid::Fr;
-    using Px    = juce::Grid::Px;
-
+    
     juce::Grid grid;
 
     grid.templateColumns = {

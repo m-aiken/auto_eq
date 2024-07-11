@@ -30,12 +30,13 @@ StereoMeter::paint(juce::Graphics& g)
 void
 StereoMeter::resized()
 {
-    auto bounds          = getLocalBounds();
-    auto bounds_width    = bounds.getWidth();
-    auto bounds_height   = bounds.getHeight();
-    auto db_scale_height = bounds_height * 0.5;
-    auto meter_height    = bounds_height * 0.1;
-    auto meter_width     = bounds.getWidth() - (Global::ANALYSER_PADDING * 2);
+    juce::Rectangle< int > bounds = getLocalBounds();
+    
+    int bounds_width    = bounds.getWidth();
+    int bounds_height   = bounds.getHeight();
+    int db_scale_height = static_cast< int >(std::floor(bounds_height * 0.5));
+    int meter_height    = static_cast< int >(std::floor(bounds_height * 0.1));
+    int meter_width     = static_cast< int >(std::floor(bounds.getWidth() - (Global::ANALYSER_PADDING * 2)));
 
     db_scale_.setBounds(0, 0, bounds_width, db_scale_height);
 
