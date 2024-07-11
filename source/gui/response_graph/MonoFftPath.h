@@ -5,7 +5,6 @@
 #include "MonoFftPathProducer.h"
 #include "../look_and_feel/Theme.h"
 #include "../../dsp/MonoFftBuffer.h"
-#include "../../utility/GlobalConstants.h"
 
 class MonoFftPath
     : public juce::Component
@@ -14,7 +13,6 @@ class MonoFftPath
 public:
     MonoFftPath(MonoFftBuffer&              fft_buffer,
                 Theme::DarkLightPair        path_colour,
-                Global::PATH_DISPLAY_MODE   display_mode,
                 juce::RangedAudioParameter* fft_enablement_param);
     ~MonoFftPath() override;
 
@@ -26,9 +24,8 @@ public:
 private:
     MonoFftPathProducer path_producer_;
 
-    juce::Path                path_;
-    Theme::DarkLightPair      path_colour_;
-    Global::PATH_DISPLAY_MODE display_mode_;
+    juce::Path           path_;
+    Theme::DarkLightPair path_colour_;
 
     juce::RangedAudioParameter* fft_enablement_param_;
 

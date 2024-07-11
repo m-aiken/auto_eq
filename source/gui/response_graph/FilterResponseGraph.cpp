@@ -18,32 +18,26 @@ FilterResponseGraph::FilterResponseGraph(PluginProcessor& p)
 
     fft_path_primary_pre_eq_l_ = std::make_unique< MonoFftPath >(fft_buffers.at(Global::FFT::PRIMARY_LEFT_PRE_EQ),
                                                                  Theme::FFT_PRIMARY_PRE_EQ,
-                                                                 Global::PATH_FILL,
                                                                  apvts.getParameter(enable_fft_primary_pre_param_id));
 
     fft_path_primary_pre_eq_r_ = std::make_unique< MonoFftPath >(fft_buffers.at(Global::FFT::PRIMARY_RIGHT_PRE_EQ),
                                                                  Theme::FFT_PRIMARY_PRE_EQ,
-                                                                 Global::PATH_FILL,
                                                                  apvts.getParameter(enable_fft_primary_pre_param_id));
 
     fft_path_primary_post_eq_l_ = std::make_unique< MonoFftPath >(fft_buffers.at(Global::FFT::PRIMARY_LEFT_POST_EQ),
                                                                   Theme::FFT_PRIMARY_POST_EQ,
-                                                                  Global::PATH_STROKE,
                                                                   apvts.getParameter(enable_fft_primary_post_param_id));
 
     fft_path_primary_post_eq_r_ = std::make_unique< MonoFftPath >(fft_buffers.at(Global::FFT::PRIMARY_RIGHT_POST_EQ),
                                                                   Theme::FFT_PRIMARY_POST_EQ,
-                                                                  Global::PATH_STROKE,
                                                                   apvts.getParameter(enable_fft_primary_post_param_id));
 
     fft_path_sidechain_l_ = std::make_unique< MonoFftPath >(fft_buffers.at(Global::FFT::SIDECHAIN_LEFT),
                                                             Theme::FFT_SIDECHAIN,
-                                                            Global::PATH_FILL,
                                                             apvts.getParameter(enable_fft_sidechain_param_id));
 
     fft_path_sidechain_r_ = std::make_unique< MonoFftPath >(fft_buffers.at(Global::FFT::SIDECHAIN_RIGHT),
                                                             Theme::FFT_SIDECHAIN,
-                                                            Global::PATH_FILL,
                                                             apvts.getParameter(enable_fft_sidechain_param_id));
 
     addAndMakeVisible(backdrop_);

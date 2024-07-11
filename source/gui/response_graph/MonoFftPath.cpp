@@ -1,15 +1,14 @@
 #include "MonoFftPath.h"
+#include "../../utility/GlobalConstants.h"
 
 /*---------------------------------------------------------------------------
 **
 */
 MonoFftPath::MonoFftPath(MonoFftBuffer&              fft_buffer,
                          Theme::DarkLightPair        path_colour,
-                         Global::PATH_DISPLAY_MODE   display_mode,
                          juce::RangedAudioParameter* fft_enablement_param)
     : path_producer_(fft_buffer)
     , path_colour_(path_colour)
-    , display_mode_(display_mode)
     , fft_enablement_param_(fft_enablement_param)
 {
 }
@@ -29,13 +28,7 @@ void
 MonoFftPath::paint(juce::Graphics& g)
 {
     g.setColour(Theme::getColour(path_colour_));
-
-    if (display_mode_ == Global::PATH_STROKE) {
-        g.strokePath(path_, juce::PathStrokeType(1.f));
-    }
-    else {
-        g.fillPath(path_);
-    }
+    g.fillPath(path_);
 }
 
 /*---------------------------------------------------------------------------

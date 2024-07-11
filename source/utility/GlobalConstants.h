@@ -26,11 +26,6 @@ static const double FFT_PATH_PRODUCTION_FREQUENCY_MS        = 20.0;
 
 static bool SHOW_DEBUG_BOUNDS = false;
 
-enum PATH_DISPLAY_MODE {
-    PATH_STROKE,
-    PATH_FILL,
-};
-
 static const uint8 ANALYSER_PADDING          = 32;
 static const float ANALYSER_MARKER_FONT_SIZE = 12.f;
 
