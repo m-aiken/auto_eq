@@ -1,7 +1,7 @@
 #include "InputAnalysisFilter.h"
 #include "../utility/GlobalConstants.h"
 
-/*static*/ const double InputAnalysisFilter::ANALYSIS_FREQUENCY_MS = 200.0;
+/*static*/ const uint16 InputAnalysisFilter::ANALYSIS_FREQUENCY_MS = 200;
 
 /*---------------------------------------------------------------------------
 **
@@ -24,7 +24,9 @@ InputAnalysisFilter::InputAnalysisFilter()
 */
 InputAnalysisFilter::~InputAnalysisFilter()
 {
-    stopThread(static_cast< int >(ANALYSIS_FREQUENCY_MS));
+    if (isThreadRunning()) {
+        stopThread(ANALYSIS_FREQUENCY_MS);
+    }
 }
 
 /*---------------------------------------------------------------------------
@@ -36,7 +38,7 @@ InputAnalysisFilter::run()
     while (!threadShouldExit()) {
         processInputBuffer();
 
-        wait(ANALYSIS_FREQUENCY_MS);
+        wait(static_cast< double >(ANALYSIS_FREQUENCY_MS));
     }
 }
 
@@ -69,8 +71,15 @@ InputAnalysisFilter::prepare(juce::dsp::ProcessSpec& process_spec)
     }
 
     is_prepared_ = true;
+}
 
-    startThread();
+/*---------------------------------------------------------------------------
+**
+*/
+bool
+InputAnalysisFilter::isPrepared() const
+{
+    return is_prepared_;
 }
 
 /*---------------------------------------------------------------------------

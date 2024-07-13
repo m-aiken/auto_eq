@@ -3,6 +3,7 @@
 #include <JuceHeader.h>
 
 //#define TEST_FFT_ACCURACY 1
+//#define SHOW_DEBUG_BOUNDS 1
 
 namespace Global
 {
@@ -23,8 +24,6 @@ static const float MAX_HZ = 20000.f;
 
 static const double BAND_MAGNITUDE_CALCULATION_FREQUENCY_MS = 20.0;
 static const double FFT_PATH_PRODUCTION_FREQUENCY_MS        = 20.0;
-
-static bool SHOW_DEBUG_BOUNDS = false;
 
 static const uint8 ANALYSER_PADDING          = 32;
 static const float ANALYSER_MARKER_FONT_SIZE = 12.f;
@@ -93,6 +92,7 @@ enum PARAM_ID {
     SHOW_FFT_PRIMARY_PRE_EQ,
     SHOW_FFT_PRIMARY_POST_EQ,
     SHOW_FFT_SIDECHAIN,
+    ANALYSE_INPUT,
     FFT_ACCURACY_TEST_TONE_HZ,
     FFT_ACCURACY_TEST_TONE_DB,
 };
@@ -102,6 +102,7 @@ static const std::map< PARAM_ID, juce::String > PARAM_NAME_MAP = {
     { SHOW_FFT_PRIMARY_PRE_EQ, "SHOW_FFT_PRIMARY_PRE_EQ" },
     { SHOW_FFT_PRIMARY_POST_EQ, "SHOW_FFT_PRIMARY_POST_EQ" },
     { SHOW_FFT_SIDECHAIN, "SHOW_FFT_SIDECHAIN" },
+    { ANALYSE_INPUT, "ANALYSE_INPUT" },
     { FFT_ACCURACY_TEST_TONE_HZ, "FFT_ACCURACY_TEST_TONE_HZ" },
     { FFT_ACCURACY_TEST_TONE_DB, "FFT_ACCURACY_TEST_TONE_DB" },
 };

@@ -1,20 +1,17 @@
 #include "BandUpdater.h"
 #include "../utility/GlobalConstants.h"
 
-/*static*/ const uint16 BandUpdater::UPDATE_FREQUENCY_MS = 1000;
+/*static*/ const uint16 BandUpdater::UPDATE_FREQUENCY_MS       = 1000;
+/*static*/ const double BandUpdater::BAND_DB_RAMP_TIME_SECONDS = 0.02;
 
 /*---------------------------------------------------------------------------
 **
 */
-BandUpdater::BandUpdater(InputAnalysisFilter& analysis_filter, BandDbValueArray& band_values_array)
+BandUpdater::BandUpdater(InputAnalysisFilter& analysis_filter)
     : juce::Thread("THREAD_band_updater")
     , analysis_filter_(analysis_filter)
-    , band_values_array_(band_values_array)
+    , is_prepared_(false)
 {
-    // We don't start the new thread immediately because the band values contains
-    // juce::SmoothedValue<float> (not raw float) which need special preparation.
-    // That preparation happens in PluginProcessor::prepareToPlay() after which our
-    // startPolling() method is called.
 }
 
 /*---------------------------------------------------------------------------
@@ -22,7 +19,32 @@ BandUpdater::BandUpdater(InputAnalysisFilter& analysis_filter, BandDbValueArray&
 */
 BandUpdater::~BandUpdater()
 {
-    stopThread(UPDATE_FREQUENCY_MS);
+    if (isThreadRunning()) {
+        stopThread(UPDATE_FREQUENCY_MS);
+    }
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
+void
+BandUpdater::prepare(double sample_rate)
+{
+    for (auto& band : band_values_array_) {
+        band.reset(sample_rate, BAND_DB_RAMP_TIME_SECONDS);
+        band.setCurrentAndTargetValue(0.f);
+    }
+
+    is_prepared_ = true;
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
+bool
+BandUpdater::isPrepared() const
+{
+    return is_prepared_;
 }
 
 /*---------------------------------------------------------------------------
@@ -34,17 +56,19 @@ BandUpdater::run()
     while (!threadShouldExit()) {
         updateBandValues();
 
-        wait(UPDATE_FREQUENCY_MS);
+        wait(static_cast< double >(UPDATE_FREQUENCY_MS));
     }
 }
 
 /*---------------------------------------------------------------------------
 **
 */
-void
-BandUpdater::startPolling()
+float
+BandUpdater::getBandDb(Equalizer::BAND_ID band_id)
 {
-    startThread();
+    BandUpdater::SmoothedFloat& sf = band_values_array_.at(band_id);
+
+    return isThreadRunning() ? sf.getNextValue() : sf.getCurrentValue();
 }
 
 /*---------------------------------------------------------------------------

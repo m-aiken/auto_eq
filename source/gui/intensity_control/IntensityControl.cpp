@@ -23,10 +23,10 @@ IntensityControl::IntensityControl(juce::AudioProcessorValueTreeState& apvts)
 void
 IntensityControl::paint(juce::Graphics& g)
 {
-    if (Global::SHOW_DEBUG_BOUNDS) {
-        g.setColour(juce::Colours::lightblue);
-        g.drawRect(getLocalBounds());
-    }
+#ifdef SHOW_DEBUG_BOUNDS
+    g.setColour(juce::Colours::lightblue);
+    g.drawRect(getLocalBounds());
+#endif
 
     g.setColour(Theme::getColour(Theme::SECTION_BORDER));
     g.drawRect(getLocalBounds());

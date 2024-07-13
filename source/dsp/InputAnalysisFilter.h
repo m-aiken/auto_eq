@@ -6,7 +6,8 @@
 
 class InputAnalysisFilter : public juce::Thread
 {
-    using Filter = juce::dsp::LinkwitzRileyFilter< float >;
+public:
+    static const uint16 ANALYSIS_FREQUENCY_MS;  //! How frequently the analysis is performed (in milliseconds).
 
 public:
     InputAnalysisFilter();
@@ -15,11 +16,15 @@ public:
     void run() override;
 
     void prepare(juce::dsp::ProcessSpec& process_spec);
+    bool isPrepared() const;
+
     void pushBufferForAnalysis(juce::AudioBuffer< float > buffer);
 
     float getBandDbAdjustment(Equalizer::BAND_ID band_id) const;
 
 private:
+    using Filter = juce::dsp::LinkwitzRileyFilter< float >;
+
     void initFilters();
     void processInputBuffer();
 
@@ -27,8 +32,6 @@ private:
 
     // Debug functions.
     void printBandMagnitudesPreProcessing();
-
-    static const double ANALYSIS_FREQUENCY_MS;  //! How frequently the analysis is performed (in milliseconds).
 
     typedef std::array< Filter, Equalizer::NUM_BANDS >                   SingleBandFilterSequence;
     typedef std::array< SingleBandFilterSequence, Equalizer::NUM_BANDS > FilterMatrix;

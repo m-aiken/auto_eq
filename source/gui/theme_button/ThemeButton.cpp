@@ -21,10 +21,10 @@ ThemeButton::ThemeButton()
 void
 ThemeButton::paint(juce::Graphics& g)
 {
-    if (Global::SHOW_DEBUG_BOUNDS) {
-        g.setColour(juce::Colours::blue);
-        g.drawRect(getLocalBounds());
-    }
+#ifdef SHOW_DEBUG_BOUNDS
+    g.setColour(juce::Colours::blue);
+    g.drawRect(getLocalBounds());
+#endif
 
     g.setFont(Theme::getFont());
     g.setColour(Theme::getColour(Theme::TEXT));

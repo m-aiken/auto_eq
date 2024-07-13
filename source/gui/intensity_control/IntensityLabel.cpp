@@ -18,10 +18,10 @@ IntensityLabel::IntensityLabel(const juce::String& text, const juce::Justificati
 void
 IntensityLabel::paint(juce::Graphics& g)
 {
-    if (Global::SHOW_DEBUG_BOUNDS) {
-        g.setColour(juce::Colours::red);
-        g.drawRect(getLocalBounds());
-    }
+#ifdef SHOW_DEBUG_BOUNDS
+    g.setColour(juce::Colours::red);
+    g.drawRect(getLocalBounds());
+#endif
 
     g.setColour(Theme::getColour(Theme::TEXT));
     g.drawFittedText(getText(), getLocalBounds(), justification_, 1);

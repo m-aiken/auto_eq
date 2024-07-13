@@ -1,7 +1,6 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
-/*static*/ const double PluginProcessor::BAND_DB_RAMP_TIME_SECONDS  = 0.02;
 /*static*/ const double PluginProcessor::METER_DB_RAMP_TIME_SECONDS = 0.2;
 
 /*---------------------------------------------------------------------------
@@ -17,7 +16,7 @@ PluginProcessor::PluginProcessor()
             .withOutput("Output", juce::AudioChannelSet::stereo(), true))
     , apvts_(*this, nullptr, "APVTS", getParameterLayout())
     , input_analysis_filter_()
-    , band_updater_(input_analysis_filter_, band_db_values_)
+    , band_updater_(input_analysis_filter_)
 {
 }
 
@@ -131,10 +130,7 @@ PluginProcessor::prepareToPlay(double sample_rate, int samples_per_block)
     //
 
     // EQ band dB values.
-    for (auto& band : band_db_values_) {
-        band.reset(sample_rate, BAND_DB_RAMP_TIME_SECONDS);
-        band.setCurrentAndTargetValue(0.f);
-    }
+    band_updater_.prepare(sample_rate);
 
     // Input analysis filter.
     juce::dsp::ProcessSpec analysis_spec;
@@ -180,9 +176,6 @@ PluginProcessor::prepareToPlay(double sample_rate, int samples_per_block)
     rms_r_.setCurrentAndTargetValue(Global::METER_NEG_INF);
     lufs_l_.setCurrentAndTargetValue(Global::METER_NEG_INF);
     lufs_r_.setCurrentAndTargetValue(Global::METER_NEG_INF);
-
-    // Start the thread the band updater loop lives on.
-    band_updater_.startPolling();
 
 #ifdef TEST_FFT_ACCURACY
     juce::dsp::ProcessSpec fft_test_spec;
@@ -256,7 +249,9 @@ PluginProcessor::processBlock(juce::AudioBuffer< float >& buffer, juce::MidiBuff
 #endif
 
     // Give the untouched input signal to the analysis filters.
-    input_analysis_filter_.pushBufferForAnalysis(buffer);
+    if (input_analysis_filter_.isThreadRunning()) {
+        input_analysis_filter_.pushBufferForAnalysis(buffer);
+    }
 
     if (static_cast< bool >(*apvts_.getRawParameterValue(GuiParams::getName(GuiParams::SHOW_FFT_SIDECHAIN)))) {
         // Sidechain/Ambient FFT buffers (not affected by EQ).
@@ -373,15 +368,6 @@ PluginProcessor::getApvts()
 /*---------------------------------------------------------------------------
 **
 */
-PluginProcessor::BandDbValueArray&
-PluginProcessor::getBandDbValues()
-{
-    return band_db_values_;
-}
-
-/*---------------------------------------------------------------------------
-**
-*/
 PluginProcessor::FftBuffers&
 PluginProcessor::getFftBuffers()
 {
@@ -429,6 +415,28 @@ PluginProcessor::getMeterValue(Global::Meters::METER_TYPE meter_type, Global::Ch
 **
 */
 void
+PluginProcessor::startInputAnalysis()
+{
+    if (input_analysis_filter_.isPrepared() && band_updater_.isPrepared()) {
+        input_analysis_filter_.startThread();
+        band_updater_.startThread();
+    }
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
+void
+PluginProcessor::stopInputAnalysis()
+{
+    input_analysis_filter_.stopThread(InputAnalysisFilter::ANALYSIS_FREQUENCY_MS);
+    band_updater_.stopThread(BandUpdater::UPDATE_FREQUENCY_MS);
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
+void
 PluginProcessor::updateFilterCoefficients()
 {
     double sample_rate = getSampleRate();
@@ -436,20 +444,11 @@ PluginProcessor::updateFilterCoefficients()
 
     for (uint8 i = 0; i < Equalizer::NUM_BANDS; ++i) {
         Equalizer::BAND_ID band_id     = static_cast< Equalizer::BAND_ID >(i);
-        float              gain_factor = getNormalisedValue(getBandDb(band_id) * intensity);
+        float              gain_factor = getNormalisedValue(band_updater_.getBandDb(band_id) * intensity);
 
         Equalizer::updateBandCoefficients(filter_chain_left_, band_id, gain_factor, sample_rate);
         Equalizer::updateBandCoefficients(filter_chain_right_, band_id, gain_factor, sample_rate);
     }
-}
-
-/*---------------------------------------------------------------------------
-**
-*/
-float
-PluginProcessor::getBandDb(Equalizer::BAND_ID band_id)
-{
-    return band_db_values_.at(band_id).getNextValue();
 }
 
 /*---------------------------------------------------------------------------
@@ -517,6 +516,7 @@ PluginProcessor::getParameterLayout()
     juce::String fft_primary_pre  = GuiParams::getName(GuiParams::SHOW_FFT_PRIMARY_PRE_EQ);
     juce::String fft_primary_post = GuiParams::getName(GuiParams::SHOW_FFT_PRIMARY_POST_EQ);
     juce::String fft_sidechain    = GuiParams::getName(GuiParams::SHOW_FFT_SIDECHAIN);
+    juce::String analyse_input    = GuiParams::getName(GuiParams::ANALYSE_INPUT);
 
     pl.add(std::make_unique< juce::AudioParameterFloat >(juce::ParameterID(intensity, 1),
                                                          intensity,
@@ -526,6 +526,7 @@ PluginProcessor::getParameterLayout()
     pl.add(std::make_unique< juce::AudioParameterBool >(juce::ParameterID(fft_primary_pre, 1), fft_primary_pre, true));
     pl.add(std::make_unique< juce::AudioParameterBool >(juce::ParameterID(fft_primary_post, 1), fft_primary_post, false));
     pl.add(std::make_unique< juce::AudioParameterBool >(juce::ParameterID(fft_sidechain, 1), fft_sidechain, false));
+    pl.add(std::make_unique< juce::AudioParameterBool >(juce::ParameterID(analyse_input, 1), analyse_input, false));
 
 #ifdef TEST_FFT_ACCURACY
     juce::String fft_test_hz = GuiParams::getName(GuiParams::FFT_ACCURACY_TEST_TONE_HZ);

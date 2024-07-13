@@ -2,6 +2,7 @@
 
 #include "PluginProcessor.h"
 #include "gui/fft_menu/FftMenu.h"
+#include "gui/input_analysis_menu/InputAnalysisMenu.h"
 #include "gui/intensity_control/IntensityControl.h"
 #include "gui/look_and_feel/CustomLookAndFeel.h"
 #include "gui/meters/MeterGroup.h"
@@ -26,6 +27,7 @@ private:
     // access the processor object that created it.
     PluginProcessor& processor_ref_;
 
+    InputAnalysisMenu   input_analysis_menu_;
     FftMenu             fft_menu_;
     ThemeButton         theme_button_;
     FilterResponseGraph filter_res_graph_;

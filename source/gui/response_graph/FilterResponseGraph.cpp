@@ -59,10 +59,10 @@ FilterResponseGraph::FilterResponseGraph(PluginProcessor& p)
 void
 FilterResponseGraph::paint(juce::Graphics& g)
 {
-    if (Global::SHOW_DEBUG_BOUNDS) {
-        g.setColour(juce::Colours::yellow);
-        g.drawRect(getLocalBounds());
-    }
+#ifdef SHOW_DEBUG_BOUNDS
+    g.setColour(juce::Colours::yellow);
+    g.drawRect(getLocalBounds());
+#endif
 }
 
 /*---------------------------------------------------------------------------

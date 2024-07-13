@@ -18,10 +18,10 @@ StereoMeter::StereoMeter(PluginProcessor& p, Global::Meters::METER_TYPE meter_ty
 void
 StereoMeter::paint(juce::Graphics& g)
 {
-    if (Global::SHOW_DEBUG_BOUNDS) {
-        g.setColour(juce::Colours::yellow);
-        g.drawRect(getLocalBounds());
-    }
+#ifdef SHOW_DEBUG_BOUNDS
+    g.setColour(juce::Colours::yellow);
+    g.drawRect(getLocalBounds());
+#endif
 }
 
 /*---------------------------------------------------------------------------
@@ -31,7 +31,7 @@ void
 StereoMeter::resized()
 {
     juce::Rectangle< int > bounds = getLocalBounds();
-    
+
     int bounds_width    = bounds.getWidth();
     int bounds_height   = bounds.getHeight();
     int db_scale_height = static_cast< int >(std::floor(bounds_height * 0.5));

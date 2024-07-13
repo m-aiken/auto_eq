@@ -43,7 +43,7 @@ target_sources(${PROJECT_NAME}
         source/dsp/InputAnalysisFilter.cpp
         source/dsp/MonoFftBuffer.cpp
         source/gui/fft_menu/FftMenu.cpp
-        source/gui/fft_menu/FftMenuButton.cpp
+        source/gui/input_analysis_menu/InputAnalysisMenu.cpp
         source/gui/intensity_control/IntensityControl.cpp
         source/gui/intensity_control/IntensityLabel.cpp
         source/gui/look_and_feel/CustomLookAndFeel.cpp
@@ -63,6 +63,8 @@ target_sources(${PROJECT_NAME}
         source/gui/response_graph/MonoFftPath.cpp
         source/gui/response_graph/MonoFftPathProducer.cpp
         source/gui/theme_button/ThemeButton.cpp
+        source/gui/widgets/MenuButton.cpp
+        source/gui/widgets/RecordButton.cpp
         source/gui/widgets/RotaryControl.cpp
         )
 

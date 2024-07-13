@@ -2,7 +2,7 @@
 
 #include <JuceHeader.h>
 
-#include "FftMenuButton.h"
+#include "../widgets/MenuButton.h"
 
 class FftMenu : public juce::Component
 {
@@ -13,9 +13,9 @@ public:
     void resized() override;
 
 private:
-    FftMenuButton primary_pre_button_;
-    FftMenuButton primary_post_button_;
-    FftMenuButton sidechain_button_;
+    MenuButton primary_pre_button_;
+    MenuButton primary_post_button_;
+    MenuButton sidechain_button_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(FftMenu)
 };

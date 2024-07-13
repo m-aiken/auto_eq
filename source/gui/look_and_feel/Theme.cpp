@@ -28,7 +28,9 @@ const Theme::DarkLightPair Theme::METER_VALUE      = DarkLightPair(TEAL, TEAL);
 const Theme::DarkLightPair Theme::ROTARY_FILL = DarkLightPair(TEAL.withAlpha(0.1f), RED_ORANGE.withAlpha(0.1f));
 const Theme::DarkLightPair Theme::ROTARY_ARC  = DarkLightPair(TEAL, RED_ORANGE);
 
-const Theme::DarkLightPair Theme::CHECKBOX = DarkLightPair(EGGSHELL, DARK_GREY);
+const Theme::DarkLightPair Theme::CHECKBOX          = DarkLightPair(EGGSHELL, DARK_GREY);
+const Theme::DarkLightPair Theme::RECORD_BUTTON_ON  = DarkLightPair(RED_ORANGE, RED_ORANGE);
+const Theme::DarkLightPair Theme::RECORD_BUTTON_OFF = DarkLightPair(EGGSHELL, DARK_GREY);
 
 bool Theme::dark_mode = true;
 

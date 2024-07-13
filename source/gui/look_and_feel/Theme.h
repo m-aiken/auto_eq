@@ -35,6 +35,8 @@ public:
     static const DarkLightPair ROTARY_ARC;
 
     static const DarkLightPair CHECKBOX;
+    static const DarkLightPair RECORD_BUTTON_ON;
+    static const DarkLightPair RECORD_BUTTON_OFF;
 
     static bool dark_mode;
 

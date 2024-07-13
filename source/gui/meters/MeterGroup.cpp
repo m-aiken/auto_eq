@@ -27,10 +27,10 @@ MeterGroup::MeterGroup(PluginProcessor& p)
 void
 MeterGroup::paint(juce::Graphics& g)
 {
-    if (Global::SHOW_DEBUG_BOUNDS) {
-        g.setColour(juce::Colours::red);
-        g.drawRect(getLocalBounds());
-    }
+#ifdef SHOW_DEBUG_BOUNDS
+    g.setColour(juce::Colours::red);
+    g.drawRect(getLocalBounds());
+#endif
 
     g.setColour(Theme::getColour(Theme::SECTION_BORDER));
     g.drawRect(getLocalBounds());
@@ -44,7 +44,7 @@ MeterGroup::resized()
 {
     using Track = juce::Grid::TrackInfo;
     using Fr    = juce::Grid::Fr;
-    
+
     juce::Grid grid;
 
     grid.templateColumns = {

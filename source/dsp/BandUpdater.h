@@ -7,16 +7,22 @@
 
 class BandUpdater : public juce::Thread
 {
+public:
     typedef juce::SmoothedValue< float, juce::ValueSmoothingTypes::Linear > SmoothedFloat;
     typedef std::array< SmoothedFloat, Equalizer::NUM_BANDS >               BandDbValueArray;
-    
+
+    static const uint16 UPDATE_FREQUENCY_MS;
+
 public:
-    BandUpdater(InputAnalysisFilter& analysis_filter, BandDbValueArray& band_values_array);
+    BandUpdater(InputAnalysisFilter& analysis_filter);
     ~BandUpdater() override;
+
+    void prepare(double sample_rate);
+    bool isPrepared() const;
 
     void run() override;
 
-    void startPolling();
+    float getBandDb(Equalizer::BAND_ID band_id);
 
 private:
     void updateBandValues();
@@ -24,10 +30,12 @@ private:
     // Debug functions.
     void printBandAdjustments();
 
-    static const uint16 UPDATE_FREQUENCY_MS;
+    static const double BAND_DB_RAMP_TIME_SECONDS;
 
     InputAnalysisFilter& analysis_filter_;
-    BandDbValueArray&    band_values_array_;
+    BandDbValueArray     band_values_array_;
+
+    bool is_prepared_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(BandUpdater)
 };

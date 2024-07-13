@@ -44,18 +44,18 @@ public:
     juce::AudioProcessorValueTreeState& getApvts();
 
     typedef juce::SmoothedValue< float, juce::ValueSmoothingTypes::Linear > SmoothedFloat;
-    typedef std::array< SmoothedFloat, Equalizer::NUM_BANDS >               BandDbValueArray;
     typedef std::array< MonoFftBuffer, Global::FFT::NUM_BUFFERS >           FftBuffers;
 
-    BandDbValueArray&     getBandDbValues();
     FftBuffers&           getFftBuffers();
     Equalizer::MonoChain& getFilterChain();
 
     float getMeterValue(Global::Meters::METER_TYPE meter_type, Global::Channels::CHANNEL_ID channel_id) const;
 
+    void startInputAnalysis();
+    void stopInputAnalysis();
+
 private:
-    void  updateFilterCoefficients();
-    float getBandDb(Equalizer::BAND_ID band_id);
+    void updateFilterCoefficients();
 
     void setPeak(SmoothedFloat& val, juce::AudioBuffer< float >& buffer, Global::Channels::CHANNEL_ID channel);
     void setRms(SmoothedFloat& val, juce::AudioBuffer< float >& buffer, Global::Channels::CHANNEL_ID channel);
@@ -68,10 +68,8 @@ private:
 private:
     juce::AudioProcessorValueTreeState apvts_;
 
-    static const double BAND_DB_RAMP_TIME_SECONDS;
     static const double METER_DB_RAMP_TIME_SECONDS;
 
-    BandDbValueArray    band_db_values_;
     InputAnalysisFilter input_analysis_filter_;
     BandUpdater         band_updater_;
     FftBuffers          fft_buffers_;
