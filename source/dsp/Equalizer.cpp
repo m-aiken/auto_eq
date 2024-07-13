@@ -7,6 +7,81 @@
 /*---------------------------------------------------------------------------
 **
 */
+/*static*/ juce::String
+Equalizer::getBandName(BAND_ID band_id)
+{
+    switch (band_id) {
+    case B1:
+        return "B1";
+    case B2:
+        return "B2";
+    case B3:
+        return "B3";
+    case B4:
+        return "B4";
+    case B5:
+        return "B5";
+    case B6:
+        return "B6";
+    case B7:
+        return "B7";
+    case B8:
+        return "B8";
+    case B9:
+        return "B9";
+    case B10:
+        return "B10";
+    case B11:
+        return "B11";
+    case B12:
+        return "B12";
+    case B13:
+        return "B13";
+    case B14:
+        return "B14";
+    case B15:
+        return "B15";
+    case B16:
+        return "B16";
+    case B17:
+        return "B17";
+    case B18:
+        return "B18";
+    case B19:
+        return "B19";
+    case B20:
+        return "B20";
+    case B21:
+        return "B21";
+    case B22:
+        return "B22";
+    case B23:
+        return "B23";
+    case B24:
+        return "B24";
+    case B25:
+        return "B25";
+    case B26:
+        return "B26";
+    case B27:
+        return "B27";
+    case B28:
+        return "B28";
+    case B29:
+        return "B29";
+    case B30:
+        return "B30";
+    case B31:
+        return "B31";
+
+    default:
+        return "";
+    }
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
 /*static*/ float
 Equalizer::getBandHz(BAND_ID band_id)
 {

@@ -17,6 +17,7 @@ PluginProcessor::PluginProcessor()
     , apvts_(*this, nullptr, "APVTS", getParameterLayout())
     , input_analysis_filter_()
     , band_updater_(input_analysis_filter_)
+    , band_parameter_updater_(apvts_, band_updater_)
 {
 }
 
@@ -420,6 +421,7 @@ PluginProcessor::startInputAnalysis()
     if (input_analysis_filter_.isPrepared() && band_updater_.isPrepared()) {
         input_analysis_filter_.startThread();
         band_updater_.startThread();
+        band_parameter_updater_.startThread();
     }
 }
 
@@ -429,8 +431,9 @@ PluginProcessor::startInputAnalysis()
 void
 PluginProcessor::stopInputAnalysis()
 {
-    input_analysis_filter_.stopThread(InputAnalysisFilter::ANALYSIS_FREQUENCY_MS);
+    band_parameter_updater_.stopThread(BandParameterUpdater::UPDATE_FREQUENCY_MS);
     band_updater_.stopThread(BandUpdater::UPDATE_FREQUENCY_MS);
+    input_analysis_filter_.stopThread(InputAnalysisFilter::ANALYSIS_FREQUENCY_MS);
 }
 
 /*---------------------------------------------------------------------------
@@ -440,11 +443,18 @@ void
 PluginProcessor::updateFilterCoefficients()
 {
     double sample_rate = getSampleRate();
-    float  intensity   = apvts_.getParameter(GuiParams::getName(GuiParams::EQ_INTENSITY))->getValue();
 
     for (uint8 i = 0; i < Equalizer::NUM_BANDS; ++i) {
-        Equalizer::BAND_ID band_id     = static_cast< Equalizer::BAND_ID >(i);
-        float              gain_factor = getNormalisedValue(band_updater_.getBandDb(band_id) * intensity);
+        Equalizer::BAND_ID          band_id      = static_cast< Equalizer::BAND_ID >(i);
+        juce::String                parameter_id = Equalizer::getBandName(band_id);
+        juce::RangedAudioParameter* apvts_param  = apvts_.getParameter(parameter_id);
+
+        if (apvts_param == nullptr) {
+            continue;
+        }
+
+        float db_value    = apvts_param->convertFrom0to1(apvts_param->getValue());
+        float gain_factor = getNormalisedValue(db_value);
 
         Equalizer::updateBandCoefficients(filter_chain_left_, band_id, gain_factor, sample_rate);
         Equalizer::updateBandCoefficients(filter_chain_right_, band_id, gain_factor, sample_rate);
@@ -527,6 +537,14 @@ PluginProcessor::getParameterLayout()
     pl.add(std::make_unique< juce::AudioParameterBool >(juce::ParameterID(fft_primary_post, 1), fft_primary_post, false));
     pl.add(std::make_unique< juce::AudioParameterBool >(juce::ParameterID(fft_sidechain, 1), fft_sidechain, false));
     pl.add(std::make_unique< juce::AudioParameterBool >(juce::ParameterID(analyse_input, 1), analyse_input, false));
+
+    juce::NormalisableRange< float > band_range(Global::MAX_DB_CUT, Global::MAX_DB_BOOST, 0.01f, 1.f);
+
+    for (size_t i = 0; i < Equalizer::NUM_BANDS; ++i) {
+        juce::String band_str = Equalizer::getBandName(static_cast< Equalizer::BAND_ID >(i));
+
+        pl.add(std::make_unique< juce::AudioParameterFloat >(juce::ParameterID(band_str, 1), band_str, band_range, 0.f));
+    }
 
 #ifdef TEST_FFT_ACCURACY
     juce::String fft_test_hz = GuiParams::getName(GuiParams::FFT_ACCURACY_TEST_TONE_HZ);

@@ -63,5 +63,29 @@ CustomLookAndFeel::drawRotarySlider(juce::Graphics& g,
 }
 
 /*---------------------------------------------------------------------------
+**
+*/
+void
+CustomLookAndFeel::drawLinearSlider(juce::Graphics&           g,
+                                    int                       x,
+                                    int                       y,
+                                    int                       width,
+                                    int                       height,
+                                    float                     slider_pos,
+                                    float                     min_slider_pos,
+                                    float                     max_slider_pos,
+                                    juce::Slider::SliderStyle slider_style,
+                                    juce::Slider&             slider)
+{
+    juce::ignoreUnused(x, y, height, min_slider_pos, max_slider_pos, slider_style, slider);
+
+    float                    thumb_diameter = static_cast< float >(width);
+    juce::Rectangle< float > thumb_bounds(0.f, slider_pos - (thumb_diameter * 0.5f), thumb_diameter, thumb_diameter);
+
+    g.setColour(Theme::getColour(Theme::BAND_VALUE));
+    g.fillEllipse(thumb_bounds);
+}
+
+/*---------------------------------------------------------------------------
 ** End of File
 */

@@ -39,6 +39,7 @@ target_sources(${PROJECT_NAME}
         source/PluginEditor.cpp
         source/PluginProcessor.cpp
         source/dsp/BandUpdater.cpp
+        source/dsp/BandParameterUpdater.cpp
         source/dsp/Equalizer.cpp
         source/dsp/InputAnalysisFilter.cpp
         source/dsp/MonoFftBuffer.cpp
@@ -55,6 +56,7 @@ target_sources(${PROJECT_NAME}
         source/gui/meters/MonoMeter.cpp
         source/gui/meters/StereoMeter.cpp
         source/gui/response_graph/DecibelMarkers.cpp
+        source/gui/response_graph/EqBandSlider.cpp
         source/gui/response_graph/FilterMagnitudesCalculator.cpp
         source/gui/response_graph/FilterResponseBands.cpp
         source/gui/response_graph/FilterResponseCanvas.cpp

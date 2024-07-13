@@ -12,6 +12,14 @@ FilterResponseBands::FilterResponseBands(PluginProcessor& p)
     : x_coordinates_calculated_(false)
     , magnitudes_calculator_(p)
 {
+    juce::AudioProcessorValueTreeState& apvts = p.getApvts();
+
+    for (size_t i = 0; i < Equalizer::NUM_BANDS; ++i) {
+        juce::String band_str = Equalizer::getBandName(static_cast< Equalizer::BAND_ID >(i));
+        sliders_.at(i)        = std::make_unique< EqBandSlider >(apvts, band_str);
+
+        addAndMakeVisible(sliders_.at(i).get());
+    }
 }
 
 /*---------------------------------------------------------------------------
@@ -21,27 +29,30 @@ FilterResponseBands::~FilterResponseBands()
 {
     stopTimer();
 }
-
+#if 0
 /*---------------------------------------------------------------------------
 **
 */
 void
 FilterResponseBands::paint(juce::Graphics& g)
 {
+    #if 0
     FilterMagnitudesCalculator::MagnitudesVector& magnitudes = magnitudes_calculator_.getMagnitudes();
 
     if (!x_coordinates_calculated_ || magnitudes.size() == 0) {
         return;
     }
+    #endif
 
     auto bounds       = getLocalBounds();
     auto bounds_width = bounds.getWidth();
     auto centre_y     = bounds.getCentreY();
 
+    #if 0
     g.setColour(Theme::getColour(Theme::BAND_VALUE));
 
     // Draw the filter response at each band.
-    // Note: We're not drawing the 20Hz or 2kHz bands.
+    // Note: We're not drawing the 20Hz or 20kHz bands.
     for (uint8 i = 1; i < Equalizer::NUM_BANDS - 1; ++i) {
         int x          = x_coordinates_.at(i);
         int y          = getYCoordinateFromMagnitude(magnitudes.at(static_cast< size_t >(x)));
@@ -51,11 +62,13 @@ FilterResponseBands::paint(juce::Graphics& g)
         juce::Rectangle< int > val_rect(x - HALF_BAR_WIDTH, juce::jmin< int >(y, centre_y), BAR_WIDTH, bar_height);
         g.fillRoundedRectangle(val_rect.toFloat(), 2.f);
     }
+    #endif
 
     // Draw a solid line at 0dB across the entire graph.
     g.setColour(Theme::getColour(Theme::GRAPH_0DB_MARKER));
     g.drawRect(0, centre_y - 1, bounds_width, 2);
 }
+#endif
 
 /*---------------------------------------------------------------------------
 **
@@ -69,6 +82,13 @@ FilterResponseBands::resized()
     calculateXCoordinates();
     magnitudes_calculator_.prepare(getLocalBounds().getWidth());
 
+    int bounds_height = getLocalBounds().getHeight();
+
+    // Note: We're not drawing the sliders for the 20Hz or 20kHz bands.
+    for (size_t i = 1; i < Equalizer::NUM_BANDS - 1; ++i) {
+        sliders_.at(i)->setBounds(x_coordinates_.at(i), 0, BAR_WIDTH, bounds_height);
+    }
+
     if (!isTimerRunning()) {
         startTimer(static_cast< int >(Global::BAND_MAGNITUDE_CALCULATION_FREQUENCY_MS));
     }
@@ -80,7 +100,8 @@ FilterResponseBands::resized()
 void
 FilterResponseBands::timerCallback()
 {
-    repaint();
+    //    updateSliderValues();
+    //    repaint();
 }
 
 /*---------------------------------------------------------------------------
@@ -96,6 +117,26 @@ FilterResponseBands::getYCoordinateFromMagnitude(double magnitude)
     double y = juce::jmap< double >(magnitude, Global::MAX_DB_CUT, Global::MAX_DB_BOOST, bounds_bottom, bounds_top);
 
     return static_cast< int >(std::floor(y));
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
+void
+FilterResponseBands::updateSliderValues()
+{
+    FilterMagnitudesCalculator::MagnitudesVector& magnitudes = magnitudes_calculator_.getMagnitudes();
+
+    if (!x_coordinates_calculated_ || magnitudes.size() == 0) {
+        return;
+    }
+
+    for (uint8 i = 1; i < Equalizer::NUM_BANDS - 1; ++i) {
+        int    hz           = x_coordinates_.at(i);
+        double slider_value = magnitudes.at(static_cast< size_t >(hz));
+
+        sliders_.at(i)->setValue(slider_value, juce::dontSendNotification);
+    }
 }
 
 /*---------------------------------------------------------------------------

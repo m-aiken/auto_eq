@@ -3,6 +3,7 @@
 #include <juce_audio_processors/juce_audio_processors.h>
 
 #include "dsp/BandUpdater.h"
+#include "dsp/BandParameterUpdater.h"
 #include "dsp/Equalizer.h"
 #include "dsp/InputAnalysisFilter.h"
 #include "dsp/MonoFftBuffer.h"
@@ -70,9 +71,10 @@ private:
 
     static const double METER_DB_RAMP_TIME_SECONDS;
 
-    InputAnalysisFilter input_analysis_filter_;
-    BandUpdater         band_updater_;
-    FftBuffers          fft_buffers_;
+    InputAnalysisFilter  input_analysis_filter_;
+    BandUpdater          band_updater_;
+    BandParameterUpdater band_parameter_updater_;
+    FftBuffers           fft_buffers_;
 
     Equalizer::MonoChain filter_chain_left_;
     Equalizer::MonoChain filter_chain_right_;

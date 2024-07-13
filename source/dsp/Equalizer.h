@@ -81,9 +81,10 @@ public:
 public:
     Equalizer() = default;
 
-    static float getBandHz(BAND_ID band_id);
-    static float getBandTestDb(BAND_ID band_id);
-    static float getBandTargetDb(BAND_ID band_id);
+    static juce::String getBandName(BAND_ID band_id);
+    static float        getBandHz(BAND_ID band_id);
+    static float        getBandTestDb(BAND_ID band_id);
+    static float        getBandTargetDb(BAND_ID band_id);
 
     static void updateBandCoefficients(MonoChain& chain, const BAND_ID& band_id, float gain, double sample_rate);
 

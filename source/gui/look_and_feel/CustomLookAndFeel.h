@@ -17,6 +17,17 @@ public:
                           float           rotary_end_angle,
                           juce::Slider&   slider) override;
 
+    void drawLinearSlider(juce::Graphics&           g,
+                          int                       x,
+                          int                       y,
+                          int                       width,
+                          int                       height,
+                          float                     slider_pos,
+                          float                     min_slider_pos,
+                          float                     max_slider_pos,
+                          juce::Slider::SliderStyle slider_style,
+                          juce::Slider&             slider) override;
+
 private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(CustomLookAndFeel)
 };
