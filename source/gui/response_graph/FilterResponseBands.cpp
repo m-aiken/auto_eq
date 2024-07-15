@@ -20,6 +20,10 @@ FilterResponseBands::FilterResponseBands(PluginProcessor& p)
 
         addAndMakeVisible(sliders_.at(i).get());
     }
+
+    // The filter response graph has multiple widgets stacked on the z axis (this being one of them).
+    // Make sure this layer is always on the top so that the band sliders are accessible to the user.
+    setAlwaysOnTop(true);
 }
 
 /*---------------------------------------------------------------------------
