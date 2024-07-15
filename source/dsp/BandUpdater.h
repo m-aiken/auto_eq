@@ -24,6 +24,8 @@ public:
 
     float getBandDb(Equalizer::BAND_ID band_id);
 
+    void syncroniseWithTreeState(juce::AudioProcessorValueTreeState& apvts);
+
 private:
     void updateBandValues();
 

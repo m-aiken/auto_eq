@@ -75,6 +75,27 @@ BandUpdater::getBandDb(Equalizer::BAND_ID band_id)
 **
 */
 void
+BandUpdater::syncroniseWithTreeState(juce::AudioProcessorValueTreeState& apvts)
+{
+    for (size_t i = 0; i < band_values_array_.size(); ++i) {
+        Equalizer::BAND_ID          band_id     = static_cast< Equalizer::BAND_ID >(i);
+        juce::RangedAudioParameter* apvts_param = apvts.getParameter(Equalizer::getBandName(band_id));
+
+        if (apvts_param == nullptr) {
+            continue;
+        }
+
+        float db_value = apvts_param->convertFrom0to1(apvts_param->getValue());
+        DBG(Equalizer::getBandName(band_id) + ": " + juce::String(db_value));
+
+        band_values_array_.at(band_id).setCurrentAndTargetValue(db_value);
+    }
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
+void
 BandUpdater::updateBandValues()
 {
     //    printBandAdjustments();

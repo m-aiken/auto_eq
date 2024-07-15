@@ -420,7 +420,12 @@ PluginProcessor::startInputAnalysis()
 {
     if (input_analysis_filter_.isPrepared() && band_updater_.isPrepared()) {
         input_analysis_filter_.startThread();
+
+        // The user may have manually changed the band values since the last analysis and subsequent auto-EQ.
+        // Align the band updater's band values array with the values in the tree state.
+        band_updater_.syncroniseWithTreeState(apvts_);
         band_updater_.startThread();
+
         band_parameter_updater_.startThread();
     }
 }
