@@ -499,14 +499,8 @@ PluginProcessor::getParameterLayout()
 {
     juce::AudioProcessorValueTreeState::ParameterLayout pl;
 
-    juce::String intensity        = GuiParams::getName(GuiParams::EQ_INTENSITY);
     juce::String fft_primary_post = GuiParams::getName(GuiParams::SHOW_FFT);
     juce::String analyse_input    = GuiParams::getName(GuiParams::ANALYSE_INPUT);
-
-    pl.add(std::make_unique< juce::AudioParameterFloat >(juce::ParameterID(intensity, 1),
-                                                         intensity,
-                                                         juce::NormalisableRange< float >(0.f, 1.f, 0.01f, 1.f),
-                                                         0.5f));
 
     pl.add(std::make_unique< juce::AudioParameterBool >(juce::ParameterID(fft_primary_post, 1), fft_primary_post, false));
     pl.add(std::make_unique< juce::AudioParameterBool >(juce::ParameterID(analyse_input, 1), analyse_input, false));

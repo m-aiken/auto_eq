@@ -13,7 +13,6 @@ PluginEditor::PluginEditor(PluginProcessor& p)
     , show_fft_button_("Show Primary Signal Post EQ", p.getApvts(), GuiParams::SHOW_FFT)
     , theme_button_()
     , filter_res_graph_(p)
-    , intensity_control_(p.getApvts())
     , meter_group_(p)
 {
     setLookAndFeel(&lnf_);
@@ -22,7 +21,6 @@ PluginEditor::PluginEditor(PluginProcessor& p)
     addAndMakeVisible(show_fft_button_);
     addAndMakeVisible(theme_button_);
     addAndMakeVisible(filter_res_graph_);
-    addAndMakeVisible(intensity_control_);
     addAndMakeVisible(meter_group_);
 
     analyse_input_button_.addListener(this);
@@ -69,14 +67,12 @@ PluginEditor::resized()
     int                    graph_height              = static_cast< int >(std::floor(bounds_height * 0.65));
     int                    meters_height             = static_cast< int >(std::floor(bounds_height * 0.3));
     int                    meters_width              = static_cast< int >(std::floor(bounds_width * 0.75));
-    int                    intensity_width           = static_cast< int >(std::floor(bounds_width * 0.25));
 
     analyse_input_button_.setBounds(0, 0, input_analysis_menu_width, top_controls_height);
     show_fft_button_.setBounds(analyse_input_button_.getRight(), 0, fft_menu_width, top_controls_height);
     theme_button_.setBounds(bounds.getRight() - theme_button_width, 0, theme_button_width, top_controls_height);
     filter_res_graph_.setBounds(0, top_controls_height, bounds_width, graph_height);
-    intensity_control_.setBounds(0, filter_res_graph_.getBottom(), intensity_width, meters_height);
-    meter_group_.setBounds(intensity_control_.getRight(), filter_res_graph_.getBottom(), meters_width, meters_height);
+    meter_group_.setBounds(0, filter_res_graph_.getBottom(), meters_width, meters_height);
 }
 
 /*---------------------------------------------------------------------------

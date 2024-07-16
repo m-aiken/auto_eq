@@ -43,8 +43,6 @@ target_sources(${PROJECT_NAME}
         source/dsp/Equalizer.cpp
         source/dsp/InputAnalysisFilter.cpp
         source/dsp/MonoFftBuffer.cpp
-        source/gui/intensity_control/IntensityControl.cpp
-        source/gui/intensity_control/IntensityLabel.cpp
         source/gui/look_and_feel/CustomLookAndFeel.cpp
         source/gui/look_and_feel/Theme.cpp
         source/gui/meters/MeterCanvas.cpp

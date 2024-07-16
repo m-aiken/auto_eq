@@ -80,7 +80,6 @@ namespace GuiParams
 {
 
 enum PARAM_ID {
-    EQ_INTENSITY,
     SHOW_FFT,
     ANALYSE_INPUT,
     FFT_ACCURACY_TEST_TONE_HZ,
@@ -88,7 +87,6 @@ enum PARAM_ID {
 };
 
 static const std::map< PARAM_ID, juce::String > PARAM_NAME_MAP = {
-    { EQ_INTENSITY, "EQ_INTENSITY" },
     { SHOW_FFT, "SHOW_FFT" },
     { ANALYSE_INPUT, "ANALYSE_INPUT" },
     { FFT_ACCURACY_TEST_TONE_HZ, "FFT_ACCURACY_TEST_TONE_HZ" },
