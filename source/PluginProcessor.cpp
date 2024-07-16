@@ -11,8 +11,6 @@ PluginProcessor::PluginProcessor()
         BusesProperties()
             .withInput(Global::Channels::getName(Global::Channels::PRIMARY_LEFT), juce::AudioChannelSet::mono(), true)
             .withInput(Global::Channels::getName(Global::Channels::PRIMARY_RIGHT), juce::AudioChannelSet::mono(), true)
-            .withInput(Global::Channels::getName(Global::Channels::SIDECHAIN_LEFT), juce::AudioChannelSet::mono(), true)
-            .withInput(Global::Channels::getName(Global::Channels::SIDECHAIN_RIGHT), juce::AudioChannelSet::mono(), true)
             .withOutput("Output", juce::AudioChannelSet::stereo(), true))
     , apvts_(*this, nullptr, "APVTS", getParameterLayout())
     , input_analysis_filter_()
@@ -143,12 +141,8 @@ PluginProcessor::prepareToPlay(double sample_rate, int samples_per_block)
     input_analysis_filter_.prepare(analysis_spec);
 
     // FFT buffers.
-    fft_buffers_.at(Global::FFT::PRIMARY_LEFT_PRE_EQ).prepare(sample_rate);
-    fft_buffers_.at(Global::FFT::PRIMARY_RIGHT_PRE_EQ).prepare(sample_rate);
     fft_buffers_.at(Global::FFT::PRIMARY_LEFT_POST_EQ).prepare(sample_rate);
     fft_buffers_.at(Global::FFT::PRIMARY_RIGHT_POST_EQ).prepare(sample_rate);
-    fft_buffers_.at(Global::FFT::SIDECHAIN_LEFT).prepare(sample_rate);
-    fft_buffers_.at(Global::FFT::SIDECHAIN_RIGHT).prepare(sample_rate);
 
     // Filter chains.
     juce::dsp::ProcessSpec filter_chain_spec;
@@ -254,26 +248,6 @@ PluginProcessor::processBlock(juce::AudioBuffer< float >& buffer, juce::MidiBuff
         input_analysis_filter_.pushBufferForAnalysis(buffer);
     }
 
-    if (static_cast< bool >(*apvts_.getRawParameterValue(GuiParams::getName(GuiParams::SHOW_FFT_SIDECHAIN)))) {
-        // Sidechain/Ambient FFT buffers (not affected by EQ).
-        for (int i = 0; i < buffer.getNumSamples(); ++i) {
-            fft_buffers_.at(Global::FFT::SIDECHAIN_LEFT)
-                .pushNextSample(buffer.getSample(Global::Channels::SIDECHAIN_LEFT, i));
-            fft_buffers_.at(Global::FFT::SIDECHAIN_RIGHT)
-                .pushNextSample(buffer.getSample(Global::Channels::SIDECHAIN_RIGHT, i));
-        }
-    }
-
-    if (static_cast< bool >(*apvts_.getRawParameterValue(GuiParams::getName(GuiParams::SHOW_FFT_PRIMARY_PRE_EQ)))) {
-        // Primary/Playback FFT buffers (PRE EQ).
-        for (int i = 0; i < buffer.getNumSamples(); ++i) {
-            fft_buffers_.at(Global::FFT::PRIMARY_LEFT_PRE_EQ)
-                .pushNextSample(buffer.getSample(Global::Channels::PRIMARY_LEFT, i));
-            fft_buffers_.at(Global::FFT::PRIMARY_RIGHT_PRE_EQ)
-                .pushNextSample(buffer.getSample(Global::Channels::PRIMARY_RIGHT, i));
-        }
-    }
-
 #ifdef TEST_FFT_ACCURACY
     // Clear the buffer so that the oscillator tone isn't processed by the filters
     // (and we don't have to listen to it).
@@ -296,7 +270,7 @@ PluginProcessor::processBlock(juce::AudioBuffer< float >& buffer, juce::MidiBuff
     filter_chain_right_.process(process_context_right);
 
     if (static_cast< bool >(*apvts_.getRawParameterValue(GuiParams::getName(GuiParams::SHOW_FFT_PRIMARY_POST_EQ)))) {
-        // Primary/Playback FFT buffers (POST EQ).
+        // FFT buffers (POST EQ).
         for (int i = 0; i < buffer.getNumSamples(); ++i) {
             fft_buffers_.at(Global::FFT::PRIMARY_LEFT_POST_EQ)
                 .pushNextSample(buffer.getSample(Global::Channels::PRIMARY_LEFT, i));
@@ -528,9 +502,7 @@ PluginProcessor::getParameterLayout()
     juce::AudioProcessorValueTreeState::ParameterLayout pl;
 
     juce::String intensity        = GuiParams::getName(GuiParams::EQ_INTENSITY);
-    juce::String fft_primary_pre  = GuiParams::getName(GuiParams::SHOW_FFT_PRIMARY_PRE_EQ);
     juce::String fft_primary_post = GuiParams::getName(GuiParams::SHOW_FFT_PRIMARY_POST_EQ);
-    juce::String fft_sidechain    = GuiParams::getName(GuiParams::SHOW_FFT_SIDECHAIN);
     juce::String analyse_input    = GuiParams::getName(GuiParams::ANALYSE_INPUT);
 
     pl.add(std::make_unique< juce::AudioParameterFloat >(juce::ParameterID(intensity, 1),
@@ -538,9 +510,7 @@ PluginProcessor::getParameterLayout()
                                                          juce::NormalisableRange< float >(0.f, 1.f, 0.01f, 1.f),
                                                          0.5f));
 
-    pl.add(std::make_unique< juce::AudioParameterBool >(juce::ParameterID(fft_primary_pre, 1), fft_primary_pre, true));
     pl.add(std::make_unique< juce::AudioParameterBool >(juce::ParameterID(fft_primary_post, 1), fft_primary_post, false));
-    pl.add(std::make_unique< juce::AudioParameterBool >(juce::ParameterID(fft_sidechain, 1), fft_sidechain, false));
     pl.add(std::make_unique< juce::AudioParameterBool >(juce::ParameterID(analyse_input, 1), analyse_input, false));
 
     juce::NormalisableRange< float > band_range(Global::MAX_DB_CUT, Global::MAX_DB_BOOST, 0.01f, 1.f);

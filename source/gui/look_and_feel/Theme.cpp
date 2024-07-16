@@ -14,10 +14,7 @@ const Theme::DarkLightPair Theme::SECTION_BORDER = DarkLightPair(WHITE.withAlpha
 const Theme::DarkLightPair Theme::ANALYSER_GRID    = DarkLightPair(EGGSHELL, DARK_GREY);
 const Theme::DarkLightPair Theme::GRAPH_0DB_MARKER = DarkLightPair(RED_ORANGE, RED_ORANGE);
 
-const Theme::DarkLightPair Theme::FFT_PRIMARY_PRE_EQ  = DarkLightPair(TEAL.withAlpha(0.2f), TEAL.withAlpha(0.2f));
-const Theme::DarkLightPair Theme::FFT_PRIMARY_POST_EQ = DarkLightPair(SOFT_PINK.withAlpha(0.2f),
-                                                                      SOFT_PINK.withAlpha(0.2f));
-const Theme::DarkLightPair Theme::FFT_SIDECHAIN = DarkLightPair(EGGSHELL.withAlpha(0.2f), DARK_GREY.withAlpha(0.1f));
+const Theme::DarkLightPair Theme::FFT_PRIMARY_POST_EQ = DarkLightPair(TEAL.withAlpha(0.2f), TEAL.withAlpha(0.2f));
 
 const Theme::DarkLightPair Theme::BAND_BACKGROUND = DarkLightPair(WHITE.withAlpha(0.02f), DARK_GREY.withAlpha(0.1f));
 const Theme::DarkLightPair Theme::BAND_VALUE = DarkLightPair(RED_ORANGE.withAlpha(0.4f), RED_ORANGE.withAlpha(0.4f));
