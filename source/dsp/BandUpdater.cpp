@@ -86,7 +86,6 @@ BandUpdater::syncroniseWithTreeState(juce::AudioProcessorValueTreeState& apvts)
         }
 
         float db_value = apvts_param->convertFrom0to1(apvts_param->getValue());
-        DBG(Equalizer::getBandName(band_id) + ": " + juce::String(db_value));
 
         band_values_array_.at(band_id).setCurrentAndTargetValue(db_value);
     }
