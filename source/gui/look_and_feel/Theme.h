@@ -21,7 +21,7 @@ public:
     static const DarkLightPair ANALYSER_GRID;
     static const DarkLightPair GRAPH_0DB_MARKER;
 
-    static const DarkLightPair FFT_PRIMARY_POST_EQ;
+    static const DarkLightPair FFT;
 
     static const DarkLightPair BAND_BACKGROUND;
     static const DarkLightPair BAND_VALUE;

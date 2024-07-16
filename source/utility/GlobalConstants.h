@@ -35,13 +35,13 @@ namespace Channels
     static const uint8 NUM_OUTPUTS = 2;
 
     enum CHANNEL_ID {
-        PRIMARY_LEFT,
-        PRIMARY_RIGHT,
+        INPUT_LEFT,
+        INPUT_RIGHT,
     };
 
     static const std::map< CHANNEL_ID, juce::String > CHANNEL_NAME_MAP = {
-        { PRIMARY_LEFT, "Primary Input Left" },
-        { PRIMARY_RIGHT, "Primary Input Right" },
+        { INPUT_LEFT, "Input Left" },
+        { INPUT_RIGHT, "Input Right" },
     };
 
     static const juce::String getName(CHANNEL_ID channel_id)
@@ -68,8 +68,8 @@ namespace FFT
     static const uint8 NUM_BUFFERS = 2;
 
     enum BUFFER_ID {
-        PRIMARY_LEFT_POST_EQ,
-        PRIMARY_RIGHT_POST_EQ,
+        LEFT_POST_EQ,
+        RIGHT_POST_EQ,
     };
 
 }  // namespace FFT
@@ -81,7 +81,7 @@ namespace GuiParams
 
 enum PARAM_ID {
     EQ_INTENSITY,
-    SHOW_FFT_PRIMARY_POST_EQ,
+    SHOW_FFT,
     ANALYSE_INPUT,
     FFT_ACCURACY_TEST_TONE_HZ,
     FFT_ACCURACY_TEST_TONE_DB,
@@ -89,7 +89,7 @@ enum PARAM_ID {
 
 static const std::map< PARAM_ID, juce::String > PARAM_NAME_MAP = {
     { EQ_INTENSITY, "EQ_INTENSITY" },
-    { SHOW_FFT_PRIMARY_POST_EQ, "SHOW_FFT_PRIMARY_POST_EQ" },
+    { SHOW_FFT, "SHOW_FFT" },
     { ANALYSE_INPUT, "ANALYSE_INPUT" },
     { FFT_ACCURACY_TEST_TONE_HZ, "FFT_ACCURACY_TEST_TONE_HZ" },
     { FFT_ACCURACY_TEST_TONE_DB, "FFT_ACCURACY_TEST_TONE_DB" },

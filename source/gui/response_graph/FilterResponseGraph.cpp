@@ -12,14 +12,14 @@ FilterResponseGraph::FilterResponseGraph(PluginProcessor& p)
     PluginProcessor::FftBuffers&        fft_buffers = p.getFftBuffers();
     juce::AudioProcessorValueTreeState& apvts       = p.getApvts();
 
-    juce::String enable_fft_primary_post_param_id = GuiParams::getName(GuiParams::SHOW_FFT_PRIMARY_POST_EQ);
+    juce::String enable_fft_primary_post_param_id = GuiParams::getName(GuiParams::SHOW_FFT);
 
-    fft_path_primary_post_eq_l_ = std::make_unique< MonoFftPath >(fft_buffers.at(Global::FFT::PRIMARY_LEFT_POST_EQ),
-                                                                  Theme::FFT_PRIMARY_POST_EQ,
+    fft_path_primary_post_eq_l_ = std::make_unique< MonoFftPath >(fft_buffers.at(Global::FFT::LEFT_POST_EQ),
+                                                                  Theme::FFT,
                                                                   apvts.getParameter(enable_fft_primary_post_param_id));
 
-    fft_path_primary_post_eq_r_ = std::make_unique< MonoFftPath >(fft_buffers.at(Global::FFT::PRIMARY_RIGHT_POST_EQ),
-                                                                  Theme::FFT_PRIMARY_POST_EQ,
+    fft_path_primary_post_eq_r_ = std::make_unique< MonoFftPath >(fft_buffers.at(Global::FFT::RIGHT_POST_EQ),
+                                                                  Theme::FFT,
                                                                   apvts.getParameter(enable_fft_primary_post_param_id));
 
     addAndMakeVisible(backdrop_);

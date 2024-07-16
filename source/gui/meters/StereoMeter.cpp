@@ -4,8 +4,8 @@
 **
 */
 StereoMeter::StereoMeter(PluginProcessor& p, Global::Meters::METER_TYPE meter_type)
-    : meter_l_(p, meter_type, Global::Channels::PRIMARY_LEFT)
-    , meter_r_(p, meter_type, Global::Channels::PRIMARY_RIGHT)
+    : meter_l_(p, meter_type, Global::Channels::INPUT_LEFT)
+    , meter_r_(p, meter_type, Global::Channels::INPUT_RIGHT)
 {
     addAndMakeVisible(db_scale_);
     addAndMakeVisible(meter_l_);

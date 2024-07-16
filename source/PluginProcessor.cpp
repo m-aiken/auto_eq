@@ -9,8 +9,8 @@
 PluginProcessor::PluginProcessor()
     : AudioProcessor(
         BusesProperties()
-            .withInput(Global::Channels::getName(Global::Channels::PRIMARY_LEFT), juce::AudioChannelSet::mono(), true)
-            .withInput(Global::Channels::getName(Global::Channels::PRIMARY_RIGHT), juce::AudioChannelSet::mono(), true)
+            .withInput(Global::Channels::getName(Global::Channels::INPUT_LEFT), juce::AudioChannelSet::mono(), true)
+            .withInput(Global::Channels::getName(Global::Channels::INPUT_RIGHT), juce::AudioChannelSet::mono(), true)
             .withOutput("Output", juce::AudioChannelSet::stereo(), true))
     , apvts_(*this, nullptr, "APVTS", getParameterLayout())
     , input_analysis_filter_()
@@ -141,8 +141,8 @@ PluginProcessor::prepareToPlay(double sample_rate, int samples_per_block)
     input_analysis_filter_.prepare(analysis_spec);
 
     // FFT buffers.
-    fft_buffers_.at(Global::FFT::PRIMARY_LEFT_POST_EQ).prepare(sample_rate);
-    fft_buffers_.at(Global::FFT::PRIMARY_RIGHT_POST_EQ).prepare(sample_rate);
+    fft_buffers_.at(Global::FFT::LEFT_POST_EQ).prepare(sample_rate);
+    fft_buffers_.at(Global::FFT::RIGHT_POST_EQ).prepare(sample_rate);
 
     // Filter chains.
     juce::dsp::ProcessSpec filter_chain_spec;
@@ -260,8 +260,8 @@ PluginProcessor::processBlock(juce::AudioBuffer< float >& buffer, juce::MidiBuff
     // Filter chains.
     juce::dsp::AudioBlock< float > audio_block(buffer);
 
-    auto audio_block_left  = audio_block.getSingleChannelBlock(Global::Channels::PRIMARY_LEFT);
-    auto audio_block_right = audio_block.getSingleChannelBlock(Global::Channels::PRIMARY_RIGHT);
+    auto audio_block_left  = audio_block.getSingleChannelBlock(Global::Channels::INPUT_LEFT);
+    auto audio_block_right = audio_block.getSingleChannelBlock(Global::Channels::INPUT_RIGHT);
 
     juce::dsp::ProcessContextReplacing< float > process_context_left(audio_block_left);
     juce::dsp::ProcessContextReplacing< float > process_context_right(audio_block_right);
@@ -269,25 +269,23 @@ PluginProcessor::processBlock(juce::AudioBuffer< float >& buffer, juce::MidiBuff
     filter_chain_left_.process(process_context_left);
     filter_chain_right_.process(process_context_right);
 
-    if (static_cast< bool >(*apvts_.getRawParameterValue(GuiParams::getName(GuiParams::SHOW_FFT_PRIMARY_POST_EQ)))) {
+    if (static_cast< bool >(*apvts_.getRawParameterValue(GuiParams::getName(GuiParams::SHOW_FFT)))) {
         // FFT buffers (POST EQ).
         for (int i = 0; i < buffer.getNumSamples(); ++i) {
-            fft_buffers_.at(Global::FFT::PRIMARY_LEFT_POST_EQ)
-                .pushNextSample(buffer.getSample(Global::Channels::PRIMARY_LEFT, i));
-            fft_buffers_.at(Global::FFT::PRIMARY_RIGHT_POST_EQ)
-                .pushNextSample(buffer.getSample(Global::Channels::PRIMARY_RIGHT, i));
+            fft_buffers_.at(Global::FFT::LEFT_POST_EQ).pushNextSample(buffer.getSample(Global::Channels::INPUT_LEFT, i));
+            fft_buffers_.at(Global::FFT::RIGHT_POST_EQ).pushNextSample(buffer.getSample(Global::Channels::INPUT_RIGHT, i));
         }
     }
 
     // Update the Peak, RMS, and LUFS.
-    setPeak(peak_l_, buffer, Global::Channels::PRIMARY_LEFT);
-    setPeak(peak_r_, buffer, Global::Channels::PRIMARY_RIGHT);
+    setPeak(peak_l_, buffer, Global::Channels::INPUT_LEFT);
+    setPeak(peak_r_, buffer, Global::Channels::INPUT_RIGHT);
 
-    setRms(rms_l_, buffer, Global::Channels::PRIMARY_LEFT);
-    setRms(rms_r_, buffer, Global::Channels::PRIMARY_RIGHT);
+    setRms(rms_l_, buffer, Global::Channels::INPUT_LEFT);
+    setRms(rms_r_, buffer, Global::Channels::INPUT_RIGHT);
 
-    setLufs(lufs_l_, buffer, Global::Channels::PRIMARY_LEFT);
-    setLufs(lufs_r_, buffer, Global::Channels::PRIMARY_RIGHT);
+    setLufs(lufs_l_, buffer, Global::Channels::INPUT_LEFT);
+    setLufs(lufs_r_, buffer, Global::Channels::INPUT_RIGHT);
 }
 
 /*---------------------------------------------------------------------------
@@ -367,19 +365,19 @@ PluginProcessor::getFilterChain()
 float
 PluginProcessor::getMeterValue(Global::Meters::METER_TYPE meter_type, Global::Channels::CHANNEL_ID channel_id) const
 {
-    if (channel_id != Global::Channels::PRIMARY_LEFT && channel_id != Global::Channels::PRIMARY_RIGHT) {
+    if (channel_id != Global::Channels::INPUT_LEFT && channel_id != Global::Channels::INPUT_RIGHT) {
         return Global::METER_NEG_INF;
     }
 
     switch (meter_type) {
     case Global::Meters::PEAK_METER:
-        return (channel_id == Global::Channels::PRIMARY_LEFT) ? peak_l_.getCurrentValue() : peak_r_.getCurrentValue();
+        return (channel_id == Global::Channels::INPUT_LEFT) ? peak_l_.getCurrentValue() : peak_r_.getCurrentValue();
 
     case Global::Meters::RMS_METER:
-        return (channel_id == Global::Channels::PRIMARY_LEFT) ? rms_l_.getCurrentValue() : rms_r_.getCurrentValue();
+        return (channel_id == Global::Channels::INPUT_LEFT) ? rms_l_.getCurrentValue() : rms_r_.getCurrentValue();
 
     case Global::Meters::LUFS_METER:
-        return (channel_id == Global::Channels::PRIMARY_LEFT) ? lufs_l_.getCurrentValue() : lufs_r_.getCurrentValue();
+        return (channel_id == Global::Channels::INPUT_LEFT) ? lufs_l_.getCurrentValue() : lufs_r_.getCurrentValue();
 
     default:
         return Global::METER_NEG_INF;
@@ -502,7 +500,7 @@ PluginProcessor::getParameterLayout()
     juce::AudioProcessorValueTreeState::ParameterLayout pl;
 
     juce::String intensity        = GuiParams::getName(GuiParams::EQ_INTENSITY);
-    juce::String fft_primary_post = GuiParams::getName(GuiParams::SHOW_FFT_PRIMARY_POST_EQ);
+    juce::String fft_primary_post = GuiParams::getName(GuiParams::SHOW_FFT);
     juce::String analyse_input    = GuiParams::getName(GuiParams::ANALYSE_INPUT);
 
     pl.add(std::make_unique< juce::AudioParameterFloat >(juce::ParameterID(intensity, 1),
