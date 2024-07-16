@@ -19,19 +19,24 @@ RecordButton::RecordButton(const juce::String&                 label_text,
 void
 RecordButton::paintButton(juce::Graphics& g, bool should_draw_button_as_highlighted, bool should_draw_button_as_down)
 {
+#ifdef SHOW_DEBUG_BOUNDS
+    g.setColour(juce::Colours::blue);
+    g.drawRect(getLocalBounds());
+#endif
+
     juce::ignoreUnused(should_draw_button_as_highlighted, should_draw_button_as_down);
 
-    const uint8              padding = 4;
-    juce::Rectangle< int >   bounds  = getLocalBounds();
+    const uint8              button_margin = 12;
+    const uint8              padding       = 4;
+    juce::Rectangle< int >   bounds        = getLocalBounds();
     juce::Rectangle< float > button_bounds(0, 0, bounds.getHeight(), bounds.getHeight());
-
-    // Reduce the button bounds width and height by a pixel so that the ellipse doesn't get clipped at the edges.
-    button_bounds = button_bounds.withSizeKeepingCentre(button_bounds.getWidth() - 1.f, button_bounds.getHeight() - 1.f);
-
-    juce::Rectangle< int > label_bounds(button_bounds.getRight() + (padding * 2),
+    juce::Rectangle< int >   label_bounds(button_bounds.getRight(),
                                         0,
                                         bounds.getWidth() - button_bounds.getWidth(),
                                         bounds.getHeight());
+    
+    button_bounds = button_bounds.withSizeKeepingCentre(button_bounds.getWidth() - button_margin,
+                                                        button_bounds.getHeight() - button_margin);
 
     // Draw the two ellipses (outline and fill).
     g.setColour(Theme::getColour(getToggleState() ? Theme::RECORD_BUTTON_ON : Theme::RECORD_BUTTON_OFF));

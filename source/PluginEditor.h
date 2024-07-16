@@ -22,6 +22,11 @@ public:
     void buttonClicked(juce::Button* button) override;
 
 private:
+    static const uint16 MAIN_WINDOW_MIN_WIDTH;
+    static const uint16 MAIN_WINDOW_MIN_HEIGHT;
+    static const uint16 MAIN_WINDOW_MAX_WIDTH;
+    static const uint16 MAIN_WINDOW_MAX_HEIGHT;
+
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     PluginProcessor& processor_ref_;

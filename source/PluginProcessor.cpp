@@ -499,10 +499,10 @@ PluginProcessor::getParameterLayout()
 {
     juce::AudioProcessorValueTreeState::ParameterLayout pl;
 
-    juce::String fft_primary_post = GuiParams::getName(GuiParams::SHOW_FFT);
-    juce::String analyse_input    = GuiParams::getName(GuiParams::ANALYSE_INPUT);
+    juce::String show_fft      = GuiParams::getName(GuiParams::SHOW_FFT);
+    juce::String analyse_input = GuiParams::getName(GuiParams::ANALYSE_INPUT);
 
-    pl.add(std::make_unique< juce::AudioParameterBool >(juce::ParameterID(fft_primary_post, 1), fft_primary_post, false));
+    pl.add(std::make_unique< juce::AudioParameterBool >(juce::ParameterID(show_fft, 1), show_fft, true));
     pl.add(std::make_unique< juce::AudioParameterBool >(juce::ParameterID(analyse_input, 1), analyse_input, false));
 
     juce::NormalisableRange< float > band_range(Global::MAX_DB_CUT, Global::MAX_DB_BOOST, 0.01f, 1.f);
