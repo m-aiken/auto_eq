@@ -11,7 +11,6 @@ public:
 
 private:
     juce::String text_;
-    juce::Font   font_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MeterLabel)
 };

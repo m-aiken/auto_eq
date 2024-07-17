@@ -1,13 +1,11 @@
 #include "MeterLabel.h"
 #include "../look_and_feel/Theme.h"
-#include "../../utility/GlobalConstants.h"
 
 /*---------------------------------------------------------------------------
 **
 */
 MeterLabel::MeterLabel(const juce::String& text)
     : text_(text)
-    , font_(Global::ANALYSER_MARKER_FONT_SIZE, juce::Font::bold)
 {
 }
 
@@ -17,7 +15,7 @@ MeterLabel::MeterLabel(const juce::String& text)
 void
 MeterLabel::paint(juce::Graphics& g)
 {
-    g.setFont(font_);
+    g.setFont(Theme::getFont().boldened());
     g.setColour(Theme::getColour(Theme::TEXT));
     g.drawFittedText(text_, getLocalBounds(), juce::Justification::centred, 1.f);
 }

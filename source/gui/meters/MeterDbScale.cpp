@@ -20,7 +20,7 @@ MeterDbScale::paint(juce::Graphics& g)
 {
     juce::Rectangle< int > bounds        = getLocalBounds();
     int                    bounds_height = bounds.getHeight();
-    int                    padded_width  = bounds.getWidth() - (Global::ANALYSER_PADDING * 2);
+    int                    padded_width  = bounds.getWidth() - (Global::METER_X_PADDING * 2);
     int                    label_width   = 40;
 
     g.setFont(Theme::getFont());
@@ -28,7 +28,7 @@ MeterDbScale::paint(juce::Graphics& g)
 
     for (int db = min_value_; db <= max_value_; db += db_interval_) {
         int          x_coord  = juce::jmap< int >(db, min_value_, max_value_, 0, padded_width);
-        int          offset_x = x_coord + Global::ANALYSER_PADDING - static_cast< int >(std::floor(label_width * 0.5));
+        int          offset_x = x_coord + Global::METER_X_PADDING - static_cast< int >(std::floor(label_width * 0.5));
         juce::String label    = juce::String(db) + "dB";
 
         g.drawFittedText((db > 0 ? "+" + label : label),

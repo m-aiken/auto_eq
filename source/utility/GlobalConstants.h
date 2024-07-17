@@ -25,8 +25,8 @@ static const float MAX_HZ = 20000.f;
 static const double BAND_MAGNITUDE_CALCULATION_FREQUENCY_MS = 20.0;
 static const double FFT_PATH_PRODUCTION_FREQUENCY_MS        = 20.0;
 
-static const uint8 ANALYSER_PADDING          = 32;
-static const float ANALYSER_MARKER_FONT_SIZE = 12.f;
+static const uint8 GRAPH_TOP_PADDING = 32;
+static const uint8 METER_X_PADDING   = 32;
 
 namespace Channels
 {
