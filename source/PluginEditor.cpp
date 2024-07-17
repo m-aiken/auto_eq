@@ -70,13 +70,13 @@ PluginEditor::resized()
     int                    fft_button_width           = static_cast< int >(std::floor(bounds_width * 0.2));
     int                    theme_button_width         = static_cast< int >(std::floor(bounds_width * 0.1));
     int                    graph_height               = static_cast< int >(std::floor(bounds_height * 0.65));
-    int                    meters_height              = static_cast< int >(std::floor(bounds_height * 0.3));
+    int                    meters_height              = static_cast< int >(std::floor(bounds_height * 0.25));
 
     analyse_input_button_.setBounds(0, 0, analyse_input_button_width, top_controls_height);
     show_fft_button_.setBounds(bounds.getCentreX() - (fft_button_width * 0.5), 0, fft_button_width, top_controls_height);
     theme_button_.setBounds(bounds.getRight() - theme_button_width, 0, theme_button_width, top_controls_height);
     filter_res_graph_.setBounds(0, top_controls_height, bounds_width, graph_height);
-    meter_group_.setBounds(0, filter_res_graph_.getBottom(), bounds_width, meters_height);
+    meter_group_.setBounds(0, bounds.getBottom() - meters_height, bounds_width, meters_height);
 }
 
 /*---------------------------------------------------------------------------
