@@ -24,7 +24,7 @@ MeterDbScale::paint(juce::Graphics& g)
     int                    label_width   = 40;
 
     g.setFont(Theme::getFont());
-    g.setColour(Theme::getColour(Theme::TEXT));
+    g.setColour(Theme::getColour(isEnabled() ? Theme::TEXT : Theme::DISABLED_WIDGET));
 
     for (int db = min_value_; db <= max_value_; db += db_interval_) {
         int          x_coord  = juce::jmap< int >(db, min_value_, max_value_, 0, padded_width);

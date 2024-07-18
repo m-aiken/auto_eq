@@ -34,12 +34,16 @@ RecordButton::paintButton(juce::Graphics& g, bool should_draw_button_as_highligh
                                         0,
                                         bounds.getWidth() - button_bounds.getWidth(),
                                         bounds.getHeight());
-    
+
     button_bounds = button_bounds.withSizeKeepingCentre(button_bounds.getWidth() - button_margin,
                                                         button_bounds.getHeight() - button_margin);
 
     // Draw the two ellipses (outline and fill).
     g.setColour(Theme::getColour(getToggleState() ? Theme::RECORD_BUTTON_ON : Theme::RECORD_BUTTON_OFF));
+
+    if (!isEnabled()) {
+        g.setColour(Theme::getColour(Theme::DISABLED_WIDGET));
+    }
 
     g.drawEllipse(button_bounds, 1.f);
 
@@ -47,7 +51,7 @@ RecordButton::paintButton(juce::Graphics& g, bool should_draw_button_as_highligh
         button_bounds.withSizeKeepingCentre(button_bounds.getWidth() - padding, button_bounds.getHeight() - padding));
 
     // Draw the label.
-    g.setColour(Theme::getColour(Theme::TEXT));
+    g.setColour(Theme::getColour(isEnabled() ? Theme::TEXT : Theme::DISABLED_WIDGET));
     g.setFont(Theme::getFont());
     g.drawFittedText(getButtonText(), label_bounds, juce::Justification::centredLeft, 1.f);
 }

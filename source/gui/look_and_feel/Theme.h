@@ -17,6 +17,7 @@ public:
     static const DarkLightPair MAIN_BG;
     static const DarkLightPair TEXT;
     static const DarkLightPair SECTION_BORDER;
+    static const DarkLightPair DISABLED_WIDGET;
 
     static const DarkLightPair ANALYSER_GRID;
     static const DarkLightPair GRAPH_0DB_MARKER;
@@ -33,8 +34,12 @@ public:
     static const DarkLightPair ROTARY_ARC;
 
     static const DarkLightPair CHECKBOX;
+
     static const DarkLightPair RECORD_BUTTON_ON;
     static const DarkLightPair RECORD_BUTTON_OFF;
+
+    static const DarkLightPair POWER_BUTTON_ON;
+    static const DarkLightPair POWER_BUTTON_OFF;
 
     static bool dark_mode;
 

@@ -24,7 +24,7 @@ DecibelMarkers::paint(juce::Graphics& g)
 #endif
 
     g.setFont(Theme::getFont());
-    g.setColour(Theme::getColour(Theme::TEXT));
+    g.setColour(Theme::getColour(isEnabled() ? Theme::TEXT : Theme::DISABLED_WIDGET));
 
     juce::Rectangle< int > bounds = getLocalBounds();
 

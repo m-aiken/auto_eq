@@ -82,7 +82,7 @@ CustomLookAndFeel::drawLinearSlider(juce::Graphics&           g,
     float                    thumb_diameter = static_cast< float >(width);
     juce::Rectangle< float > thumb_bounds(0.f, slider_pos - (thumb_diameter * 0.5f), thumb_diameter, thumb_diameter);
 
-    g.setColour(Theme::getColour(Theme::BAND_VALUE));
+    g.setColour(Theme::getColour(slider.isEnabled() ? Theme::BAND_VALUE : Theme::DISABLED_WIDGET));
     g.fillEllipse(thumb_bounds);
 }
 

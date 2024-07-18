@@ -79,16 +79,22 @@ namespace FFT
 namespace GuiParams
 {
 
+static const bool INITIAL_POWER_STATE    = true;
+static const bool INITIAL_ANALYSIS_STATE = false;
+static const bool INITIAL_FFT_STATE      = true;
+
 enum PARAM_ID {
-    SHOW_FFT,
+    POWER,
     ANALYSE_INPUT,
+    SHOW_FFT,
     FFT_ACCURACY_TEST_TONE_HZ,
     FFT_ACCURACY_TEST_TONE_DB,
 };
 
 static const std::map< PARAM_ID, juce::String > PARAM_NAME_MAP = {
-    { SHOW_FFT, "SHOW_FFT" },
+    { POWER, "POWER" },
     { ANALYSE_INPUT, "ANALYSE_INPUT" },
+    { SHOW_FFT, "SHOW_FFT" },
     { FFT_ACCURACY_TEST_TONE_HZ, "FFT_ACCURACY_TEST_TONE_HZ" },
     { FFT_ACCURACY_TEST_TONE_DB, "FFT_ACCURACY_TEST_TONE_DB" },
 };

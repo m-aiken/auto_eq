@@ -6,6 +6,7 @@
 #include "gui/response_graph/FilterResponseGraph.h"
 #include "gui/theme_button/ThemeButton.h"
 #include "gui/widgets/MenuButton.h"
+#include "gui/widgets/PowerButton.h"
 #include "gui/widgets/RecordButton.h"
 
 class PluginEditor final
@@ -31,6 +32,7 @@ private:
     // access the processor object that created it.
     PluginProcessor& processor_ref_;
 
+    PowerButton         power_button_;
     RecordButton        analyse_input_button_;
     MenuButton          show_fft_button_;
     ThemeButton         theme_button_;
@@ -38,6 +40,8 @@ private:
     MeterGroup          meter_group_;
 
     CustomLookAndFeel lnf_;
+
+    bool cached_fft_draw_status_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PluginEditor)
 };

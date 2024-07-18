@@ -86,6 +86,8 @@ private:
     SmoothedFloat lufs_l_;
     SmoothedFloat lufs_r_;
 
+    juce::AudioBuffer< float > empty_buffer_;  //! Used to clear the meters when the plugin is disabled.
+
 #ifdef TEST_FFT_ACCURACY
     juce::dsp::Oscillator< float > fft_test_tone_;
     juce::dsp::Gain< float >       fft_test_tone_gain_;

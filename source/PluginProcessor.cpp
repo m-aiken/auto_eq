@@ -172,6 +172,10 @@ PluginProcessor::prepareToPlay(double sample_rate, int samples_per_block)
     lufs_l_.setCurrentAndTargetValue(Global::METER_NEG_INF);
     lufs_r_.setCurrentAndTargetValue(Global::METER_NEG_INF);
 
+    // Initialise the empty buffer.
+    empty_buffer_.setSize(Global::Channels::NUM_INPUTS, samples_per_block);
+    empty_buffer_.clear();
+
 #ifdef TEST_FFT_ACCURACY
     juce::dsp::ProcessSpec fft_test_spec;
 
@@ -229,6 +233,23 @@ PluginProcessor::processBlock(juce::AudioBuffer< float >& buffer, juce::MidiBuff
     // this code if your algorithm always overwrites all the output channels.
     for (int i = total_num_input_channels; i < total_num_output_channels; ++i) {
         buffer.clear(i, 0, buffer.getNumSamples());
+    }
+
+    if (!static_cast< bool >(apvts_.getParameter(GuiParams::getName(GuiParams::POWER))->getValue())) {
+        // The plugin is being bypassed.
+        // The threads responsible for the FFT, input analysis and EQ will already have been stopped.
+        // We just need to clear out the meters with an empty buffer.
+        setPeak(peak_l_, empty_buffer_, Global::Channels::INPUT_LEFT);
+        setPeak(peak_r_, empty_buffer_, Global::Channels::INPUT_RIGHT);
+
+        setRms(rms_l_, empty_buffer_, Global::Channels::INPUT_LEFT);
+        setRms(rms_r_, empty_buffer_, Global::Channels::INPUT_RIGHT);
+
+        setLufs(lufs_l_, empty_buffer_, Global::Channels::INPUT_LEFT);
+        setLufs(lufs_r_, empty_buffer_, Global::Channels::INPUT_RIGHT);
+
+        // Don't do any processing on the real buffer.
+        return;
     }
 
 #ifdef TEST_FFT_ACCURACY
@@ -499,11 +520,19 @@ PluginProcessor::getParameterLayout()
 {
     juce::AudioProcessorValueTreeState::ParameterLayout pl;
 
-    juce::String show_fft      = GuiParams::getName(GuiParams::SHOW_FFT);
-    juce::String analyse_input = GuiParams::getName(GuiParams::ANALYSE_INPUT);
+    juce::String power_param_id    = GuiParams::getName(GuiParams::POWER);
+    juce::String analysis_param_id = GuiParams::getName(GuiParams::ANALYSE_INPUT);
+    juce::String fft_param_id      = GuiParams::getName(GuiParams::SHOW_FFT);
 
-    pl.add(std::make_unique< juce::AudioParameterBool >(juce::ParameterID(show_fft, 1), show_fft, true));
-    pl.add(std::make_unique< juce::AudioParameterBool >(juce::ParameterID(analyse_input, 1), analyse_input, false));
+    pl.add(std::make_unique< juce::AudioParameterBool >(juce::ParameterID(power_param_id, 1),
+                                                        power_param_id,
+                                                        GuiParams::INITIAL_POWER_STATE));
+    pl.add(std::make_unique< juce::AudioParameterBool >(juce::ParameterID(analysis_param_id, 1),
+                                                        analysis_param_id,
+                                                        GuiParams::INITIAL_ANALYSIS_STATE));
+    pl.add(std::make_unique< juce::AudioParameterBool >(juce::ParameterID(fft_param_id, 1),
+                                                        fft_param_id,
+                                                        GuiParams::INITIAL_FFT_STATE));
 
     juce::NormalisableRange< float > band_range(Global::MAX_DB_CUT, Global::MAX_DB_BOOST, 0.01f, 1.f);
 

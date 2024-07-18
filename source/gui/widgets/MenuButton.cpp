@@ -38,7 +38,7 @@ MenuButton::paintButton(juce::Graphics& g, bool should_draw_button_as_highlighte
     button_bounds = button_bounds.withSizeKeepingCentre(button_bounds.getWidth() - button_margin,
                                                         button_bounds.getHeight() - button_margin);
 
-    g.setColour(Theme::getColour(Theme::CHECKBOX));
+    g.setColour(Theme::getColour(isEnabled() ? Theme::CHECKBOX : Theme::DISABLED_WIDGET));
     g.drawRect(button_bounds);
 
     if (getToggleState()) {
@@ -46,7 +46,7 @@ MenuButton::paintButton(juce::Graphics& g, bool should_draw_button_as_highlighte
                                                        button_bounds.getHeight() - padding));
     }
 
-    g.setColour(Theme::getColour(Theme::TEXT));
+    g.setColour(Theme::getColour(isEnabled() ? Theme::TEXT : Theme::DISABLED_WIDGET));
     g.setFont(Theme::getFont());
     g.drawFittedText(getButtonText(), label_bounds, juce::Justification::centredLeft, 1.f);
 }

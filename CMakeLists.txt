@@ -62,6 +62,7 @@ target_sources(${PROJECT_NAME}
         source/gui/response_graph/MonoFftPathProducer.cpp
         source/gui/theme_button/ThemeButton.cpp
         source/gui/widgets/MenuButton.cpp
+        source/gui/widgets/PowerButton.cpp
         source/gui/widgets/RecordButton.cpp
         source/gui/widgets/RotaryControl.cpp
         )
