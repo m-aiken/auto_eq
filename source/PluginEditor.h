@@ -4,10 +4,10 @@
 #include "gui/look_and_feel/CustomLookAndFeel.h"
 #include "gui/meters/MeterGroup.h"
 #include "gui/response_graph/FilterResponseGraph.h"
-#include "gui/theme_button/ThemeButton.h"
 #include "gui/widgets/MenuButton.h"
 #include "gui/widgets/PowerButton.h"
 #include "gui/widgets/RecordButton.h"
+#include "gui/widgets/ThemeButton.h"
 
 class PluginEditor final
     : public juce::AudioProcessorEditor
