@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PluginProcessor.h"
+#include "gui/gain_control/UnityGainWidget.h"
 #include "gui/look_and_feel/CustomLookAndFeel.h"
 #include "gui/meters/MeterGroup.h"
 #include "gui/response_graph/FilterResponseGraph.h"
@@ -37,6 +38,7 @@ private:
     MenuButton          show_fft_button_;
     ThemeButton         theme_button_;
     FilterResponseGraph filter_res_graph_;
+    UnityGainWidget     unity_gain_widget_;
     MeterGroup          meter_group_;
 
     CustomLookAndFeel lnf_;

@@ -534,6 +534,12 @@ PluginProcessor::getParameterLayout()
                                                         fft_param_id,
                                                         GuiParams::INITIAL_FFT_STATE));
 
+    juce::String enable_unity_gain_param_id = GuiParams::getName(GuiParams::UNITY_GAIN);
+
+    pl.add(std::make_unique< juce::AudioParameterBool >(juce::ParameterID(enable_unity_gain_param_id, 1),
+                                                        enable_unity_gain_param_id,
+                                                        GuiParams::INITIAL_UNITY_GAIN_STATE));
+
     juce::NormalisableRange< float > band_range(Global::MAX_DB_CUT, Global::MAX_DB_BOOST, 0.01f, 1.f);
 
     for (size_t i = 0; i < Equalizer::NUM_BANDS; ++i) {
