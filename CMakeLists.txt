@@ -65,7 +65,9 @@ target_sources(${PROJECT_NAME}
         source/gui/widgets/PowerButton.cpp
         source/gui/widgets/RecordButton.cpp
         source/gui/widgets/RotaryControl.cpp
-        source/gui/widgets/SpinBox.cpp
+        source/gui/widgets/spinbox/SpinBox.cpp
+        source/gui/widgets/spinbox/SpinBoxButton.cpp
+        source/gui/widgets/spinbox/SpinBoxTextBox.cpp
         source/gui/widgets/ThemeButton.cpp
         )
 

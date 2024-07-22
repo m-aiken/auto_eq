@@ -3,7 +3,7 @@
 #include <JuceHeader.h>
 
 #include "../widgets/MenuButton.h"
-#include "../widgets/SpinBox.h"
+#include "../widgets/spinbox/SpinBox.h"
 
 class UnityGainWidget : public juce::Component
 {

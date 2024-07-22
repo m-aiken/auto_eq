@@ -16,6 +16,7 @@ UnityGainWidget::UnityGainWidget(juce::AudioProcessorValueTreeState& apvts)
 
     gain_selector_label_.setText("Target dB:", juce::dontSendNotification);
     gain_selector_label_.setFont(Theme::getFont());
+    gain_selector_label_.setColour(juce::Label::ColourIds::textColourId, Theme::getColour(Theme::TEXT));
 }
 
 /*---------------------------------------------------------------------------
@@ -46,7 +47,7 @@ UnityGainWidget::resized()
 
     enable_button_.setBounds(button_margin, button_margin, og_bounds_width - (button_margin * 2), og_bounds_height * 0.2);
 
-    auto padded_bounds = og_bounds.withSizeKeepingCentre(og_bounds_width * 0.4, og_bounds_height * 0.4);
+    auto padded_bounds = og_bounds.withSizeKeepingCentre(og_bounds_width * 0.4, og_bounds_height * 0.3);
 
     using Tr = juce::Grid::TrackInfo;
     using Fr = juce::Grid::Fr;
