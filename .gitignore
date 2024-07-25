@@ -1,6 +1,7 @@
 .DS_Store
+.cache/
 .idea/
-.vscode/
+.zed/
 build/
 dependencies/
 relufs.filtergraph
