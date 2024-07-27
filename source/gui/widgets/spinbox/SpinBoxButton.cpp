@@ -28,5 +28,16 @@ SpinBoxButton::paint(juce::Graphics& g)
 }
 
 /*---------------------------------------------------------------------------
+**
+*/
+void
+SpinBoxButton::mouseEnter(const juce::MouseEvent& e)
+{
+    juce::ignoreUnused(e);
+
+    setMouseCursor(juce::MouseCursor::PointingHandCursor);
+}
+
+/*---------------------------------------------------------------------------
 ** End of File
 */

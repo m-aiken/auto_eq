@@ -8,6 +8,7 @@ public:
     SpinBoxButton(bool is_increment);
 
     void paint(juce::Graphics& g) override;
+    void mouseEnter(const juce::MouseEvent& e) override;
 
 private:
     bool is_increment_;
