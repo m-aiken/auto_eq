@@ -1,5 +1,4 @@
 #include "Equalizer.h"
-#include "../utility/GlobalConstants.h"
 
 /*static*/ const float Equalizer::DEFAULT_BAND_DB = 0.f;
 /*static*/ const float Equalizer::DEFAULT_BAND_Q  = 2.f;

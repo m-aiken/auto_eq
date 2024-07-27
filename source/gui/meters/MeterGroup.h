@@ -2,7 +2,6 @@
 
 #include <JuceHeader.h>
 
-#include "MeterDbScale.h"
 #include "MeterLabel.h"
 #include "StereoMeter.h"
 #include "../../PluginProcessor.h"

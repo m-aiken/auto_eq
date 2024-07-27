@@ -1,6 +1,5 @@
 #include "BandParameterUpdater.h"
 #include "Equalizer.h"
-#include "../utility/GlobalConstants.h"
 
 /*static*/ const uint16 BandParameterUpdater::UPDATE_FREQUENCY_MS = 20;
 
