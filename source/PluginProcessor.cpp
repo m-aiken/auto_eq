@@ -8,10 +8,10 @@
 */
 PluginProcessor::PluginProcessor()
     : AudioProcessor(
-        BusesProperties()
-            .withInput(Global::Channels::getName(Global::Channels::INPUT_LEFT), juce::AudioChannelSet::mono(), true)
-            .withInput(Global::Channels::getName(Global::Channels::INPUT_RIGHT), juce::AudioChannelSet::mono(), true)
-            .withOutput("Output", juce::AudioChannelSet::stereo(), true))
+          BusesProperties()
+              .withInput(Global::Channels::getName(Global::Channels::INPUT_LEFT), juce::AudioChannelSet::mono(), true)
+              .withInput(Global::Channels::getName(Global::Channels::INPUT_RIGHT), juce::AudioChannelSet::mono(), true)
+              .withOutput("Output", juce::AudioChannelSet::stereo(), true))
     , apvts_(*this, nullptr, "APVTS", getParameterLayout())
     , input_analysis_filter_()
     , band_updater_(input_analysis_filter_)
