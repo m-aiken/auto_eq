@@ -27,6 +27,9 @@ public:
     static const DarkLightPair BAND_BACKGROUND;
     static const DarkLightPair BAND_VALUE;
 
+    static const DarkLightPair UNITY_GAIN_VALUE_BUTTON;
+    static const DarkLightPair UNITY_GAIN_VALUE_BOX;
+
     static const DarkLightPair METER_BACKGROUND;
     static const DarkLightPair METER_VALUE;
 

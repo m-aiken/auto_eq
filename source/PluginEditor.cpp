@@ -109,6 +109,7 @@ PluginEditor::buttonClicked(juce::Button* button)
         analyse_input_button_.setEnabled(plugin_enabled);
         show_fft_button_.setEnabled(plugin_enabled);
         filter_res_graph_.setEnabled(plugin_enabled);
+        unity_gain_widget_.setEnabled(plugin_enabled);
         meter_group_.setEnabled(plugin_enabled);
 
         // If the user is disabling the plugin and the analysis is active, stop the analysis.

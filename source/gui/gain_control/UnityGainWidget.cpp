@@ -7,16 +7,12 @@
 */
 UnityGainWidget::UnityGainWidget(juce::AudioProcessorValueTreeState& apvts)
     : enable_button_("Unity Gain", apvts, GuiParams::UNITY_GAIN)
-    , gain_selector_label_()
+    , gain_selector_label_("unity_gain_target_db_label", "Target dB:")
     , gain_selector_(juce::Range< double >(-12.0, 0.0), -3.0, "dB")
 {
     addAndMakeVisible(enable_button_);
     addAndMakeVisible(gain_selector_label_);
     addAndMakeVisible(gain_selector_);
-
-    gain_selector_label_.setText("Target dB:", juce::dontSendNotification);
-    gain_selector_label_.setFont(Theme::getFont());
-    gain_selector_label_.setColour(juce::Label::ColourIds::textColourId, Theme::getColour(Theme::TEXT));
 }
 
 /*---------------------------------------------------------------------------

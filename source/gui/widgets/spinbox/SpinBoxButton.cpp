@@ -22,8 +22,12 @@ SpinBoxButton::paint(juce::Graphics& g)
     g.drawRect(getLocalBounds());
 #endif
 
-    g.fillAll(Theme::getColour(Theme::BAND_VALUE));
-    g.setColour(Theme::getColour(Theme::TEXT));
+    // Button background.
+    g.fillAll(Theme::getColour(isEnabled() ? Theme::UNITY_GAIN_VALUE_BUTTON : Theme::DISABLED_WIDGET));
+
+    // +/- label.
+    g.setColour(Theme::getColour(isEnabled() ? Theme::TEXT : Theme::DISABLED_WIDGET));
+    g.setFont(Theme::getFont());
     g.drawFittedText(is_increment_ ? "+" : "-", getLocalBounds(), juce::Justification::centred, 1);
 }
 

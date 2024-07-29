@@ -63,6 +63,7 @@ target_sources(${PROJECT_NAME}
         source/gui/response_graph/FrequencyMarkers.cpp
         source/gui/response_graph/MonoFftPath.cpp
         source/gui/response_graph/MonoFftPathProducer.cpp
+        source/gui/widgets/DisableableLabel.cpp
         source/gui/widgets/MenuButton.cpp
         source/gui/widgets/PowerButton.cpp
         source/gui/widgets/RecordButton.cpp

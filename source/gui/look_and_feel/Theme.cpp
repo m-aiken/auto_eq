@@ -20,6 +20,10 @@ const Theme::DarkLightPair Theme::FFT = DarkLightPair(TEAL.withAlpha(0.2f), TEAL
 const Theme::DarkLightPair Theme::BAND_BACKGROUND = DarkLightPair(WHITE.withAlpha(0.02f), DARK_GREY.withAlpha(0.1f));
 const Theme::DarkLightPair Theme::BAND_VALUE = DarkLightPair(RED_ORANGE.withAlpha(0.4f), RED_ORANGE.withAlpha(0.4f));
 
+const Theme::DarkLightPair Theme::UNITY_GAIN_VALUE_BUTTON = DarkLightPair(RED_ORANGE.withAlpha(0.4f),
+                                                                          RED_ORANGE.withAlpha(0.4f));
+const Theme::DarkLightPair Theme::UNITY_GAIN_VALUE_BOX    = DarkLightPair(TEAL.withAlpha(0.2f), TEAL.withAlpha(0.2f));
+
 const Theme::DarkLightPair Theme::METER_BACKGROUND = DarkLightPair(WHITE.withAlpha(0.02f), DARK_GREY.withAlpha(0.1f));
 const Theme::DarkLightPair Theme::METER_VALUE      = DarkLightPair(TEAL, TEAL);
 

@@ -23,8 +23,12 @@ SpinBoxTextBox::paint(juce::Graphics& g)
     g.drawRect(getLocalBounds());
 #endif
 
-    g.fillAll(Theme::getColour(Theme::FFT));
-    g.setColour(Theme::getColour(Theme::TEXT));
+    // Background.
+    g.fillAll(Theme::getColour(isEnabled() ? Theme::UNITY_GAIN_VALUE_BOX : Theme::DISABLED_WIDGET));
+
+    // Value.
+    g.setColour(Theme::getColour(isEnabled() ? Theme::TEXT : Theme::DISABLED_WIDGET));
+    g.setFont(Theme::getFont());
     g.drawFittedText(getText(), getLocalBounds(), juce::Justification::centred, 1);
 }
 
