@@ -6,9 +6,9 @@
 **
 */
 UnityGainWidget::UnityGainWidget(juce::AudioProcessorValueTreeState& apvts)
-    : enable_button_("Unity Gain", apvts, GuiParams::UNITY_GAIN)
+    : enable_button_("Unity Gain", apvts, GuiParams::UNITY_GAIN_ENABLED)
     , gain_selector_label_("unity_gain_target_db_label", "Target dB:")
-    , gain_selector_(juce::Range< double >(-12.0, 0.0), -3.0, "dB")
+    , gain_selector_(apvts.getParameter(GuiParams::getName(GuiParams::UNITY_GAIN_VALUE)))
 {
     addAndMakeVisible(enable_button_);
     addAndMakeVisible(gain_selector_label_);

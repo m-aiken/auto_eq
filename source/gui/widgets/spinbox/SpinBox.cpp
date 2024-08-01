@@ -5,21 +5,27 @@
 /*---------------------------------------------------------------------------
 **
 */
-SpinBox::SpinBox(juce::Range< double > range, double default_value, const juce::String& unit)
-    : up_button_(true)
+SpinBox::SpinBox(juce::RangedAudioParameter* param)
+    : value_box_(param)
+    , up_button_(true)
     , down_button_(false)
+    , param_(param)
 {
-    unit_label_.setText(unit, juce::dontSendNotification);
-    unit_label_.setFont(Theme::getFont());
-    unit_label_.setColour(juce::Label::ColourIds::textColourId, Theme::getColour(Theme::TEXT));
-
     addAndMakeVisible(value_box_);
-    addAndMakeVisible(unit_label_);
     addAndMakeVisible(up_button_);
     addAndMakeVisible(down_button_);
 
-    //    setRange(range, 0.1);
-    //    setValue(default_value, juce::dontSendNotification);
+    up_button_.addListener(this);
+    down_button_.addListener(this);
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
+SpinBox::~SpinBox()
+{
+    up_button_.removeListener(this);
+    down_button_.removeListener(this);
 }
 
 /*---------------------------------------------------------------------------
@@ -47,16 +53,41 @@ SpinBox::resized()
     juce::Grid grid;
 
     grid.autoRows        = Tr(Fr(1));
-    grid.templateColumns = { Tr(Fr(40)), Tr(Fr(10)), Tr(Fr(25)), Tr(Fr(25)) };
+    grid.templateColumns = { Tr(Fr(50)), Tr(Fr(25)), Tr(Fr(25)) };
 
     grid.items.add(juce::GridItem(value_box_));
-    grid.items.add(juce::GridItem(unit_label_));
     grid.items.add(juce::GridItem(up_button_));
     grid.items.add(juce::GridItem(down_button_));
 
     grid.setGap(Px(4));
 
     grid.performLayout(getLocalBounds());
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
+void
+SpinBox::buttonClicked(juce::Button* button)
+{
+    if (button == nullptr || param_ == nullptr) {
+        return;
+    }
+
+    float value = param_->convertFrom0to1(param_->getValue());
+
+    if (button == &up_button_) {
+        value += GuiParams::UNITY_GAIN_INTERVAL;
+    }
+    else if (button == &down_button_) {
+        value -= GuiParams::UNITY_GAIN_INTERVAL;
+    }
+
+    param_->beginChangeGesture();
+    param_->setValueNotifyingHost(param_->convertTo0to1(value));
+    param_->endChangeGesture();
+
+    value_box_.repaint();
 }
 
 /*---------------------------------------------------------------------------

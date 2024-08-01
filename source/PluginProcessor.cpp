@@ -520,9 +520,14 @@ PluginProcessor::getParameterLayout()
 {
     juce::AudioProcessorValueTreeState::ParameterLayout pl;
 
-    juce::String power_param_id    = GuiParams::getName(GuiParams::POWER);
-    juce::String analysis_param_id = GuiParams::getName(GuiParams::ANALYSE_INPUT);
-    juce::String fft_param_id      = GuiParams::getName(GuiParams::SHOW_FFT);
+    juce::String power_param_id              = GuiParams::getName(GuiParams::POWER);
+    juce::String analysis_param_id           = GuiParams::getName(GuiParams::ANALYSE_INPUT);
+    juce::String fft_param_id                = GuiParams::getName(GuiParams::SHOW_FFT);
+    juce::String unity_gain_enabled_param_id = GuiParams::getName(GuiParams::UNITY_GAIN_ENABLED);
+    juce::String unity_gain_value_param_id   = GuiParams::getName(GuiParams::UNITY_GAIN_VALUE);
+
+    juce::NormalisableRange< float > unity_gain_range(-12.f, 3.f, GuiParams::UNITY_GAIN_INTERVAL, 1.f);
+    juce::NormalisableRange< float > band_range(Global::MAX_DB_CUT, Global::MAX_DB_BOOST, 0.01f, 1.f);
 
     pl.add(std::make_unique< juce::AudioParameterBool >(juce::ParameterID(power_param_id, 1),
                                                         power_param_id,
@@ -534,13 +539,14 @@ PluginProcessor::getParameterLayout()
                                                         fft_param_id,
                                                         GuiParams::INITIAL_FFT_STATE));
 
-    juce::String enable_unity_gain_param_id = GuiParams::getName(GuiParams::UNITY_GAIN);
-
-    pl.add(std::make_unique< juce::AudioParameterBool >(juce::ParameterID(enable_unity_gain_param_id, 1),
-                                                        enable_unity_gain_param_id,
+    pl.add(std::make_unique< juce::AudioParameterBool >(juce::ParameterID(unity_gain_enabled_param_id, 1),
+                                                        unity_gain_enabled_param_id,
                                                         GuiParams::INITIAL_UNITY_GAIN_STATE));
 
-    juce::NormalisableRange< float > band_range(Global::MAX_DB_CUT, Global::MAX_DB_BOOST, 0.01f, 1.f);
+    pl.add(std::make_unique< juce::AudioParameterFloat >(juce::ParameterID(unity_gain_value_param_id, 1),
+                                                         unity_gain_value_param_id,
+                                                         unity_gain_range,
+                                                         0.f));
 
     for (size_t i = 0; i < Equalizer::NUM_BANDS; ++i) {
         juce::String band_str = Equalizer::getBandName(static_cast< Equalizer::BAND_ID >(i));

@@ -84,11 +84,14 @@ static const bool INITIAL_ANALYSIS_STATE   = false;
 static const bool INITIAL_FFT_STATE        = true;
 static const bool INITIAL_UNITY_GAIN_STATE = true;
 
+static const float UNITY_GAIN_INTERVAL = 0.1f;
+
 enum PARAM_ID {
     POWER,
     ANALYSE_INPUT,
     SHOW_FFT,
-    UNITY_GAIN,
+    UNITY_GAIN_ENABLED,
+    UNITY_GAIN_VALUE,
     FFT_ACCURACY_TEST_TONE_HZ,
     FFT_ACCURACY_TEST_TONE_DB,
 };
@@ -97,7 +100,8 @@ static const std::map< PARAM_ID, juce::String > PARAM_NAME_MAP = {
     { POWER, "POWER" },
     { ANALYSE_INPUT, "ANALYSE_INPUT" },
     { SHOW_FFT, "SHOW_FFT" },
-    { UNITY_GAIN, "UNITY_GAIN" },
+    { UNITY_GAIN_ENABLED, "UNITY_GAIN_ENABLED" },
+    { UNITY_GAIN_VALUE, "UNITY_GAIN_VALUE" },
     { FFT_ACCURACY_TEST_TONE_HZ, "FFT_ACCURACY_TEST_TONE_HZ" },
     { FFT_ACCURACY_TEST_TONE_DB, "FFT_ACCURACY_TEST_TONE_DB" },
 };
