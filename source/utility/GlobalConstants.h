@@ -44,10 +44,7 @@ namespace Channels
         { INPUT_RIGHT, "Input Right" },
     };
 
-    static const juce::String getName(CHANNEL_ID channel_id)
-    {
-        return CHANNEL_NAME_MAP.at(channel_id);
-    }
+    static const juce::String getName(CHANNEL_ID channel_id) { return CHANNEL_NAME_MAP.at(channel_id); }
 
 }  // namespace Channels
 
@@ -82,7 +79,7 @@ namespace GuiParams
 static const bool INITIAL_POWER_STATE      = true;
 static const bool INITIAL_ANALYSIS_STATE   = false;
 static const bool INITIAL_FFT_STATE        = true;
-static const bool INITIAL_UNITY_GAIN_STATE = true;
+static const bool INITIAL_UNITY_GAIN_STATE = false;
 
 static const float UNITY_GAIN_INTERVAL = 0.1f;
 

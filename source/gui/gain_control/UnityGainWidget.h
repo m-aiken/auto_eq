@@ -6,13 +6,18 @@
 #include "../widgets/MenuButton.h"
 #include "../widgets/spinbox/SpinBox.h"
 
-class UnityGainWidget : public juce::Component
+class UnityGainWidget
+    : public juce::Component
+    , public juce::Button::Listener
 {
 public:
     UnityGainWidget(juce::AudioProcessorValueTreeState& apvts);
+    ~UnityGainWidget() override;
 
     void paint(juce::Graphics& g) override;
     void resized() override;
+
+    void buttonClicked(juce::Button* button) override;
 
 private:
     MenuButton       enable_button_;

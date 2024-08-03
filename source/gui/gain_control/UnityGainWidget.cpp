@@ -13,6 +13,19 @@ UnityGainWidget::UnityGainWidget(juce::AudioProcessorValueTreeState& apvts)
     addAndMakeVisible(enable_button_);
     addAndMakeVisible(gain_selector_label_);
     addAndMakeVisible(gain_selector_);
+
+    enable_button_.addListener(this);
+
+    gain_selector_label_.setEnabled(GuiParams::INITIAL_UNITY_GAIN_STATE);
+    gain_selector_.setEnabled(GuiParams::INITIAL_UNITY_GAIN_STATE);
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
+UnityGainWidget::~UnityGainWidget()
+{
+    enable_button_.removeListener(this);
 }
 
 /*---------------------------------------------------------------------------
@@ -61,6 +74,24 @@ UnityGainWidget::resized()
     grid.items.add(juce::GridItem(gain_selector_));
 
     grid.performLayout(padded_bounds);
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
+void
+UnityGainWidget::buttonClicked(juce::Button* button)
+{
+    if (button == nullptr) {
+        return;
+    }
+
+    if (button == &enable_button_) {
+        bool component_enabled = enable_button_.getToggleState();
+
+        gain_selector_label_.setEnabled(component_enabled);
+        gain_selector_.setEnabled(component_enabled);
+    }
 }
 
 /*---------------------------------------------------------------------------
