@@ -2,7 +2,7 @@
 #
 # SPDX-FileCopyrightText: Copyright (c) 2019-2023 Lars Melchior and contributors
 
-set(CPM_DOWNLOAD_VERSION 0.39.0)
+set(CPM_DOWNLOAD_VERSION 0.40.1)
 set(CPM_DOWNLOAD_LOCATION "${DEPENDENCIES_DIR}/cpm/CPM_${CPM_DOWNLOAD_VERSION}.cmake")
 
 # Expand relative path. This is important if the provided path contains a tilde (~).
