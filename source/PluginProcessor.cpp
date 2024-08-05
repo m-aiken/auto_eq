@@ -299,9 +299,9 @@ PluginProcessor::processBlock(juce::AudioBuffer< float >& buffer, juce::MidiBuff
         }
     }
 
-    // Adjust for unity gain if it's enabled.
-    if (static_cast< bool >(*apvts_.getRawParameterValue(GuiParams::getName(GuiParams::UNITY_GAIN_ENABLED)))) {
-        adjustForUnityGain(buffer);
+    // Apply the limiter if it's enabled.
+    if (static_cast< bool >(*apvts_.getRawParameterValue(GuiParams::getName(GuiParams::LIMITER_ENABLED)))) {
+        applyLimiter(buffer);
     }
 
     // Update the Peak, RMS, and LUFS.
@@ -510,9 +510,9 @@ PluginProcessor::setLufsMeter(SmoothedFloat& val, juce::AudioBuffer< float >& bu
 **
 */
 void
-PluginProcessor::adjustForUnityGain(juce::AudioBuffer< float >& buffer)
+PluginProcessor::applyLimiter(juce::AudioBuffer< float >& buffer)
 {
-    juce::RangedAudioParameter* unity_gain_param = apvts_.getParameter(GuiParams::getName(GuiParams::UNITY_GAIN_VALUE));
+    juce::RangedAudioParameter* unity_gain_param = apvts_.getParameter(GuiParams::getName(GuiParams::LIMITER_VALUE));
 
     if (unity_gain_param == nullptr) {
         return;
@@ -522,9 +522,10 @@ PluginProcessor::adjustForUnityGain(juce::AudioBuffer< float >& buffer)
     float peak        = juce::Decibels::gainToDecibels(buffer.getMagnitude(0, num_samples), Global::METER_NEG_INF);
     float target      = unity_gain_param->convertFrom0to1(unity_gain_param->getValue());
 
-    float adjustment = (target - peak);
-
-    buffer.applyGain(0, num_samples, juce::Decibels::decibelsToGain(adjustment, Global::METER_NEG_INF));
+    if (peak > target) {
+        float adjustment = (target - peak);
+        buffer.applyGain(0, num_samples, juce::Decibels::decibelsToGain(adjustment, Global::METER_NEG_INF));
+    }
 }
 
 /*---------------------------------------------------------------------------
@@ -547,13 +548,13 @@ PluginProcessor::getParameterLayout()
 {
     juce::AudioProcessorValueTreeState::ParameterLayout pl;
 
-    juce::String power_param_id              = GuiParams::getName(GuiParams::POWER);
-    juce::String analysis_param_id           = GuiParams::getName(GuiParams::ANALYSE_INPUT);
-    juce::String fft_param_id                = GuiParams::getName(GuiParams::SHOW_FFT);
-    juce::String unity_gain_enabled_param_id = GuiParams::getName(GuiParams::UNITY_GAIN_ENABLED);
-    juce::String unity_gain_value_param_id   = GuiParams::getName(GuiParams::UNITY_GAIN_VALUE);
+    juce::String power_param_id           = GuiParams::getName(GuiParams::POWER);
+    juce::String analysis_param_id        = GuiParams::getName(GuiParams::ANALYSE_INPUT);
+    juce::String fft_param_id             = GuiParams::getName(GuiParams::SHOW_FFT);
+    juce::String limiter_enabled_param_id = GuiParams::getName(GuiParams::LIMITER_ENABLED);
+    juce::String limiter_value_param_id   = GuiParams::getName(GuiParams::LIMITER_VALUE);
 
-    juce::NormalisableRange< float > unity_gain_range(-12.f, 3.f, GuiParams::UNITY_GAIN_INTERVAL, 1.f);
+    juce::NormalisableRange< float > unity_gain_range(-12.f, 3.f, GuiParams::LIMITER_INTERVAL, 1.f);
     juce::NormalisableRange< float > band_range(Global::MAX_DB_CUT, Global::MAX_DB_BOOST, 0.01f, 1.f);
 
     pl.add(std::make_unique< juce::AudioParameterBool >(juce::ParameterID(power_param_id, 1),
@@ -566,14 +567,14 @@ PluginProcessor::getParameterLayout()
                                                         fft_param_id,
                                                         GuiParams::INITIAL_FFT_STATE));
 
-    pl.add(std::make_unique< juce::AudioParameterBool >(juce::ParameterID(unity_gain_enabled_param_id, 1),
-                                                        unity_gain_enabled_param_id,
-                                                        GuiParams::INITIAL_UNITY_GAIN_STATE));
+    pl.add(std::make_unique< juce::AudioParameterBool >(juce::ParameterID(limiter_enabled_param_id, 1),
+                                                        limiter_enabled_param_id,
+                                                        GuiParams::INITIAL_LIMITER_STATE));
 
-    pl.add(std::make_unique< juce::AudioParameterFloat >(juce::ParameterID(unity_gain_value_param_id, 1),
-                                                         unity_gain_value_param_id,
+    pl.add(std::make_unique< juce::AudioParameterFloat >(juce::ParameterID(limiter_value_param_id, 1),
+                                                         limiter_value_param_id,
                                                          unity_gain_range,
-                                                         GuiParams::INITIAL_UNITY_GAIN_VALUE));
+                                                         GuiParams::INITIAL_LIMITER_VALUE));
 
     for (size_t i = 0; i < Equalizer::NUM_BANDS; ++i) {
         juce::String band_str = Equalizer::getBandName(static_cast< Equalizer::BAND_ID >(i));

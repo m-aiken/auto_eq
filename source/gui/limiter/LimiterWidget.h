@@ -6,13 +6,13 @@
 #include "../widgets/MenuButton.h"
 #include "../widgets/spinbox/SpinBox.h"
 
-class UnityGainWidget
+class LimiterWidget
     : public juce::Component
     , public juce::Button::Listener
 {
 public:
-    UnityGainWidget(juce::AudioProcessorValueTreeState& apvts);
-    ~UnityGainWidget() override;
+    LimiterWidget(juce::AudioProcessorValueTreeState& apvts);
+    ~LimiterWidget() override;
 
     void paint(juce::Graphics& g) override;
     void resized() override;
@@ -24,5 +24,5 @@ private:
     DisableableLabel gain_selector_label_;
     SpinBox          gain_selector_;
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(UnityGainWidget)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(LimiterWidget)
 };

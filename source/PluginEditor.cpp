@@ -19,7 +19,7 @@ PluginEditor::PluginEditor(PluginProcessor& p)
     , show_fft_button_("Show Spectrum", p.getApvts(), GuiParams::SHOW_FFT)
     , theme_button_()
     , filter_res_graph_(p)
-    , unity_gain_widget_(p.getApvts())
+    , limiter_widget_(p.getApvts())
     , meter_group_(p)
     , cached_fft_draw_status_(GuiParams::INITIAL_FFT_STATE)
 {
@@ -30,7 +30,7 @@ PluginEditor::PluginEditor(PluginProcessor& p)
     addAndMakeVisible(show_fft_button_);
     addAndMakeVisible(theme_button_);
     addAndMakeVisible(filter_res_graph_);
-    addAndMakeVisible(unity_gain_widget_);
+    addAndMakeVisible(limiter_widget_);
     addAndMakeVisible(meter_group_);
 
     power_button_.addListener(this);
@@ -86,7 +86,7 @@ PluginEditor::resized()
     show_fft_button_.setBounds(analyse_input_button_.getRight(), 0, fft_button_width, top_controls_height);
     theme_button_.setBounds(bounds.getRight() - theme_button_width, 0, theme_button_width, top_controls_height);
     filter_res_graph_.setBounds(0, top_controls_height, bounds_width, graph_height);
-    unity_gain_widget_.setBounds(0, bounds.getBottom() - bottom_section_height, unity_gain_width, bottom_section_height);
+    limiter_widget_.setBounds(0, bounds.getBottom() - bottom_section_height, unity_gain_width, bottom_section_height);
     meter_group_.setBounds(unity_gain_width,
                            bounds.getBottom() - bottom_section_height,
                            meters_width,
@@ -109,7 +109,7 @@ PluginEditor::buttonClicked(juce::Button* button)
         analyse_input_button_.setEnabled(plugin_enabled);
         show_fft_button_.setEnabled(plugin_enabled);
         filter_res_graph_.setEnabled(plugin_enabled);
-        unity_gain_widget_.setEnabled(plugin_enabled);
+        limiter_widget_.setEnabled(plugin_enabled);
         meter_group_.setEnabled(plugin_enabled);
 
         // If the user is disabling the plugin and the analysis is active, stop the analysis.

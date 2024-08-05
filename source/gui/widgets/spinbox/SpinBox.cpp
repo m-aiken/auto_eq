@@ -77,10 +77,10 @@ SpinBox::buttonClicked(juce::Button* button)
     float value = param_->convertFrom0to1(param_->getValue());
 
     if (button == &up_button_) {
-        value += GuiParams::UNITY_GAIN_INTERVAL;
+        value += GuiParams::LIMITER_INTERVAL;
     }
     else if (button == &down_button_) {
-        value -= GuiParams::UNITY_GAIN_INTERVAL;
+        value -= GuiParams::LIMITER_INTERVAL;
     }
 
     param_->beginChangeGesture();

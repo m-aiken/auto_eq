@@ -45,7 +45,7 @@ target_sources(${PROJECT_NAME}
         source/dsp/Equalizer.cpp
         source/dsp/InputAnalysisFilter.cpp
         source/dsp/MonoFftBuffer.cpp
-        source/gui/gain_control/UnityGainWidget.cpp
+        source/gui/limiter/LimiterWidget.cpp
         source/gui/look_and_feel/CustomLookAndFeel.cpp
         source/gui/look_and_feel/Theme.cpp
         source/gui/meters/MeterCanvas.cpp

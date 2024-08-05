@@ -1,14 +1,14 @@
-#include "UnityGainWidget.h"
+#include "LimiterWidget.h"
 #include "../look_and_feel/Theme.h"
 #include "../../utility/GlobalConstants.h"
 
 /*---------------------------------------------------------------------------
 **
 */
-UnityGainWidget::UnityGainWidget(juce::AudioProcessorValueTreeState& apvts)
-    : enable_button_("Unity Gain", apvts, GuiParams::UNITY_GAIN_ENABLED)
-    , gain_selector_label_("unity_gain_target_db_label", "Target dB:")
-    , gain_selector_(apvts.getParameter(GuiParams::getName(GuiParams::UNITY_GAIN_VALUE)))
+LimiterWidget::LimiterWidget(juce::AudioProcessorValueTreeState& apvts)
+    : enable_button_("Limiter", apvts, GuiParams::LIMITER_ENABLED)
+    , gain_selector_label_("limiter_target_db_label", "Target dB:")
+    , gain_selector_(apvts.getParameter(GuiParams::getName(GuiParams::LIMITER_VALUE)))
 {
     addAndMakeVisible(enable_button_);
     addAndMakeVisible(gain_selector_label_);
@@ -16,14 +16,14 @@ UnityGainWidget::UnityGainWidget(juce::AudioProcessorValueTreeState& apvts)
 
     enable_button_.addListener(this);
 
-    gain_selector_label_.setEnabled(GuiParams::INITIAL_UNITY_GAIN_STATE);
-    gain_selector_.setEnabled(GuiParams::INITIAL_UNITY_GAIN_STATE);
+    gain_selector_label_.setEnabled(GuiParams::INITIAL_LIMITER_STATE);
+    gain_selector_.setEnabled(GuiParams::INITIAL_LIMITER_STATE);
 }
 
 /*---------------------------------------------------------------------------
 **
 */
-UnityGainWidget::~UnityGainWidget()
+LimiterWidget::~LimiterWidget()
 {
     enable_button_.removeListener(this);
 }
@@ -32,7 +32,7 @@ UnityGainWidget::~UnityGainWidget()
 **
 */
 void
-UnityGainWidget::paint(juce::Graphics& g)
+LimiterWidget::paint(juce::Graphics& g)
 {
 #ifdef SHOW_DEBUG_BOUNDS
     g.setColour(juce::Colours::green);
@@ -47,7 +47,7 @@ UnityGainWidget::paint(juce::Graphics& g)
 **
 */
 void
-UnityGainWidget::resized()
+LimiterWidget::resized()
 {
     auto og_bounds        = getLocalBounds();
     auto og_bounds_width  = og_bounds.getWidth();
@@ -80,7 +80,7 @@ UnityGainWidget::resized()
 **
 */
 void
-UnityGainWidget::buttonClicked(juce::Button* button)
+LimiterWidget::buttonClicked(juce::Button* button)
 {
     if (button == nullptr) {
         return;
