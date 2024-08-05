@@ -76,10 +76,11 @@ namespace FFT
 namespace GuiParams
 {
 
-static const bool INITIAL_POWER_STATE      = true;
-static const bool INITIAL_ANALYSIS_STATE   = false;
-static const bool INITIAL_FFT_STATE        = true;
-static const bool INITIAL_UNITY_GAIN_STATE = false;
+static const bool  INITIAL_POWER_STATE      = true;
+static const bool  INITIAL_ANALYSIS_STATE   = false;
+static const bool  INITIAL_FFT_STATE        = true;
+static const bool  INITIAL_UNITY_GAIN_STATE = false;
+static const float INITIAL_UNITY_GAIN_VALUE = -3.f;
 
 static const float UNITY_GAIN_INTERVAL = 0.1f;
 

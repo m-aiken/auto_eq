@@ -1,5 +1,6 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
+#include "utility/GlobalConstants.h"
 
 /*static*/ const double PluginProcessor::METER_DB_RAMP_TIME_SECONDS = 0.2;
 
@@ -8,10 +9,10 @@
 */
 PluginProcessor::PluginProcessor()
     : AudioProcessor(
-          BusesProperties()
-              .withInput(Global::Channels::getName(Global::Channels::INPUT_LEFT), juce::AudioChannelSet::mono(), true)
-              .withInput(Global::Channels::getName(Global::Channels::INPUT_RIGHT), juce::AudioChannelSet::mono(), true)
-              .withOutput("Output", juce::AudioChannelSet::stereo(), true))
+        BusesProperties()
+            .withInput(Global::Channels::getName(Global::Channels::INPUT_LEFT), juce::AudioChannelSet::mono(), true)
+            .withInput(Global::Channels::getName(Global::Channels::INPUT_RIGHT), juce::AudioChannelSet::mono(), true)
+            .withOutput("Output", juce::AudioChannelSet::stereo(), true))
     , apvts_(*this, nullptr, "APVTS", getParameterLayout())
     , input_analysis_filter_()
     , band_updater_(input_analysis_filter_)
@@ -239,14 +240,14 @@ PluginProcessor::processBlock(juce::AudioBuffer< float >& buffer, juce::MidiBuff
         // The plugin is being bypassed.
         // The threads responsible for the FFT, input analysis and EQ will already have been stopped.
         // We just need to clear out the meters with an empty buffer.
-        setPeak(peak_l_, empty_buffer_, Global::Channels::INPUT_LEFT);
-        setPeak(peak_r_, empty_buffer_, Global::Channels::INPUT_RIGHT);
+        setPeakMeter(peak_l_, empty_buffer_, Global::Channels::INPUT_LEFT);
+        setPeakMeter(peak_r_, empty_buffer_, Global::Channels::INPUT_RIGHT);
 
-        setRms(rms_l_, empty_buffer_, Global::Channels::INPUT_LEFT);
-        setRms(rms_r_, empty_buffer_, Global::Channels::INPUT_RIGHT);
+        setRmsMeter(rms_l_, empty_buffer_, Global::Channels::INPUT_LEFT);
+        setRmsMeter(rms_r_, empty_buffer_, Global::Channels::INPUT_RIGHT);
 
-        setLufs(lufs_l_, empty_buffer_, Global::Channels::INPUT_LEFT);
-        setLufs(lufs_r_, empty_buffer_, Global::Channels::INPUT_RIGHT);
+        setLufsMeter(lufs_l_, empty_buffer_, Global::Channels::INPUT_LEFT);
+        setLufsMeter(lufs_r_, empty_buffer_, Global::Channels::INPUT_RIGHT);
 
         // Don't do any processing on the real buffer.
         return;
@@ -298,15 +299,20 @@ PluginProcessor::processBlock(juce::AudioBuffer< float >& buffer, juce::MidiBuff
         }
     }
 
+    // Adjust for unity gain if it's enabled.
+    if (static_cast< bool >(*apvts_.getRawParameterValue(GuiParams::getName(GuiParams::UNITY_GAIN_ENABLED)))) {
+        adjustForUnityGain(buffer);
+    }
+
     // Update the Peak, RMS, and LUFS.
-    setPeak(peak_l_, buffer, Global::Channels::INPUT_LEFT);
-    setPeak(peak_r_, buffer, Global::Channels::INPUT_RIGHT);
+    setPeakMeter(peak_l_, buffer, Global::Channels::INPUT_LEFT);
+    setPeakMeter(peak_r_, buffer, Global::Channels::INPUT_RIGHT);
 
-    setRms(rms_l_, buffer, Global::Channels::INPUT_LEFT);
-    setRms(rms_r_, buffer, Global::Channels::INPUT_RIGHT);
+    setRmsMeter(rms_l_, buffer, Global::Channels::INPUT_LEFT);
+    setRmsMeter(rms_r_, buffer, Global::Channels::INPUT_RIGHT);
 
-    setLufs(lufs_l_, buffer, Global::Channels::INPUT_LEFT);
-    setLufs(lufs_r_, buffer, Global::Channels::INPUT_RIGHT);
+    setLufsMeter(lufs_l_, buffer, Global::Channels::INPUT_LEFT);
+    setLufsMeter(lufs_r_, buffer, Global::Channels::INPUT_RIGHT);
 }
 
 /*---------------------------------------------------------------------------
@@ -463,9 +469,9 @@ PluginProcessor::updateFilterCoefficients()
 **
 */
 void
-PluginProcessor::setPeak(SmoothedFloat& val, juce::AudioBuffer< float >& buffer, Global::Channels::CHANNEL_ID channel)
+PluginProcessor::setPeakMeter(SmoothedFloat& val, juce::AudioBuffer< float >& buffer, Global::Channels::CHANNEL_ID channel)
 {
-    int num_samples = buffer.getNumSamples();
+    int   num_samples = buffer.getNumSamples();
     float new_value = juce::Decibels::gainToDecibels(buffer.getMagnitude(channel, 0, num_samples), Global::METER_NEG_INF);
 
     val.skip(num_samples);
@@ -479,9 +485,9 @@ PluginProcessor::setPeak(SmoothedFloat& val, juce::AudioBuffer< float >& buffer,
 **
 */
 void
-PluginProcessor::setRms(SmoothedFloat& val, juce::AudioBuffer< float >& buffer, Global::Channels::CHANNEL_ID channel)
+PluginProcessor::setRmsMeter(SmoothedFloat& val, juce::AudioBuffer< float >& buffer, Global::Channels::CHANNEL_ID channel)
 {
-    int num_samples = buffer.getNumSamples();
+    int   num_samples = buffer.getNumSamples();
     float new_value = juce::Decibels::gainToDecibels(buffer.getRMSLevel(channel, 0, num_samples), Global::METER_NEG_INF);
 
     val.skip(num_samples);
@@ -495,9 +501,30 @@ PluginProcessor::setRms(SmoothedFloat& val, juce::AudioBuffer< float >& buffer, 
 **
 */
 void
-PluginProcessor::setLufs(SmoothedFloat& val, juce::AudioBuffer< float >& buffer, Global::Channels::CHANNEL_ID channel)
+PluginProcessor::setLufsMeter(SmoothedFloat& val, juce::AudioBuffer< float >& buffer, Global::Channels::CHANNEL_ID channel)
 {
     juce::ignoreUnused(val, buffer, channel);
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
+void
+PluginProcessor::adjustForUnityGain(juce::AudioBuffer< float >& buffer)
+{
+    juce::RangedAudioParameter* unity_gain_param = apvts_.getParameter(GuiParams::getName(GuiParams::UNITY_GAIN_VALUE));
+
+    if (unity_gain_param == nullptr) {
+        return;
+    }
+
+    int   num_samples = buffer.getNumSamples();
+    float peak        = juce::Decibels::gainToDecibels(buffer.getMagnitude(0, num_samples), Global::METER_NEG_INF);
+    float target      = unity_gain_param->convertFrom0to1(unity_gain_param->getValue());
+
+    float adjustment = (target - peak);
+
+    buffer.applyGain(0, num_samples, juce::Decibels::decibelsToGain(adjustment, Global::METER_NEG_INF));
 }
 
 /*---------------------------------------------------------------------------
@@ -546,7 +573,7 @@ PluginProcessor::getParameterLayout()
     pl.add(std::make_unique< juce::AudioParameterFloat >(juce::ParameterID(unity_gain_value_param_id, 1),
                                                          unity_gain_value_param_id,
                                                          unity_gain_range,
-                                                         0.f));
+                                                         GuiParams::INITIAL_UNITY_GAIN_VALUE));
 
     for (size_t i = 0; i < Equalizer::NUM_BANDS; ++i) {
         juce::String band_str = Equalizer::getBandName(static_cast< Equalizer::BAND_ID >(i));
