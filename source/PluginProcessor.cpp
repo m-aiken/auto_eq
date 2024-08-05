@@ -177,6 +177,19 @@ PluginProcessor::prepareToPlay(double sample_rate, int samples_per_block)
     empty_buffer_.setSize(Global::Channels::NUM_INPUTS, samples_per_block);
     empty_buffer_.clear();
 
+    // Initialise the compressor.
+    juce::dsp::ProcessSpec compressor_spec;
+
+    compressor_spec.sampleRate       = sample_rate;
+    compressor_spec.maximumBlockSize = static_cast< juce::uint32 >(samples_per_block);
+    compressor_spec.numChannels      = static_cast< juce::uint32 >(getTotalNumInputChannels());
+
+    compressor_.prepare(compressor_spec);
+    compressor_.setAttack(20.f);
+    compressor_.setRelease(200.f);
+    compressor_.setRatio(1.f);
+    compressor_.setThreshold(GuiParams::INITIAL_LIMITER_VALUE);
+
 #ifdef TEST_FFT_ACCURACY
     juce::dsp::ProcessSpec fft_test_spec;
 
@@ -512,6 +525,29 @@ PluginProcessor::setLufsMeter(SmoothedFloat& val, juce::AudioBuffer< float >& bu
 void
 PluginProcessor::applyLimiter(juce::AudioBuffer< float >& buffer)
 {
+    juce::RangedAudioParameter* limiter_threshold_param = apvts_.getParameter(
+        GuiParams::getName(GuiParams::LIMITER_VALUE));
+
+    if (limiter_threshold_param == nullptr) {
+        return;
+    }
+
+    float threshold = limiter_threshold_param->convertFrom0to1(limiter_threshold_param->getValue());
+
+    compressor_.setThreshold(threshold);
+
+    juce::dsp::AudioBlock< float > audio_block(buffer);
+
+    auto block_l = audio_block.getSingleChannelBlock(Global::Channels::INPUT_LEFT);
+    auto block_r = audio_block.getSingleChannelBlock(Global::Channels::INPUT_RIGHT);
+
+    juce::dsp::ProcessContextReplacing< float > ctx_l(block_l);
+    juce::dsp::ProcessContextReplacing< float > ctx_r(block_r);
+
+    compressor_.process(ctx_l);
+    compressor_.process(ctx_r);
+
+#if 0
     juce::RangedAudioParameter* unity_gain_param = apvts_.getParameter(GuiParams::getName(GuiParams::LIMITER_VALUE));
 
     if (unity_gain_param == nullptr) {
@@ -526,6 +562,7 @@ PluginProcessor::applyLimiter(juce::AudioBuffer< float >& buffer)
         float adjustment = (target - peak);
         buffer.applyGain(0, num_samples, juce::Decibels::decibelsToGain(adjustment, Global::METER_NEG_INF));
     }
+#endif
 }
 
 /*---------------------------------------------------------------------------
