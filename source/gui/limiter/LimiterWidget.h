@@ -4,7 +4,7 @@
 
 #include "../widgets/DisableableLabel.h"
 #include "../widgets/MenuButton.h"
-#include "../widgets/spinbox/SpinBox.h"
+#include "../widgets/RotaryControl.h"
 
 class LimiterWidget
     : public juce::Component
@@ -21,8 +21,8 @@ public:
 
 private:
     MenuButton       enable_button_;
-    DisableableLabel gain_selector_label_;
-    SpinBox          gain_selector_;
+    DisableableLabel threshold_label_;
+    RotaryControl    threshold_control_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(LimiterWidget)
 };

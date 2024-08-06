@@ -1,4 +1,5 @@
 #include "RotaryControl.h"
+#include "../look_and_feel/Theme.h"
 #include "../../utility/GlobalConstants.h"
 
 /*---------------------------------------------------------------------------
@@ -49,6 +50,13 @@ RotaryControl::paint(juce::Graphics& g)
                                       START_ANGLE,
                                       END_ANGLE,
                                       *this);
+
+    // Value text.
+    juce::String value_str(getValue(), 1);
+
+    g.setColour(Theme::getColour(Theme::TEXT));
+    g.setFont(Theme::getFont());
+    g.drawFittedText(value_str + " dB", bounds, juce::Justification::centred, 1);
 }
 
 /*---------------------------------------------------------------------------

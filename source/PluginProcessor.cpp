@@ -187,7 +187,7 @@ PluginProcessor::prepareToPlay(double sample_rate, int samples_per_block)
     compressor_.prepare(compressor_spec);
     compressor_.setAttack(20.f);
     compressor_.setRelease(200.f);
-    compressor_.setRatio(1.f);
+    compressor_.setRatio(100.f);
     compressor_.setThreshold(GuiParams::INITIAL_LIMITER_VALUE);
 
 #ifdef TEST_FFT_ACCURACY
@@ -591,7 +591,7 @@ PluginProcessor::getParameterLayout()
     juce::String limiter_enabled_param_id = GuiParams::getName(GuiParams::LIMITER_ENABLED);
     juce::String limiter_value_param_id   = GuiParams::getName(GuiParams::LIMITER_VALUE);
 
-    juce::NormalisableRange< float > unity_gain_range(-12.f, 3.f, GuiParams::LIMITER_INTERVAL, 1.f);
+    juce::NormalisableRange< float > limiter_threshold_range(-30.f, 0.f, GuiParams::LIMITER_INTERVAL, 1.f);
     juce::NormalisableRange< float > band_range(Global::MAX_DB_CUT, Global::MAX_DB_BOOST, 0.01f, 1.f);
 
     pl.add(std::make_unique< juce::AudioParameterBool >(juce::ParameterID(power_param_id, 1),
@@ -610,7 +610,7 @@ PluginProcessor::getParameterLayout()
 
     pl.add(std::make_unique< juce::AudioParameterFloat >(juce::ParameterID(limiter_value_param_id, 1),
                                                          limiter_value_param_id,
-                                                         unity_gain_range,
+                                                         limiter_threshold_range,
                                                          GuiParams::INITIAL_LIMITER_VALUE));
 
     for (size_t i = 0; i < Equalizer::NUM_BANDS; ++i) {

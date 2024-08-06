@@ -7,17 +7,17 @@
 */
 LimiterWidget::LimiterWidget(juce::AudioProcessorValueTreeState& apvts)
     : enable_button_("Limiter", apvts, GuiParams::LIMITER_ENABLED)
-    , gain_selector_label_("limiter_target_db_label", "Target dB:")
-    , gain_selector_(apvts.getParameter(GuiParams::getName(GuiParams::LIMITER_VALUE)))
+    , threshold_label_("limiter_threshold_label", "Threshold")
+    , threshold_control_(apvts, GuiParams::getName(GuiParams::LIMITER_VALUE))
 {
     addAndMakeVisible(enable_button_);
-    addAndMakeVisible(gain_selector_label_);
-    addAndMakeVisible(gain_selector_);
+    addAndMakeVisible(threshold_label_);
+    addAndMakeVisible(threshold_control_);
 
     enable_button_.addListener(this);
 
-    gain_selector_label_.setEnabled(GuiParams::INITIAL_LIMITER_STATE);
-    gain_selector_.setEnabled(GuiParams::INITIAL_LIMITER_STATE);
+    threshold_label_.setEnabled(GuiParams::INITIAL_LIMITER_STATE);
+    threshold_control_.setEnabled(GuiParams::INITIAL_LIMITER_STATE);
 }
 
 /*---------------------------------------------------------------------------
@@ -56,7 +56,7 @@ LimiterWidget::resized()
 
     enable_button_.setBounds(button_margin, button_margin, og_bounds_width - (button_margin * 2), og_bounds_height * 0.2);
 
-    auto padded_bounds = og_bounds.withSizeKeepingCentre(og_bounds_width * 0.4, og_bounds_height * 0.3);
+    auto padded_bounds = og_bounds.withSizeKeepingCentre(og_bounds_width * 0.4, og_bounds_height * 0.6);
 
     using Tr = juce::Grid::TrackInfo;
     using Fr = juce::Grid::Fr;
@@ -66,12 +66,12 @@ LimiterWidget::resized()
     grid.autoColumns = Tr(Fr(1));
 
     grid.templateRows = {
-        Tr(Fr(40)),
-        Tr(Fr(60)),
+        Tr(Fr(80)),
+        Tr(Fr(20)),
     };
 
-    grid.items.add(juce::GridItem(gain_selector_label_));
-    grid.items.add(juce::GridItem(gain_selector_));
+    grid.items.add(juce::GridItem(threshold_control_));
+    grid.items.add(juce::GridItem(threshold_label_));
 
     grid.performLayout(padded_bounds);
 }
@@ -89,8 +89,8 @@ LimiterWidget::buttonClicked(juce::Button* button)
     if (button == &enable_button_) {
         bool component_enabled = enable_button_.getToggleState();
 
-        gain_selector_label_.setEnabled(component_enabled);
-        gain_selector_.setEnabled(component_enabled);
+        threshold_label_.setEnabled(component_enabled);
+        threshold_control_.setEnabled(component_enabled);
     }
 }
 

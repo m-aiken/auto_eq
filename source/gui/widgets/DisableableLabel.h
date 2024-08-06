@@ -7,7 +7,7 @@ class DisableableLabel : public juce::Label
 public:
     DisableableLabel(const juce::String& component_name = juce::String(),
                      const juce::String& label_text     = juce::String(),
-                     juce::Justification justification  = juce::Justification::centredLeft);
+                     juce::Justification justification  = juce::Justification::centred);
 
     void paint(juce::Graphics& g) override;
 
