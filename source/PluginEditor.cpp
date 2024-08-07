@@ -1,7 +1,7 @@
+#include "GlobalConstants.h"
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 #include "Theme.h"
-#include "GlobalConstants.h"
 
 /*static*/ const uint16 PluginEditor::MAIN_WINDOW_MIN_WIDTH  = 768;
 /*static*/ const uint16 PluginEditor::MAIN_WINDOW_MIN_HEIGHT = 400;

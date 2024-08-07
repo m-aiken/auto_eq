@@ -1,6 +1,6 @@
+#include "GlobalConstants.h"
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
-#include "GlobalConstants.h"
 
 /*static*/ const double PluginProcessor::METER_DB_RAMP_TIME_SECONDS = 0.2;
 

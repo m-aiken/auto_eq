@@ -1,6 +1,6 @@
+#include "GlobalConstants.h"
 #include "MeterCanvas.h"
 #include "Theme.h"
-#include "GlobalConstants.h"
 
 /*static*/ const uint8 MeterCanvas::DB_INTERVAL = 3;
 

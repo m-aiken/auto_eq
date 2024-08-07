@@ -1,6 +1,6 @@
+#include "GlobalConstants.h"
 #include "RotaryControl.h"
 #include "Theme.h"
-#include "GlobalConstants.h"
 
 /*---------------------------------------------------------------------------
 **

@@ -3,8 +3,8 @@
 #include <JuceHeader.h>
 
 #include "MeterLabel.h"
-#include "StereoMeter.h"
 #include "PluginProcessor.h"
+#include "StereoMeter.h"
 
 class MeterGroup : public juce::Component
 {

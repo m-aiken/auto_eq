@@ -1,5 +1,5 @@
-#include "FilterMagnitudesCalculator.h"
 #include "Equalizer.h"
+#include "FilterMagnitudesCalculator.h"
 #include "GlobalConstants.h"
 
 /*---------------------------------------------------------------------------

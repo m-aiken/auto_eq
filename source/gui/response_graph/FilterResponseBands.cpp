@@ -1,6 +1,6 @@
 #include "FilterResponseBands.h"
-#include "Theme.h"
 #include "GlobalConstants.h"
+#include "Theme.h"
 
 /*static*/ const uint8 FilterResponseBands::BAR_WIDTH      = 8;
 /*static*/ const uint8 FilterResponseBands::HALF_BAR_WIDTH = 4;

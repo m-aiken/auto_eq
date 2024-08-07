@@ -1,11 +1,11 @@
 #pragma once
 
-#include "PluginProcessor.h"
-#include "LimiterWidget.h"
 #include "CustomLookAndFeel.h"
-#include "MeterGroup.h"
 #include "FilterResponseGraph.h"
+#include "LimiterWidget.h"
 #include "MenuButton.h"
+#include "MeterGroup.h"
+#include "PluginProcessor.h"
 #include "PowerButton.h"
 #include "RecordButton.h"
 #include "ThemeButton.h"

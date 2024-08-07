@@ -2,9 +2,9 @@
 
 #include <JuceHeader.h>
 
+#include "GlobalConstants.h"
 #include "MeterCanvas.h"
 #include "PluginProcessor.h"
-#include "GlobalConstants.h"
 
 class MonoMeter
     : public juce::Component

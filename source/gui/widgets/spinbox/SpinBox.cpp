@@ -1,6 +1,6 @@
+#include "GlobalConstants.h"
 #include "SpinBox.h"
 #include "Theme.h"
-#include "GlobalConstants.h"
 
 /*---------------------------------------------------------------------------
 **

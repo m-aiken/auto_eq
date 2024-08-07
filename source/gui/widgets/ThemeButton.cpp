@@ -1,6 +1,6 @@
-#include "ThemeButton.h"
-#include "Theme.h"
 #include "GlobalConstants.h"
+#include "Theme.h"
+#include "ThemeButton.h"
 
 /*---------------------------------------------------------------------------
 **

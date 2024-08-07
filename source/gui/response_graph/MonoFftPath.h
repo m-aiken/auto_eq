@@ -2,9 +2,9 @@
 
 #include <JuceHeader.h>
 
+#include "MonoFftBuffer.h"
 #include "MonoFftPathProducer.h"
 #include "Theme.h"
-#include "MonoFftBuffer.h"
 
 class MonoFftPath
     : public juce::Component

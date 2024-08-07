@@ -2,10 +2,10 @@
 
 #include <JuceHeader.h>
 
+#include "GlobalConstants.h"
 #include "MeterDbScale.h"
 #include "MonoMeter.h"
 #include "PluginProcessor.h"
-#include "GlobalConstants.h"
 
 class StereoMeter : public juce::Component
 {

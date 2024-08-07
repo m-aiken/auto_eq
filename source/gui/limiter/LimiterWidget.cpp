@@ -1,6 +1,6 @@
+#include "GlobalConstants.h"
 #include "LimiterWidget.h"
 #include "Theme.h"
-#include "GlobalConstants.h"
 
 /*---------------------------------------------------------------------------
 **

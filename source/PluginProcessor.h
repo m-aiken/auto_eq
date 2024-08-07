@@ -2,12 +2,12 @@
 
 #include <JuceHeader.h>
 
-#include "BandUpdater.h"
 #include "BandParameterUpdater.h"
+#include "BandUpdater.h"
 #include "Equalizer.h"
+#include "GlobalConstants.h"
 #include "InputAnalysisFilter.h"
 #include "MonoFftBuffer.h"
-#include "GlobalConstants.h"
 
 class PluginProcessor final : public juce::AudioProcessor
 {

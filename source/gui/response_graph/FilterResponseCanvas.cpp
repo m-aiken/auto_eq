@@ -1,6 +1,6 @@
 #include "FilterResponseCanvas.h"
-#include "Theme.h"
 #include "GlobalConstants.h"
+#include "Theme.h"
 
 /*static*/ const uint8 FilterResponseCanvas::DB_INTERVAL = 3;
 
