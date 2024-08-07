@@ -54,7 +54,7 @@ RotaryControl::paint(juce::Graphics& g)
     // Value text.
     juce::String value_str(getValue(), 1);
 
-    g.setColour(Theme::getColour(Theme::TEXT));
+    g.setColour(Theme::getColour(isEnabled() ? Theme::TEXT : Theme::DISABLED_WIDGET));
     g.setFont(Theme::getFont());
     g.drawFittedText(value_str + " dB", bounds, juce::Justification::centred, 1);
 }

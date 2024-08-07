@@ -30,7 +30,7 @@ CustomLookAndFeel::drawRotarySlider(juce::Graphics& g,
     float                    arc_radius     = radius - (path_thickness * 0.5f);
 
     // Fill.
-    g.setColour(Theme::getColour(Theme::ROTARY_FILL));
+    g.setColour(Theme::getColour(slider.isEnabled() ? Theme::ROTARY_FILL : Theme::DISABLED_WIDGET));
 
     juce::Path fill_path;
 
@@ -46,7 +46,7 @@ CustomLookAndFeel::drawRotarySlider(juce::Graphics& g,
     g.strokePath(fill_path, juce::PathStrokeType(path_thickness));
 
     // Arc.
-    g.setColour(Theme::getColour(Theme::ROTARY_ARC));
+    g.setColour(Theme::getColour(slider.isEnabled() ? Theme::ROTARY_ARC : Theme::DISABLED_WIDGET));
 
     juce::Path arc_path;
 
