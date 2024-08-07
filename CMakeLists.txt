@@ -36,8 +36,7 @@ juce_add_plugin(${PROJECT_NAME}
 
 juce_generate_juce_header(${PROJECT_NAME})
 
-target_sources(${PROJECT_NAME}
-        PRIVATE
+set(PROJECT_SOURCES
         source/PluginEditor.cpp
         source/PluginProcessor.cpp
         source/dsp/BandUpdater.cpp
@@ -72,6 +71,64 @@ target_sources(${PROJECT_NAME}
         source/gui/widgets/spinbox/SpinBoxButton.cpp
         source/gui/widgets/spinbox/SpinBoxTextBox.cpp
         source/gui/widgets/ThemeButton.cpp
+        )
+
+set(PROJECT_HEADERS
+        source/PluginEditor.h
+        source/PluginProcessor.h
+        source/dsp/BandUpdater.h
+        source/dsp/BandParameterUpdater.h
+        source/dsp/Equalizer.h
+        source/dsp/InputAnalysisFilter.h
+        source/dsp/MonoFftBuffer.h
+        source/gui/limiter/LimiterWidget.h
+        source/gui/look_and_feel/CustomLookAndFeel.h
+        source/gui/look_and_feel/Theme.h
+        source/gui/meters/MeterCanvas.h
+        source/gui/meters/MeterDbScale.h
+        source/gui/meters/MeterGroup.h
+        source/gui/meters/MeterLabel.h
+        source/gui/meters/MonoMeter.h
+        source/gui/meters/StereoMeter.h
+        source/gui/response_graph/DecibelMarkers.h
+        source/gui/response_graph/EqBandSlider.h
+        source/gui/response_graph/FilterMagnitudesCalculator.h
+        source/gui/response_graph/FilterResponseBands.h
+        source/gui/response_graph/FilterResponseCanvas.h
+        source/gui/response_graph/FilterResponseGraph.h
+        source/gui/response_graph/FrequencyMarkers.h
+        source/gui/response_graph/MonoFftPath.h
+        source/gui/response_graph/MonoFftPathProducer.h
+        source/gui/widgets/DisableableLabel.h
+        source/gui/widgets/MenuButton.h
+        source/gui/widgets/PowerButton.h
+        source/gui/widgets/RecordButton.h
+        source/gui/widgets/RotaryControl.h
+        source/gui/widgets/spinbox/SpinBox.h
+        source/gui/widgets/spinbox/SpinBoxButton.h
+        source/gui/widgets/spinbox/SpinBoxTextBox.h
+        source/gui/widgets/ThemeButton.h
+        source/utility/GlobalConstants.h
+        )
+
+target_sources(${PROJECT_NAME}
+        PRIVATE
+        ${PROJECT_SOURCES}
+        ${PROJECT_HEADERS}
+        )
+
+target_include_directories(${PROJECT_NAME}
+        PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/source
+        ${CMAKE_CURRENT_SOURCE_DIR}/source/dsp
+        ${CMAKE_CURRENT_SOURCE_DIR}/source/gui
+        ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/limiter
+        ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/look_and_feel
+        ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/meters
+        ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/response_graph
+        ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/widgets
+        ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/widgets/spinbox
+        ${CMAKE_CURRENT_SOURCE_DIR}/source/utility
         )
 
 # JUCE modules make use of compile definitions to switch certain features on/off.
