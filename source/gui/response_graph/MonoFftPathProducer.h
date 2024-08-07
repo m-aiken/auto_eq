@@ -2,7 +2,7 @@
 
 #include <JuceHeader.h>
 
-#include "../../dsp/MonoFftBuffer.h"
+#include "MonoFftBuffer.h"
 
 class MonoFftPathProducer : juce::Thread
 {

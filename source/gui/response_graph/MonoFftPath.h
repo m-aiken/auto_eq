@@ -3,8 +3,8 @@
 #include <JuceHeader.h>
 
 #include "MonoFftPathProducer.h"
-#include "../look_and_feel/Theme.h"
-#include "../../dsp/MonoFftBuffer.h"
+#include "Theme.h"
+#include "MonoFftBuffer.h"
 
 class MonoFftPath
     : public juce::Component

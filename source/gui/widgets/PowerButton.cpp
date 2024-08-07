@@ -1,5 +1,5 @@
 #include "PowerButton.h"
-#include "../look_and_feel/Theme.h"
+#include "Theme.h"
 
 /*---------------------------------------------------------------------------
 **

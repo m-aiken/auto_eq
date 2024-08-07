@@ -1,5 +1,5 @@
 #include "InputAnalysisFilter.h"
-#include "../utility/GlobalConstants.h"
+#include "GlobalConstants.h"
 
 /*static*/ const uint16 InputAnalysisFilter::ANALYSIS_FREQUENCY_MS = 200;
 

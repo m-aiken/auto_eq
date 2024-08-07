@@ -1,5 +1,5 @@
 #include "EqBandSlider.h"
-#include "../../utility/GlobalConstants.h"
+#include "GlobalConstants.h"
 
 /*---------------------------------------------------------------------------
 **

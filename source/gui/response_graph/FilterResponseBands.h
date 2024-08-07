@@ -4,8 +4,8 @@
 
 #include "EqBandSlider.h"
 #include "FilterMagnitudesCalculator.h"
-#include "../../PluginProcessor.h"
-#include "../../dsp/Equalizer.h"
+#include "PluginProcessor.h"
+#include "Equalizer.h"
 
 class FilterResponseBands
     : public juce::Component

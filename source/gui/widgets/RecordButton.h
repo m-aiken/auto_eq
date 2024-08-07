@@ -1,8 +1,8 @@
 #pragma once
 
-#include "JuceHeader.h"
+#include <JuceHeader.h>
 
-#include "../../utility/GlobalConstants.h"
+#include "GlobalConstants.h"
 
 class RecordButton : public juce::ToggleButton
 {

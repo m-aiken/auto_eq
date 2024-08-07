@@ -3,8 +3,8 @@
 #include <JuceHeader.h>
 
 #include "MeterCanvas.h"
-#include "../../PluginProcessor.h"
-#include "../../utility/GlobalConstants.h"
+#include "PluginProcessor.h"
+#include "GlobalConstants.h"
 
 class MonoMeter
     : public juce::Component

@@ -2,7 +2,7 @@
 
 #include <JuceHeader.h>
 
-#include "../../utility/GlobalConstants.h"
+#include "GlobalConstants.h"
 
 class MenuButton : public juce::ToggleButton
 {

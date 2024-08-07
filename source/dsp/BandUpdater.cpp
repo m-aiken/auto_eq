@@ -1,5 +1,5 @@
 #include "BandUpdater.h"
-#include "../utility/GlobalConstants.h"
+#include "GlobalConstants.h"
 
 /*static*/ const uint16 BandUpdater::UPDATE_FREQUENCY_MS       = 1000;
 /*static*/ const double BandUpdater::BAND_DB_RAMP_TIME_SECONDS = 0.02;

@@ -1,13 +1,13 @@
 #pragma once
 
-#include <juce_audio_processors/juce_audio_processors.h>
+#include <JuceHeader.h>
 
-#include "dsp/BandUpdater.h"
-#include "dsp/BandParameterUpdater.h"
-#include "dsp/Equalizer.h"
-#include "dsp/InputAnalysisFilter.h"
-#include "dsp/MonoFftBuffer.h"
-#include "utility/GlobalConstants.h"
+#include "BandUpdater.h"
+#include "BandParameterUpdater.h"
+#include "Equalizer.h"
+#include "InputAnalysisFilter.h"
+#include "MonoFftBuffer.h"
+#include "GlobalConstants.h"
 
 class PluginProcessor final : public juce::AudioProcessor
 {

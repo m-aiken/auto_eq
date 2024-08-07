@@ -1,6 +1,6 @@
 #include "FilterMagnitudesCalculator.h"
-#include "../../dsp/Equalizer.h"
-#include "../../utility/GlobalConstants.h"
+#include "Equalizer.h"
+#include "GlobalConstants.h"
 
 /*---------------------------------------------------------------------------
 **

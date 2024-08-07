@@ -1,6 +1,5 @@
 #include "DisableableLabel.h"
-#include "../look_and_feel/Theme.h"
-#include "juce_graphics/juce_graphics.h"
+#include "Theme.h"
 
 /*---------------------------------------------------------------------------
 **

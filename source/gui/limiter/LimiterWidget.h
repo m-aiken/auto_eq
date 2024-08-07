@@ -2,9 +2,9 @@
 
 #include <JuceHeader.h>
 
-#include "../widgets/DisableableLabel.h"
-#include "../widgets/MenuButton.h"
-#include "../widgets/RotaryControl.h"
+#include "DisableableLabel.h"
+#include "MenuButton.h"
+#include "RotaryControl.h"
 
 class LimiterWidget
     : public juce::Component

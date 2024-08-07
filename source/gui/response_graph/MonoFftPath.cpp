@@ -1,5 +1,5 @@
 #include "MonoFftPath.h"
-#include "../../utility/GlobalConstants.h"
+#include "GlobalConstants.h"
 
 /*---------------------------------------------------------------------------
 **

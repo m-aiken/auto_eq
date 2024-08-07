@@ -7,7 +7,7 @@
 #include "FilterResponseBands.h"
 #include "FrequencyMarkers.h"
 #include "MonoFftPath.h"
-#include "../../PluginProcessor.h"
+#include "PluginProcessor.h"
 
 class FilterResponseGraph : public juce::Component
 {

@@ -4,7 +4,7 @@
 
 #include "MeterLabel.h"
 #include "StereoMeter.h"
-#include "../../PluginProcessor.h"
+#include "PluginProcessor.h"
 
 class MeterGroup : public juce::Component
 {

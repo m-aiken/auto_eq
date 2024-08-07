@@ -4,8 +4,8 @@
 
 #include "MeterDbScale.h"
 #include "MonoMeter.h"
-#include "../../PluginProcessor.h"
-#include "../../utility/GlobalConstants.h"
+#include "PluginProcessor.h"
+#include "GlobalConstants.h"
 
 class StereoMeter : public juce::Component
 {
