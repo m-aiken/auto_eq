@@ -8,7 +8,7 @@
 LimiterWidget::LimiterWidget(juce::AudioProcessorValueTreeState& apvts)
     : enable_button_("Limiter", apvts, GuiParams::LIMITER_ENABLED)
     , threshold_label_("limiter_threshold_label", "Threshold")
-    , threshold_control_(apvts, GuiParams::getName(GuiParams::LIMITER_VALUE))
+    , threshold_control_(apvts, GuiParams::getName(GuiParams::LIMITER_THRESHOLD))
 {
     addAndMakeVisible(enable_button_);
     addAndMakeVisible(threshold_label_);
