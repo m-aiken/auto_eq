@@ -62,6 +62,7 @@ private:
     void setRmsMeter(SmoothedFloat& val, juce::AudioBuffer< float >& buffer, Global::Channels::CHANNEL_ID channel);
     void setLufsMeter(SmoothedFloat& val, juce::AudioBuffer< float >& buffer, Global::Channels::CHANNEL_ID channel);
 
+    void applyMasterGain(juce::AudioBuffer< float >& buffer);
     void applyLimiter(juce::AudioBuffer< float >& buffer);
 
     static float getNormalisedValue(float full_range_value);

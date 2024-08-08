@@ -79,16 +79,19 @@ namespace GuiParams
 static const bool  INITIAL_POWER_STATE       = true;
 static const bool  INITIAL_ANALYSIS_STATE    = false;
 static const bool  INITIAL_FFT_STATE         = true;
+static const float INITIAL_MASTER_GAIN       = 0.f;
 static const bool  INITIAL_UNITY_GAIN_STATE  = false;
 static const bool  INITIAL_LIMITER_STATE     = false;
 static const float INITIAL_LIMITER_THRESHOLD = -3.f;
 
-static const float LIMITER_INTERVAL = 0.1f;
+static const float MASTER_GAIN_INTERVAL = 0.1f;
+static const float LIMITER_INTERVAL     = 0.1f;
 
 enum PARAM_ID {
     POWER,
     ANALYSE_INPUT,
     SHOW_FFT,
+    MASTER_GAIN,
     UNITY_GAIN_ENABLED,
     LIMITER_ENABLED,
     LIMITER_THRESHOLD,
@@ -100,6 +103,7 @@ static const std::map< PARAM_ID, juce::String > PARAM_NAME_MAP = {
     { POWER, "POWER" },
     { ANALYSE_INPUT, "ANALYSE_INPUT" },
     { SHOW_FFT, "SHOW_FFT" },
+    { MASTER_GAIN, "MASTER_GAIN" },
     { UNITY_GAIN_ENABLED, "UNITY_GAIN_ENABLED" },
     { LIMITER_ENABLED, "LIMITER_ENABLED" },
     { LIMITER_THRESHOLD, "LIMITER_THRESHOLD" },

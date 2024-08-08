@@ -317,6 +317,9 @@ PluginProcessor::processBlock(juce::AudioBuffer< float >& buffer, juce::MidiBuff
         applyLimiter(buffer);
     }
 
+    // Master gain.
+    applyMasterGain(buffer);
+
     // Update the Peak, RMS, and LUFS.
     setPeakMeter(peak_l_, buffer, Global::Channels::INPUT_LEFT);
     setPeakMeter(peak_r_, buffer, Global::Channels::INPUT_RIGHT);
@@ -523,6 +526,22 @@ PluginProcessor::setLufsMeter(SmoothedFloat& val, juce::AudioBuffer< float >& bu
 **
 */
 void
+PluginProcessor::applyMasterGain(juce::AudioBuffer< float >& buffer)
+{
+    juce::RangedAudioParameter* master_gain_param = apvts_.getParameter(GuiParams::getName(GuiParams::MASTER_GAIN));
+
+    if (master_gain_param != nullptr) {
+        float db   = master_gain_param->convertFrom0to1(master_gain_param->getValue());
+        float gain = juce::Decibels::decibelsToGain(db, Global::NEG_INF);
+
+        buffer.applyGain(gain);
+    }
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
+void
 PluginProcessor::applyLimiter(juce::AudioBuffer< float >& buffer)
 {
     juce::RangedAudioParameter* limiter_threshold_param = apvts_.getParameter(
@@ -588,10 +607,12 @@ PluginProcessor::getParameterLayout()
     juce::String power_param_id           = GuiParams::getName(GuiParams::POWER);
     juce::String analysis_param_id        = GuiParams::getName(GuiParams::ANALYSE_INPUT);
     juce::String fft_param_id             = GuiParams::getName(GuiParams::SHOW_FFT);
+    juce::String master_gain_param_id     = GuiParams::getName(GuiParams::MASTER_GAIN);
     juce::String unity_gain_param_id      = GuiParams::getName(GuiParams::UNITY_GAIN_ENABLED);
     juce::String limiter_enabled_param_id = GuiParams::getName(GuiParams::LIMITER_ENABLED);
     juce::String limiter_value_param_id   = GuiParams::getName(GuiParams::LIMITER_THRESHOLD);
 
+    juce::NormalisableRange< float > master_gain_range(Global::NEG_INF, 12.f, GuiParams::MASTER_GAIN_INTERVAL, 1.f);
     juce::NormalisableRange< float > limiter_threshold_range(-30.f, 0.f, GuiParams::LIMITER_INTERVAL, 1.f);
     juce::NormalisableRange< float > band_range(Global::MAX_DB_CUT, Global::MAX_DB_BOOST, 0.01f, 1.f);
 
@@ -606,6 +627,11 @@ PluginProcessor::getParameterLayout()
     pl.add(std::make_unique< juce::AudioParameterBool >(juce::ParameterID(fft_param_id, 1),
                                                         fft_param_id,
                                                         GuiParams::INITIAL_FFT_STATE));
+
+    pl.add(std::make_unique< juce::AudioParameterFloat >(juce::ParameterID(master_gain_param_id, 1),
+                                                         master_gain_param_id,
+                                                         master_gain_range,
+                                                         GuiParams::INITIAL_MASTER_GAIN));
 
     pl.add(std::make_unique< juce::AudioParameterBool >(juce::ParameterID(unity_gain_param_id, 1),
                                                         unity_gain_param_id,
