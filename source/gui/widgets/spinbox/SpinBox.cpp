@@ -5,8 +5,9 @@
 /*---------------------------------------------------------------------------
 **
 */
-SpinBox::SpinBox(juce::RangedAudioParameter* param)
-    : value_box_(param)
+SpinBox::SpinBox(juce::RangedAudioParameter* param, float interval)
+    : interval_(interval)
+    , value_box_(param)
     , up_button_(true)
     , down_button_(false)
     , param_(param)
@@ -77,10 +78,10 @@ SpinBox::buttonClicked(juce::Button* button)
     float value = param_->convertFrom0to1(param_->getValue());
 
     if (button == &up_button_) {
-        value += GuiParams::LIMITER_INTERVAL;
+        value += interval_;
     }
     else if (button == &down_button_) {
-        value -= GuiParams::LIMITER_INTERVAL;
+        value -= interval_;
     }
 
     param_->beginChangeGesture();

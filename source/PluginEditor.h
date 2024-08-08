@@ -2,7 +2,6 @@
 
 #include "CustomLookAndFeel.h"
 #include "FilterResponseGraph.h"
-#include "LimiterWidget.h"
 #include "MenuButton.h"
 #include "MeterGroup.h"
 #include "PluginProcessor.h"
@@ -39,7 +38,6 @@ private:
     MenuButton          unity_gain_button_;
     ThemeButton         theme_button_;
     FilterResponseGraph filter_res_graph_;
-    LimiterWidget       limiter_widget_;
     MeterGroup          meter_group_;
 
     CustomLookAndFeel lnf_;

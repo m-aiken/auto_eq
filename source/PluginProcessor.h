@@ -65,7 +65,6 @@ private:
     void setLufsMeter(SmoothedFloat& val, juce::AudioBuffer< float >& buffer, Global::Channels::CHANNEL_ID channel);
 
     void applyMasterGain(juce::AudioBuffer< float >& buffer);
-    void applyLimiter(juce::AudioBuffer< float >& buffer);
 
     static float getNormalisedValue(float full_range_value);
 
@@ -92,8 +91,6 @@ private:
     SmoothedFloat lufs_r_;
 
     juce::AudioBuffer< float > empty_buffer_;  //! Used to clear the meters when the plugin is disabled.
-
-    juce::dsp::Compressor< float > compressor_;
 
     float input_magnitude_;
 
