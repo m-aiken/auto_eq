@@ -56,6 +56,8 @@ public:
     void stopInputAnalysis();
 
 private:
+    bool booleanParameterEnabled(GuiParams::PARAM_ID param_id) const;
+
     void updateFilterCoefficients();
 
     void setPeakMeter(SmoothedFloat& val, juce::AudioBuffer< float >& buffer, Global::Channels::CHANNEL_ID channel);
@@ -92,6 +94,8 @@ private:
     juce::AudioBuffer< float > empty_buffer_;  //! Used to clear the meters when the plugin is disabled.
 
     juce::dsp::Compressor< float > compressor_;
+
+    float input_magnitude_;
 
 #ifdef TEST_FFT_ACCURACY
     juce::dsp::Oscillator< float > fft_test_tone_;

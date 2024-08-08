@@ -17,6 +17,7 @@ PluginProcessor::PluginProcessor()
     , input_analysis_filter_()
     , band_updater_(input_analysis_filter_)
     , band_parameter_updater_(apvts_, band_updater_)
+    , input_magnitude_(0.f)
 {
 }
 
@@ -249,7 +250,7 @@ PluginProcessor::processBlock(juce::AudioBuffer< float >& buffer, juce::MidiBuff
         buffer.clear(i, 0, buffer.getNumSamples());
     }
 
-    if (!static_cast< bool >(apvts_.getParameter(GuiParams::getName(GuiParams::POWER))->getValue())) {
+    if (!booleanParameterEnabled(GuiParams::POWER)) {
         // The plugin is being bypassed.
         // The threads responsible for the FFT, input analysis and EQ will already have been stopped.
         // We just need to clear out the meters with an empty buffer.
@@ -264,6 +265,10 @@ PluginProcessor::processBlock(juce::AudioBuffer< float >& buffer, juce::MidiBuff
 
         // Don't do any processing on the real buffer.
         return;
+    }
+
+    if (booleanParameterEnabled(GuiParams::UNITY_GAIN_ENABLED)) {
+        input_magnitude_ = buffer.getMagnitude(0, buffer.getNumSamples());
     }
 
 #ifdef TEST_FFT_ACCURACY
@@ -304,7 +309,7 @@ PluginProcessor::processBlock(juce::AudioBuffer< float >& buffer, juce::MidiBuff
     filter_chain_left_.process(process_context_left);
     filter_chain_right_.process(process_context_right);
 
-    if (static_cast< bool >(*apvts_.getRawParameterValue(GuiParams::getName(GuiParams::SHOW_FFT)))) {
+    if (booleanParameterEnabled(GuiParams::SHOW_FFT)) {
         // FFT buffers (POST EQ).
         for (int i = 0; i < buffer.getNumSamples(); ++i) {
             fft_buffers_.at(Global::FFT::LEFT_POST_EQ).pushNextSample(buffer.getSample(Global::Channels::INPUT_LEFT, i));
@@ -312,8 +317,8 @@ PluginProcessor::processBlock(juce::AudioBuffer< float >& buffer, juce::MidiBuff
         }
     }
 
-    // Apply the limiter if it's enabled.
-    if (static_cast< bool >(*apvts_.getRawParameterValue(GuiParams::getName(GuiParams::LIMITER_ENABLED)))) {
+    // Limiter.
+    if (booleanParameterEnabled(GuiParams::LIMITER_ENABLED)) {
         applyLimiter(buffer);
     }
 
@@ -454,6 +459,17 @@ PluginProcessor::stopInputAnalysis()
     band_parameter_updater_.stopThread(BandParameterUpdater::UPDATE_FREQUENCY_MS);
     band_updater_.stopThread(BandUpdater::UPDATE_FREQUENCY_MS);
     input_analysis_filter_.stopThread(InputAnalysisFilter::ANALYSIS_FREQUENCY_MS);
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
+bool
+PluginProcessor::booleanParameterEnabled(GuiParams::PARAM_ID param_id) const
+{
+    juce::RangedAudioParameter* param = apvts_.getParameter(GuiParams::getName(param_id));
+
+    return (param != nullptr) && static_cast< bool >(param->getValue());
 }
 
 /*---------------------------------------------------------------------------
@@ -612,7 +628,7 @@ PluginProcessor::getParameterLayout()
     juce::String limiter_enabled_param_id = GuiParams::getName(GuiParams::LIMITER_ENABLED);
     juce::String limiter_value_param_id   = GuiParams::getName(GuiParams::LIMITER_THRESHOLD);
 
-    juce::NormalisableRange< float > master_gain_range(Global::NEG_INF, 12.f, GuiParams::MASTER_GAIN_INTERVAL, 1.f);
+    juce::NormalisableRange< float > master_gain_range(-24.f, 12.f, GuiParams::MASTER_GAIN_INTERVAL, 1.f);
     juce::NormalisableRange< float > limiter_threshold_range(-30.f, 0.f, GuiParams::LIMITER_INTERVAL, 1.f);
     juce::NormalisableRange< float > band_range(Global::MAX_DB_CUT, Global::MAX_DB_BOOST, 0.01f, 1.f);
 
