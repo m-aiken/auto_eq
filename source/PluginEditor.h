@@ -2,6 +2,7 @@
 
 #include "CustomLookAndFeel.h"
 #include "FilterResponseGraph.h"
+#include "MasterGain.h"
 #include "MenuButton.h"
 #include "MeterGroup.h"
 #include "PluginProcessor.h"
@@ -38,6 +39,7 @@ private:
     MenuButton          unity_gain_button_;
     ThemeButton         theme_button_;
     FilterResponseGraph filter_res_graph_;
+    MasterGain          master_gain_;
     MeterGroup          meter_group_;
 
     CustomLookAndFeel lnf_;

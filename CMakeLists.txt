@@ -46,6 +46,7 @@ set(PROJECT_SOURCES
         source/dsp/MonoFftBuffer.cpp
         source/gui/look_and_feel/CustomLookAndFeel.cpp
         source/gui/look_and_feel/Theme.cpp
+        source/gui/master_gain/MasterGain.cpp
         source/gui/meters/MeterCanvas.cpp
         source/gui/meters/MeterDbScale.cpp
         source/gui/meters/MeterGroup.cpp
@@ -82,6 +83,7 @@ set(PROJECT_HEADERS
         source/dsp/MonoFftBuffer.h
         source/gui/look_and_feel/CustomLookAndFeel.h
         source/gui/look_and_feel/Theme.h
+        source/gui/master_gain/MasterGain.h
         source/gui/meters/MeterCanvas.h
         source/gui/meters/MeterDbScale.h
         source/gui/meters/MeterGroup.h
@@ -121,6 +123,7 @@ target_include_directories(${PROJECT_NAME}
         ${CMAKE_CURRENT_SOURCE_DIR}/source/dsp
         ${CMAKE_CURRENT_SOURCE_DIR}/source/gui
         ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/look_and_feel
+        ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/master_gain
         ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/meters
         ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/response_graph
         ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/widgets
