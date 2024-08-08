@@ -2,12 +2,14 @@
 
 #include <JuceHeader.h>
 
+#include "GlobalConstants.h"
+
 class RotaryControl
     : public juce::Slider
     , public juce::AudioProcessorParameter::Listener
 {
 public:
-    RotaryControl(juce::AudioProcessorValueTreeState& apvts, const juce::String& parameter_id);
+    RotaryControl(juce::AudioProcessorValueTreeState& apvts, GuiParams::PARAM_ID parameter_id);
     ~RotaryControl() override;
 
     // Slider virtual functions.

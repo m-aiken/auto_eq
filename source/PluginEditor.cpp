@@ -17,9 +17,9 @@ PluginEditor::PluginEditor(PluginProcessor& p)
     , power_button_(p.getApvts(), GuiParams::POWER)
     , analyse_input_button_("Analyse Input", p.getApvts(), GuiParams::ANALYSE_INPUT)
     , show_fft_button_("Show Spectrum", p.getApvts(), GuiParams::SHOW_FFT)
-    , unity_gain_button_("Unity Gain", p.getApvts(), GuiParams::UNITY_GAIN_ENABLED)
     , theme_button_()
     , filter_res_graph_(p)
+    , master_gain_(p.getApvts())
     , meter_group_(p)
     , cached_fft_draw_status_(GuiParams::INITIAL_FFT_STATE)
 {
@@ -28,7 +28,6 @@ PluginEditor::PluginEditor(PluginProcessor& p)
     addAndMakeVisible(power_button_);
     addAndMakeVisible(analyse_input_button_);
     addAndMakeVisible(show_fft_button_);
-    addAndMakeVisible(unity_gain_button_);
     addAndMakeVisible(theme_button_);
     addAndMakeVisible(filter_res_graph_);
     addAndMakeVisible(master_gain_);
@@ -70,23 +69,21 @@ PluginEditor::paint(juce::Graphics& g)
 void
 PluginEditor::resized()
 {
-    juce::Rectangle< int > bounds                  = getLocalBounds();
-    int                    bounds_height           = bounds.getHeight();
-    int                    bounds_width            = bounds.getWidth();
-    int                    top_controls_height     = static_cast< int >(std::floor(bounds_height * 0.05));
-    int                    analysis_button_width   = static_cast< int >(std::floor(bounds_width * 0.2));
-    int                    fft_button_width        = static_cast< int >(std::floor(bounds_width * 0.2));
-    int                    unity_gain_button_width = static_cast< int >(std::floor(bounds_width * 0.2));
-    int                    theme_button_width      = static_cast< int >(std::floor(bounds_width * 0.1));
-    int                    graph_height            = static_cast< int >(std::floor(bounds_height * 0.65));
-    int                    bottom_section_height   = static_cast< int >(std::floor(bounds_height * 0.25));
-    int                    master_gain_width       = static_cast< int >(std::floor(bounds_width * 0.25));
-    int                    meters_width            = static_cast< int >(std::floor(bounds_width * 0.75));
+    juce::Rectangle< int > bounds                = getLocalBounds();
+    int                    bounds_height         = bounds.getHeight();
+    int                    bounds_width          = bounds.getWidth();
+    int                    top_controls_height   = static_cast< int >(std::floor(bounds_height * 0.05));
+    int                    analysis_button_width = static_cast< int >(std::floor(bounds_width * 0.2));
+    int                    fft_button_width      = static_cast< int >(std::floor(bounds_width * 0.2));
+    int                    theme_button_width    = static_cast< int >(std::floor(bounds_width * 0.1));
+    int                    graph_height          = static_cast< int >(std::floor(bounds_height * 0.65));
+    int                    bottom_section_height = static_cast< int >(std::floor(bounds_height * 0.25));
+    int                    master_gain_width     = static_cast< int >(std::floor(bounds_width * 0.25));
+    int                    meters_width          = static_cast< int >(std::floor(bounds_width * 0.75));
 
     power_button_.setBounds(0, 0, top_controls_height, top_controls_height);
     analyse_input_button_.setBounds(analysis_button_width, 0, analysis_button_width, top_controls_height);
     show_fft_button_.setBounds(analyse_input_button_.getRight(), 0, fft_button_width, top_controls_height);
-    unity_gain_button_.setBounds(show_fft_button_.getRight(), 0, unity_gain_button_width, top_controls_height);
     theme_button_.setBounds(bounds.getRight() - theme_button_width, 0, theme_button_width, top_controls_height);
     filter_res_graph_.setBounds(0, top_controls_height, bounds_width, graph_height);
     master_gain_.setBounds(0, bounds.getBottom() - bottom_section_height, master_gain_width, bottom_section_height);
@@ -112,7 +109,6 @@ PluginEditor::buttonClicked(juce::Button* button)
         analyse_input_button_.setEnabled(plugin_enabled);
         show_fft_button_.setEnabled(plugin_enabled);
         filter_res_graph_.setEnabled(plugin_enabled);
-        unity_gain_button_.setEnabled(plugin_enabled);
         master_gain_.setEnabled(plugin_enabled);
         meter_group_.setEnabled(plugin_enabled);
 

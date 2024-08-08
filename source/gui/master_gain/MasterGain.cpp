@@ -5,8 +5,14 @@
 /*---------------------------------------------------------------------------
 **
 */
-MasterGain::MasterGain()
+MasterGain::MasterGain(juce::AudioProcessorValueTreeState& apvts)
+    : widget_label_("master_gain_widget_label", "Master Gain", juce::Justification::centredLeft)
+    , rotary_control_(apvts, GuiParams::MASTER_GAIN)
+    , unity_gain_button_("Unity Gain", apvts, GuiParams::UNITY_GAIN_ENABLED)
 {
+    addAndMakeVisible(widget_label_);
+    addAndMakeVisible(rotary_control_);
+    addAndMakeVisible(unity_gain_button_);
 }
 
 /*---------------------------------------------------------------------------
@@ -22,10 +28,6 @@ MasterGain::paint(juce::Graphics& g)
 
     g.setColour(Theme::getColour(Theme::SECTION_BORDER));
     g.drawRect(getLocalBounds());
-
-    g.setColour(Theme::getColour(Theme::TEXT));
-    g.setFont(Theme::getFont());
-    g.drawFittedText("Master Gain", getLocalBounds(), juce::Justification::centred, 1);
 }
 
 /*---------------------------------------------------------------------------
@@ -34,6 +36,24 @@ MasterGain::paint(juce::Graphics& g)
 void
 MasterGain::resized()
 {
+    using Track = juce::Grid::TrackInfo;
+    using Fr    = juce::Grid::Fr;
+
+    juce::Grid grid;
+
+    grid.autoColumns = Track(Fr(1));
+
+    grid.templateRows = {
+        Track(Fr(20)),
+        Track(Fr(60)),
+        Track(Fr(20)),
+    };
+
+    grid.items.add(juce::GridItem(widget_label_));
+    grid.items.add(juce::GridItem(rotary_control_));
+    grid.items.add(juce::GridItem(unity_gain_button_));
+
+    grid.performLayout(getLocalBounds());
 }
 
 /*---------------------------------------------------------------------------

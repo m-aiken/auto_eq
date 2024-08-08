@@ -9,7 +9,6 @@ DisableableLabel::DisableableLabel(const juce::String& component_name,
                                    juce::Justification justification)
     : juce::Label(component_name, label_text)
 {
-
     setJustificationType(justification);
 }
 

@@ -1,15 +1,15 @@
-#include "GlobalConstants.h"
 #include "RotaryControl.h"
 #include "Theme.h"
 
 /*---------------------------------------------------------------------------
 **
 */
-RotaryControl::RotaryControl(juce::AudioProcessorValueTreeState& apvts, const juce::String& parameter_id)
+RotaryControl::RotaryControl(juce::AudioProcessorValueTreeState& apvts, GuiParams::PARAM_ID parameter_id)
     : juce::Slider(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag, juce::Slider::TextEntryBoxPosition::NoTextBox)
-    , param_(apvts.getParameter(parameter_id))
+    , param_(apvts.getParameter(GuiParams::getName(parameter_id)))
 {
-    slider_attachment_.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(apvts, parameter_id, *this));
+    slider_attachment_.reset(
+        new juce::AudioProcessorValueTreeState::SliderAttachment(apvts, GuiParams::getName(parameter_id), *this));
 
     if (param_ != nullptr) {
         param_->addListener(this);

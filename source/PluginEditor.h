@@ -36,7 +36,6 @@ private:
     PowerButton         power_button_;
     RecordButton        analyse_input_button_;
     MenuButton          show_fft_button_;
-    MenuButton          unity_gain_button_;
     ThemeButton         theme_button_;
     FilterResponseGraph filter_res_graph_;
     MasterGain          master_gain_;
