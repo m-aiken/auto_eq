@@ -44,6 +44,7 @@ set(PROJECT_SOURCES
         source/dsp/Equalizer.cpp
         source/dsp/InputAnalysisFilter.cpp
         source/dsp/MonoFftBuffer.cpp
+        source/dsp/UnityGainCalculator.cpp
         source/gui/look_and_feel/CustomLookAndFeel.cpp
         source/gui/look_and_feel/Theme.cpp
         source/gui/master_gain/MasterGain.cpp
@@ -62,6 +63,7 @@ set(PROJECT_SOURCES
         source/gui/response_graph/FrequencyMarkers.cpp
         source/gui/response_graph/MonoFftPath.cpp
         source/gui/response_graph/MonoFftPathProducer.cpp
+        source/gui/widgets/ButtonWithLabel.cpp
         source/gui/widgets/DisableableLabel.cpp
         source/gui/widgets/MenuButton.cpp
         source/gui/widgets/PowerButton.cpp
@@ -70,6 +72,7 @@ set(PROJECT_SOURCES
         source/gui/widgets/spinbox/SpinBox.cpp
         source/gui/widgets/spinbox/SpinBoxButton.cpp
         source/gui/widgets/spinbox/SpinBoxTextBox.cpp
+        source/gui/widgets/SquareToggleButton.cpp
         source/gui/widgets/ThemeButton.cpp
         )
 
@@ -81,6 +84,7 @@ set(PROJECT_HEADERS
         source/dsp/Equalizer.h
         source/dsp/InputAnalysisFilter.h
         source/dsp/MonoFftBuffer.h
+        source/dsp/UnityGainCalculator.h
         source/gui/look_and_feel/CustomLookAndFeel.h
         source/gui/look_and_feel/Theme.h
         source/gui/master_gain/MasterGain.h
@@ -99,6 +103,7 @@ set(PROJECT_HEADERS
         source/gui/response_graph/FrequencyMarkers.h
         source/gui/response_graph/MonoFftPath.h
         source/gui/response_graph/MonoFftPathProducer.h
+        source/gui/widgets/ButtonWithLabel.h
         source/gui/widgets/DisableableLabel.h
         source/gui/widgets/MenuButton.h
         source/gui/widgets/PowerButton.h
@@ -107,6 +112,7 @@ set(PROJECT_HEADERS
         source/gui/widgets/spinbox/SpinBox.h
         source/gui/widgets/spinbox/SpinBoxButton.h
         source/gui/widgets/spinbox/SpinBoxTextBox.h
+        source/gui/widgets/SquareToggleButton.h
         source/gui/widgets/ThemeButton.h
         source/utility/GlobalConstants.h
         )

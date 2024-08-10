@@ -46,7 +46,7 @@ BandParameterUpdater::updateParameters()
         return;
     }
 
-    // We're changing the band parameter values that will have a side effect of
+    // We're changing the band parameter values which will have a side effect of
     // triggering the band sliders to repaint on the message thread.
     // We need to acquire a lock for the message thread whilst doing so.
     // The lock is scoped, hence putting it on the stack.

@@ -19,7 +19,7 @@ PluginEditor::PluginEditor(PluginProcessor& p)
     , show_fft_button_("Show Spectrum", p.getApvts(), GuiParams::SHOW_FFT)
     , theme_button_()
     , filter_res_graph_(p)
-    , master_gain_(p.getApvts())
+    , master_gain_(p)
     , meter_group_(p)
     , cached_fft_draw_status_(GuiParams::INITIAL_FFT_STATE)
 {

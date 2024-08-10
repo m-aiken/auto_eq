@@ -217,30 +217,60 @@ Equalizer::getBandTargetDb(BAND_ID band_id)
     case B9:
     case B10:
     case B11:
+        return -24.f;
+
     case B12:
+        return -30.f;
+
     case B13:
+        return -34.f;
+
     case B14:
+        return -38.f;
+
     case B15:
+        return -41.f;
+
     case B16:
+        return -44.f;
+
     case B17:
+        return -46.f;
+
     case B18:
+        return -48.f;
+
     case B19:
+        return -48.f;
+
     case B20:
+        return -48.f;
+
     case B21:
+        return -48.f;
+
     case B22:
+        return -46.f;
+
     case B23:
+        return -42.f;
+
     case B24:
+        return -38.f;
+
     case B25:
+        return -32.f;
+
     case B26:
     case B27:
     case B28:
     case B29:
     case B30:
     case B31:
-        return -18.f;
+        return -26.f;
 
     default:
-        return -18.f;
+        return -36.f;
     }
 }
 

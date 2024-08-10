@@ -17,7 +17,7 @@ PluginProcessor::PluginProcessor()
     , input_analysis_filter_()
     , band_updater_(input_analysis_filter_)
     , band_parameter_updater_(apvts_, band_updater_)
-    , input_magnitude_(0.f)
+    , unity_gain_calculator_(apvts_.getParameter(GuiParams::getName(GuiParams::MASTER_GAIN)))
 {
 }
 
@@ -178,6 +178,9 @@ PluginProcessor::prepareToPlay(double sample_rate, int samples_per_block)
     empty_buffer_.setSize(Global::Channels::NUM_INPUTS, samples_per_block);
     empty_buffer_.clear();
 
+    // Unity gain.
+    unity_gain_calculator_.prepare(sample_rate, static_cast< juce::uint32 >(samples_per_block));
+
 #ifdef TEST_FFT_ACCURACY
     juce::dsp::ProcessSpec fft_test_spec;
 
@@ -255,7 +258,7 @@ PluginProcessor::processBlock(juce::AudioBuffer< float >& buffer, juce::MidiBuff
     }
 
     if (booleanParameterEnabled(GuiParams::UNITY_GAIN_ENABLED)) {
-        input_magnitude_ = buffer.getMagnitude(0, buffer.getNumSamples());
+        unity_gain_calculator_.pushForAnalysis(buffer, UnityGainCalculator::PRE_PROCESSED_FIFO);
     }
 
 #ifdef TEST_FFT_ACCURACY
@@ -302,6 +305,10 @@ PluginProcessor::processBlock(juce::AudioBuffer< float >& buffer, juce::MidiBuff
             fft_buffers_.at(Global::FFT::LEFT_POST_EQ).pushNextSample(buffer.getSample(Global::Channels::INPUT_LEFT, i));
             fft_buffers_.at(Global::FFT::RIGHT_POST_EQ).pushNextSample(buffer.getSample(Global::Channels::INPUT_RIGHT, i));
         }
+    }
+
+    if (booleanParameterEnabled(GuiParams::UNITY_GAIN_ENABLED)) {
+        unity_gain_calculator_.pushForAnalysis(buffer, UnityGainCalculator::POST_PROCESSED_FIFO);
     }
 
     // Master gain.
@@ -446,6 +453,26 @@ PluginProcessor::stopInputAnalysis()
 /*---------------------------------------------------------------------------
 **
 */
+void
+PluginProcessor::startUnityGainCalculation()
+{
+    if (unity_gain_calculator_.isPrepared()) {
+        unity_gain_calculator_.startThread();
+    }
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
+void
+PluginProcessor::stopUnityGainCalculation()
+{
+    unity_gain_calculator_.stopThread(UnityGainCalculator::CALCULATION_FREQUENCY_MS);
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
 bool
 PluginProcessor::booleanParameterEnabled(GuiParams::PARAM_ID param_id) const
 {
@@ -528,12 +555,16 @@ PluginProcessor::applyMasterGain(juce::AudioBuffer< float >& buffer)
 {
     juce::RangedAudioParameter* master_gain_param = apvts_.getParameter(GuiParams::getName(GuiParams::MASTER_GAIN));
 
-    if (master_gain_param != nullptr) {
-        float db   = master_gain_param->convertFrom0to1(master_gain_param->getValue());
-        float gain = juce::Decibels::decibelsToGain(db, Global::NEG_INF);
-
-        buffer.applyGain(gain);
+    if (master_gain_param == nullptr) {
+        return;
     }
+
+    bool  unity_gain = booleanParameterEnabled(GuiParams::UNITY_GAIN_ENABLED);
+    float raw_val    = unity_gain ? unity_gain_calculator_.getGainAdjustment() : master_gain_param->getValue();
+    float db         = master_gain_param->convertFrom0to1(raw_val);
+    float gain       = juce::Decibels::decibelsToGain(db, Global::NEG_INF);
+
+    buffer.applyGain(gain);
 }
 
 /*---------------------------------------------------------------------------

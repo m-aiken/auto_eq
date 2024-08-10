@@ -8,6 +8,7 @@
 #include "GlobalConstants.h"
 #include "InputAnalysisFilter.h"
 #include "MonoFftBuffer.h"
+#include "UnityGainCalculator.h"
 
 class PluginProcessor final : public juce::AudioProcessor
 {
@@ -55,6 +56,9 @@ public:
     void startInputAnalysis();
     void stopInputAnalysis();
 
+    void startUnityGainCalculation();
+    void stopUnityGainCalculation();
+
 private:
     bool booleanParameterEnabled(GuiParams::PARAM_ID param_id) const;
 
@@ -92,7 +96,7 @@ private:
 
     juce::AudioBuffer< float > empty_buffer_;  //! Used to clear the meters when the plugin is disabled.
 
-    float input_magnitude_;
+    UnityGainCalculator unity_gain_calculator_;
 
 #ifdef TEST_FFT_ACCURACY
     juce::dsp::Oscillator< float > fft_test_tone_;

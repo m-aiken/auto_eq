@@ -5,14 +5,25 @@
 /*---------------------------------------------------------------------------
 **
 */
-MasterGain::MasterGain(juce::AudioProcessorValueTreeState& apvts)
-    : widget_label_("master_gain_widget_label", "Master Gain", juce::Justification::centredLeft)
-    , rotary_control_(apvts, GuiParams::MASTER_GAIN)
-    , unity_gain_button_("Unity Gain", apvts, GuiParams::UNITY_GAIN_ENABLED)
+MasterGain::MasterGain(PluginProcessor& p)
+    : widget_label_("master_gain_widget_label", "Master Gain")
+    , rotary_control_(p.getApvts(), GuiParams::MASTER_GAIN)
+    , unity_gain_button_(p.getApvts(), GuiParams::UNITY_GAIN_ENABLED, "Unity Gain")
+    , processor_ref_(p)
 {
     addAndMakeVisible(widget_label_);
     addAndMakeVisible(rotary_control_);
     addAndMakeVisible(unity_gain_button_);
+
+    unity_gain_button_.getButton().addListener(this);
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
+MasterGain::~MasterGain()
+{
+    unity_gain_button_.getButton().removeListener(this);
 }
 
 /*---------------------------------------------------------------------------
@@ -44,16 +55,35 @@ MasterGain::resized()
     grid.autoColumns = Track(Fr(1));
 
     grid.templateRows = {
-        Track(Fr(20)),
+        Track(Fr(25)),
         Track(Fr(60)),
-        Track(Fr(20)),
+        Track(Fr(15)),
     };
 
     grid.items.add(juce::GridItem(widget_label_));
     grid.items.add(juce::GridItem(rotary_control_));
     grid.items.add(juce::GridItem(unity_gain_button_));
 
-    grid.performLayout(getLocalBounds());
+    const int              padding       = 12;
+    juce::Rectangle< int > og_bounds     = getLocalBounds();
+    juce::Rectangle< int > padded_bounds = og_bounds.withSizeKeepingCentre(og_bounds.getWidth() - (padding * 2),
+                                                                           og_bounds.getHeight() - (padding * 2));
+
+    grid.performLayout(padded_bounds);
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
+void
+MasterGain::buttonClicked(juce::Button* button)
+{
+    if (button != nullptr && button == &unity_gain_button_.getButton()) {
+        bool unity_gain_enabled = unity_gain_button_.getButton().getToggleState();
+
+        unity_gain_enabled ? processor_ref_.startUnityGainCalculation() : processor_ref_.stopUnityGainCalculation();
+        rotary_control_.setEnabled(!unity_gain_enabled);
+    }
 }
 
 /*---------------------------------------------------------------------------
