@@ -587,11 +587,12 @@ PluginProcessor::getParameterLayout()
 {
     juce::AudioProcessorValueTreeState::ParameterLayout pl;
 
-    juce::String power_param_id       = GuiParams::getName(GuiParams::POWER);
-    juce::String analysis_param_id    = GuiParams::getName(GuiParams::ANALYSE_INPUT);
-    juce::String fft_param_id         = GuiParams::getName(GuiParams::SHOW_FFT);
-    juce::String master_gain_param_id = GuiParams::getName(GuiParams::MASTER_GAIN);
-    juce::String unity_gain_param_id  = GuiParams::getName(GuiParams::UNITY_GAIN_ENABLED);
+    juce::String power_param_id        = GuiParams::getName(GuiParams::POWER);
+    juce::String analysis_param_id     = GuiParams::getName(GuiParams::ANALYSE_INPUT);
+    juce::String fft_param_id          = GuiParams::getName(GuiParams::SHOW_FFT);
+    juce::String eq_intensity_param_id = GuiParams::getName(GuiParams::EQ_INTENSITY);
+    juce::String master_gain_param_id  = GuiParams::getName(GuiParams::MASTER_GAIN);
+    juce::String unity_gain_param_id   = GuiParams::getName(GuiParams::UNITY_GAIN_ENABLED);
 
     juce::NormalisableRange< float > master_gain_range(-24.f, 12.f, GuiParams::MASTER_GAIN_INTERVAL, 1.f);
     juce::NormalisableRange< float > band_range(Global::MAX_DB_CUT, Global::MAX_DB_BOOST, 0.01f, 1.f);
@@ -607,6 +608,12 @@ PluginProcessor::getParameterLayout()
     pl.add(std::make_unique< juce::AudioParameterBool >(juce::ParameterID(fft_param_id, 1),
                                                         fft_param_id,
                                                         GuiParams::INITIAL_FFT_STATE));
+
+    pl.add(std::make_unique< juce::AudioParameterInt >(juce::ParameterID(eq_intensity_param_id, 1),
+                                                       eq_intensity_param_id,
+                                                       0,
+                                                       100,
+                                                       100));
 
     pl.add(std::make_unique< juce::AudioParameterFloat >(juce::ParameterID(master_gain_param_id, 1),
                                                          master_gain_param_id,

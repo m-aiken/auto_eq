@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CustomLookAndFeel.h"
+#include "EqIntensity.h"
 #include "FilterResponseGraph.h"
 #include "MasterGain.h"
 #include "MenuButton.h"
@@ -38,6 +39,7 @@ private:
     MenuButton          show_fft_button_;
     ThemeButton         theme_button_;
     FilterResponseGraph filter_res_graph_;
+    EqIntensity         eq_intensity_;
     MasterGain          master_gain_;
     MeterGroup          meter_group_;
 

@@ -45,6 +45,7 @@ set(PROJECT_SOURCES
         source/dsp/InputAnalysisFilter.cpp
         source/dsp/MonoFftBuffer.cpp
         source/dsp/UnityGainCalculator.cpp
+        source/gui/eq_intensity/EqIntensity.cpp
         source/gui/look_and_feel/CustomLookAndFeel.cpp
         source/gui/look_and_feel/Theme.cpp
         source/gui/master_gain/MasterGain.cpp
@@ -85,6 +86,7 @@ set(PROJECT_HEADERS
         source/dsp/InputAnalysisFilter.h
         source/dsp/MonoFftBuffer.h
         source/dsp/UnityGainCalculator.h
+        source/gui/eq_intensity/EqIntensity.h
         source/gui/look_and_feel/CustomLookAndFeel.h
         source/gui/look_and_feel/Theme.h
         source/gui/master_gain/MasterGain.h
@@ -128,6 +130,7 @@ target_include_directories(${PROJECT_NAME}
         ${CMAKE_CURRENT_SOURCE_DIR}/source
         ${CMAKE_CURRENT_SOURCE_DIR}/source/dsp
         ${CMAKE_CURRENT_SOURCE_DIR}/source/gui
+        ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/eq_intensity
         ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/look_and_feel
         ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/master_gain
         ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/meters

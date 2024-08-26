@@ -9,7 +9,11 @@ class RotaryControl
     , public juce::AudioProcessorParameter::Listener
 {
 public:
-    RotaryControl(juce::AudioProcessorValueTreeState& apvts, GuiParams::PARAM_ID parameter_id);
+    RotaryControl(juce::AudioProcessorValueTreeState& apvts,
+                  GuiParams::PARAM_ID                 parameter_id,
+                  bool                                draw_text_value    = false,
+                  juce::String                        suffix             = "",
+                  int                                 num_decimal_places = 0);
     ~RotaryControl() override;
 
     // Slider virtual functions.
@@ -24,6 +28,10 @@ private:
 
     std::unique_ptr< juce::AudioProcessorValueTreeState::SliderAttachment > slider_attachment_;
     juce::RangedAudioParameter*                                             param_;
+
+    bool         draw_text_value_;
+    juce::String suffix_;
+    int          num_decimal_places_;
 
     static constexpr float START_ANGLE = juce::degreesToRadians(180.f + 45.f);
     static constexpr float END_ANGLE   = juce::degreesToRadians(180.f - 45.f) + juce::MathConstants< float >::twoPi;

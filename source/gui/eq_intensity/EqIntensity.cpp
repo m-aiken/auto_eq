@@ -1,39 +1,30 @@
+#include "EqIntensity.h"
 #include "GlobalConstants.h"
-#include "MasterGain.h"
 #include "Theme.h"
 
 /*---------------------------------------------------------------------------
 **
 */
-MasterGain::MasterGain(PluginProcessor& p)
-    : widget_label_("master_gain_widget_label", "Master Gain")
-    , rotary_control_(p.getApvts(), GuiParams::MASTER_GAIN, true, "dB", 1)
-    , unity_gain_button_(p.getApvts(), GuiParams::UNITY_GAIN_ENABLED, "Unity Gain")
-    , processor_ref_(p)
+EqIntensity::EqIntensity(juce::AudioProcessorValueTreeState& apvts)
+    : widget_label_("eq_intensity_widget_label", "EQ Intensity")
+    , rotary_control_(apvts, GuiParams::EQ_INTENSITY)
+    , off_label_("eq_intensity_off_label", "Off", juce::Justification::centredLeft)
+    , full_label_("eq_intensity_full_label", "100%", juce::Justification::centredRight)
 {
     addAndMakeVisible(widget_label_);
     addAndMakeVisible(rotary_control_);
-    addAndMakeVisible(unity_gain_button_);
-
-    unity_gain_button_.getButton().addListener(this);
-}
-
-/*---------------------------------------------------------------------------
-**
-*/
-MasterGain::~MasterGain()
-{
-    unity_gain_button_.getButton().removeListener(this);
+    addAndMakeVisible(off_label_);
+    addAndMakeVisible(full_label_);
 }
 
 /*---------------------------------------------------------------------------
 **
 */
 void
-MasterGain::paint(juce::Graphics& g)
+EqIntensity::paint(juce::Graphics& g)
 {
 #ifdef SHOW_DEBUG_BOUNDS
-    g.setColour(juce::Colours::blue);
+    g.setColour(juce::Colours::yellow);
     g.drawRect(getLocalBounds());
 #endif
 
@@ -45,7 +36,7 @@ MasterGain::paint(juce::Graphics& g)
 **
 */
 void
-MasterGain::resized()
+EqIntensity::resized()
 {
     using Track = juce::Grid::TrackInfo;
     using Fr    = juce::Grid::Fr;
@@ -62,7 +53,7 @@ MasterGain::resized()
 
     grid.items.add(juce::GridItem(widget_label_));
     grid.items.add(juce::GridItem(rotary_control_));
-    grid.items.add(juce::GridItem(unity_gain_button_));
+    grid.items.add(juce::GridItem());
 
     const int              padding       = 12;
     juce::Rectangle< int > og_bounds     = getLocalBounds();
@@ -70,20 +61,14 @@ MasterGain::resized()
                                                                            og_bounds.getHeight() - (padding * 2));
 
     grid.performLayout(padded_bounds);
-}
 
-/*---------------------------------------------------------------------------
-**
-*/
-void
-MasterGain::buttonClicked(juce::Button* button)
-{
-    if (button != nullptr && button == &unity_gain_button_.getButton()) {
-        bool unity_gain_enabled = unity_gain_button_.getButton().getToggleState();
+    int rotary_control_bottom = rotary_control_.getBottom();
+    int center_x              = padded_bounds.getCentreX();
+    int label_width           = static_cast< int >(std::floor(padded_bounds.getWidth() * 0.3));
+    int label_height          = static_cast< int >(std::floor(padded_bounds.getHeight() * 0.15));
 
-        unity_gain_enabled ? processor_ref_.startUnityGainCalculation() : processor_ref_.stopUnityGainCalculation();
-        rotary_control_.setEnabled(!unity_gain_enabled);
-    }
+    off_label_.setBounds(center_x - label_width, rotary_control_bottom, label_width, label_height);
+    full_label_.setBounds(center_x, rotary_control_bottom, label_width, label_height);
 }
 
 /*---------------------------------------------------------------------------
