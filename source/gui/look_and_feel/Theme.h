@@ -7,11 +7,9 @@ class Theme
 public:
     typedef std::pair< juce::Colour, juce::Colour > DarkLightPair;
 
-    static const juce::Colour WHITE;
     static const juce::Colour DARK_GREY;
+    static const juce::Colour PARCHMENT;
     static const juce::Colour RED_ORANGE;
-    static const juce::Colour SOFT_PINK;
-    static const juce::Colour EGGSHELL;
     static const juce::Colour TEAL;
 
     static const DarkLightPair MAIN_BG;
