@@ -7,6 +7,7 @@
 EqBandSlider::EqBandSlider(juce::AudioProcessorValueTreeState& apvts, const juce::String& parameter_id)
     : juce::Slider(juce::Slider::LinearVertical, juce::Slider::NoTextBox)
     , param_(apvts.getParameter(parameter_id))
+    , intensity_param_(apvts.getParameter(GuiParams::getName(GuiParams::EQ_INTENSITY)))
 {
     slider_attachment_.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(apvts, parameter_id, *this));
 
@@ -34,14 +35,14 @@ EqBandSlider::~EqBandSlider()
 void
 EqBandSlider::paint(juce::Graphics& g)
 {
-    if (param_ == nullptr) {
+    if (param_ == nullptr || intensity_param_ == nullptr) {
         return;
     }
 
     juce::Rectangle< float > bounds        = getLocalBounds().toFloat();
     float                    bounds_y      = bounds.getY();
     float                    bounds_bottom = bounds.getBottom();
-    float                    param_value   = param_->convertFrom0to1(param_->getValue());
+    float                    param_value   = param_->convertFrom0to1(param_->getValue()) * intensity_param_->getValue();
 
     float val = juce::jmap< float >(param_value, Global::MAX_DB_CUT, Global::MAX_DB_BOOST, bounds_bottom, bounds_y);
 

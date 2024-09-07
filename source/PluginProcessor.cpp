@@ -487,6 +487,12 @@ PluginProcessor::booleanParameterEnabled(GuiParams::PARAM_ID param_id) const
 void
 PluginProcessor::updateFilterCoefficients()
 {
+    juce::RangedAudioParameter* intensity_param = apvts_.getParameter(GuiParams::getName(GuiParams::EQ_INTENSITY));
+
+    if (intensity_param == nullptr) {
+        return;
+    }
+
     double sample_rate = getSampleRate();
 
     for (uint8 i = 0; i < Equalizer::NUM_BANDS; ++i) {
@@ -499,7 +505,7 @@ PluginProcessor::updateFilterCoefficients()
         }
 
         float db_value    = apvts_param->convertFrom0to1(apvts_param->getValue());
-        float gain_factor = getNormalisedValue(db_value);
+        float gain_factor = getNormalisedValue(db_value * intensity_param->getValue());
 
         Equalizer::updateBandCoefficients(filter_chain_left_, band_id, gain_factor, sample_rate);
         Equalizer::updateBandCoefficients(filter_chain_right_, band_id, gain_factor, sample_rate);

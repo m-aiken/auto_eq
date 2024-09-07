@@ -21,5 +21,7 @@ private:
     std::unique_ptr< juce::AudioProcessorValueTreeState::SliderAttachment > slider_attachment_;
     juce::RangedAudioParameter*                                             param_;
 
+    juce::RangedAudioParameter* intensity_param_;
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(EqBandSlider)
 };
