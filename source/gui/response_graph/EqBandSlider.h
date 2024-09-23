@@ -19,7 +19,7 @@ public:
 
 private:
     std::unique_ptr< juce::AudioProcessorValueTreeState::SliderAttachment > slider_attachment_;
-    juce::RangedAudioParameter*                                             param_;
+    juce::RangedAudioParameter*                                             band_param_;
 
     juce::RangedAudioParameter* intensity_param_;
 

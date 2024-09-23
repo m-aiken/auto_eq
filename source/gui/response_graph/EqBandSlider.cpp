@@ -6,13 +6,13 @@
 */
 EqBandSlider::EqBandSlider(juce::AudioProcessorValueTreeState& apvts, const juce::String& parameter_id)
     : juce::Slider(juce::Slider::LinearVertical, juce::Slider::NoTextBox)
-    , param_(apvts.getParameter(parameter_id))
+    , band_param_(apvts.getParameter(parameter_id))
     , intensity_param_(apvts.getParameter(GuiParams::getName(GuiParams::EQ_INTENSITY)))
 {
     slider_attachment_.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(apvts, parameter_id, *this));
 
-    if (param_ != nullptr) {
-        param_->addListener(this);
+    if (band_param_ != nullptr) {
+        band_param_->addListener(this);
     }
 
     setRange(Global::MAX_DB_CUT, Global::MAX_DB_BOOST);
@@ -24,8 +24,8 @@ EqBandSlider::EqBandSlider(juce::AudioProcessorValueTreeState& apvts, const juce
 */
 EqBandSlider::~EqBandSlider()
 {
-    if (param_ != nullptr) {
-        param_->removeListener(this);
+    if (band_param_ != nullptr) {
+        band_param_->removeListener(this);
     }
 }
 
@@ -35,23 +35,24 @@ EqBandSlider::~EqBandSlider()
 void
 EqBandSlider::paint(juce::Graphics& g)
 {
-    if (param_ == nullptr || intensity_param_ == nullptr) {
+    if (band_param_ == nullptr || intensity_param_ == nullptr) {
         return;
     }
 
     juce::Rectangle< float > bounds        = getLocalBounds().toFloat();
     float                    bounds_y      = bounds.getY();
     float                    bounds_bottom = bounds.getBottom();
-    float                    param_value   = param_->convertFrom0to1(param_->getValue()) * intensity_param_->getValue();
 
-    float val = juce::jmap< float >(param_value, Global::MAX_DB_CUT, Global::MAX_DB_BOOST, bounds_bottom, bounds_y);
+    float band_value = band_param_->convertFrom0to1(band_param_->getValue()) * intensity_param_->getValue();
+
+    float scaled_value = juce::jmap< float >(band_value, Global::MAX_DB_CUT, Global::MAX_DB_BOOST, bounds_bottom, bounds_y);
 
     getLookAndFeel().drawLinearSlider(g,
                                       bounds.getX(),
                                       bounds_y,
                                       bounds.getWidth(),
                                       bounds.getHeight(),
-                                      val,
+                                      scaled_value,
                                       bounds_bottom,
                                       bounds_y,
                                       getSliderStyle(),
