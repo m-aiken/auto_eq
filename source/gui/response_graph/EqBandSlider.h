@@ -18,6 +18,9 @@ public:
     void parameterGestureChanged(int parameter_index, bool gesture_is_starting) override;
 
 private:
+    float                    getScaledValue(float raw_value) const;
+    juce::Rectangle< float > getGhostNode(float band_value) const;
+
     std::unique_ptr< juce::AudioProcessorValueTreeState::SliderAttachment > slider_attachment_;
     juce::RangedAudioParameter*                                             band_param_;
 

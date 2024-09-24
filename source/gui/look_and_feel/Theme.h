@@ -24,6 +24,7 @@ public:
 
     static const DarkLightPair BAND_BACKGROUND;
     static const DarkLightPair BAND_VALUE;
+    static const DarkLightPair GHOST_NODE;
 
     static const DarkLightPair UNITY_GAIN_VALUE_BUTTON;
     static const DarkLightPair UNITY_GAIN_VALUE_BOX;

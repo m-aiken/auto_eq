@@ -17,6 +17,7 @@ const Theme::DarkLightPair Theme::FFT = DarkLightPair(TEAL.withAlpha(0.2f), TEAL
 
 const Theme::DarkLightPair Theme::BAND_BACKGROUND = DarkLightPair(PARCHMENT.withAlpha(0.02f), DARK_GREY.withAlpha(0.1f));
 const Theme::DarkLightPair Theme::BAND_VALUE      = DarkLightPair(RED_ORANGE, RED_ORANGE);
+const Theme::DarkLightPair Theme::GHOST_NODE = DarkLightPair(RED_ORANGE.withAlpha(0.2f), RED_ORANGE.withAlpha(0.2f));
 
 const Theme::DarkLightPair Theme::UNITY_GAIN_VALUE_BUTTON = DarkLightPair(RED_ORANGE.withAlpha(0.4f),
                                                                           RED_ORANGE.withAlpha(0.4f));
