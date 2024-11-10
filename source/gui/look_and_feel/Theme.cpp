@@ -27,7 +27,7 @@ const Theme::DLP Theme::RECORD_BUTTON_OFF       = DarkLightPair(PARCHMENT, DARK_
 const Theme::DLP Theme::POWER_BUTTON_ON         = DarkLightPair(TEAL, TEAL);
 const Theme::DLP Theme::POWER_BUTTON_OFF        = Theme::DISABLED_WIDGET;
 
-bool Theme::dark_mode = false;
+bool Theme::dark_mode = true;
 
 /*---------------------------------------------------------------------------
 **
