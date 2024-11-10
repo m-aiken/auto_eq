@@ -11,7 +11,7 @@ public:
 
 public:
     BandParameterUpdater(juce::AudioProcessorValueTreeState& apvts, BandUpdater& band_updater);
-    ~BandParameterUpdater();
+    ~BandParameterUpdater() override;
 
     void run() override;
 
