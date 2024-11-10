@@ -50,12 +50,13 @@ set(PROJECT_SOURCES
         source/gui/look_and_feel/CustomLookAndFeel.cpp
         source/gui/look_and_feel/Theme.cpp
         source/gui/master_gain/MasterGain.cpp
+        source/gui/meters/LufsLabelGroup.cpp
+        source/gui/meters/LufsMeterGroup.cpp
+        source/gui/meters/LufsMetersWidget.cpp
         source/gui/meters/MeterCanvas.cpp
         source/gui/meters/MeterDbScale.cpp
-        source/gui/meters/MeterGroup.cpp
-        source/gui/meters/MeterLabel.cpp
         source/gui/meters/MonoMeter.cpp
-        source/gui/meters/StereoMeter.cpp
+        source/gui/meters/ResetButton.cpp
         source/gui/response_graph/DecibelMarkers.cpp
         source/gui/response_graph/EqBandSlider.cpp
         source/gui/response_graph/FilterMagnitudesCalculator.cpp
@@ -76,6 +77,9 @@ set(PROJECT_SOURCES
         source/gui/widgets/spinbox/SpinBoxTextBox.cpp
         source/gui/widgets/SquareToggleButton.cpp
         source/gui/widgets/ThemeButton.cpp
+
+        source/third_party/klangfreund_lufs_meter/Ebu128LoudnessMeter.cpp
+        source/third_party/klangfreund_lufs_meter/filters/SecondOrderIIRFilter.cpp
         )
 
 set(PROJECT_HEADERS
@@ -92,12 +96,13 @@ set(PROJECT_HEADERS
         source/gui/look_and_feel/CustomLookAndFeel.h
         source/gui/look_and_feel/Theme.h
         source/gui/master_gain/MasterGain.h
+        source/gui/meters/LufsLabelGroup.h
+        source/gui/meters/LufsMeterGroup.h
+        source/gui/meters/LufsMetersWidget.h
         source/gui/meters/MeterCanvas.h
         source/gui/meters/MeterDbScale.h
-        source/gui/meters/MeterGroup.h
-        source/gui/meters/MeterLabel.h
         source/gui/meters/MonoMeter.h
-        source/gui/meters/StereoMeter.h
+        source/gui/meters/ResetButton.h
         source/gui/response_graph/DecibelMarkers.h
         source/gui/response_graph/EqBandSlider.h
         source/gui/response_graph/FilterMagnitudesCalculator.h
@@ -119,6 +124,9 @@ set(PROJECT_HEADERS
         source/gui/widgets/SquareToggleButton.h
         source/gui/widgets/ThemeButton.h
         source/utility/GlobalConstants.h
+
+        source/third_party/klangfreund_lufs_meter/Ebu128LoudnessMeter.h
+        source/third_party/klangfreund_lufs_meter/filters/SecondOrderIIRFilter.h
         )
 
 target_sources(${PROJECT_NAME}
@@ -140,6 +148,9 @@ target_include_directories(${PROJECT_NAME}
         ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/widgets
         ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/widgets/spinbox
         ${CMAKE_CURRENT_SOURCE_DIR}/source/utility
+
+        ${CMAKE_CURRENT_SOURCE_DIR}/source/third_party/klangfreund_lufs_meter
+        ${CMAKE_CURRENT_SOURCE_DIR}/source/third_party/klangfreund_lufs_meter/filters
         )
 
 # JUCE modules make use of compile definitions to switch certain features on/off.

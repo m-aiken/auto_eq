@@ -3,9 +3,9 @@
 #include "CustomLookAndFeel.h"
 #include "EqIntensity.h"
 #include "FilterResponseGraph.h"
+#include "LufsMetersWidget.h"
 #include "MasterGain.h"
 #include "MenuButton.h"
-#include "MeterGroup.h"
 #include "PluginProcessor.h"
 #include "PowerButton.h"
 #include "RecordButton.h"
@@ -41,7 +41,7 @@ private:
     FilterResponseGraph filter_res_graph_;
     EqIntensity         eq_intensity_;
     MasterGain          master_gain_;
-    MeterGroup          meter_group_;
+    LufsMeterWidget     lufs_meters_;
 
     CustomLookAndFeel lnf_;
 

@@ -21,7 +21,7 @@ PluginEditor::PluginEditor(PluginProcessor& p)
     , filter_res_graph_(p)
     , eq_intensity_(p.getApvts())
     , master_gain_(p)
-    , meter_group_(p)
+    , lufs_meters_(p)
     , cached_fft_draw_status_(GuiParams::INITIAL_FFT_STATE)
 {
     setLookAndFeel(&lnf_);
@@ -33,7 +33,7 @@ PluginEditor::PluginEditor(PluginProcessor& p)
     addAndMakeVisible(filter_res_graph_);
     addAndMakeVisible(eq_intensity_);
     addAndMakeVisible(master_gain_);
-    addAndMakeVisible(meter_group_);
+    addAndMakeVisible(lufs_meters_);
 
     power_button_.addListener(this);
     analyse_input_button_.addListener(this);
@@ -97,7 +97,7 @@ PluginEditor::resized()
     // Bottom section.
     eq_intensity_.setBounds(0, bottom_section_y, eq_intensity_width, bottom_section_height);
     master_gain_.setBounds(eq_intensity_.getRight(), bottom_section_y, master_gain_width, bottom_section_height);
-    meter_group_.setBounds(master_gain_.getRight(), bottom_section_y, meters_width, bottom_section_height);
+    lufs_meters_.setBounds(master_gain_.getRight(), bottom_section_y, meters_width, bottom_section_height);
 }
 
 /*---------------------------------------------------------------------------
@@ -118,7 +118,7 @@ PluginEditor::buttonClicked(juce::Button* button)
         filter_res_graph_.setEnabled(plugin_enabled);
         eq_intensity_.setEnabled(plugin_enabled);
         master_gain_.setEnabled(plugin_enabled);
-        meter_group_.setEnabled(plugin_enabled);
+        lufs_meters_.setEnabled(plugin_enabled);
 
         // If the user is disabling the plugin and the analysis is active, stop the analysis.
         if (!plugin_enabled && analyse_input_button_.getToggleState()) {

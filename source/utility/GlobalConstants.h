@@ -51,11 +51,23 @@ namespace Channels
 namespace Meters
 {
 
+    static constexpr uint8 NUM_METERS = 5;
+
     enum METER_TYPE {
-        PEAK_METER,
-        RMS_METER,
-        LUFS_METER,
+        SHORT_TERM,
+        MOMENTARY,
+        SHORT_TERM_MAX,
+        MOMENTARY_MAX,
+        INTEGRATED,
     };
+
+    static const std::map< METER_TYPE, juce::String > METER_NAME_MAP = { { SHORT_TERM, "Short Term" },
+                                                                         { MOMENTARY, "Momentary" },
+                                                                         { SHORT_TERM_MAX, "Short Term (MAX)" },
+                                                                         { MOMENTARY_MAX, "Momentary (MAX)" },
+                                                                         { INTEGRATED, "Integrated" } };
+
+    static juce::String getName(const METER_TYPE loudness_meter_type) { return METER_NAME_MAP.at(loudness_meter_type); }
 
 }  // namespace Meters
 

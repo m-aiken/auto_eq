@@ -4,6 +4,7 @@
 
 #include "BandParameterUpdater.h"
 #include "BandUpdater.h"
+#include "Ebu128LoudnessMeter.h"
 #include "Equalizer.h"
 #include "GlobalConstants.h"
 #include "InputAnalysisFilter.h"
@@ -51,7 +52,9 @@ public:
     FftBuffers&           getFftBuffers();
     Equalizer::MonoChain& getFilterChain();
 
-    float getMeterValue(Global::Meters::METER_TYPE meter_type, Global::Channels::CHANNEL_ID channel_id) const;
+    float getMeterValue(const Global::Meters::METER_TYPE meter_type) const;
+
+    void resetLufsModule();
 
     void startInputAnalysis();
     void stopInputAnalysis();
@@ -64,9 +67,7 @@ private:
 
     void updateFilterCoefficients();
 
-    void setPeakMeter(SmoothedFloat& val, juce::AudioBuffer< float >& buffer, Global::Channels::CHANNEL_ID channel);
-    void setRmsMeter(SmoothedFloat& val, juce::AudioBuffer< float >& buffer, Global::Channels::CHANNEL_ID channel);
-    void setLufsMeter(SmoothedFloat& val, juce::AudioBuffer< float >& buffer, Global::Channels::CHANNEL_ID channel);
+    void updateLufsValues(const juce::AudioBuffer< float >& dummy_buffer);
 
     void applyMasterGain(juce::AudioBuffer< float >& buffer);
 
@@ -87,16 +88,14 @@ private:
     Equalizer::MonoChain filter_chain_left_;
     Equalizer::MonoChain filter_chain_right_;
 
-    SmoothedFloat peak_l_;
-    SmoothedFloat peak_r_;
-    SmoothedFloat rms_l_;
-    SmoothedFloat rms_r_;
-    SmoothedFloat lufs_l_;
-    SmoothedFloat lufs_r_;
+    // LUFS values.
+    std::array< SmoothedFloat, Global::Meters::NUM_METERS > loudness_values_;
 
     juce::AudioBuffer< float > empty_buffer_;  //! Used to clear the meters when the plugin is disabled.
 
     UnityGainCalculator unity_gain_calculator_;
+
+    Ebu128LoudnessMeter lufs_module_;
 
 #ifdef TEST_FFT_ACCURACY
     juce::dsp::Oscillator< float > fft_test_tone_;
