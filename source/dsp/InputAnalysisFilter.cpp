@@ -8,15 +8,12 @@
 */
 InputAnalysisFilter::InputAnalysisFilter()
     : juce::Thread("THREAD_input_analysis_filter")
-    , fifo_write_idx_(2)
-    , fifo_read_idx_(0)
     , is_prepared_(false)
 {
     initFilters();
 
     std::fill(band_buffers_.begin(), band_buffers_.end(), juce::AudioBuffer< float >());
     std::fill(band_adjustments_.begin(), band_adjustments_.end(), 0.f);
-    std::fill(fifo_.begin(), fifo_.end(), juce::AudioBuffer< float >());
 }
 
 /*---------------------------------------------------------------------------
@@ -62,13 +59,7 @@ InputAnalysisFilter::prepare(juce::dsp::ProcessSpec& process_spec)
                        true);
     }
 
-    for (auto& buffer : fifo_) {
-        buffer.setSize(static_cast< int >(process_spec.numChannels),
-                       static_cast< int >(process_spec.maximumBlockSize),
-                       false,
-                       true,
-                       true);
-    }
+    fifo_.prepare(process_spec);
 
     is_prepared_ = true;
 }
@@ -79,24 +70,17 @@ InputAnalysisFilter::prepare(juce::dsp::ProcessSpec& process_spec)
 bool
 InputAnalysisFilter::isPrepared() const
 {
-    return is_prepared_;
+    return (is_prepared_ && fifo_.isPrepared());
 }
 
 /*---------------------------------------------------------------------------
 **
 */
 void
-InputAnalysisFilter::pushBufferForAnalysis(juce::AudioBuffer< float > buffer)
+InputAnalysisFilter::pushBufferForAnalysis(const juce::AudioBuffer< float >& buffer)
 {
-    // Buffers passed in by copy. We don't want to mutate the actual buffer.
-    std::swap(fifo_.at(fifo_write_idx_), buffer);
-
-    if (++fifo_write_idx_ == FIFO_SIZE) {
-        fifo_write_idx_ = 0;
-    }
-
-    if (++fifo_read_idx_ == FIFO_SIZE) {
-        fifo_read_idx_ = 0;
+    if (fifo_.isPrepared()) {
+        fifo_.push(buffer);
     }
 }
 
@@ -150,12 +134,12 @@ InputAnalysisFilter::initFilters()
 void
 InputAnalysisFilter::processInputBuffer()
 {
-    if (!is_prepared_) {
+    if (!isPrepared()) {
         return;
     }
 
     // Take by copy.
-    const juce::AudioBuffer< float > input_buffer = fifo_.at(fifo_read_idx_);
+    const juce::AudioBuffer< float > input_buffer = fifo_.pull();
 
     for (auto& buffer : band_buffers_) {
         buffer.clear();

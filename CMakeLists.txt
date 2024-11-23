@@ -39,6 +39,7 @@ juce_generate_juce_header(${PROJECT_NAME})
 set(PROJECT_SOURCES
         source/PluginEditor.cpp
         source/PluginProcessor.cpp
+        source/dsp/AudioBufferFifo.cpp
         source/dsp/BandUpdater.cpp
         source/dsp/BandParameterUpdater.cpp
         source/dsp/Equalizer.cpp
@@ -80,6 +81,7 @@ set(PROJECT_SOURCES
 set(PROJECT_HEADERS
         source/PluginEditor.h
         source/PluginProcessor.h
+        source/dsp/AudioBufferFifo.h
         source/dsp/BandUpdater.h
         source/dsp/BandParameterUpdater.h
         source/dsp/Equalizer.h

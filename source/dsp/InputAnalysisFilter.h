@@ -2,6 +2,7 @@
 
 #include <JuceHeader.h>
 
+#include "AudioBufferFifo.h"
 #include "Equalizer.h"
 
 class InputAnalysisFilter : public juce::Thread
@@ -18,7 +19,7 @@ public:
     void prepare(juce::dsp::ProcessSpec& process_spec);
     bool isPrepared() const;
 
-    void pushBufferForAnalysis(juce::AudioBuffer< float > buffer);
+    void pushBufferForAnalysis(const juce::AudioBuffer< float >& buffer);
 
     float getBandDbAdjustment(Equalizer::BAND_ID band_id) const;
 
@@ -45,10 +46,7 @@ private:
     // On the timer callback we grab one of the buffers and perform the analysis.
     // This prevents blocking the audio thread and gives better control over the
     // frequency of the analysis.
-    static constexpr size_t                             FIFO_SIZE = 24;
-    std::array< juce::AudioBuffer< float >, FIFO_SIZE > fifo_;
-    size_t                                              fifo_write_idx_;
-    size_t                                              fifo_read_idx_;
+    AudioBufferFifo fifo_;
 
     bool is_prepared_;
 
