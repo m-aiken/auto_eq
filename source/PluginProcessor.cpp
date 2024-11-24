@@ -8,11 +8,9 @@
 **
 */
 PluginProcessor::PluginProcessor()
-    : AudioProcessor(
-        BusesProperties()
-            .withInput(Global::Channels::getName(Global::Channels::INPUT_LEFT), juce::AudioChannelSet::mono(), true)
-            .withInput(Global::Channels::getName(Global::Channels::INPUT_RIGHT), juce::AudioChannelSet::mono(), true)
-            .withOutput("Output", juce::AudioChannelSet::stereo(), true))
+    : AudioProcessor(BusesProperties()
+                         .withInput("Input", juce::AudioChannelSet::stereo(), true)
+                         .withOutput("Output", juce::AudioChannelSet::stereo(), true))
     , apvts_(*this, nullptr, "APVTS", getParameterLayout())
     , input_analysis_filter_()
     , band_updater_(input_analysis_filter_)
@@ -212,10 +210,14 @@ PluginProcessor::releaseResources()
 bool
 PluginProcessor::isBusesLayoutSupported(const BusesLayout& layouts) const
 {
-    const int num_inputs  = layouts.getMainInputChannels();
-    const int num_outputs = layouts.getMainOutputChannels();
+    // Some plugin hosts will only support mono or stereo output bus layouts.
+    bool mono_out   = layouts.getMainOutputChannelSet() == juce::AudioChannelSet::mono();
+    bool stereo_out = layouts.getMainOutputChannelSet() == juce::AudioChannelSet::stereo();
 
-    return (num_inputs <= 4 && num_outputs <= 2);
+    // We want the input and output layouts to match (i.e. mono in --> mono out or stereo in --> stereo out).
+    bool in_matches_out = layouts.getMainInputChannelSet() == layouts.getMainOutputChannelSet();
+
+    return (mono_out || stereo_out) && in_matches_out;
 }
 
 /*---------------------------------------------------------------------------
