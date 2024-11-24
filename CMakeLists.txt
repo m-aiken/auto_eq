@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.23)
 project(ReLufs VERSION 1.0.0)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-set(CMAKE_BUILD_TYPE Debug)
+set(JUCE_COPY_PLUGIN_AFTER_BUILD ON)
 
 #
 # Dependencies.
