@@ -9,6 +9,7 @@
 #include "GlobalConstants.h"
 #include "InputAnalysisFilter.h"
 #include "MonoFftBuffer.h"
+#include "MonoWaveform.h"
 #include "UnityGainCalculator.h"
 
 class PluginProcessor final : public juce::AudioProcessor
@@ -52,6 +53,8 @@ public:
     FftBuffers&           getFftBuffers();
     Equalizer::MonoChain& getFilterChain();
 
+    MonoWaveform& getMonoWaveform();
+
     float getMeterValue(const Global::Meters::METER_TYPE meter_type) const;
 
     void resetLufsModule();
@@ -87,6 +90,8 @@ private:
 
     Equalizer::MonoChain filter_chain_left_;
     Equalizer::MonoChain filter_chain_right_;
+
+    MonoWaveform mono_waveform_;
 
     // LUFS values.
     std::array< SmoothedFloat, Global::Meters::NUM_METERS > loudness_values_;

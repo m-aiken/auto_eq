@@ -157,6 +157,9 @@ PluginProcessor::prepareToPlay(double sample_rate, int samples_per_block)
     // Band pass filters.
     updateFilterCoefficients();
 
+    // Profiler input waveform.
+    mono_waveform_.setBufferSize(samples_per_block);
+
     // Meter values.
     for (auto& loudness_val : loudness_values_) {
         loudness_val.reset(sample_rate, METER_DB_RAMP_TIME_SECONDS);
@@ -253,6 +256,11 @@ PluginProcessor::processBlock(juce::AudioBuffer< float >& buffer, juce::MidiBuff
 
     if (booleanParameterEnabled(GuiParams::UNITY_GAIN_ENABLED)) {
         unity_gain_calculator_.pushForAnalysis(buffer, UnityGainCalculator::PRE_PROCESSED_FIFO);
+    }
+
+    // Profiler input waveform.
+    for (int i = 0; i < buffer.getNumSamples(); ++i) {
+        mono_waveform_.pushSample(buffer.getReadPointer(0, i), 1);
     }
 
 #ifdef TEST_FFT_ACCURACY
@@ -383,6 +391,15 @@ PluginProcessor::getFilterChain()
     // We're currently just returning a mono chain as left and right
     // are processed identically.
     return filter_chain_left_;
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
+MonoWaveform&
+PluginProcessor::getMonoWaveform()
+{
+    return mono_waveform_;
 }
 
 /*---------------------------------------------------------------------------

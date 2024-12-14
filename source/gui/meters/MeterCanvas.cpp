@@ -16,7 +16,7 @@ MeterCanvas::paint(juce::Graphics& g)
     const int  min_db         = static_cast< int >(Global::METER_NEG_INF);
     const int  max_db         = static_cast< int >(Global::METER_MAX_DB);
     const auto line_colour    = Theme::getColour(Theme::ANALYSER_GRID);
-    const auto alpha          = Theme::dark_mode ? 0.05f : 0.1f;
+    const auto alpha          = Theme::app_is_in_dark_mode ? 0.05f : 0.1f;
     const int  line_thickness = 1;
 
     g.setColour(line_colour.withAlpha(alpha));

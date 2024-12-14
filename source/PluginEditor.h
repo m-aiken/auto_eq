@@ -6,8 +6,10 @@
 #include "LufsMetersWidget.h"
 #include "MasterGain.h"
 #include "MenuButton.h"
+#include "MonoWaveform.h"
 #include "PluginProcessor.h"
 #include "PowerButton.h"
+#include "ProfileButtonGroup.h"
 #include "RecordButton.h"
 #include "ThemeButton.h"
 
@@ -37,11 +39,14 @@ private:
     PowerButton         power_button_;
     RecordButton        analyse_input_button_;
     MenuButton          show_fft_button_;
+    ProfileButtonGroup  profile_buttons_;
     ThemeButton         theme_button_;
     FilterResponseGraph filter_res_graph_;
     EqIntensity         eq_intensity_;
     MasterGain          master_gain_;
     LufsMeterWidget     lufs_meters_;
+
+    MonoWaveform& mono_waveform_ref_;
 
     CustomLookAndFeel lnf_;
 

@@ -17,11 +17,13 @@ PluginEditor::PluginEditor(PluginProcessor& p)
     , power_button_(p.getApvts(), GuiParams::POWER)
     , analyse_input_button_("Analyse Input", p.getApvts(), GuiParams::ANALYSE_INPUT)
     , show_fft_button_("Show Spectrum", p.getApvts(), GuiParams::SHOW_FFT)
+    , profile_buttons_()
     , theme_button_()
     , filter_res_graph_(p)
     , eq_intensity_(p.getApvts())
     , master_gain_(p)
     , lufs_meters_(p)
+    , mono_waveform_ref_(p.getMonoWaveform())
     , cached_fft_draw_status_(GuiParams::INITIAL_FFT_STATE)
 {
     setLookAndFeel(&lnf_);
@@ -29,11 +31,13 @@ PluginEditor::PluginEditor(PluginProcessor& p)
     addAndMakeVisible(power_button_);
     addAndMakeVisible(analyse_input_button_);
     addAndMakeVisible(show_fft_button_);
+    addAndMakeVisible(profile_buttons_);
     addAndMakeVisible(theme_button_);
     addAndMakeVisible(filter_res_graph_);
     addAndMakeVisible(eq_intensity_);
     addAndMakeVisible(master_gain_);
     addAndMakeVisible(lufs_meters_);
+    addAndMakeVisible(mono_waveform_ref_);
 
     power_button_.addListener(this);
     analyse_input_button_.addListener(this);
@@ -71,28 +75,34 @@ PluginEditor::paint(juce::Graphics& g)
 void
 PluginEditor::resized()
 {
-    juce::Rectangle< int > bounds                = getLocalBounds();
-    int                    bounds_height         = bounds.getHeight();
-    int                    bounds_width          = bounds.getWidth();
-    int                    top_controls_height   = static_cast< int >(std::floor(bounds_height * 0.05));
-    int                    analysis_button_width = static_cast< int >(std::floor(bounds_width * 0.2));
-    int                    fft_button_width      = static_cast< int >(std::floor(bounds_width * 0.2));
-    int                    theme_button_width    = static_cast< int >(std::floor(bounds_width * 0.1));
-    int                    graph_height          = static_cast< int >(std::floor(bounds_height * 0.65));
-    int                    bottom_section_height = static_cast< int >(std::floor(bounds_height * 0.25));
-    int                    eq_intensity_width    = static_cast< int >(std::floor(bounds_width * 0.15));
-    int                    master_gain_width     = static_cast< int >(std::floor(bounds_width * 0.15));
-    int                    meters_width          = static_cast< int >(std::floor(bounds_width * 0.7));
-    int                    bottom_section_y      = bounds.getBottom() - bottom_section_height;
+    juce::Rectangle< int > bounds                  = getLocalBounds();
+    int                    bounds_height           = bounds.getHeight();
+    int                    bounds_width            = bounds.getWidth();
+    int                    top_controls_height     = static_cast< int >(std::floor(bounds_height * 0.05));
+    int                    analysis_button_width   = static_cast< int >(std::floor(bounds_width * 0.2));
+    int                    fft_button_width        = static_cast< int >(std::floor(bounds_width * 0.2));
+    int                    profile_btn_group_width = static_cast< int >(std::floor(bounds_width * 0.5));
+    int                    theme_button_width      = static_cast< int >(std::floor(bounds_width * 0.1));
+    int                    graph_height            = static_cast< int >(std::floor(bounds_height * 0.65));
+    int                    bottom_section_height   = static_cast< int >(std::floor(bounds_height * 0.25));
+    int                    eq_intensity_width      = static_cast< int >(std::floor(bounds_width * 0.15));
+    int                    master_gain_width       = static_cast< int >(std::floor(bounds_width * 0.15));
+    int                    meters_width            = static_cast< int >(std::floor(bounds_width * 0.7));
+    int                    bottom_section_y        = bounds.getBottom() - bottom_section_height;
 
     // Top buttons section.
     power_button_.setBounds(0, 0, top_controls_height, top_controls_height);
-    analyse_input_button_.setBounds(analysis_button_width, 0, analysis_button_width, top_controls_height);
-    show_fft_button_.setBounds(analyse_input_button_.getRight(), 0, fft_button_width, top_controls_height);
+    // analyse_input_button_.setBounds(analysis_button_width, 0, analysis_button_width, top_controls_height);
+    // show_fft_button_.setBounds(analyse_input_button_.getRight(), 0, fft_button_width, top_controls_height);
+    profile_buttons_.setBounds(bounds.getCentreX() - (profile_btn_group_width * 0.5),
+                               0,
+                               profile_btn_group_width,
+                               top_controls_height);
     theme_button_.setBounds(bounds.getRight() - theme_button_width, 0, theme_button_width, top_controls_height);
 
-    // EQ section.
-    filter_res_graph_.setBounds(0, top_controls_height, bounds_width, graph_height);
+    // EQ graph and input waveform.
+    // filter_res_graph_.setBounds(0, top_controls_height, bounds_width, graph_height);
+    mono_waveform_ref_.setBounds(0, top_controls_height, bounds_width, graph_height);
 
     // Bottom section.
     eq_intensity_.setBounds(0, bottom_section_y, eq_intensity_width, bottom_section_height);

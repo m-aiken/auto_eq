@@ -26,8 +26,10 @@ const Theme::DLP Theme::RECORD_BUTTON_ON        = DarkLightPair(RED_ORANGE, RED_
 const Theme::DLP Theme::RECORD_BUTTON_OFF       = DarkLightPair(PARCHMENT, DARK_GREY);
 const Theme::DLP Theme::POWER_BUTTON_ON         = DarkLightPair(TEAL, TEAL);
 const Theme::DLP Theme::POWER_BUTTON_OFF        = Theme::DISABLED_WIDGET;
+const Theme::DLP Theme::PROFILE_BUTTON_NO_FOCUS = DarkLightPair(PARCHMENT.withAlpha(0.02f), DARK_GREY.withAlpha(0.05f));
+const Theme::DLP Theme::PROFILE_BUTTON_FOCUS    = DarkLightPair(PARCHMENT.withAlpha(0.05f), DARK_GREY.withAlpha(0.1f));
 
-bool Theme::dark_mode = true;
+bool Theme::app_is_in_dark_mode = true;
 
 /*---------------------------------------------------------------------------
 **
@@ -35,7 +37,7 @@ bool Theme::dark_mode = true;
 /*static*/ void
 Theme::toggleTheme()
 {
-    dark_mode = !dark_mode;
+    app_is_in_dark_mode = !app_is_in_dark_mode;
 }
 
 /*---------------------------------------------------------------------------
@@ -44,7 +46,7 @@ Theme::toggleTheme()
 /*static*/ juce::Colour
 Theme::getColour(DarkLightPair c)
 {
-    return dark_mode ? c.first : c.second;
+    return app_is_in_dark_mode ? c.first : c.second;
 }
 
 /*---------------------------------------------------------------------------

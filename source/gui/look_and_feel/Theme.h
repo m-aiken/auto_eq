@@ -33,8 +33,10 @@ public:
     static const DarkLightPair RECORD_BUTTON_OFF;
     static const DarkLightPair POWER_BUTTON_ON;
     static const DarkLightPair POWER_BUTTON_OFF;
+    static const DarkLightPair PROFILE_BUTTON_NO_FOCUS;
+    static const DarkLightPair PROFILE_BUTTON_FOCUS;
 
-    static bool dark_mode;
+    static bool app_is_in_dark_mode;
 
 public:
     Theme() = default;

@@ -7,7 +7,7 @@
 */
 ThemeButton::ThemeButton()
 {
-    setToggleState(Theme::dark_mode, juce::dontSendNotification);
+    setToggleState(Theme::app_is_in_dark_mode, juce::dontSendNotification);
 
     onClick = [this]() {
         Theme::toggleTheme();
@@ -28,7 +28,7 @@ ThemeButton::paint(juce::Graphics& g)
 
     g.setFont(Theme::getFont());
     g.setColour(Theme::getColour(Theme::TEXT));
-    g.drawFittedText(Theme::dark_mode ? "LIGHT" : "DARK", getLocalBounds(), juce::Justification::centred, 1);
+    g.drawFittedText(Theme::app_is_in_dark_mode ? "LIGHT" : "DARK", getLocalBounds(), juce::Justification::centred, 1);
 }
 
 /*---------------------------------------------------------------------------

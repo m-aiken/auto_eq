@@ -57,6 +57,8 @@ set(PROJECT_SOURCES
         source/gui/meters/MeterDbScale.cpp
         source/gui/meters/MonoMeter.cpp
         source/gui/meters/ResetButton.cpp
+        source/gui/profiling/MonoWaveform.cpp
+        source/gui/profiling/ProfileButtonGroup.cpp
         source/gui/response_graph/DecibelMarkers.cpp
         source/gui/response_graph/EqBandSlider.cpp
         source/gui/response_graph/FilterMagnitudesCalculator.cpp
@@ -67,6 +69,7 @@ set(PROJECT_SOURCES
         source/gui/response_graph/MonoFftPath.cpp
         source/gui/response_graph/MonoFftPathProducer.cpp
         source/gui/widgets/ButtonWithLabel.cpp
+        source/gui/widgets/CustomTextButton.cpp
         source/gui/widgets/DisableableLabel.cpp
         source/gui/widgets/MenuButton.cpp
         source/gui/widgets/PowerButton.cpp
@@ -103,6 +106,8 @@ set(PROJECT_HEADERS
         source/gui/meters/MeterDbScale.h
         source/gui/meters/MonoMeter.h
         source/gui/meters/ResetButton.h
+        source/gui/profiling/MonoWaveform.h
+        source/gui/profiling/ProfileButtonGroup.h
         source/gui/response_graph/DecibelMarkers.h
         source/gui/response_graph/EqBandSlider.h
         source/gui/response_graph/FilterMagnitudesCalculator.h
@@ -113,6 +118,7 @@ set(PROJECT_HEADERS
         source/gui/response_graph/MonoFftPath.h
         source/gui/response_graph/MonoFftPathProducer.h
         source/gui/widgets/ButtonWithLabel.h
+        source/gui/widgets/CustomTextButton.h
         source/gui/widgets/DisableableLabel.h
         source/gui/widgets/MenuButton.h
         source/gui/widgets/PowerButton.h
@@ -144,6 +150,7 @@ target_include_directories(${PROJECT_NAME}
         ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/look_and_feel
         ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/master_gain
         ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/meters
+        ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/profiling
         ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/response_graph
         ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/widgets
         ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/widgets/spinbox
