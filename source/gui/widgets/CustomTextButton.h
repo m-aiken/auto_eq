@@ -7,7 +7,7 @@
 class CustomTextButton : public juce::TextButton
 {
 public:
-    CustomTextButton(const juce::String& label_text);
+    explicit CustomTextButton(const juce::String& label_text);
 
     void paintButton(juce::Graphics& g, bool should_draw_button_as_highlighted, bool should_draw_button_as_down) override;
     void mouseEnter(const juce::MouseEvent& e) override;

@@ -2,7 +2,7 @@
 
 #include <JuceHeader.h>
 
-#include "ButtonWithLabel.h"
+#include "CustomTextToggleButton.h"
 #include "DisableableLabel.h"
 #include "PluginProcessor.h"
 #include "RotaryControl.h"
@@ -21,9 +21,9 @@ public:
     void buttonClicked(juce::Button* button) override;
 
 private:
-    DisableableLabel widget_label_;
-    RotaryControl    rotary_control_;
-    ButtonWithLabel  unity_gain_button_;
+    DisableableLabel       widget_label_;
+    RotaryControl          rotary_control_;
+    CustomTextToggleButton unity_gain_button_;
 
     PluginProcessor& processor_ref_;
 

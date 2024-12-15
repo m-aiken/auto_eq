@@ -5,10 +5,10 @@
 /*---------------------------------------------------------------------------
 **
 */
-LufsMeterWidget::LufsMeterWidget(PluginProcessor& p)
+LufsMetersWidget::LufsMetersWidget(PluginProcessor& p)
     : widget_label_("lufs_meters_widget_label", "LUFS")
     , meters_(p)
-    , reset_button_(p)
+    , reset_button_("Reset")
 {
     addAndMakeVisible(widget_label_);
     addAndMakeVisible(db_scale_top_);
@@ -22,7 +22,7 @@ LufsMeterWidget::LufsMeterWidget(PluginProcessor& p)
 **
 */
 void
-LufsMeterWidget::paint(juce::Graphics& g)
+LufsMetersWidget::paint(juce::Graphics& g)
 {
 #ifdef SHOW_DEBUG_BOUNDS
     g.setColour(juce::Colours::red);
@@ -37,7 +37,7 @@ LufsMeterWidget::paint(juce::Graphics& g)
 **
 */
 void
-LufsMeterWidget::resized()
+LufsMetersWidget::resized()
 {
     const juce::Rectangle< int > bounds              = getLocalBounds();
     const int                    bounds_width        = bounds.getWidth();
@@ -64,7 +64,25 @@ LufsMeterWidget::resized()
     meter_labels_.setBounds(label_group_x, db_scale_height, label_section_width, label_group_height);
     meters_.setBounds(meter_section_x + Global::METER_X_PADDING, db_scale_height, meter_group_width, meter_group_height);
 
-    reset_button_.setBounds(bounds.getRight() - reset_button_width, 0, reset_button_width, db_scale_height);
+    // Reset button.
+    const juce::Rectangle< int > reset_bounds(bounds.getRight() - reset_button_width,
+                                              0,
+                                              reset_button_width,
+                                              db_scale_height);
+
+    const int reset_padding = 6;
+
+    reset_button_.setBounds(reset_bounds.withSizeKeepingCentre(reset_bounds.getWidth() - (reset_padding * 2),
+                                                               reset_bounds.getHeight() - (reset_padding * 2)));
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
+CustomTextButton&
+LufsMetersWidget::getResetButton()
+{
+    return reset_button_;
 }
 
 /*---------------------------------------------------------------------------

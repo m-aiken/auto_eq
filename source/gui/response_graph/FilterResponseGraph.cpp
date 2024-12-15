@@ -11,15 +11,15 @@ FilterResponseGraph::FilterResponseGraph(PluginProcessor& p)
     PluginProcessor::FftBuffers&        fft_buffers = p.getFftBuffers();
     juce::AudioProcessorValueTreeState& apvts       = p.getApvts();
 
-    juce::String enable_fft_primary_post_param_id = GuiParams::getName(GuiParams::SHOW_FFT);
+    juce::String power_saving_param_id = GuiParams::getName(GuiParams::POWER_SAVING);
 
     fft_path_primary_post_eq_l_ = std::make_unique< MonoFftPath >(fft_buffers.at(Global::FFT::LEFT_POST_EQ),
                                                                   Theme::FFT,
-                                                                  apvts.getParameter(enable_fft_primary_post_param_id));
+                                                                  apvts.getParameter(power_saving_param_id));
 
     fft_path_primary_post_eq_r_ = std::make_unique< MonoFftPath >(fft_buffers.at(Global::FFT::RIGHT_POST_EQ),
                                                                   Theme::FFT,
-                                                                  apvts.getParameter(enable_fft_primary_post_param_id));
+                                                                  apvts.getParameter(power_saving_param_id));
 
     addAndMakeVisible(backdrop_);
     addAndMakeVisible(db_scale_);

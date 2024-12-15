@@ -10,14 +10,15 @@ class RotaryControl
 {
 public:
     RotaryControl(juce::AudioProcessorValueTreeState& apvts,
-                  GuiParams::PARAM_ID                 parameter_id,
-                  bool                                draw_text_value    = false,
+                  const GuiParams::PARAM_ID           parameter_id,
+                  const bool                          draw_text_value    = false,
                   juce::String                        suffix             = "",
-                  int                                 num_decimal_places = 0);
+                  const int                           num_decimal_places = 0);
     ~RotaryControl() override;
 
     // Slider virtual functions.
     void paint(juce::Graphics& g) override;
+    void mouseEnter(const juce::MouseEvent& e) override;
 
     // Listener pure virtual functions.
     void parameterValueChanged(int parameter_index, float new_value) override;

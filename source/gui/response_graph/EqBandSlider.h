@@ -12,6 +12,7 @@ public:
 
     // Slider virtual functions.
     void paint(juce::Graphics& g) override;
+    void mouseEnter(const juce::MouseEvent& e) override;
 
     // Listener pure virtual functions.
     void parameterValueChanged(int parameter_index, float new_value) override;

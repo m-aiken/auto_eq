@@ -301,7 +301,7 @@ PluginProcessor::processBlock(juce::AudioBuffer< float >& buffer, juce::MidiBuff
     filter_chain_left_.process(process_context_left);
     filter_chain_right_.process(process_context_right);
 
-    if (booleanParameterEnabled(GuiParams::SHOW_FFT)) {
+    if (!booleanParameterEnabled(GuiParams::POWER_SAVING)) {
         // FFT buffers (POST EQ).
         for (int i = 0; i < buffer.getNumSamples(); ++i) {
             fft_buffers_.at(Global::FFT::LEFT_POST_EQ).pushNextSample(buffer.getSample(Global::Channels::INPUT_LEFT, i));
@@ -584,7 +584,7 @@ PluginProcessor::getParameterLayout()
 
     juce::String power_param_id        = GuiParams::getName(GuiParams::POWER);
     juce::String analysis_param_id     = GuiParams::getName(GuiParams::ANALYSE_INPUT);
-    juce::String fft_param_id          = GuiParams::getName(GuiParams::SHOW_FFT);
+    juce::String power_saving_param_id = GuiParams::getName(GuiParams::POWER_SAVING);
     juce::String eq_intensity_param_id = GuiParams::getName(GuiParams::EQ_INTENSITY);
     juce::String master_gain_param_id  = GuiParams::getName(GuiParams::MASTER_GAIN);
     juce::String unity_gain_param_id   = GuiParams::getName(GuiParams::UNITY_GAIN_ENABLED);
@@ -600,9 +600,9 @@ PluginProcessor::getParameterLayout()
                                                         analysis_param_id,
                                                         GuiParams::INITIAL_ANALYSIS_STATE));
 
-    pl.add(std::make_unique< juce::AudioParameterBool >(juce::ParameterID(fft_param_id, 1),
-                                                        fft_param_id,
-                                                        GuiParams::INITIAL_FFT_STATE));
+    pl.add(std::make_unique< juce::AudioParameterBool >(juce::ParameterID(power_saving_param_id, 1),
+                                                        power_saving_param_id,
+                                                        GuiParams::INITIAL_POWER_SAVING_STATE));
 
     pl.add(std::make_unique< juce::AudioParameterInt >(juce::ParameterID(eq_intensity_param_id, 1),
                                                        eq_intensity_param_id,

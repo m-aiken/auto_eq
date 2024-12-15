@@ -22,12 +22,13 @@ const Theme::DLP Theme::METER_VALUE             = DarkLightPair(TEAL.withAlpha(0
 const Theme::DLP Theme::ROTARY_FILL             = DarkLightPair(TEAL.withAlpha(0.1f), RED_ORANGE.withAlpha(0.1f));
 const Theme::DLP Theme::ROTARY_ARC              = DarkLightPair(TEAL, RED_ORANGE);
 const Theme::DLP Theme::CHECKBOX                = DarkLightPair(PARCHMENT, DARK_GREY);
-const Theme::DLP Theme::RECORD_BUTTON_ON        = DarkLightPair(RED_ORANGE, RED_ORANGE);
-const Theme::DLP Theme::RECORD_BUTTON_OFF       = DarkLightPair(PARCHMENT, DARK_GREY);
+const Theme::DLP Theme::RECORD_BUTTON           = DarkLightPair(RED_ORANGE, RED_ORANGE);
+const Theme::DLP Theme::STOP_BUTTON             = DarkLightPair(RED_ORANGE, RED_ORANGE);
 const Theme::DLP Theme::POWER_BUTTON_ON         = DarkLightPair(TEAL, TEAL);
 const Theme::DLP Theme::POWER_BUTTON_OFF        = Theme::DISABLED_WIDGET;
 const Theme::DLP Theme::TEXT_BTN_BG             = DarkLightPair(PARCHMENT.withAlpha(0.02f), DARK_GREY.withAlpha(0.05f));
 const Theme::DLP Theme::TEXT_BTN_BG_FOCUS       = DarkLightPair(PARCHMENT.withAlpha(0.05f), DARK_GREY.withAlpha(0.1f));
+const Theme::DLP Theme::TEXT_BTN_TOGGLE_ON_BORDER = DarkLightPair(RED_ORANGE, RED_ORANGE);
 
 bool Theme::app_is_in_dark_mode = true;
 

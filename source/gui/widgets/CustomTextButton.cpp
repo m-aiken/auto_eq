@@ -4,7 +4,7 @@
 **
 */
 CustomTextButton::CustomTextButton(const juce::String& label_text)
-    : juce::TextButton("profile_" + label_text + "_button")
+    : juce::TextButton(label_text + "_button")
 {
     setButtonText(label_text);
 
@@ -20,7 +20,7 @@ CustomTextButton::paintButton(juce::Graphics& g, bool should_draw_button_as_high
     juce::ignoreUnused(should_draw_button_as_highlighted, should_draw_button_as_down);
 
     g.fillAll(Theme::getColour(background_colour_));
-    g.setColour(Theme::getColour(Theme::TEXT));
+    g.setColour(Theme::getColour(isEnabled() ? Theme::TEXT : Theme::DISABLED_WIDGET));
     g.setFont(Theme::getFont());
     g.drawFittedText(getButtonText(), getLocalBounds(), juce::Justification::centred, 1);
 }
@@ -33,11 +33,13 @@ CustomTextButton::mouseEnter(const juce::MouseEvent& e)
 {
     juce::ignoreUnused(e);
 
-    setMouseCursor(juce::MouseCursor::PointingHandCursor);
+    setMouseCursor(isEnabled() ? juce::MouseCursor::PointingHandCursor : juce::MouseCursor::NormalCursor);
 
-    background_colour_ = Theme::TEXT_BTN_BG_FOCUS;
+    if (isEnabled()) {
+        background_colour_ = Theme::TEXT_BTN_BG_FOCUS;
 
-    repaint();
+        repaint();
+    }
 }
 
 /*---------------------------------------------------------------------------
@@ -46,6 +48,10 @@ CustomTextButton::mouseEnter(const juce::MouseEvent& e)
 void
 CustomTextButton::mouseExit(const juce::MouseEvent& e)
 {
+    if (!isEnabled()) {
+        return;
+    }
+
     juce::ignoreUnused(e);
 
     background_colour_ = Theme::TEXT_BTN_BG;

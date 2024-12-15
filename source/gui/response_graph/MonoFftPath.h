@@ -13,7 +13,7 @@ class MonoFftPath
 public:
     MonoFftPath(MonoFftBuffer&              fft_buffer,
                 Theme::DarkLightPair        path_colour,
-                juce::RangedAudioParameter* fft_enablement_param);
+                juce::RangedAudioParameter* power_saving_param);
     ~MonoFftPath() override;
 
     void paint(juce::Graphics& g) override;
@@ -27,7 +27,7 @@ private:
     juce::Path           path_;
     Theme::DarkLightPair path_colour_;
 
-    juce::RangedAudioParameter* fft_enablement_param_;
+    juce::RangedAudioParameter* power_saving_param_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MonoFftPath)
 };

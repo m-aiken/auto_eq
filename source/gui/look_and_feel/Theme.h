@@ -29,12 +29,13 @@ public:
     static const DarkLightPair ROTARY_FILL;
     static const DarkLightPair ROTARY_ARC;
     static const DarkLightPair CHECKBOX;
-    static const DarkLightPair RECORD_BUTTON_ON;
-    static const DarkLightPair RECORD_BUTTON_OFF;
+    static const DarkLightPair RECORD_BUTTON;
+    static const DarkLightPair STOP_BUTTON;
     static const DarkLightPair POWER_BUTTON_ON;
     static const DarkLightPair POWER_BUTTON_OFF;
     static const DarkLightPair TEXT_BTN_BG;
     static const DarkLightPair TEXT_BTN_BG_FOCUS;
+    static const DarkLightPair TEXT_BTN_TOGGLE_ON_BORDER;
 
     static bool app_is_in_dark_mode;
 

@@ -31,6 +31,10 @@ MonoWaveform::paint(juce::Graphics& g)
     // Then just call the existing paint method.
     // We don't want to have to redefine the entire painting logic for the waveform.
     juce::AudioVisualiserComponent::paint(g);
+
+    // Draw an invisible border (same as the background colour) to hide the artefacts that can occur at the edges.
+    g.setColour(Theme::getColour(Theme::MAIN_BG));
+    g.drawRect(getLocalBounds(), 2);
 }
 
 /*---------------------------------------------------------------------------

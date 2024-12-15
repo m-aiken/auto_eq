@@ -36,13 +36,13 @@ private:
     FilterResponseGraph filter_res_graph_;
     EqIntensity         eq_intensity_;
     MasterGain          master_gain_;
-    LufsMeterWidget     lufs_meters_;
+    LufsMetersWidget    lufs_meters_;
 
     MonoWaveform& mono_waveform_ref_;
 
     CustomLookAndFeel lnf_;
 
-    bool cached_fft_draw_status_;
+    bool cached_power_saving_state_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PluginEditor)
 };

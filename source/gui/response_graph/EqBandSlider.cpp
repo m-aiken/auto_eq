@@ -17,7 +17,6 @@ EqBandSlider::EqBandSlider(juce::AudioProcessorValueTreeState& apvts, const juce
     }
 
     setRange(Global::MAX_DB_CUT, Global::MAX_DB_BOOST);
-    setMouseCursor(juce::MouseCursor::DraggingHandCursor);
 }
 
 /*---------------------------------------------------------------------------
@@ -65,6 +64,17 @@ EqBandSlider::paint(juce::Graphics& g)
                                       bounds_y,
                                       getSliderStyle(),
                                       *this);
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
+void
+EqBandSlider::mouseEnter(const juce::MouseEvent& e)
+{
+    juce::ignoreUnused(e);
+
+    setMouseCursor(isEnabled() ? juce::MouseCursor::DraggingHandCursor : juce::MouseCursor::NormalCursor);
 }
 
 /*---------------------------------------------------------------------------

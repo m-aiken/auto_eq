@@ -56,7 +56,7 @@ set(PROJECT_SOURCES
         source/gui/meters/MeterCanvas.cpp
         source/gui/meters/MeterDbScale.cpp
         source/gui/meters/MonoMeter.cpp
-        source/gui/meters/ResetButton.cpp
+        source/gui/mode_selector/ModeSelector.cpp
         source/gui/profiling/MonoWaveform.cpp
         source/gui/response_graph/DecibelMarkers.cpp
         source/gui/response_graph/EqBandSlider.cpp
@@ -68,19 +68,15 @@ set(PROJECT_SOURCES
         source/gui/response_graph/MonoFftPath.cpp
         source/gui/response_graph/MonoFftPathProducer.cpp
         source/gui/toolbar/ButtonToolbar.cpp
-        source/gui/widgets/AnalysisStateButton.cpp
-        source/gui/widgets/ButtonWithLabel.cpp
+        source/gui/toolbar/PluginEnablementButton.cpp
+        source/gui/toolbar/ThemeButton.cpp
+        source/gui/transport/TransportButton.cpp
+        source/gui/transport/TransportGroup.cpp
         source/gui/widgets/CustomTextButton.cpp
+        source/gui/widgets/CustomTextToggleButton.cpp
         source/gui/widgets/DisableableLabel.cpp
-        source/gui/widgets/PluginEnablementButton.cpp
-        source/gui/widgets/RecordButton.cpp
         source/gui/widgets/RotaryControl.cpp
-        source/gui/widgets/SpectrumVisibilityButton.cpp
-        source/gui/widgets/spinbox/SpinBox.cpp
-        source/gui/widgets/spinbox/SpinBoxButton.cpp
-        source/gui/widgets/spinbox/SpinBoxTextBox.cpp
-        source/gui/widgets/SquareToggleButton.cpp
-        source/gui/widgets/ThemeButton.cpp
+        source/gui/widgets/ToggleSwitch.cpp
 
         source/third_party/klangfreund_lufs_meter/Ebu128LoudnessMeter.cpp
         source/third_party/klangfreund_lufs_meter/filters/SecondOrderIIRFilter.cpp
@@ -106,7 +102,7 @@ set(PROJECT_HEADERS
         source/gui/meters/MeterCanvas.h
         source/gui/meters/MeterDbScale.h
         source/gui/meters/MonoMeter.h
-        source/gui/meters/ResetButton.h
+        source/gui/mode_selector/ModeSelector.h
         source/gui/profiling/MonoWaveform.h
         source/gui/response_graph/DecibelMarkers.h
         source/gui/response_graph/EqBandSlider.h
@@ -118,19 +114,15 @@ set(PROJECT_HEADERS
         source/gui/response_graph/MonoFftPath.h
         source/gui/response_graph/MonoFftPathProducer.h
         source/gui/toolbar/ButtonToolbar.h
-        source/gui/widgets/AnalysisStateButton.h
-        source/gui/widgets/ButtonWithLabel.h
+        source/gui/toolbar/PluginEnablementButton.h
+        source/gui/toolbar/ThemeButton.h
+        source/gui/transport/TransportButton.h
+        source/gui/transport/TransportGroup.h
         source/gui/widgets/CustomTextButton.h
+        source/gui/widgets/CustomTextToggleButton.h
         source/gui/widgets/DisableableLabel.h
-        source/gui/widgets/PluginEnablementButton.h
-        source/gui/widgets/RecordButton.h
         source/gui/widgets/RotaryControl.h
-        source/gui/widgets/SpectrumVisibilityButton.h
-        source/gui/widgets/spinbox/SpinBox.h
-        source/gui/widgets/spinbox/SpinBoxButton.h
-        source/gui/widgets/spinbox/SpinBoxTextBox.h
-        source/gui/widgets/SquareToggleButton.h
-        source/gui/widgets/ThemeButton.h
+        source/gui/widgets/ToggleSwitch.h
         source/utility/GlobalConstants.h
 
         source/third_party/klangfreund_lufs_meter/Ebu128LoudnessMeter.h
@@ -152,11 +144,12 @@ target_include_directories(${PROJECT_NAME}
         ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/look_and_feel
         ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/master_gain
         ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/meters
+        ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/mode_selector
         ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/profiling
         ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/response_graph
         ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/toolbar
+        ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/transport
         ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/widgets
-        ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/widgets/spinbox
         ${CMAKE_CURRENT_SOURCE_DIR}/source/utility
 
         ${CMAKE_CURRENT_SOURCE_DIR}/source/third_party/klangfreund_lufs_meter

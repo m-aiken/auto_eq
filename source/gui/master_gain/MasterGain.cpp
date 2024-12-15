@@ -8,14 +8,14 @@
 MasterGain::MasterGain(PluginProcessor& p)
     : widget_label_("master_gain_widget_label", "Master Gain")
     , rotary_control_(p.getApvts(), GuiParams::MASTER_GAIN, true, "dB", 1)
-    , unity_gain_button_(p.getApvts(), GuiParams::UNITY_GAIN_ENABLED, "Unity Gain")
+    , unity_gain_button_(p.getApvts(), GuiParams::UNITY_GAIN_ENABLED, "Unity Gain", GuiParams::INITIAL_UNITY_GAIN_STATE)
     , processor_ref_(p)
 {
     addAndMakeVisible(widget_label_);
     addAndMakeVisible(rotary_control_);
     addAndMakeVisible(unity_gain_button_);
 
-    unity_gain_button_.getButton().addListener(this);
+    unity_gain_button_.addListener(this);
 }
 
 /*---------------------------------------------------------------------------
@@ -23,7 +23,7 @@ MasterGain::MasterGain(PluginProcessor& p)
 */
 MasterGain::~MasterGain()
 {
-    unity_gain_button_.getButton().removeListener(this);
+    unity_gain_button_.removeListener(this);
 }
 
 /*---------------------------------------------------------------------------
@@ -78,8 +78,8 @@ MasterGain::resized()
 void
 MasterGain::buttonClicked(juce::Button* button)
 {
-    if (button != nullptr && button == &unity_gain_button_.getButton()) {
-        bool unity_gain_enabled = unity_gain_button_.getButton().getToggleState();
+    if (button != nullptr && button == &unity_gain_button_) {
+        bool unity_gain_enabled = unity_gain_button_.getToggleState();
 
         unity_gain_enabled ? processor_ref_.startUnityGainCalculation() : processor_ref_.stopUnityGainCalculation();
         rotary_control_.setEnabled(!unity_gain_enabled);

@@ -20,7 +20,7 @@ PluginEditor::PluginEditor(PluginProcessor& p)
     , master_gain_(p)
     , lufs_meters_(p)
     , mono_waveform_ref_(p.getMonoWaveform())
-    , cached_fft_draw_status_(GuiParams::INITIAL_FFT_STATE)
+    , cached_power_saving_state_(GuiParams::INITIAL_POWER_SAVING_STATE)
 {
     setLookAndFeel(&lnf_);
 
@@ -32,8 +32,10 @@ PluginEditor::PluginEditor(PluginProcessor& p)
     addAndMakeVisible(mono_waveform_ref_);
 
     toolbar_.getPluginEnablementButton().addListener(this);
+    toolbar_.getModeSelectorSwitch().addListener(this);
     toolbar_.getAnalysisStateButton().addListener(this);
     toolbar_.getThemeButton().addListener(this);
+    lufs_meters_.getResetButton().addListener(this);
 
     setResizable(true, true);
     setResizeLimits(MAIN_WINDOW_MIN_WIDTH, MAIN_WINDOW_MIN_HEIGHT, MAIN_WINDOW_MAX_WIDTH, MAIN_WINDOW_MAX_HEIGHT);
@@ -46,8 +48,10 @@ PluginEditor::PluginEditor(PluginProcessor& p)
 PluginEditor::~PluginEditor()
 {
     toolbar_.getPluginEnablementButton().removeListener(this);
+    toolbar_.getModeSelectorSwitch().removeListener(this);
     toolbar_.getAnalysisStateButton().removeListener(this);
     toolbar_.getThemeButton().removeListener(this);
+    lufs_meters_.getResetButton().removeListener(this);
 
     setLookAndFeel(nullptr);
 }
@@ -67,29 +71,32 @@ PluginEditor::paint(juce::Graphics& g)
 void
 PluginEditor::resized()
 {
-    juce::Rectangle< int > bounds                  = getLocalBounds();
-    int                    bounds_height           = bounds.getHeight();
-    int                    bounds_width            = bounds.getWidth();
-    int                    top_controls_height     = static_cast< int >(std::floor(bounds_height * 0.05));
-    int                    analysis_button_width   = static_cast< int >(std::floor(bounds_width * 0.2));
-    int                    fft_button_width        = static_cast< int >(std::floor(bounds_width * 0.2));
-    int                    profile_btn_group_width = static_cast< int >(std::floor(bounds_width * 0.5));
-    int                    theme_button_width      = static_cast< int >(std::floor(bounds_width * 0.1));
-    int                    graph_height            = static_cast< int >(std::floor(bounds_height * 0.65));
-    int                    bottom_section_height   = static_cast< int >(std::floor(bounds_height * 0.25));
-    int                    eq_intensity_width      = static_cast< int >(std::floor(bounds_width * 0.15));
-    int                    master_gain_width       = static_cast< int >(std::floor(bounds_width * 0.15));
-    int                    meters_width            = static_cast< int >(std::floor(bounds_width * 0.7));
-    int                    bottom_section_y        = bounds.getBottom() - bottom_section_height;
+    juce::Rectangle< int > bounds                = getLocalBounds();
+    int                    bounds_height         = bounds.getHeight();
+    int                    bounds_width          = bounds.getWidth();
+    int                    top_controls_height   = static_cast< int >(std::floor(bounds_height * 0.05));
+    int                    graph_height          = static_cast< int >(std::floor(bounds_height * 0.65));
+    int                    bottom_section_height = static_cast< int >(std::floor(bounds_height * 0.25));
+    int                    eq_intensity_width    = static_cast< int >(std::floor(bounds_width * 0.15));
+    int                    master_gain_width     = static_cast< int >(std::floor(bounds_width * 0.15));
+    int                    meters_width          = static_cast< int >(std::floor(bounds_width * 0.7));
+    int                    bottom_section_y      = bounds.getBottom() - bottom_section_height;
 
-    // Top buttons section.
+    // Top button toolbar.
     toolbar_.setBounds(0, 0, bounds_width, top_controls_height);
-    // analyse_input_button_.setBounds(analysis_button_width, 0, analysis_button_width, top_controls_height);
-    // show_fft_button_.setBounds(analyse_input_button_.getRight(), 0, fft_button_width, top_controls_height);
 
     // EQ graph and input waveform.
-    filter_res_graph_.setBounds(0, top_controls_height, bounds_width, graph_height);
-    // mono_waveform_ref_.setBounds(0, top_controls_height, bounds_width, graph_height);
+    juce::Rectangle< int > graph_bounds(0, top_controls_height, bounds_width, graph_height);
+    int                    waveform_width  = static_cast< int >(std::floor(graph_bounds.getWidth() * 0.8));
+    int                    waveform_height = static_cast< int >(std::floor(graph_bounds.getHeight() * 0.8));
+
+    filter_res_graph_.setBounds(graph_bounds);
+    mono_waveform_ref_.setBounds(graph_bounds.withSizeKeepingCentre(waveform_width, waveform_height));
+
+    const bool profiler_mode = toolbar_.getModeSelectorSwitch().getToggleState();
+
+    mono_waveform_ref_.setVisible(profiler_mode);
+    filter_res_graph_.setVisible(!profiler_mode);
 
     // Bottom section.
     eq_intensity_.setBounds(0, bottom_section_y, eq_intensity_width, bottom_section_height);
@@ -107,41 +114,58 @@ PluginEditor::buttonClicked(juce::Button* button)
         return;
     }
 
-    if (button == &toolbar_.getPluginEnablementButton()) {
-        bool plugin_enabled = toolbar_.getPluginEnablementButton().getToggleState();
+    const PluginEnablementButton& plugin_enablement_button = toolbar_.getPluginEnablementButton();
+    const ToggleSwitch&           mode_selector_switch     = toolbar_.getModeSelectorSwitch();
+    CustomTextToggleButton&       power_saving_button      = toolbar_.getPowerSavingButton();
+    TransportButton&              analysis_state_button    = toolbar_.getAnalysisStateButton();
+    const ThemeButton&            theme_button             = toolbar_.getThemeButton();
+    const CustomTextButton&       lufs_meters_reset_button = lufs_meters_.getResetButton();
 
-        toolbar_.getAnalysisStateButton().setEnabled(plugin_enabled);
-        toolbar_.getSpectrumVisibilityButton().setEnabled(plugin_enabled);
+    if (button == &plugin_enablement_button) {
+        const bool plugin_enabled = plugin_enablement_button.getToggleState();
+
+        toolbar_.setGlobalEnablement(plugin_enabled && !mode_selector_switch.getToggleState());
         filter_res_graph_.setEnabled(plugin_enabled);
         eq_intensity_.setEnabled(plugin_enabled);
         master_gain_.setEnabled(plugin_enabled);
         lufs_meters_.setEnabled(plugin_enabled);
 
         // If the user is disabling the plugin and the analysis is active, stop the analysis.
-        if (!plugin_enabled && toolbar_.getAnalysisStateButton().getToggleState()) {
-            toolbar_.getAnalysisStateButton().setToggleState(false, juce::sendNotification);
+        if (!plugin_enabled && analysis_state_button.getToggleState()) {
+            analysis_state_button.setToggleState(false, juce::sendNotification);
         }
 
         // If the user is disabling the plugin and the FFT is being drawn, stop drawing it.
         // Preserve the state of the button though so that it's restored when the user re-enables the plugin.
         if (!plugin_enabled) {
-            cached_fft_draw_status_ = toolbar_.getSpectrumVisibilityButton().getToggleState();
+            cached_power_saving_state_ = power_saving_button.getToggleState();
 
-            toolbar_.getSpectrumVisibilityButton().setToggleState(false, juce::sendNotification);
+            power_saving_button.setToggleState(true, juce::sendNotification);
         }
         else {
             // The plugin is being re-enabled. Restore the FTT button state.
-            toolbar_.getSpectrumVisibilityButton().setToggleState(cached_fft_draw_status_, juce::sendNotification);
+            power_saving_button.setToggleState(cached_power_saving_state_, juce::sendNotification);
         }
 
         repaint();
     }
-    else if (button == &toolbar_.getAnalysisStateButton()) {
-        toolbar_.getAnalysisStateButton().getToggleState() ? processor_ref_.startInputAnalysis() :
-                                                             processor_ref_.stopInputAnalysis();
+    else if (button == &mode_selector_switch) {
+        const bool profiler_mode = mode_selector_switch.getToggleState();
+
+        mono_waveform_ref_.setVisible(profiler_mode);
+        filter_res_graph_.setVisible(!profiler_mode);
+
+        power_saving_button.setEnabled(!profiler_mode);
+        analysis_state_button.setEnabled(!profiler_mode);
     }
-    else if (button == &toolbar_.getThemeButton()) {
+    else if (button == &analysis_state_button) {
+        analysis_state_button.getToggleState() ? processor_ref_.startInputAnalysis() : processor_ref_.stopInputAnalysis();
+    }
+    else if (button == &theme_button) {
         repaint();
+    }
+    else if (button == &lufs_meters_reset_button) {
+        processor_ref_.resetLufsModule();
     }
 }
 

@@ -5,24 +5,24 @@
 **
 */
 RotaryControl::RotaryControl(juce::AudioProcessorValueTreeState& apvts,
-                             GuiParams::PARAM_ID                 parameter_id,
-                             bool                                draw_text_value,
+                             const GuiParams::PARAM_ID           parameter_id,
+                             const bool                          draw_text_value,
                              juce::String                        suffix,
-                             int                                 num_decimal_places)
+                             const int                           num_decimal_places)
     : juce::Slider(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag, juce::Slider::TextEntryBoxPosition::NoTextBox)
     , param_(apvts.getParameter(GuiParams::getName(parameter_id)))
     , draw_text_value_(draw_text_value)
-    , suffix_(suffix)
+    , suffix_(std::move(suffix))
     , num_decimal_places_(num_decimal_places)
 {
-    slider_attachment_.reset(
-        new juce::AudioProcessorValueTreeState::SliderAttachment(apvts, GuiParams::getName(parameter_id), *this));
+    slider_attachment_ = std::make_unique< juce::AudioProcessorValueTreeState::SliderAttachment >(apvts,
+                                                                                                  GuiParams::getName(
+                                                                                                      parameter_id),
+                                                                                                  *this);
 
     if (param_ != nullptr) {
         param_->addListener(this);
     }
-
-    setMouseCursor(juce::MouseCursor::UpDownLeftRightResizeCursor);
 }
 
 /*---------------------------------------------------------------------------
@@ -68,6 +68,17 @@ RotaryControl::paint(juce::Graphics& g)
     g.setColour(Theme::getColour(isEnabled() ? Theme::TEXT : Theme::DISABLED_WIDGET));
     g.setFont(Theme::getFont());
     g.drawFittedText(value_str + " " + suffix_, bounds, juce::Justification::centred, 1);
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
+void
+RotaryControl::mouseEnter(const juce::MouseEvent& e)
+{
+    juce::ignoreUnused(e);
+
+    setMouseCursor(isEnabled() ? juce::MouseCursor::UpDownLeftRightResizeCursor : juce::MouseCursor::NormalCursor);
 }
 
 /*---------------------------------------------------------------------------
