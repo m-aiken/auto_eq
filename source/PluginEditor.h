@@ -1,17 +1,13 @@
 #pragma once
 
+#include "ButtonToolbar.h"
 #include "CustomLookAndFeel.h"
 #include "EqIntensity.h"
 #include "FilterResponseGraph.h"
 #include "LufsMetersWidget.h"
 #include "MasterGain.h"
-#include "MenuButton.h"
 #include "MonoWaveform.h"
 #include "PluginProcessor.h"
-#include "PowerButton.h"
-#include "ProfileButtonGroup.h"
-#include "RecordButton.h"
-#include "ThemeButton.h"
 
 class PluginEditor final
     : public juce::AudioProcessorEditor
@@ -36,11 +32,7 @@ private:
     // access the processor object that created it.
     PluginProcessor& processor_ref_;
 
-    PowerButton         power_button_;
-    RecordButton        analyse_input_button_;
-    MenuButton          show_fft_button_;
-    ProfileButtonGroup  profile_buttons_;
-    ThemeButton         theme_button_;
+    ButtonToolbar       toolbar_;
     FilterResponseGraph filter_res_graph_;
     EqIntensity         eq_intensity_;
     MasterGain          master_gain_;

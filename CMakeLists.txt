@@ -58,7 +58,6 @@ set(PROJECT_SOURCES
         source/gui/meters/MonoMeter.cpp
         source/gui/meters/ResetButton.cpp
         source/gui/profiling/MonoWaveform.cpp
-        source/gui/profiling/ProfileButtonGroup.cpp
         source/gui/response_graph/DecibelMarkers.cpp
         source/gui/response_graph/EqBandSlider.cpp
         source/gui/response_graph/FilterMagnitudesCalculator.cpp
@@ -68,13 +67,15 @@ set(PROJECT_SOURCES
         source/gui/response_graph/FrequencyMarkers.cpp
         source/gui/response_graph/MonoFftPath.cpp
         source/gui/response_graph/MonoFftPathProducer.cpp
+        source/gui/toolbar/ButtonToolbar.cpp
+        source/gui/widgets/AnalysisStateButton.cpp
         source/gui/widgets/ButtonWithLabel.cpp
         source/gui/widgets/CustomTextButton.cpp
         source/gui/widgets/DisableableLabel.cpp
-        source/gui/widgets/MenuButton.cpp
-        source/gui/widgets/PowerButton.cpp
+        source/gui/widgets/PluginEnablementButton.cpp
         source/gui/widgets/RecordButton.cpp
         source/gui/widgets/RotaryControl.cpp
+        source/gui/widgets/SpectrumVisibilityButton.cpp
         source/gui/widgets/spinbox/SpinBox.cpp
         source/gui/widgets/spinbox/SpinBoxButton.cpp
         source/gui/widgets/spinbox/SpinBoxTextBox.cpp
@@ -107,7 +108,6 @@ set(PROJECT_HEADERS
         source/gui/meters/MonoMeter.h
         source/gui/meters/ResetButton.h
         source/gui/profiling/MonoWaveform.h
-        source/gui/profiling/ProfileButtonGroup.h
         source/gui/response_graph/DecibelMarkers.h
         source/gui/response_graph/EqBandSlider.h
         source/gui/response_graph/FilterMagnitudesCalculator.h
@@ -117,13 +117,15 @@ set(PROJECT_HEADERS
         source/gui/response_graph/FrequencyMarkers.h
         source/gui/response_graph/MonoFftPath.h
         source/gui/response_graph/MonoFftPathProducer.h
+        source/gui/toolbar/ButtonToolbar.h
+        source/gui/widgets/AnalysisStateButton.h
         source/gui/widgets/ButtonWithLabel.h
         source/gui/widgets/CustomTextButton.h
         source/gui/widgets/DisableableLabel.h
-        source/gui/widgets/MenuButton.h
-        source/gui/widgets/PowerButton.h
+        source/gui/widgets/PluginEnablementButton.h
         source/gui/widgets/RecordButton.h
         source/gui/widgets/RotaryControl.h
+        source/gui/widgets/SpectrumVisibilityButton.h
         source/gui/widgets/spinbox/SpinBox.h
         source/gui/widgets/spinbox/SpinBoxButton.h
         source/gui/widgets/spinbox/SpinBoxTextBox.h
@@ -152,6 +154,7 @@ target_include_directories(${PROJECT_NAME}
         ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/meters
         ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/profiling
         ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/response_graph
+        ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/toolbar
         ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/widgets
         ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/widgets/spinbox
         ${CMAKE_CURRENT_SOURCE_DIR}/source/utility

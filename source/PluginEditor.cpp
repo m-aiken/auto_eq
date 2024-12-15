@@ -14,11 +14,7 @@
 PluginEditor::PluginEditor(PluginProcessor& p)
     : AudioProcessorEditor(&p)
     , processor_ref_(p)
-    , power_button_(p.getApvts(), GuiParams::POWER)
-    , analyse_input_button_("Analyse Input", p.getApvts(), GuiParams::ANALYSE_INPUT)
-    , show_fft_button_("Show Spectrum", p.getApvts(), GuiParams::SHOW_FFT)
-    , profile_buttons_()
-    , theme_button_()
+    , toolbar_(p.getApvts())
     , filter_res_graph_(p)
     , eq_intensity_(p.getApvts())
     , master_gain_(p)
@@ -28,20 +24,16 @@ PluginEditor::PluginEditor(PluginProcessor& p)
 {
     setLookAndFeel(&lnf_);
 
-    addAndMakeVisible(power_button_);
-    addAndMakeVisible(analyse_input_button_);
-    addAndMakeVisible(show_fft_button_);
-    addAndMakeVisible(profile_buttons_);
-    addAndMakeVisible(theme_button_);
+    addAndMakeVisible(toolbar_);
     addAndMakeVisible(filter_res_graph_);
     addAndMakeVisible(eq_intensity_);
     addAndMakeVisible(master_gain_);
     addAndMakeVisible(lufs_meters_);
     addAndMakeVisible(mono_waveform_ref_);
 
-    power_button_.addListener(this);
-    analyse_input_button_.addListener(this);
-    theme_button_.addListener(this);
+    toolbar_.getPluginEnablementButton().addListener(this);
+    toolbar_.getAnalysisStateButton().addListener(this);
+    toolbar_.getThemeButton().addListener(this);
 
     setResizable(true, true);
     setResizeLimits(MAIN_WINDOW_MIN_WIDTH, MAIN_WINDOW_MIN_HEIGHT, MAIN_WINDOW_MAX_WIDTH, MAIN_WINDOW_MAX_HEIGHT);
@@ -53,9 +45,9 @@ PluginEditor::PluginEditor(PluginProcessor& p)
 */
 PluginEditor::~PluginEditor()
 {
-    power_button_.removeListener(this);
-    analyse_input_button_.removeListener(this);
-    theme_button_.removeListener(this);
+    toolbar_.getPluginEnablementButton().removeListener(this);
+    toolbar_.getAnalysisStateButton().removeListener(this);
+    toolbar_.getThemeButton().removeListener(this);
 
     setLookAndFeel(nullptr);
 }
@@ -91,18 +83,13 @@ PluginEditor::resized()
     int                    bottom_section_y        = bounds.getBottom() - bottom_section_height;
 
     // Top buttons section.
-    power_button_.setBounds(0, 0, top_controls_height, top_controls_height);
+    toolbar_.setBounds(0, 0, bounds_width, top_controls_height);
     // analyse_input_button_.setBounds(analysis_button_width, 0, analysis_button_width, top_controls_height);
     // show_fft_button_.setBounds(analyse_input_button_.getRight(), 0, fft_button_width, top_controls_height);
-    profile_buttons_.setBounds(bounds.getCentreX() - (profile_btn_group_width * 0.5),
-                               0,
-                               profile_btn_group_width,
-                               top_controls_height);
-    theme_button_.setBounds(bounds.getRight() - theme_button_width, 0, theme_button_width, top_controls_height);
 
     // EQ graph and input waveform.
-    // filter_res_graph_.setBounds(0, top_controls_height, bounds_width, graph_height);
-    mono_waveform_ref_.setBounds(0, top_controls_height, bounds_width, graph_height);
+    filter_res_graph_.setBounds(0, top_controls_height, bounds_width, graph_height);
+    // mono_waveform_ref_.setBounds(0, top_controls_height, bounds_width, graph_height);
 
     // Bottom section.
     eq_intensity_.setBounds(0, bottom_section_y, eq_intensity_width, bottom_section_height);
@@ -120,39 +107,40 @@ PluginEditor::buttonClicked(juce::Button* button)
         return;
     }
 
-    if (button == &power_button_) {
-        bool plugin_enabled = power_button_.getToggleState();
+    if (button == &toolbar_.getPluginEnablementButton()) {
+        bool plugin_enabled = toolbar_.getPluginEnablementButton().getToggleState();
 
-        analyse_input_button_.setEnabled(plugin_enabled);
-        show_fft_button_.setEnabled(plugin_enabled);
+        toolbar_.getAnalysisStateButton().setEnabled(plugin_enabled);
+        toolbar_.getSpectrumVisibilityButton().setEnabled(plugin_enabled);
         filter_res_graph_.setEnabled(plugin_enabled);
         eq_intensity_.setEnabled(plugin_enabled);
         master_gain_.setEnabled(plugin_enabled);
         lufs_meters_.setEnabled(plugin_enabled);
 
         // If the user is disabling the plugin and the analysis is active, stop the analysis.
-        if (!plugin_enabled && analyse_input_button_.getToggleState()) {
-            analyse_input_button_.setToggleState(false, juce::sendNotification);
+        if (!plugin_enabled && toolbar_.getAnalysisStateButton().getToggleState()) {
+            toolbar_.getAnalysisStateButton().setToggleState(false, juce::sendNotification);
         }
 
         // If the user is disabling the plugin and the FFT is being drawn, stop drawing it.
         // Preserve the state of the button though so that it's restored when the user re-enables the plugin.
         if (!plugin_enabled) {
-            cached_fft_draw_status_ = show_fft_button_.getToggleState();
+            cached_fft_draw_status_ = toolbar_.getSpectrumVisibilityButton().getToggleState();
 
-            show_fft_button_.setToggleState(false, juce::sendNotification);
+            toolbar_.getSpectrumVisibilityButton().setToggleState(false, juce::sendNotification);
         }
         else {
             // The plugin is being re-enabled. Restore the FTT button state.
-            show_fft_button_.setToggleState(cached_fft_draw_status_, juce::sendNotification);
+            toolbar_.getSpectrumVisibilityButton().setToggleState(cached_fft_draw_status_, juce::sendNotification);
         }
 
         repaint();
     }
-    else if (button == &analyse_input_button_) {
-        analyse_input_button_.getToggleState() ? processor_ref_.startInputAnalysis() : processor_ref_.stopInputAnalysis();
+    else if (button == &toolbar_.getAnalysisStateButton()) {
+        toolbar_.getAnalysisStateButton().getToggleState() ? processor_ref_.startInputAnalysis() :
+                                                             processor_ref_.stopInputAnalysis();
     }
-    else if (button == &theme_button_) {
+    else if (button == &toolbar_.getThemeButton()) {
         repaint();
     }
 }

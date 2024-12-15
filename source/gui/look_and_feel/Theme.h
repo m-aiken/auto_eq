@@ -33,8 +33,8 @@ public:
     static const DarkLightPair RECORD_BUTTON_OFF;
     static const DarkLightPair POWER_BUTTON_ON;
     static const DarkLightPair POWER_BUTTON_OFF;
-    static const DarkLightPair PROFILE_BUTTON_NO_FOCUS;
-    static const DarkLightPair PROFILE_BUTTON_FOCUS;
+    static const DarkLightPair TEXT_BTN_BG;
+    static const DarkLightPair TEXT_BTN_BG_FOCUS;
 
     static bool app_is_in_dark_mode;
 

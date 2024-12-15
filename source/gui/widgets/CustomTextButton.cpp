@@ -8,7 +8,7 @@ CustomTextButton::CustomTextButton(const juce::String& label_text)
 {
     setButtonText(label_text);
 
-    background_colour_ = Theme::PROFILE_BUTTON_NO_FOCUS;
+    background_colour_ = Theme::TEXT_BTN_BG;
 }
 
 /*---------------------------------------------------------------------------
@@ -35,7 +35,7 @@ CustomTextButton::mouseEnter(const juce::MouseEvent& e)
 
     setMouseCursor(juce::MouseCursor::PointingHandCursor);
 
-    background_colour_ = Theme::PROFILE_BUTTON_FOCUS;
+    background_colour_ = Theme::TEXT_BTN_BG_FOCUS;
 
     repaint();
 }
@@ -48,7 +48,7 @@ CustomTextButton::mouseExit(const juce::MouseEvent& e)
 {
     juce::ignoreUnused(e);
 
-    background_colour_ = Theme::PROFILE_BUTTON_NO_FOCUS;
+    background_colour_ = Theme::TEXT_BTN_BG;
 
     repaint();
 }
