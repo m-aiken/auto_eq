@@ -41,13 +41,9 @@ TransportButton::paintButton(juce::Graphics& g, bool should_draw_button_as_highl
 void
 TransportButton::mouseEnter(const juce::MouseEvent& e)
 {
-    if (!isEnabled()) {
-        return;
-    }
-
     juce::ignoreUnused(e);
 
-    setMouseCursor(juce::MouseCursor::PointingHandCursor);
+    setMouseCursor(isEnabled() ? juce::MouseCursor::PointingHandCursor : juce::MouseCursor::NormalCursor);
 }
 
 /*---------------------------------------------------------------------------

@@ -50,13 +50,9 @@ ToggleSwitch::paintButton(juce::Graphics& g, bool should_draw_button_as_highligh
 void
 ToggleSwitch::mouseEnter(const juce::MouseEvent& e)
 {
-    if (!isEnabled()) {
-        return;
-    }
-
     juce::ignoreUnused(e);
 
-    setMouseCursor(juce::MouseCursor::PointingHandCursor);
+    setMouseCursor(isEnabled() ? juce::MouseCursor::PointingHandCursor : juce::MouseCursor::NormalCursor);
 }
 
 /*---------------------------------------------------------------------------

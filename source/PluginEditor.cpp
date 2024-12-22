@@ -124,7 +124,7 @@ PluginEditor::buttonClicked(juce::Button* button)
     if (button == &plugin_enablement_button) {
         const bool plugin_enabled = plugin_enablement_button.getToggleState();
 
-        toolbar_.setGlobalEnablement(plugin_enabled && !mode_selector_switch.getToggleState());
+        toolbar_.setGlobalEnablement(plugin_enabled);
         filter_res_graph_.setEnabled(plugin_enabled);
         eq_intensity_.setEnabled(plugin_enabled);
         master_gain_.setEnabled(plugin_enabled);
@@ -156,7 +156,6 @@ PluginEditor::buttonClicked(juce::Button* button)
         filter_res_graph_.setVisible(!profiler_mode);
 
         power_saving_button.setEnabled(!profiler_mode);
-        analysis_state_button.setEnabled(!profiler_mode);
     }
     else if (button == &analysis_state_button) {
         analysis_state_button.getToggleState() ? processor_ref_.startInputAnalysis() : processor_ref_.stopInputAnalysis();

@@ -242,13 +242,16 @@ PluginProcessor::processBlock(juce::AudioBuffer< float >& buffer, juce::MidiBuff
     if (!booleanParameterEnabled(GuiParams::POWER)) {
         // The plugin is being bypassed.
         // The threads responsible for the FFT, input analysis and EQ will already have been stopped.
-        // We just need to clear out the meter values.
+        // Clear out the meter values.
         const int samples_to_skip = buffer.getNumSamples();
 
         for (auto& loudness_val : loudness_values_) {
             loudness_val.skip(samples_to_skip);
             loudness_val.setTargetValue(Global::METER_NEG_INF);  //! Ramp to the new value.
         }
+
+        // Clear the profiler input waveform.
+        mono_waveform_.clear();
 
         // Don't do any processing on the real buffer.
         return;

@@ -121,12 +121,16 @@ void
 ButtonToolbar::setGlobalEnablement(const bool enable)
 {
     mode_selector_.setEnabled(enable);
-    power_saving_button_.setEnabled(enable);
     transport_.setEnabled(enable);
     load_profile_button_.setEnabled(enable);
     save_profile_button_.setEnabled(enable);
     save_as_profile_button_.setEnabled(enable);
     theme_button_.setEnabled(enable);
+
+    // The power saving button only applies to the Analyser.
+    const bool in_analyser_mode = !getModeSelectorSwitch().getToggleState();
+
+    power_saving_button_.setEnabled(enable && in_analyser_mode);
 }
 
 /*---------------------------------------------------------------------------

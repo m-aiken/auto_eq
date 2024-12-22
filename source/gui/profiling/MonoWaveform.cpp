@@ -34,7 +34,7 @@ MonoWaveform::paint(juce::Graphics& g)
 
     // Draw an invisible border (same as the background colour) to hide the artefacts that can occur at the edges.
     g.setColour(Theme::getColour(Theme::MAIN_BG));
-    g.drawRect(getLocalBounds(), 2);
+    g.drawRect(getLocalBounds(), 6);
 }
 
 /*---------------------------------------------------------------------------
