@@ -4,13 +4,18 @@
 /*---------------------------------------------------------------------------
 **
 */
-ToggleSwitch::ToggleSwitch(/*juce::AudioProcessorValueTreeState& apvts, GuiParams::PARAM_ID param_id*/)
+ToggleSwitch::ToggleSwitch(juce::AudioProcessorValueTreeState& apvts, GuiParams::PARAM_ID param_id)
     : juce::ToggleButton()
 {
-#if 0
-    attachment_.reset(
-        new juce::AudioProcessorValueTreeState::ButtonAttachment(apvts, GuiParams::getName(param_id), *this));
-#endif
+    attachment_ = std::make_unique< juce::AudioProcessorValueTreeState::ButtonAttachment >(apvts,
+                                                                                           GuiParams::getName(param_id),
+                                                                                           *this);
+
+    juce::RangedAudioParameter* param = apvts.getParameter(GuiParams::getName(param_id));
+
+    if (param != nullptr) {
+        setToggleState(static_cast< bool >(param->getValue()), juce::dontSendNotification);
+    }
 }
 
 /*---------------------------------------------------------------------------

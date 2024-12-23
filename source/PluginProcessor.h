@@ -68,13 +68,11 @@ public:
 private:
     bool booleanParameterEnabled(GuiParams::PARAM_ID param_id) const;
 
-    void updateFilterCoefficients();
-
-    void updateLufsValues(const juce::AudioBuffer< float >& dummy_buffer);
-
-    void applyMasterGain(juce::AudioBuffer< float >& buffer);
-
+    void         updateFilterCoefficients();
+    void         updateLufsValues(const juce::AudioBuffer< float >& dummy_buffer);
+    void         applyMasterGain(juce::AudioBuffer< float >& buffer);
     static float getNormalisedValue(float full_range_value);
+    // bool pluginInMode()
 
     static juce::AudioProcessorValueTreeState::ParameterLayout getParameterLayout();
 

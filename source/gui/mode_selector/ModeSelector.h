@@ -8,7 +8,7 @@
 class ModeSelector : public juce::Component
 {
 public:
-    explicit ModeSelector(/*juce::AudioProcessorValueTreeState& apvts*/);
+    explicit ModeSelector(juce::AudioProcessorValueTreeState& apvts);
 
     void resized() override;
 

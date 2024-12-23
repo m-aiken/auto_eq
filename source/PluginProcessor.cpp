@@ -586,18 +586,37 @@ PluginProcessor::getParameterLayout()
     juce::AudioProcessorValueTreeState::ParameterLayout pl;
 
     juce::String power_param_id        = GuiParams::getName(GuiParams::POWER);
+    juce::String plugin_mode_param_id  = GuiParams::getName(GuiParams::PLUGIN_MODE);
     juce::String analysis_param_id     = GuiParams::getName(GuiParams::ANALYSE_INPUT);
     juce::String power_saving_param_id = GuiParams::getName(GuiParams::POWER_SAVING);
+    juce::String input_trim_param_id   = GuiParams::getName(GuiParams::INPUT_TRIM);
     juce::String eq_intensity_param_id = GuiParams::getName(GuiParams::EQ_INTENSITY);
     juce::String master_gain_param_id  = GuiParams::getName(GuiParams::MASTER_GAIN);
     juce::String unity_gain_param_id   = GuiParams::getName(GuiParams::UNITY_GAIN_ENABLED);
 
-    juce::NormalisableRange< float > master_gain_range(-24.f, 12.f, GuiParams::MASTER_GAIN_INTERVAL, 1.f);
     juce::NormalisableRange< float > band_range(Global::MAX_DB_CUT, Global::MAX_DB_BOOST, 0.01f, 1.f);
+
+    juce::NormalisableRange< float > input_trim_range(GuiParams::INPUT_TRIM_MIN,
+                                                      GuiParams::INPUT_TRIM_MAX,
+                                                      GuiParams::INPUT_TRIM_INTERVAL,
+                                                      1.f);
+
+    juce::NormalisableRange< float > master_gain_range(GuiParams::MASTER_GAIN_MIN,
+                                                       GuiParams::MASTER_GAIN_MAX,
+                                                       GuiParams::MASTER_GAIN_INTERVAL,
+                                                       1.f);
+
+    juce::StringArray plugin_mode_choices(Global::PluginMode::getName(Global::PluginMode::ANALYSER),
+                                          Global::PluginMode::getName(Global::PluginMode::PROFILER));
 
     pl.add(std::make_unique< juce::AudioParameterBool >(juce::ParameterID(power_param_id, 1),
                                                         power_param_id,
                                                         GuiParams::INITIAL_POWER_STATE));
+
+    pl.add(std::make_unique< juce::AudioParameterChoice >(juce::ParameterID(plugin_mode_param_id, 1),
+                                                          plugin_mode_param_id,
+                                                          plugin_mode_choices,
+                                                          Global::PluginMode::DEFAULT));
 
     pl.add(std::make_unique< juce::AudioParameterBool >(juce::ParameterID(analysis_param_id, 1),
                                                         analysis_param_id,
@@ -606,6 +625,11 @@ PluginProcessor::getParameterLayout()
     pl.add(std::make_unique< juce::AudioParameterBool >(juce::ParameterID(power_saving_param_id, 1),
                                                         power_saving_param_id,
                                                         GuiParams::INITIAL_POWER_SAVING_STATE));
+
+    pl.add(std::make_unique< juce::AudioParameterFloat >(juce::ParameterID(input_trim_param_id, 1),
+                                                         input_trim_param_id,
+                                                         input_trim_range,
+                                                         GuiParams::INITIAL_INPUT_TRIM));
 
     pl.add(std::make_unique< juce::AudioParameterInt >(juce::ParameterID(eq_intensity_param_id, 1),
                                                        eq_intensity_param_id,

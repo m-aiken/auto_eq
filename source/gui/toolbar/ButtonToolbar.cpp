@@ -5,6 +5,7 @@
 */
 ButtonToolbar::ButtonToolbar(juce::AudioProcessorValueTreeState& apvts)
     : plugin_enablement_button_(apvts, GuiParams::POWER)
+    , mode_selector_(apvts)
     , power_saving_button_(apvts, GuiParams::POWER_SAVING, "Power Saving", GuiParams::INITIAL_POWER_SAVING_STATE)
     , transport_(apvts)
     , load_profile_button_("Load")

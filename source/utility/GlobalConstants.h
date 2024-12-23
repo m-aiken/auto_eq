@@ -48,6 +48,25 @@ namespace Channels
 
 }  // namespace Channels
 
+namespace PluginMode
+{
+
+    enum OPTION {
+        ANALYSER = 0,
+        PROFILER = 1,
+    };
+
+    static const uint8 DEFAULT = ANALYSER;
+
+    static const std::map< OPTION, juce::String > MODE_NAME_MAP = {
+        { ANALYSER, "ANALYSER" },
+        { PROFILER, "PROFILER" },
+    };
+
+    static const juce::String getName(OPTION option) { return MODE_NAME_MAP.at(option); }
+
+}  // namespace PluginMode
+
 namespace Meters
 {
 
@@ -88,18 +107,27 @@ namespace FFT
 namespace GuiParams
 {
 
-static const bool  INITIAL_POWER_STATE        = true;
-static const bool  INITIAL_ANALYSIS_STATE     = false;
-static const bool  INITIAL_POWER_SAVING_STATE = false;
-static const float INITIAL_MASTER_GAIN        = 0.f;
-static const bool  INITIAL_UNITY_GAIN_STATE   = false;
+static const bool INITIAL_POWER_STATE        = true;
+static const bool INITIAL_ANALYSIS_STATE     = false;
+static const bool INITIAL_POWER_SAVING_STATE = false;
+static const bool INITIAL_UNITY_GAIN_STATE   = false;
 
+static const float INPUT_TRIM_MIN      = -12.f;
+static const float INPUT_TRIM_MAX      = 12.f;
+static const float INPUT_TRIM_INTERVAL = 0.1f;
+static const float INITIAL_INPUT_TRIM  = 0.f;
+
+static const float MASTER_GAIN_MIN      = -24.f;
+static const float MASTER_GAIN_MAX      = 12.f;
 static const float MASTER_GAIN_INTERVAL = 0.1f;
+static const float INITIAL_MASTER_GAIN  = 0.f;
 
 enum PARAM_ID {
     POWER,
+    PLUGIN_MODE,  //! Analyser or Profiler
     ANALYSE_INPUT,
     POWER_SAVING,
+    INPUT_TRIM,
     EQ_INTENSITY,
     MASTER_GAIN,
     UNITY_GAIN_ENABLED,
@@ -109,8 +137,10 @@ enum PARAM_ID {
 
 static const std::map< PARAM_ID, juce::String > PARAM_NAME_MAP = {
     { POWER, "POWER" },
+    { PLUGIN_MODE, "PLUGIN_MODE" },
     { ANALYSE_INPUT, "ANALYSE_INPUT" },
     { POWER_SAVING, "POWER_SAVING" },
+    { INPUT_TRIM, "INPUT_TRIM" },
     { EQ_INTENSITY, "EQ_INTENSITY" },
     { MASTER_GAIN, "MASTER_GAIN" },
     { UNITY_GAIN_ENABLED, "UNITY_GAIN_ENABLED" },

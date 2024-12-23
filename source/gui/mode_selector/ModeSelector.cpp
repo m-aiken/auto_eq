@@ -3,9 +3,10 @@
 /*---------------------------------------------------------------------------
 **
 */
-ModeSelector::ModeSelector(/*juce::AudioProcessorValueTreeState& apvts*/)
+ModeSelector::ModeSelector(juce::AudioProcessorValueTreeState& apvts)
     : analyser_mode_label_("analyser_mode_label", "Analyser")
     , profiler_mode_label_("profiler_mode_label", "Profiler")
+    , toggle_switch_(apvts, GuiParams::PLUGIN_MODE)
 {
     addAndMakeVisible(analyser_mode_label_);
     addAndMakeVisible(profiler_mode_label_);
