@@ -35,7 +35,11 @@ ProfilerWidget::resized()
 
     juce::Grid grid;
 
-    grid.templateRows = { Track(Fr(10)), Track(Fr(80)), Track(Fr(10)) };
+    grid.templateRows = {
+        Track(Fr(5)),   //! Empty row.
+        Track(Fr(90)),  //! Widget row.
+        Track(Fr(5)),   //! Empty row.
+    };
 
     grid.templateColumns = {
         Track(Fr(10)),  //! Input meter and trim rotary.
