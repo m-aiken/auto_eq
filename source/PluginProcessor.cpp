@@ -599,7 +599,7 @@ PluginProcessor::updateLufsValues(const juce::AudioBuffer< float >& dummy_buffer
 void
 PluginProcessor::applyInputTrim(juce::AudioBuffer< float >& buffer) const
 {
-    const juce::RangedAudioParameter* input_trim_param = apvts_.getParameter(GuiParams::getName(GuiParams::MASTER_GAIN));
+    const juce::RangedAudioParameter* input_trim_param = apvts_.getParameter(GuiParams::getName(GuiParams::INPUT_TRIM));
 
     if (input_trim_param == nullptr) {
         return;
