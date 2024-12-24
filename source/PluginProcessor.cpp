@@ -157,7 +157,9 @@ PluginProcessor::prepareToPlay(double sample_rate, int samples_per_block)
     // Band pass filters.
     updateFilterCoefficients();
 
-    // Profiler input waveform.
+    // Profiler input gain and waveform.
+    input_gain_value_.reset(sample_rate, METER_DB_RAMP_TIME_SECONDS);
+    input_gain_value_.setCurrentAndTargetValue(Global::METER_NEG_INF);
     mono_waveform_.setBufferSize(samples_per_block);
 
     // Meter values.
@@ -250,20 +252,27 @@ PluginProcessor::processBlock(juce::AudioBuffer< float >& buffer, juce::MidiBuff
             loudness_val.setTargetValue(Global::METER_NEG_INF);  //! Ramp to the new value.
         }
 
-        // Clear the profiler input waveform.
+        // Clear the profiler input gain and waveform.
+        input_gain_value_.skip(samples_to_skip);
+        input_gain_value_.setTargetValue(Global::METER_NEG_INF);  //! Ramp to the new value.
         mono_waveform_.clear();
 
         // Don't do any processing on the real buffer.
         return;
     }
 
-    if (booleanParameterEnabled(GuiParams::UNITY_GAIN_ENABLED)) {
-        unity_gain_calculator_.pushForAnalysis(buffer, UnityGainCalculator::PRE_PROCESSED_FIFO);
+    // If we're in profiler mode apply any input trim, then update the meter and waveform.
+    if (pluginInMode(Global::PluginMode::PROFILER)) {
+        applyInputTrim(buffer);
+        updateInputGainValue(buffer);
+
+        for (int i = 0; i < buffer.getNumSamples(); ++i) {
+            mono_waveform_.pushSample(buffer.getReadPointer(0, i), 1);
+        }
     }
 
-    // Profiler input waveform.
-    for (int i = 0; i < buffer.getNumSamples(); ++i) {
-        mono_waveform_.pushSample(buffer.getReadPointer(0, i), 1);
+    if (booleanParameterEnabled(GuiParams::UNITY_GAIN_ENABLED)) {
+        unity_gain_calculator_.pushForAnalysis(buffer, UnityGainCalculator::PRE_PROCESSED_FIFO);
     }
 
 #ifdef TEST_FFT_ACCURACY
@@ -399,6 +408,15 @@ PluginProcessor::getFilterChain()
 /*---------------------------------------------------------------------------
 **
 */
+float
+PluginProcessor::getInputGainValue() const
+{
+    return input_gain_value_.getCurrentValue();
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
 MonoWaveform&
 PluginProcessor::getMonoWaveform()
 {
@@ -486,6 +504,18 @@ PluginProcessor::booleanParameterEnabled(GuiParams::PARAM_ID param_id) const
 /*---------------------------------------------------------------------------
 **
 */
+bool
+PluginProcessor::pluginInMode(Global::PluginMode::OPTION mode) const
+{
+    juce::RangedAudioParameter* raw_param = apvts_.getParameter(GuiParams::getName(GuiParams::PLUGIN_MODE));
+    const auto* choice_param = (raw_param != nullptr) ? dynamic_cast< juce::AudioParameterChoice* >(raw_param) : nullptr;
+
+    return (choice_param != nullptr) && (choice_param->getIndex() == mode);
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
 void
 PluginProcessor::updateFilterCoefficients()
 {
@@ -512,6 +542,24 @@ PluginProcessor::updateFilterCoefficients()
         Equalizer::updateBandCoefficients(filter_chain_left_, band_id, gain_factor, sample_rate);
         Equalizer::updateBandCoefficients(filter_chain_right_, band_id, gain_factor, sample_rate);
     }
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
+void
+PluginProcessor::updateInputGainValue(const juce::AudioBuffer< float >& buffer)
+{
+    // Note: This logic (or similar) might be nice for the value updating below.
+    const int   num_samples = buffer.getNumSamples();
+    const float new_value = juce::Decibels::gainToDecibels(buffer.getMagnitude(0, 0, num_samples), Global::METER_NEG_INF);
+
+    input_gain_value_.skip(num_samples);
+
+    // new value >  current value: jump to it immediately.
+    // new value <= current value: ramp to it gradually.
+    new_value > input_gain_value_.getCurrentValue() ? input_gain_value_.setCurrentAndTargetValue(new_value) :
+                                                      input_gain_value_.setTargetValue(new_value);
 }
 
 /*---------------------------------------------------------------------------
@@ -549,18 +597,37 @@ PluginProcessor::updateLufsValues(const juce::AudioBuffer< float >& dummy_buffer
 **
 */
 void
+PluginProcessor::applyInputTrim(juce::AudioBuffer< float >& buffer) const
+{
+    const juce::RangedAudioParameter* input_trim_param = apvts_.getParameter(GuiParams::getName(GuiParams::MASTER_GAIN));
+
+    if (input_trim_param == nullptr) {
+        return;
+    }
+
+    const float raw_val = input_trim_param->getValue();
+    const float db      = input_trim_param->convertFrom0to1(raw_val);
+    const float gain    = juce::Decibels::decibelsToGain(db, Global::NEG_INF);
+
+    buffer.applyGain(gain);
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
+void
 PluginProcessor::applyMasterGain(juce::AudioBuffer< float >& buffer)
 {
-    juce::RangedAudioParameter* master_gain_param = apvts_.getParameter(GuiParams::getName(GuiParams::MASTER_GAIN));
+    const juce::RangedAudioParameter* master_gain_param = apvts_.getParameter(GuiParams::getName(GuiParams::MASTER_GAIN));
 
     if (master_gain_param == nullptr) {
         return;
     }
 
-    bool  unity_gain = booleanParameterEnabled(GuiParams::UNITY_GAIN_ENABLED);
-    float raw_val    = unity_gain ? unity_gain_calculator_.getGainAdjustment() : master_gain_param->getValue();
-    float db         = master_gain_param->convertFrom0to1(raw_val);
-    float gain       = juce::Decibels::decibelsToGain(db, Global::NEG_INF);
+    const bool  unity_gain = booleanParameterEnabled(GuiParams::UNITY_GAIN_ENABLED);
+    const float raw_val    = unity_gain ? unity_gain_calculator_.getGainAdjustment() : master_gain_param->getValue();
+    const float db         = master_gain_param->convertFrom0to1(raw_val);
+    const float gain       = juce::Decibels::decibelsToGain(db, Global::NEG_INF);
 
     buffer.applyGain(gain);
 }

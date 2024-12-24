@@ -53,6 +53,7 @@ public:
     FftBuffers&           getFftBuffers();
     Equalizer::MonoChain& getFilterChain();
 
+    float         getInputGainValue() const;
     MonoWaveform& getMonoWaveform();
 
     float getMeterValue(const Global::Meters::METER_TYPE meter_type) const;
@@ -68,11 +69,13 @@ public:
 private:
     bool booleanParameterEnabled(GuiParams::PARAM_ID param_id) const;
 
+    bool         pluginInMode(Global::PluginMode::OPTION mode) const;
     void         updateFilterCoefficients();
+    void         updateInputGainValue(const juce::AudioBuffer< float >& buffer);
     void         updateLufsValues(const juce::AudioBuffer< float >& dummy_buffer);
+    void         applyInputTrim(juce::AudioBuffer< float >& buffer) const;
     void         applyMasterGain(juce::AudioBuffer< float >& buffer);
     static float getNormalisedValue(float full_range_value);
-    // bool pluginInMode()
 
     static juce::AudioProcessorValueTreeState::ParameterLayout getParameterLayout();
 
@@ -89,7 +92,8 @@ private:
     Equalizer::MonoChain filter_chain_left_;
     Equalizer::MonoChain filter_chain_right_;
 
-    MonoWaveform mono_waveform_;
+    SmoothedFloat input_gain_value_;
+    MonoWaveform  mono_waveform_;
 
     // LUFS values.
     std::array< SmoothedFloat, Global::Meters::NUM_METERS > loudness_values_;
