@@ -8,6 +8,7 @@
 #include "MasterGain.h"
 #include "MonoWaveform.h"
 #include "PluginProcessor.h"
+#include "ProfilerWidget.h"
 
 class PluginEditor final
     : public juce::AudioProcessorEditor
@@ -34,11 +35,10 @@ private:
 
     ButtonToolbar       toolbar_;
     FilterResponseGraph filter_res_graph_;
+    ProfilerWidget      profiler_widget_;
     EqIntensity         eq_intensity_;
     MasterGain          master_gain_;
     LufsMetersWidget    lufs_meters_;
-
-    MonoWaveform& mono_waveform_ref_;
 
     CustomLookAndFeel lnf_;
 

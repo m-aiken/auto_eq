@@ -16,20 +16,20 @@ PluginEditor::PluginEditor(PluginProcessor& p)
     , processor_ref_(p)
     , toolbar_(p.getApvts())
     , filter_res_graph_(p)
+    , profiler_widget_(p.getMonoWaveform())
     , eq_intensity_(p.getApvts())
     , master_gain_(p)
     , lufs_meters_(p)
-    , mono_waveform_ref_(p.getMonoWaveform())
     , cached_power_saving_state_(GuiParams::INITIAL_POWER_SAVING_STATE)
 {
     setLookAndFeel(&lnf_);
 
     addAndMakeVisible(toolbar_);
     addAndMakeVisible(filter_res_graph_);
+    addAndMakeVisible(profiler_widget_);
     addAndMakeVisible(eq_intensity_);
     addAndMakeVisible(master_gain_);
     addAndMakeVisible(lufs_meters_);
-    addAndMakeVisible(mono_waveform_ref_);
 
     toolbar_.getPluginEnablementButton().addListener(this);
     toolbar_.getModeSelectorSwitch().addListener(this);
@@ -71,32 +71,30 @@ PluginEditor::paint(juce::Graphics& g)
 void
 PluginEditor::resized()
 {
-    juce::Rectangle< int > bounds                = getLocalBounds();
-    int                    bounds_height         = bounds.getHeight();
-    int                    bounds_width          = bounds.getWidth();
-    int                    top_controls_height   = static_cast< int >(std::floor(bounds_height * 0.05));
-    int                    graph_height          = static_cast< int >(std::floor(bounds_height * 0.65));
-    int                    bottom_section_height = static_cast< int >(std::floor(bounds_height * 0.25));
-    int                    eq_intensity_width    = static_cast< int >(std::floor(bounds_width * 0.15));
-    int                    master_gain_width     = static_cast< int >(std::floor(bounds_width * 0.15));
-    int                    meters_width          = static_cast< int >(std::floor(bounds_width * 0.7));
-    int                    bottom_section_y      = bounds.getBottom() - bottom_section_height;
+    const juce::Rectangle< int > bounds                = getLocalBounds();
+    const int                    bounds_height         = bounds.getHeight();
+    const int                    bounds_width          = bounds.getWidth();
+    const int                    top_controls_height   = static_cast< int >(std::floor(bounds_height * 0.05));
+    const int                    graph_height          = static_cast< int >(std::floor(bounds_height * 0.65));
+    const int                    bottom_section_height = static_cast< int >(std::floor(bounds_height * 0.25));
+    const int                    eq_intensity_width    = static_cast< int >(std::floor(bounds_width * 0.15));
+    const int                    master_gain_width     = static_cast< int >(std::floor(bounds_width * 0.15));
+    const int                    meters_width          = static_cast< int >(std::floor(bounds_width * 0.7));
+    const int                    bottom_section_y      = bounds.getBottom() - bottom_section_height;
 
     // Top button toolbar.
     toolbar_.setBounds(0, 0, bounds_width, top_controls_height);
 
-    // EQ graph and input waveform.
-    juce::Rectangle< int > graph_bounds(0, top_controls_height, bounds_width, graph_height);
-    int                    waveform_width  = static_cast< int >(std::floor(graph_bounds.getWidth() * 0.8));
-    int                    waveform_height = static_cast< int >(std::floor(graph_bounds.getHeight() * 0.8));
+    // EQ graph and profiler widget. They occupy the same space as their visibility is dependent on the mode.
+    const juce::Rectangle< int > graph_bounds(0, top_controls_height, bounds_width, graph_height);
 
     filter_res_graph_.setBounds(graph_bounds);
-    mono_waveform_ref_.setBounds(graph_bounds.withSizeKeepingCentre(waveform_width, waveform_height));
+    profiler_widget_.setBounds(graph_bounds);
 
     const bool profiler_mode = toolbar_.getModeSelectorSwitch().getToggleState();
 
-    mono_waveform_ref_.setVisible(profiler_mode);
     filter_res_graph_.setVisible(!profiler_mode);
+    profiler_widget_.setVisible(profiler_mode);
 
     // Bottom section.
     eq_intensity_.setBounds(0, bottom_section_y, eq_intensity_width, bottom_section_height);
@@ -152,8 +150,8 @@ PluginEditor::buttonClicked(juce::Button* button)
     else if (button == &mode_selector_switch) {
         const bool profiler_mode = mode_selector_switch.getToggleState();
 
-        mono_waveform_ref_.setVisible(profiler_mode);
         filter_res_graph_.setVisible(!profiler_mode);
+        profiler_widget_.setVisible(profiler_mode);
 
         power_saving_button.setEnabled(!profiler_mode);
     }
