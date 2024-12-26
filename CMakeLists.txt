@@ -49,10 +49,10 @@ set(PROJECT_SOURCES
         source/gui/eq_intensity/EqIntensity.cpp
         source/gui/look_and_feel/CustomLookAndFeel.cpp
         source/gui/look_and_feel/Theme.cpp
+        source/gui/lufs_meters/LufsLabelGroup.cpp
+        source/gui/lufs_meters/LufsMeterGroup.cpp
+        source/gui/lufs_meters/LufsMetersWidget.cpp
         source/gui/master_gain/MasterGain.cpp
-        source/gui/meters/LufsLabelGroup.cpp
-        source/gui/meters/LufsMeterGroup.cpp
-        source/gui/meters/LufsMetersWidget.cpp
         source/gui/meters/MeterCanvas.cpp
         source/gui/meters/MeterDbScale.cpp
         source/gui/meters/MonoMeter.cpp
@@ -98,10 +98,10 @@ set(PROJECT_HEADERS
         source/gui/eq_intensity/EqIntensity.h
         source/gui/look_and_feel/CustomLookAndFeel.h
         source/gui/look_and_feel/Theme.h
+        source/gui/lufs_meters/LufsLabelGroup.h
+        source/gui/lufs_meters/LufsMeterGroup.h
+        source/gui/lufs_meters/LufsMetersWidget.h
         source/gui/master_gain/MasterGain.h
-        source/gui/meters/LufsLabelGroup.h
-        source/gui/meters/LufsMeterGroup.h
-        source/gui/meters/LufsMetersWidget.h
         source/gui/meters/MeterCanvas.h
         source/gui/meters/MeterDbScale.h
         source/gui/meters/MonoMeter.h
@@ -148,6 +148,7 @@ target_include_directories(${PROJECT_NAME}
         ${CMAKE_CURRENT_SOURCE_DIR}/source/gui
         ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/eq_intensity
         ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/look_and_feel
+        ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/lufs_meters
         ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/master_gain
         ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/meters
         ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/mode_selector

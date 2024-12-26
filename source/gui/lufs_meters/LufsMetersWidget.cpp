@@ -7,6 +7,8 @@
 */
 LufsMetersWidget::LufsMetersWidget(PluginProcessor& p)
     : widget_label_("lufs_meters_widget_label", "LUFS")
+    , db_scale_top_(Global::Meters::HORIZONTAL)
+    , db_scale_bottom_(Global::Meters::HORIZONTAL)
     , meters_(p)
     , reset_button_("Reset")
 {

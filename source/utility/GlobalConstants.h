@@ -3,7 +3,7 @@
 #include <JuceHeader.h>
 
 //#define TEST_FFT_ACCURACY 1
-#define SHOW_DEBUG_BOUNDS 1
+//#define SHOW_DEBUG_BOUNDS 1
 
 namespace Global
 {
@@ -27,6 +27,7 @@ static const double FFT_PATH_PRODUCTION_FREQUENCY_MS        = 20.0;
 
 static const uint8 GRAPH_TOP_PADDING = 32;
 static const uint8 METER_X_PADDING   = 32;
+static const uint8 METER_Y_PADDING   = 16;
 
 namespace Channels
 {
@@ -78,6 +79,11 @@ namespace Meters
         SHORT_TERM_MAX,
         MOMENTARY_MAX,
         INTEGRATED,
+    };
+
+    enum ORIENTATION {
+        HORIZONTAL,
+        VERTICAL,
     };
 
     static const std::map< METER_TYPE, juce::String > METER_NAME_MAP = { { SHORT_TERM, "Short Term" },

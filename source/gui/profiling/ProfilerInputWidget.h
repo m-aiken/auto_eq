@@ -2,6 +2,8 @@
 
 #include <JuceHeader.h>
 
+#include "MeterCanvas.h"
+#include "MeterDbScale.h"
 #include "ProfilerInputMeter.h"
 
 class ProfilerInputWidget : public juce::Component
@@ -13,7 +15,9 @@ public:
     void resized() override;
 
 private:
+    MeterDbScale       db_scale_;
     ProfilerInputMeter meter_;
+    MeterCanvas        backdrop_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ProfilerInputWidget)
 };

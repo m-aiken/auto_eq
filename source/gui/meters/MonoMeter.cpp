@@ -8,6 +8,7 @@ MonoMeter::MonoMeter(PluginProcessor& p, const Global::Meters::METER_TYPE meter_
     : processor_ref_(p)
     , meter_type_(meter_type)
     , meter_width_pct_(meter_width_pct)
+    , backdrop_(Global::Meters::HORIZONTAL)
 {
     addAndMakeVisible(backdrop_);
 

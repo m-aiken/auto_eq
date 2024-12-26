@@ -7,6 +7,14 @@
 /*---------------------------------------------------------------------------
 **
 */
+MeterCanvas::MeterCanvas(const Global::Meters::ORIENTATION meter_orientation)
+    : meter_orientation_(meter_orientation)
+{
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
 void
 MeterCanvas::paint(juce::Graphics& g)
 {
@@ -21,17 +29,29 @@ MeterCanvas::paint(juce::Graphics& g)
 
     g.setColour(line_colour.withAlpha(alpha));
 
-    // dB markers (vertical - the meters are horizontal).
     for (int i = min_db; i <= max_db; i += DB_INTERVAL) {
-        int x = juce::roundToInt(juce::jmap< float >(i, min_db, max_db, 0, bounds_width));
+        if (meter_orientation_ == Global::Meters::HORIZONTAL) {
+            int x = juce::roundToInt(juce::jmap< float >(i, min_db, max_db, 0, bounds_width));
 
-        if (i == max_db) {
-            // The final line needs to be pulled left by the thickness of the line.
-            // Otherwise it would go out of the bounding box of this widget.
-            x -= line_thickness;
+            if (i == max_db) {
+                // The final line needs to be pulled in by the thickness of the line.
+                // Otherwise it would go out of the bounding box of this widget.
+                x -= line_thickness;
+            }
+
+            g.fillRect(x, 0, line_thickness, bounds_height);
         }
+        else {
+            int y = juce::roundToInt(juce::jmap< float >(i, min_db, max_db, 0, bounds_height));
 
-        g.fillRect(x, 0, line_thickness, bounds_height);
+            if (i == max_db) {
+                // The final line needs to be pulled in by the thickness of the line.
+                // Otherwise it would go out of the bounding box of this widget.
+                y -= line_thickness;
+            }
+
+            g.fillRect(0, y, bounds_width, line_thickness);
+        }
     }
 }
 

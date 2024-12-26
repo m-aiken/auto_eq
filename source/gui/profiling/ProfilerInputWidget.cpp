@@ -5,9 +5,13 @@
 **
 */
 ProfilerInputWidget::ProfilerInputWidget(PluginProcessor& p)
-    : meter_(p)
+    : db_scale_(Global::Meters::VERTICAL)
+    , meter_(p)
+    , backdrop_(Global::Meters::VERTICAL)
 {
+    addAndMakeVisible(db_scale_);
     addAndMakeVisible(meter_);
+    addAndMakeVisible(backdrop_);
 }
 
 /*---------------------------------------------------------------------------
@@ -28,24 +32,17 @@ ProfilerInputWidget::paint(juce::Graphics& g)
 void
 ProfilerInputWidget::resized()
 {
-    using Track = juce::Grid::TrackInfo;
-    using Fr    = juce::Grid::Fr;
+    const auto bounds         = getLocalBounds();
+    const int  bounds_width   = bounds.getWidth();
+    const int  bounds_height  = bounds.getHeight();
+    const int  meter_height   = bounds_height - (Global::METER_Y_PADDING * 2);
+    const int  db_scale_width = static_cast< int >(std::floor(bounds_width * 0.6));
+    const int  meter_width    = static_cast< int >(std::floor(bounds_width * 0.2));
 
-    juce::Grid grid;
+    db_scale_.setBounds(0, 0, db_scale_width, bounds_height);
 
-    grid.autoColumns = Track(Fr(100));
-
-    grid.templateRows = {
-        // Track(Fr(10)),  //! Label.
-        Track(Fr(100)),  //! Meter.
-        // Track(Fr(20)),  //! Input trim rotary control.
-    };
-
-    // grid.items.add(juce::GridItem());
-    grid.items.add(juce::GridItem(meter_));
-    // grid.items.add(juce::GridItem());
-
-    grid.performLayout(getLocalBounds());
+    meter_.setBounds(db_scale_.getRight(), Global::METER_Y_PADDING, meter_width, meter_height);
+    backdrop_.setBounds(db_scale_.getRight(), Global::METER_Y_PADDING, meter_width, meter_height);
 }
 
 /*---------------------------------------------------------------------------
