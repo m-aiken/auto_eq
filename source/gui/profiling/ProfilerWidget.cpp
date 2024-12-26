@@ -3,9 +3,9 @@
 /*---------------------------------------------------------------------------
 **
 */
-ProfilerWidget::ProfilerWidget(juce::AudioProcessorValueTreeState& apvts, MonoWaveform& mono_waveform_ref)
-    : input_widget_(apvts)
-    , mono_waveform_ref_(mono_waveform_ref)
+ProfilerWidget::ProfilerWidget(PluginProcessor& p)
+    : input_widget_(p)
+    , mono_waveform_ref_(p.getMonoWaveform())
 {
     addAndMakeVisible(input_widget_);
     addAndMakeVisible(mono_waveform_ref_);

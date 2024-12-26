@@ -4,11 +4,13 @@
 /*---------------------------------------------------------------------------
 **
 */
-ProfilerInputWidget::ProfilerInputWidget(juce::AudioProcessorValueTreeState& apvts)
+ProfilerInputWidget::ProfilerInputWidget(PluginProcessor& p)
     : label_("profiler_input_widget_label", "Input Level")
-    , input_trim_(apvts, GuiParams::INPUT_TRIM)
+    , meter_(p)
+    , input_trim_(p.getApvts(), GuiParams::INPUT_TRIM)
 {
     addAndMakeVisible(label_);
+    addAndMakeVisible(meter_);
     addAndMakeVisible(input_trim_);
 }
 
@@ -44,7 +46,7 @@ ProfilerInputWidget::resized()
     };
 
     grid.items.add(juce::GridItem(label_));
-    grid.items.add(juce::GridItem());
+    grid.items.add(juce::GridItem(meter_));
     grid.items.add(juce::GridItem(input_trim_));
 
     grid.performLayout(getLocalBounds());

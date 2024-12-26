@@ -8,7 +8,7 @@
 class ProfilerWidget : public juce::Component
 {
 public:
-    ProfilerWidget(juce::AudioProcessorValueTreeState& apvts, MonoWaveform& mono_waveform_ref);
+    explicit ProfilerWidget(PluginProcessor& p);
 
     void paint(juce::Graphics& g) override;
     void resized() override;
