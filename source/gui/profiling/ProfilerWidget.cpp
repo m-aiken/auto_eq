@@ -4,10 +4,14 @@
 **
 */
 ProfilerWidget::ProfilerWidget(PluginProcessor& p)
-    : input_widget_(p)
+    : label_("profiler_input_widget_label", "Input Level")
+    , input_widget_(p)
+    , input_trim_(p.getApvts(), GuiParams::INPUT_TRIM)
     , mono_waveform_ref_(p.getMonoWaveform())
 {
+    addAndMakeVisible(label_);
     addAndMakeVisible(input_widget_);
+    addAndMakeVisible(input_trim_);
     addAndMakeVisible(mono_waveform_ref_);
 }
 
@@ -37,12 +41,13 @@ ProfilerWidget::resized()
 
     grid.templateRows = {
         Track(Fr(5)),   //! Empty row.
-        Track(Fr(90)),  //! Widget row.
-        Track(Fr(5)),   //! Empty row.
+        Track(Fr(5)),   //! Meter label.
+        Track(Fr(70)),  //! Meter/Waveform row.
+        Track(Fr(20)),  //! Rotary Control.
     };
 
     grid.templateColumns = {
-        Track(Fr(10)),  //! Input meter and trim rotary.
+        Track(Fr(10)),  //! Input label, meter and trim rotary.
         Track(Fr(80)),  //! Waveform.
         Track(Fr(10)),  //! Empty.
     };
@@ -53,12 +58,17 @@ ProfilerWidget::resized()
     grid.items.add(juce::GridItem());
 
     // Row 2.
+    grid.items.add(juce::GridItem(label_));
+    grid.items.add(juce::GridItem());
+    grid.items.add(juce::GridItem());
+
+    // Row 3.
     grid.items.add(juce::GridItem(input_widget_));
     grid.items.add(juce::GridItem(mono_waveform_ref_));
     grid.items.add(juce::GridItem());
 
-    // Row 3.
-    grid.items.add(juce::GridItem());
+    // Row 4.
+    grid.items.add(juce::GridItem(input_trim_));
     grid.items.add(juce::GridItem());
     grid.items.add(juce::GridItem());
 

@@ -1,3 +1,4 @@
+#include "GlobalConstants.h"
 #include "MonoWaveform.h"
 #include "Theme.h"
 
@@ -35,6 +36,11 @@ MonoWaveform::paint(juce::Graphics& g)
     // Draw an invisible border (same as the background colour) to hide the artefacts that can occur at the edges.
     g.setColour(Theme::getColour(Theme::MAIN_BG));
     g.drawRect(getLocalBounds(), 6);
+
+#ifdef SHOW_DEBUG_BOUNDS
+    g.setColour(juce::Colours::green);
+    g.drawRect(getLocalBounds());
+#endif
 }
 
 /*---------------------------------------------------------------------------

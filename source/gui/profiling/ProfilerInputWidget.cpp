@@ -5,13 +5,9 @@
 **
 */
 ProfilerInputWidget::ProfilerInputWidget(PluginProcessor& p)
-    : label_("profiler_input_widget_label", "Input Level")
-    , meter_(p)
-    , input_trim_(p.getApvts(), GuiParams::INPUT_TRIM)
+    : meter_(p)
 {
-    addAndMakeVisible(label_);
     addAndMakeVisible(meter_);
-    addAndMakeVisible(input_trim_);
 }
 
 /*---------------------------------------------------------------------------
@@ -40,14 +36,14 @@ ProfilerInputWidget::resized()
     grid.autoColumns = Track(Fr(100));
 
     grid.templateRows = {
-        Track(Fr(10)),  //! Label.
-        Track(Fr(70)),  //! Meter.
-        Track(Fr(20)),  //! Input trim rotary control.
+        // Track(Fr(10)),  //! Label.
+        Track(Fr(100)),  //! Meter.
+        // Track(Fr(20)),  //! Input trim rotary control.
     };
 
-    grid.items.add(juce::GridItem(label_));
+    // grid.items.add(juce::GridItem());
     grid.items.add(juce::GridItem(meter_));
-    grid.items.add(juce::GridItem(input_trim_));
+    // grid.items.add(juce::GridItem());
 
     grid.performLayout(getLocalBounds());
 }

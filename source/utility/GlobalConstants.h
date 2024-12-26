@@ -3,7 +3,7 @@
 #include <JuceHeader.h>
 
 //#define TEST_FFT_ACCURACY 1
-//#define SHOW_DEBUG_BOUNDS 1
+#define SHOW_DEBUG_BOUNDS 1
 
 namespace Global
 {

@@ -1,3 +1,4 @@
+#include "GlobalConstants.h"
 #include "ProfilerInputMeter.h"
 #include "Theme.h"
 
@@ -24,6 +25,11 @@ ProfilerInputMeter::~ProfilerInputMeter()
 void
 ProfilerInputMeter::paint(juce::Graphics& g)
 {
+#ifdef SHOW_DEBUG_BOUNDS
+    g.setColour(juce::Colours::yellow);
+    g.drawRect(getLocalBounds());
+#endif
+
     const auto  bounds        = getLocalBounds();
     const auto  bounds_width  = bounds.getWidth();
     const auto  bounds_height = bounds.getHeight();
