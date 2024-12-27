@@ -6,12 +6,10 @@
 */
 ProfilerInputWidget::ProfilerInputWidget(PluginProcessor& p)
     : db_scale_(Global::Meters::VERTICAL)
-    , meter_(p)
-    , backdrop_(Global::Meters::VERTICAL)
+    , meter_(p, Global::Meters::INPUT_GAIN, Global::Meters::VERTICAL, 40.0)
 {
     addAndMakeVisible(db_scale_);
     addAndMakeVisible(meter_);
-    addAndMakeVisible(backdrop_);
 }
 
 /*---------------------------------------------------------------------------
@@ -42,7 +40,6 @@ ProfilerInputWidget::resized()
     db_scale_.setBounds(0, 0, db_scale_width, bounds_height);
 
     meter_.setBounds(db_scale_.getRight(), Global::METER_Y_PADDING, meter_width, meter_height);
-    backdrop_.setBounds(db_scale_.getRight(), Global::METER_Y_PADDING, meter_width, meter_height);
 }
 
 /*---------------------------------------------------------------------------

@@ -1,4 +1,3 @@
-#include "GlobalConstants.h"
 #include "MeterDbScale.h"
 #include "Theme.h"
 

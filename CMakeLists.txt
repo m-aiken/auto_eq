@@ -58,7 +58,6 @@ set(PROJECT_SOURCES
         source/gui/meters/MonoMeter.cpp
         source/gui/mode_selector/ModeSelector.cpp
         source/gui/profiling/MonoWaveform.cpp
-        source/gui/profiling/ProfilerInputMeter.cpp
         source/gui/profiling/ProfilerInputWidget.cpp
         source/gui/profiling/ProfilerWidget.cpp
         source/gui/response_graph/DecibelMarkers.cpp
@@ -107,7 +106,6 @@ set(PROJECT_HEADERS
         source/gui/meters/MonoMeter.h
         source/gui/mode_selector/ModeSelector.h
         source/gui/profiling/MonoWaveform.h
-        source/gui/profiling/ProfilerInputMeter.h
         source/gui/profiling/ProfilerInputWidget.h
         source/gui/profiling/ProfilerWidget.h
         source/gui/response_graph/DecibelMarkers.h

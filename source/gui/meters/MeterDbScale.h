@@ -2,6 +2,8 @@
 
 #include <JuceHeader.h>
 
+#include "GlobalConstants.h"
+
 class MeterDbScale : public juce::Component
 {
 public:

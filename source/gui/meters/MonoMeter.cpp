@@ -12,7 +12,7 @@ MonoMeter::MonoMeter(PluginProcessor&                  p,
     , meter_type_(meter_type)
     , meter_orientation_(meter_orientation)
     , meter_width_pct_(meter_width_pct)
-    , backdrop_(Global::Meters::HORIZONTAL)
+    , backdrop_(meter_orientation)
 {
     addAndMakeVisible(backdrop_);
 
@@ -38,29 +38,34 @@ MonoMeter::paint(juce::Graphics& g)
     const auto  bounds        = getLocalBounds();
     const int   bounds_width  = bounds.getWidth();
     const int   bounds_height = bounds.getHeight();
-    const int   max_length    = is_horizontal ? bounds_width : bounds_height;
     const float val           = processor_ref_.getMeterValue(meter_type_);
-    const auto  length        = juce::jmap< float >(val, Global::METER_NEG_INF, Global::METER_MAX_DB, 0, max_length);
+    const int   scaling_min   = is_horizontal ? 0 : bounds_height;
+    const int   scaling_max   = is_horizontal ? bounds_width : 0;
+    const auto  scaled_value  = static_cast< int >(std::floor(juce::jmap< float >(val,
+                                                                                Global::METER_NEG_INF,
+                                                                                Global::METER_MAX_DB,
+                                                                                static_cast< float >(scaling_min),
+                                                                                static_cast< float >(scaling_max))));
 
-    uint8 meter_width = is_horizontal ? bounds_height : bounds_width;
-    uint8 x           = 0;
-    uint8 y           = 0;
+    int meter_thickness = is_horizontal ? bounds_height : bounds_width;
+    int x               = 0;             // Default for horizontal meters.
+    int y               = scaled_value;  // Default for vertical meters.
 
     if (meter_width_pct_ != 100.0) {
-        meter_width = static_cast< uint8 >(std::floor(meter_width * (meter_width_pct_ / 100.0)));
+        meter_thickness = static_cast< int >(std::floor(meter_thickness * (meter_width_pct_ / 100.0)));
 
         if (is_horizontal) {
-            y = static_cast< uint8 >(std::floor(bounds.getCentreY() - (meter_width * 0.5)));
+            y = static_cast< int >(std::floor(bounds.getCentreY() - (meter_thickness * 0.5)));
         }
         else {
-            x = static_cast< uint8 >(std::floor(bounds.getCentreX() - (meter_width * 0.5)));
+            x = static_cast< int >(std::floor(bounds.getCentreX() - (meter_thickness * 0.5)));
         }
     }
 
-    const int w = is_horizontal ? length : meter_width;
-    const int h = is_horizontal ? meter_width : length;
+    const int w = is_horizontal ? scaled_value : meter_thickness;
+    const int h = is_horizontal ? meter_thickness : (bounds_height - y);
 
-    juce::Rectangle< float > meter_rect(x, y, w, h);
+    const juce::Rectangle< int > meter_rect(x, y, w, h);
 
     g.setColour(Theme::getColour(Theme::METER_VALUE));
     g.fillRect(meter_rect);
