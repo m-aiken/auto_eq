@@ -71,7 +71,7 @@ namespace PluginMode
 namespace Meters
 {
 
-    static constexpr uint8 NUM_METERS = 5;
+    static constexpr uint8 NUM_LOUDNESS_METERS = 5;
 
     enum METER_TYPE {
         SHORT_TERM,
@@ -79,6 +79,8 @@ namespace Meters
         SHORT_TERM_MAX,
         MOMENTARY_MAX,
         INTEGRATED,
+
+        INPUT_GAIN,
     };
 
     enum ORIENTATION {
@@ -86,13 +88,31 @@ namespace Meters
         VERTICAL,
     };
 
-    static const std::map< METER_TYPE, juce::String > METER_NAME_MAP = { { SHORT_TERM, "Short Term" },
-                                                                         { MOMENTARY, "Momentary" },
-                                                                         { SHORT_TERM_MAX, "Short Term (MAX)" },
-                                                                         { MOMENTARY_MAX, "Momentary (MAX)" },
-                                                                         { INTEGRATED, "Integrated" } };
+    static const std::map< METER_TYPE, juce::String > METER_NAME_MAP = {
+        { SHORT_TERM, "Short Term" },            //
+        { MOMENTARY, "Momentary" },              //
+        { SHORT_TERM_MAX, "Short Term (MAX)" },  //
+        { MOMENTARY_MAX, "Momentary (MAX)" },    //
+        { INTEGRATED, "Integrated" },            //
+        { INPUT_GAIN, "Input Gain" }             //
+    };
 
-    static juce::String getName(const METER_TYPE loudness_meter_type) { return METER_NAME_MAP.at(loudness_meter_type); }
+    static juce::String getName(const METER_TYPE meter_type) { return METER_NAME_MAP.at(meter_type); }
+
+    static bool isLoudnessMeter(const METER_TYPE meter_type)
+    {
+        bool is_loudness_meter = false;
+
+        is_loudness_meter |= (meter_type == SHORT_TERM);
+        is_loudness_meter |= (meter_type == MOMENTARY);
+        is_loudness_meter |= (meter_type == SHORT_TERM_MAX);
+        is_loudness_meter |= (meter_type == MOMENTARY_MAX);
+        is_loudness_meter |= (meter_type == INTEGRATED);
+
+        return is_loudness_meter;
+    }
+
+    static bool isInputGainMeter(const METER_TYPE meter_type) { return (meter_type == INPUT_GAIN); }
 
 }  // namespace Meters
 

@@ -14,7 +14,9 @@ public:
     void resized() override;
 
 private:
-    std::array< std::unique_ptr< MonoMeter >, Global::Meters::NUM_METERS > meters_;
+    void initMeter(PluginProcessor& p, Global::Meters::METER_TYPE meter_type);
+
+    std::array< std::unique_ptr< MonoMeter >, Global::Meters::NUM_LOUDNESS_METERS > meters_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(LufsMeterGroup)
 };

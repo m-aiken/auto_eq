@@ -96,7 +96,7 @@ private:
     MonoWaveform  mono_waveform_;
 
     // LUFS values.
-    std::array< SmoothedFloat, Global::Meters::NUM_METERS > loudness_values_;
+    std::array< SmoothedFloat, Global::Meters::NUM_LOUDNESS_METERS > loudness_values_;
 
     juce::AudioBuffer< float > empty_buffer_;  //! Used to clear the meters when the plugin is disabled.
 

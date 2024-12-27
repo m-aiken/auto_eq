@@ -429,7 +429,16 @@ PluginProcessor::getMonoWaveform()
 float
 PluginProcessor::getMeterValue(const Global::Meters::METER_TYPE meter_type) const
 {
-    return loudness_values_.at(meter_type).getCurrentValue();
+    float ret = Global::NEG_INF;
+
+    if (Global::Meters::isLoudnessMeter(meter_type)) {
+        ret = loudness_values_.at(meter_type).getCurrentValue();
+    }
+    else if (Global::Meters::isInputGainMeter(meter_type)) {
+        ret = input_gain_value_.getCurrentValue();
+    }
+
+    return ret;
 }
 
 /*---------------------------------------------------------------------------

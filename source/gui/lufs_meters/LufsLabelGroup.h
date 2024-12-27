@@ -13,7 +13,7 @@ public:
     void resized() override;
 
 private:
-    std::array< std::unique_ptr< DisableableLabel >, Global::Meters::NUM_METERS > labels_;
+    std::array< std::unique_ptr< DisableableLabel >, Global::Meters::NUM_LOUDNESS_METERS > labels_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(LufsLabelGroup)
 };
