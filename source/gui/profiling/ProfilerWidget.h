@@ -16,9 +16,9 @@ public:
     void resized() override;
 
 private:
-    DisableableLabel    label_;
-    ProfilerInputWidget input_widget_;
-    RotaryControl       input_trim_;
+    DisableableLabel    input_level_label_;
+    ProfilerInputWidget input_meter_widget_;
+    RotaryControl       input_trim_rotary_;
     MonoWaveform&       mono_waveform_ref_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ProfilerWidget)

@@ -4,14 +4,14 @@
 **
 */
 ProfilerWidget::ProfilerWidget(PluginProcessor& p)
-    : label_("profiler_input_widget_label", "Input Level")
-    , input_widget_(p)
-    , input_trim_(p.getApvts(), GuiParams::INPUT_TRIM)
+    : input_level_label_("profiler_input_widget_label", "Input Level")
+    , input_meter_widget_(p)
+    , input_trim_rotary_(p.getApvts(), GuiParams::INPUT_TRIM, true, "dB", 1)
     , mono_waveform_ref_(p.getMonoWaveform())
 {
-    addAndMakeVisible(label_);
-    addAndMakeVisible(input_widget_);
-    addAndMakeVisible(input_trim_);
+    addAndMakeVisible(input_level_label_);
+    addAndMakeVisible(input_meter_widget_);
+    addAndMakeVisible(input_trim_rotary_);
     addAndMakeVisible(mono_waveform_ref_);
 }
 
@@ -35,7 +35,6 @@ ProfilerWidget::resized()
 {
     using Track = juce::Grid::TrackInfo;
     using Fr    = juce::Grid::Fr;
-    // using Px    = juce::Grid::Px;
 
     juce::Grid grid;
 
@@ -58,21 +57,19 @@ ProfilerWidget::resized()
     grid.items.add(juce::GridItem());
 
     // Row 2.
-    grid.items.add(juce::GridItem(label_));
+    grid.items.add(juce::GridItem(input_level_label_));
     grid.items.add(juce::GridItem());
     grid.items.add(juce::GridItem());
 
     // Row 3.
-    grid.items.add(juce::GridItem(input_widget_));
+    grid.items.add(juce::GridItem(input_meter_widget_));
     grid.items.add(juce::GridItem(mono_waveform_ref_));
     grid.items.add(juce::GridItem());
 
     // Row 4.
-    grid.items.add(juce::GridItem(input_trim_));
+    grid.items.add(juce::GridItem(input_trim_rotary_));
     grid.items.add(juce::GridItem());
     grid.items.add(juce::GridItem());
-
-    // grid.setGap(Px(padding));
 
     grid.performLayout(getLocalBounds());
 }

@@ -138,8 +138,8 @@ static const bool INITIAL_ANALYSIS_STATE     = false;
 static const bool INITIAL_POWER_SAVING_STATE = false;
 static const bool INITIAL_UNITY_GAIN_STATE   = false;
 
-static const float INPUT_TRIM_MIN      = -12.f;
-static const float INPUT_TRIM_MAX      = 12.f;
+static const float INPUT_TRIM_MIN      = -24.f;
+static const float INPUT_TRIM_MAX      = 24.f;
 static const float INPUT_TRIM_INTERVAL = 0.1f;
 static const float INITIAL_INPUT_TRIM  = 0.f;
 
