@@ -124,6 +124,7 @@ PluginEditor::buttonClicked(juce::Button* button)
 
         toolbar_.setGlobalEnablement(plugin_enabled);
         filter_res_graph_.setEnabled(plugin_enabled);
+        profiler_widget_.setEnabled(plugin_enabled);
         eq_intensity_.setEnabled(plugin_enabled);
         master_gain_.setEnabled(plugin_enabled);
         lufs_meters_.setEnabled(plugin_enabled);
