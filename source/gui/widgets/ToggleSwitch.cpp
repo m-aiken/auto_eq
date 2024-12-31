@@ -31,12 +31,17 @@ ToggleSwitch::paintButton(juce::Graphics& g, bool should_draw_button_as_highligh
     g.drawRect(getLocalBounds());
 #endif
 
-    juce::Rectangle< int > bounds         = getLocalBounds();
-    const uint8            padding        = 4;
-    const uint8            thumb_diameter = bounds.getHeight() - (padding * 2);
+    const juce::Rectangle< int >   bounds           = getLocalBounds();
+    const juce::Rectangle< float > float_bounds     = bounds.toFloat();
+    constexpr uint8                padding          = 4;
+    constexpr float                border_thickness = 1.f;
+    const uint8                    thumb_diameter   = bounds.getHeight() - (padding * 2);
 
     g.setColour(Theme::getColour(isEnabled() ? Theme::CHECKBOX : Theme::DISABLED_WIDGET));
-    g.drawRoundedRectangle(bounds.toFloat(), thumb_diameter, 1.f);
+    g.drawRoundedRectangle(float_bounds.withSizeKeepingCentre(float_bounds.getWidth() - border_thickness,
+                                                              float_bounds.getHeight() - border_thickness),
+                           thumb_diameter,
+                           border_thickness);
 
     int x = padding;
 
