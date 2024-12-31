@@ -7,6 +7,7 @@
 #include "ModeSelector.h"
 #include "PluginEnablementButton.h"
 #include "ThemeButton.h"
+#include "ToolbarSeparator.h"
 #include "TransportGroup.h"
 
 class ButtonToolbar : public juce::Component
@@ -34,6 +35,13 @@ private:
     CustomTextButton       save_profile_button_;
     CustomTextButton       save_as_profile_button_;
     ThemeButton            theme_button_;
+
+    ToolbarSeparator section_separator_1_;
+    ToolbarSeparator section_separator_2_;
+    ToolbarSeparator section_separator_3_;
+    ToolbarSeparator section_separator_4_;
+    ToolbarSeparator section_separator_5_;
+    ToolbarSeparator section_separator_6_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ButtonToolbar)
 };

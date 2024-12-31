@@ -72,6 +72,7 @@ set(PROJECT_SOURCES
         source/gui/toolbar/ButtonToolbar.cpp
         source/gui/toolbar/PluginEnablementButton.cpp
         source/gui/toolbar/ThemeButton.cpp
+        source/gui/toolbar/ToolbarSeparator.cpp
         source/gui/transport/TransportButton.cpp
         source/gui/transport/TransportGroup.cpp
         source/gui/widgets/CustomTextButton.cpp
@@ -120,6 +121,7 @@ set(PROJECT_HEADERS
         source/gui/toolbar/ButtonToolbar.h
         source/gui/toolbar/PluginEnablementButton.h
         source/gui/toolbar/ThemeButton.h
+        source/gui/toolbar/ToolbarSeparator.h
         source/gui/transport/TransportButton.h
         source/gui/transport/TransportGroup.h
         source/gui/widgets/CustomTextButton.h

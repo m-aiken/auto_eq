@@ -33,6 +33,7 @@ public:
     static const DarkLightPair STOP_BUTTON;
     static const DarkLightPair POWER_BUTTON_ON;
     static const DarkLightPair POWER_BUTTON_OFF;
+    static const DarkLightPair TOOLBAR_SEPARATOR;
     static const DarkLightPair TEXT_BTN_BG;
     static const DarkLightPair TEXT_BTN_BG_FOCUS;
     static const DarkLightPair TEXT_BTN_TOGGLE_ON_BORDER;
