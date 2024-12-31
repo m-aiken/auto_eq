@@ -8,6 +8,7 @@ ButtonToolbar::ButtonToolbar(juce::AudioProcessorValueTreeState& apvts)
     , mode_selector_(apvts)
     , power_saving_button_(apvts, GuiParams::POWER_SAVING, "Power Saving", GuiParams::INITIAL_POWER_SAVING_STATE)
     , transport_(apvts)
+    , new_profile_button_("New")
     , load_profile_button_("Load")
     , save_profile_button_("Save")
     , save_as_profile_button_("Save As")
@@ -16,6 +17,7 @@ ButtonToolbar::ButtonToolbar(juce::AudioProcessorValueTreeState& apvts)
     addAndMakeVisible(mode_selector_);
     addAndMakeVisible(power_saving_button_);
     addAndMakeVisible(transport_);
+    addAndMakeVisible(new_profile_button_);
     addAndMakeVisible(load_profile_button_);
     addAndMakeVisible(save_profile_button_);
     addAndMakeVisible(save_as_profile_button_);
@@ -42,16 +44,17 @@ ButtonToolbar::resized()
     grid.autoRows = Track(Fr(100));
 
     grid.templateColumns = {
-        Track(Fr(10)),  //! Plugin enablement button.
-        Track(Fr(20)),  //! Mode selector switch.
-        Track(Fr(10)),  //! Power saving button.
-        Track(Fr(10)),  //! Empty space.
-        Track(Fr(10)),  //! Transport button.
-        Track(Fr(10)),  //! Empty space.
-        Track(Fr(10)),  //! "Load" profile button.
-        Track(Fr(10)),  //! "Save" profile button.
-        Track(Fr(10)),  //! "Save As" profile button.
-        Track(Fr(10)),  //! Theme button.
+        Track(Fr(8)),   //! Plugin enablement button.
+        Track(Fr(16)),  //! Mode selector switch.
+        Track(Fr(8)),   //! Power saving button.
+        Track(Fr(6)),   //! Empty space.
+        Track(Fr(16)),  //! Transport button.
+        Track(Fr(6)),   //! Empty space.
+        Track(Fr(8)),   //! "New" profile button.
+        Track(Fr(8)),   //! "Load" profile button.
+        Track(Fr(8)),   //! "Save" profile button.
+        Track(Fr(8)),   //! "Save As" profile button.
+        Track(Fr(8)),   //! Theme button.
     };
 
     grid.items.add(juce::GridItem(plugin_enablement_button_));
@@ -60,6 +63,7 @@ ButtonToolbar::resized()
     grid.items.add(juce::GridItem());
     grid.items.add(juce::GridItem(transport_));
     grid.items.add(juce::GridItem());
+    grid.items.add(juce::GridItem(new_profile_button_));
     grid.items.add(juce::GridItem(load_profile_button_));
     grid.items.add(juce::GridItem(save_profile_button_));
     grid.items.add(juce::GridItem(save_as_profile_button_));
@@ -123,6 +127,7 @@ ButtonToolbar::setGlobalEnablement(const bool enable)
 {
     mode_selector_.setEnabled(enable);
     transport_.setEnabled(enable);
+    new_profile_button_.setEnabled(enable);
     load_profile_button_.setEnabled(enable);
     save_profile_button_.setEnabled(enable);
     save_as_profile_button_.setEnabled(enable);

@@ -29,6 +29,7 @@ private:
     ModeSelector           mode_selector_;
     CustomTextToggleButton power_saving_button_;
     TransportGroup         transport_;
+    CustomTextButton       new_profile_button_;
     CustomTextButton       load_profile_button_;
     CustomTextButton       save_profile_button_;
     CustomTextButton       save_as_profile_button_;
