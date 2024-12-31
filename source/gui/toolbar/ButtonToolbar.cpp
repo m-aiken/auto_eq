@@ -51,37 +51,37 @@ ButtonToolbar::resized()
 
     grid.templateColumns = {
         Track(Fr(8)),   //! Plugin enablement button.
-        Track(Fr(1)),   //! Section separator.
-        Track(Fr(16)),  //! Mode selector switch.
-        Track(Fr(1)),   //! Section separator.
-        Track(Fr(8)),   //! Power saving button.
-        Track(Fr(1)),   //! Section separator.
-        Track(Fr(6)),   //! Empty space.
-        Track(Fr(1)),   //! Section separator.
-        Track(Fr(16)),  //! Transport button.
-        Track(Fr(1)),   //! Section separator.
+        Track(Fr(1)),   //! ******************************** SECTION SEPARATOR.
         Track(Fr(8)),   //! "New" profile button.
         Track(Fr(8)),   //! "Load" profile button.
         Track(Fr(8)),   //! "Save" profile button.
         Track(Fr(8)),   //! "Save As" profile button.
-        Track(Fr(1)),   //! Section separator.
+        Track(Fr(1)),   //! ******************************** SECTION SEPARATOR.
+        Track(Fr(16)),  //! Mode selector switch.
+        Track(Fr(1)),   //! ******************************** SECTION SEPARATOR.
+        Track(Fr(16)),  //! Transport button.
+        Track(Fr(1)),   //! ******************************** SECTION SEPARATOR.
+        Track(Fr(6)),   //! Empty space.
+        Track(Fr(1)),   //! ******************************** SECTION SEPARATOR.
+        Track(Fr(8)),   //! Power saving button.
+        Track(Fr(1)),   //! ******************************** SECTION SEPARATOR.
         Track(Fr(8)),   //! Theme button.
     };
 
     grid.items.add(juce::GridItem(plugin_enablement_button_));
     grid.items.add(juce::GridItem(section_separator_1_));
-    grid.items.add(juce::GridItem(mode_selector_));
-    grid.items.add(juce::GridItem(section_separator_2_));
-    grid.items.add(juce::GridItem(power_saving_button_));
-    grid.items.add(juce::GridItem(section_separator_3_));
-    grid.items.add(juce::GridItem());
-    grid.items.add(juce::GridItem(section_separator_4_));
-    grid.items.add(juce::GridItem(transport_));
-    grid.items.add(juce::GridItem(section_separator_5_));
     grid.items.add(juce::GridItem(new_profile_button_));
     grid.items.add(juce::GridItem(load_profile_button_));
     grid.items.add(juce::GridItem(save_profile_button_));
     grid.items.add(juce::GridItem(save_as_profile_button_));
+    grid.items.add(juce::GridItem(section_separator_2_));
+    grid.items.add(juce::GridItem(mode_selector_));
+    grid.items.add(juce::GridItem(section_separator_3_));
+    grid.items.add(juce::GridItem(transport_));
+    grid.items.add(juce::GridItem(section_separator_4_));
+    grid.items.add(juce::GridItem());
+    grid.items.add(juce::GridItem(section_separator_5_));
+    grid.items.add(juce::GridItem(power_saving_button_));
     grid.items.add(juce::GridItem(section_separator_6_));
     grid.items.add(juce::GridItem(theme_button_));
 
