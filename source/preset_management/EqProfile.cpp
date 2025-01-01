@@ -112,7 +112,7 @@ EqProfile::initialiseProfile()
     for (int i = 0; i < Equalizer::NUM_BANDS; ++i) {
         juce::ValueTree band(XML_TAG_BAND);
 
-        band.setProperty(XML_ATTR_BAND_ID, (i + 1), undo_manager_.get());
+        band.setProperty(XML_ATTR_BAND_ID, i, undo_manager_.get());
         band.setProperty(XML_ATTR_BAND_GAIN, 0.0, undo_manager_.get());
 
         initial_data.appendChild(band, undo_manager_.get());
