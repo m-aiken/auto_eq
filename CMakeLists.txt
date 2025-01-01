@@ -80,6 +80,7 @@ set(PROJECT_SOURCES
         source/gui/widgets/DisableableLabel.cpp
         source/gui/widgets/RotaryControl.cpp
         source/gui/widgets/ToggleSwitch.cpp
+        source/preset_management/EqProfile.cpp
 
         source/third_party/klangfreund_lufs_meter/Ebu128LoudnessMeter.cpp
         source/third_party/klangfreund_lufs_meter/filters/SecondOrderIIRFilter.cpp
@@ -129,6 +130,7 @@ set(PROJECT_HEADERS
         source/gui/widgets/DisableableLabel.h
         source/gui/widgets/RotaryControl.h
         source/gui/widgets/ToggleSwitch.h
+        source/preset_management/EqProfile.h
         source/utility/GlobalConstants.h
 
         source/third_party/klangfreund_lufs_meter/Ebu128LoudnessMeter.h
@@ -157,6 +159,7 @@ target_include_directories(${PROJECT_NAME}
         ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/toolbar
         ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/transport
         ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/widgets
+        ${CMAKE_CURRENT_SOURCE_DIR}/source/preset_management
         ${CMAKE_CURRENT_SOURCE_DIR}/source/utility
 
         ${CMAKE_CURRENT_SOURCE_DIR}/source/third_party/klangfreund_lufs_meter
