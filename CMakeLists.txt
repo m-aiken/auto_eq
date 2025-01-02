@@ -71,6 +71,7 @@ set(PROJECT_SOURCES
         source/gui/response_graph/MonoFftPathProducer.cpp
         source/gui/toolbar/ButtonToolbar.cpp
         source/gui/toolbar/PluginEnablementButton.cpp
+        source/gui/toolbar/ReadonlyTextBox.cpp
         source/gui/toolbar/ThemeButton.cpp
         source/gui/toolbar/ToolbarSeparator.cpp
         source/gui/transport/TransportButton.cpp
@@ -121,6 +122,7 @@ set(PROJECT_HEADERS
         source/gui/response_graph/MonoFftPathProducer.h
         source/gui/toolbar/ButtonToolbar.h
         source/gui/toolbar/PluginEnablementButton.h
+        source/gui/toolbar/ReadonlyTextBox.h
         source/gui/toolbar/ThemeButton.h
         source/gui/toolbar/ToolbarSeparator.h
         source/gui/transport/TransportButton.h

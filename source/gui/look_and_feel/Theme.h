@@ -37,6 +37,7 @@ public:
     static const DarkLightPair TEXT_BTN_BG;
     static const DarkLightPair TEXT_BTN_BG_FOCUS;
     static const DarkLightPair TEXT_BTN_TOGGLE_ON_BORDER;
+    static const DarkLightPair READONLY_TEXTBOX_BG;
 
     static bool app_is_in_dark_mode;
 

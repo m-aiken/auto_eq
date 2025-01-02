@@ -4,8 +4,10 @@
 
 #include "CustomTextButton.h"
 #include "CustomTextToggleButton.h"
+#include "DisableableLabel.h"
 #include "ModeSelector.h"
 #include "PluginEnablementButton.h"
+#include "ReadonlyTextBox.h"
 #include "ThemeButton.h"
 #include "ToolbarSeparator.h"
 #include "TransportGroup.h"
@@ -30,6 +32,7 @@ private:
     ModeSelector           mode_selector_;
     CustomTextToggleButton power_saving_button_;
     TransportGroup         transport_;
+    ReadonlyTextBox        current_profile_name_;
     CustomTextButton       new_profile_button_;
     CustomTextButton       load_profile_button_;
     CustomTextButton       save_profile_button_;
@@ -42,6 +45,12 @@ private:
     ToolbarSeparator section_separator_4_;
     ToolbarSeparator section_separator_5_;
     ToolbarSeparator section_separator_6_;
+    ToolbarSeparator section_separator_7_;
+    ToolbarSeparator section_separator_8_;
+    ToolbarSeparator section_separator_9_;
+    ToolbarSeparator section_separator_10_;
+    ToolbarSeparator section_separator_11_;
+    ToolbarSeparator section_separator_12_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ButtonToolbar)
 };

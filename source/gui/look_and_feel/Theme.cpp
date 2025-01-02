@@ -30,6 +30,7 @@ const Theme::DLP Theme::TOOLBAR_SEPARATOR       = DarkLightPair(PARCHMENT.withAl
 const Theme::DLP Theme::TEXT_BTN_BG             = DarkLightPair(PARCHMENT.withAlpha(0.02f), DARK_GREY.withAlpha(0.05f));
 const Theme::DLP Theme::TEXT_BTN_BG_FOCUS       = DarkLightPair(PARCHMENT.withAlpha(0.05f), DARK_GREY.withAlpha(0.1f));
 const Theme::DLP Theme::TEXT_BTN_TOGGLE_ON_BORDER = DarkLightPair(RED_ORANGE, RED_ORANGE);
+const Theme::DLP Theme::READONLY_TEXTBOX_BG = DarkLightPair(PARCHMENT.withAlpha(0.02f), DARK_GREY.withAlpha(0.05f));
 
 bool Theme::app_is_in_dark_mode = true;
 
