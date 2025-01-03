@@ -5,10 +5,10 @@
 #include "DisableableLabel.h"
 #include "RotaryControl.h"
 
-class EqIntensity : public juce::Component
+class InputTrim : public juce::Component
 {
 public:
-    explicit EqIntensity(juce::AudioProcessorValueTreeState& apvts);
+    explicit InputTrim(juce::AudioProcessorValueTreeState& apvts);
 
     void paint(juce::Graphics& g) override;
     void resized() override;
@@ -16,8 +16,8 @@ public:
 private:
     DisableableLabel widget_label_;
     RotaryControl    rotary_control_;
-    DisableableLabel off_label_;
-    DisableableLabel full_label_;
+    DisableableLabel min_label_;
+    DisableableLabel max_label_;
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(EqIntensity)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(InputTrim)
 };

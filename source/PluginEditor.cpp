@@ -17,6 +17,7 @@ PluginEditor::PluginEditor(PluginProcessor& p)
     , toolbar_(p.getApvts())
     , filter_res_graph_(p)
     , profiler_widget_(p)
+    , input_trim_(p.getApvts())
     , eq_intensity_(p.getApvts())
     , master_gain_(p)
     , lufs_meters_(p)
@@ -27,6 +28,7 @@ PluginEditor::PluginEditor(PluginProcessor& p)
     addAndMakeVisible(toolbar_);
     addAndMakeVisible(filter_res_graph_);
     addAndMakeVisible(profiler_widget_);
+    addAndMakeVisible(input_trim_);
     addAndMakeVisible(eq_intensity_);
     addAndMakeVisible(master_gain_);
     addAndMakeVisible(lufs_meters_);
@@ -77,9 +79,8 @@ PluginEditor::resized()
     const int                    top_controls_height   = static_cast< int >(std::floor(bounds_height * 0.05));
     const int                    graph_height          = static_cast< int >(std::floor(bounds_height * 0.65));
     const int                    bottom_section_height = static_cast< int >(std::floor(bounds_height * 0.25));
-    const int                    eq_intensity_width    = static_cast< int >(std::floor(bounds_width * 0.15));
-    const int                    master_gain_width     = static_cast< int >(std::floor(bounds_width * 0.15));
-    const int                    meters_width          = static_cast< int >(std::floor(bounds_width * 0.7));
+    const int                    rotary_widget_width   = static_cast< int >(std::floor(bounds_width * 0.15));
+    const int                    meters_width          = static_cast< int >(std::floor(bounds_width * 0.55));
     const int                    bottom_section_y      = bounds.getBottom() - bottom_section_height;
 
     // Top button toolbar.
@@ -97,8 +98,9 @@ PluginEditor::resized()
     profiler_widget_.setVisible(profiler_mode);
 
     // Bottom section.
-    eq_intensity_.setBounds(0, bottom_section_y, eq_intensity_width, bottom_section_height);
-    master_gain_.setBounds(eq_intensity_.getRight(), bottom_section_y, master_gain_width, bottom_section_height);
+    input_trim_.setBounds(0, bottom_section_y, rotary_widget_width, bottom_section_height);
+    eq_intensity_.setBounds(input_trim_.getRight(), bottom_section_y, rotary_widget_width, bottom_section_height);
+    master_gain_.setBounds(eq_intensity_.getRight(), bottom_section_y, rotary_widget_width, bottom_section_height);
     lufs_meters_.setBounds(master_gain_.getRight(), bottom_section_y, meters_width, bottom_section_height);
 }
 
@@ -125,6 +127,7 @@ PluginEditor::buttonClicked(juce::Button* button)
         toolbar_.setGlobalEnablement(plugin_enabled);
         filter_res_graph_.setEnabled(plugin_enabled);
         profiler_widget_.setEnabled(plugin_enabled);
+        input_trim_.setEnabled(plugin_enabled);
         eq_intensity_.setEnabled(plugin_enabled);
         master_gain_.setEnabled(plugin_enabled);
         lufs_meters_.setEnabled(plugin_enabled);

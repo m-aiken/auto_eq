@@ -47,6 +47,7 @@ set(PROJECT_SOURCES
         source/dsp/MonoFftBuffer.cpp
         source/dsp/UnityGainCalculator.cpp
         source/gui/eq_intensity/EqIntensity.cpp
+        source/gui/input_trim/InputTrim.cpp
         source/gui/look_and_feel/CustomLookAndFeel.cpp
         source/gui/look_and_feel/Theme.cpp
         source/gui/lufs_meters/LufsLabelGroup.cpp
@@ -98,6 +99,7 @@ set(PROJECT_HEADERS
         source/dsp/MonoFftBuffer.h
         source/dsp/UnityGainCalculator.h
         source/gui/eq_intensity/EqIntensity.h
+        source/gui/input_trim/InputTrim.h
         source/gui/look_and_feel/CustomLookAndFeel.h
         source/gui/look_and_feel/Theme.h
         source/gui/lufs_meters/LufsLabelGroup.h
@@ -151,6 +153,7 @@ target_include_directories(${PROJECT_NAME}
         ${CMAKE_CURRENT_SOURCE_DIR}/source/dsp
         ${CMAKE_CURRENT_SOURCE_DIR}/source/gui
         ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/eq_intensity
+        ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/input_trim
         ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/look_and_feel
         ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/lufs_meters
         ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/master_gain

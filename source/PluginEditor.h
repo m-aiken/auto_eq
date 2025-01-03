@@ -4,9 +4,9 @@
 #include "CustomLookAndFeel.h"
 #include "EqIntensity.h"
 #include "FilterResponseGraph.h"
+#include "InputTrim.h"
 #include "LufsMetersWidget.h"
 #include "MasterGain.h"
-#include "MonoWaveform.h"
 #include "PluginProcessor.h"
 #include "ProfilerWidget.h"
 
@@ -36,6 +36,7 @@ private:
     ButtonToolbar       toolbar_;
     FilterResponseGraph filter_res_graph_;
     ProfilerWidget      profiler_widget_;
+    InputTrim           input_trim_;
     EqIntensity         eq_intensity_;
     MasterGain          master_gain_;
     LufsMetersWidget    lufs_meters_;
