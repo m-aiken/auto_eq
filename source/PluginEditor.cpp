@@ -16,7 +16,6 @@ PluginEditor::PluginEditor(PluginProcessor& p)
     , processor_ref_(p)
     , toolbar_(p.getApvts())
     , filter_res_graph_(p)
-    , profiler_widget_(p)
     , input_trim_(p.getApvts())
     , eq_intensity_(p.getApvts())
     , master_gain_(p)
@@ -27,14 +26,12 @@ PluginEditor::PluginEditor(PluginProcessor& p)
 
     addAndMakeVisible(toolbar_);
     addAndMakeVisible(filter_res_graph_);
-    addAndMakeVisible(profiler_widget_);
     addAndMakeVisible(input_trim_);
     addAndMakeVisible(eq_intensity_);
     addAndMakeVisible(master_gain_);
     addAndMakeVisible(lufs_meters_);
 
     toolbar_.getPluginEnablementButton().addListener(this);
-    toolbar_.getModeSelectorSwitch().addListener(this);
     toolbar_.getAnalysisStateButton().addListener(this);
     toolbar_.getThemeButton().addListener(this);
     lufs_meters_.getResetButton().addListener(this);
@@ -50,7 +47,6 @@ PluginEditor::PluginEditor(PluginProcessor& p)
 PluginEditor::~PluginEditor()
 {
     toolbar_.getPluginEnablementButton().removeListener(this);
-    toolbar_.getModeSelectorSwitch().removeListener(this);
     toolbar_.getAnalysisStateButton().removeListener(this);
     toolbar_.getThemeButton().removeListener(this);
     lufs_meters_.getResetButton().removeListener(this);
@@ -86,16 +82,8 @@ PluginEditor::resized()
     // Top button toolbar.
     toolbar_.setBounds(0, 0, bounds_width, top_controls_height);
 
-    // EQ graph and profiler widget. They occupy the same space as their visibility is dependent on the mode.
-    const juce::Rectangle< int > graph_bounds(0, top_controls_height, bounds_width, graph_height);
-
-    filter_res_graph_.setBounds(graph_bounds);
-    profiler_widget_.setBounds(graph_bounds);
-
-    const bool profiler_mode = toolbar_.getModeSelectorSwitch().getToggleState();
-
-    filter_res_graph_.setVisible(!profiler_mode);
-    profiler_widget_.setVisible(profiler_mode);
+    // EQ graph.
+    filter_res_graph_.setBounds(0, top_controls_height, bounds_width, graph_height);
 
     // Bottom section.
     input_trim_.setBounds(0, bottom_section_y, rotary_widget_width, bottom_section_height);
@@ -115,9 +103,8 @@ PluginEditor::buttonClicked(juce::Button* button)
     }
 
     const PluginEnablementButton& plugin_enablement_button = toolbar_.getPluginEnablementButton();
-    const ToggleSwitch&           mode_selector_switch     = toolbar_.getModeSelectorSwitch();
     CustomTextToggleButton&       power_saving_button      = toolbar_.getPowerSavingButton();
-    TransportButton&              analysis_state_button    = toolbar_.getAnalysisStateButton();
+    CustomTextToggleButton&       analysis_state_button    = toolbar_.getAnalysisStateButton();
     const ThemeButton&            theme_button             = toolbar_.getThemeButton();
     const CustomTextButton&       lufs_meters_reset_button = lufs_meters_.getResetButton();
 
@@ -126,7 +113,6 @@ PluginEditor::buttonClicked(juce::Button* button)
 
         toolbar_.setGlobalEnablement(plugin_enabled);
         filter_res_graph_.setEnabled(plugin_enabled);
-        profiler_widget_.setEnabled(plugin_enabled);
         input_trim_.setEnabled(plugin_enabled);
         eq_intensity_.setEnabled(plugin_enabled);
         master_gain_.setEnabled(plugin_enabled);
@@ -150,14 +136,6 @@ PluginEditor::buttonClicked(juce::Button* button)
         }
 
         repaint();
-    }
-    else if (button == &mode_selector_switch) {
-        const bool profiler_mode = mode_selector_switch.getToggleState();
-
-        filter_res_graph_.setVisible(!profiler_mode);
-        profiler_widget_.setVisible(profiler_mode);
-
-        power_saving_button.setEnabled(!profiler_mode);
     }
     else if (button == &analysis_state_button) {
         analysis_state_button.getToggleState() ? processor_ref_.startInputAnalysis() : processor_ref_.stopInputAnalysis();

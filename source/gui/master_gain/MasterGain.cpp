@@ -8,7 +8,7 @@
 MasterGain::MasterGain(PluginProcessor& p)
     : widget_label_("master_gain_widget_label", "Master Gain")
     , rotary_control_(p.getApvts(), GuiParams::MASTER_GAIN, true, "dB", 1)
-    , unity_gain_button_(p.getApvts(), GuiParams::UNITY_GAIN_ENABLED, "Unity Gain", GuiParams::INITIAL_UNITY_GAIN_STATE)
+    , unity_gain_button_(p.getApvts(), GuiParams::UNITY_GAIN_ENABLED, GuiParams::INITIAL_UNITY_GAIN_STATE, "Unity Gain")
     , processor_ref_(p)
 {
     addAndMakeVisible(widget_label_);

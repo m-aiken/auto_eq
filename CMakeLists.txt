@@ -57,10 +57,6 @@ set(PROJECT_SOURCES
         source/gui/meters/MeterCanvas.cpp
         source/gui/meters/MeterDbScale.cpp
         source/gui/meters/MonoMeter.cpp
-        source/gui/mode_selector/ModeSelector.cpp
-        source/gui/profiling/MonoWaveform.cpp
-        source/gui/profiling/ProfilerInputWidget.cpp
-        source/gui/profiling/ProfilerWidget.cpp
         source/gui/response_graph/DecibelMarkers.cpp
         source/gui/response_graph/EqBandSlider.cpp
         source/gui/response_graph/FilterMagnitudesCalculator.cpp
@@ -76,7 +72,6 @@ set(PROJECT_SOURCES
         source/gui/toolbar/ThemeButton.cpp
         source/gui/toolbar/ToolbarSeparator.cpp
         source/gui/transport/TransportButton.cpp
-        source/gui/transport/TransportGroup.cpp
         source/gui/widgets/CustomTextButton.cpp
         source/gui/widgets/CustomTextToggleButton.cpp
         source/gui/widgets/DisableableLabel.cpp
@@ -109,10 +104,6 @@ set(PROJECT_HEADERS
         source/gui/meters/MeterCanvas.h
         source/gui/meters/MeterDbScale.h
         source/gui/meters/MonoMeter.h
-        source/gui/mode_selector/ModeSelector.h
-        source/gui/profiling/MonoWaveform.h
-        source/gui/profiling/ProfilerInputWidget.h
-        source/gui/profiling/ProfilerWidget.h
         source/gui/response_graph/DecibelMarkers.h
         source/gui/response_graph/EqBandSlider.h
         source/gui/response_graph/FilterMagnitudesCalculator.h
@@ -128,7 +119,6 @@ set(PROJECT_HEADERS
         source/gui/toolbar/ThemeButton.h
         source/gui/toolbar/ToolbarSeparator.h
         source/gui/transport/TransportButton.h
-        source/gui/transport/TransportGroup.h
         source/gui/widgets/CustomTextButton.h
         source/gui/widgets/CustomTextToggleButton.h
         source/gui/widgets/DisableableLabel.h
@@ -158,8 +148,6 @@ target_include_directories(${PROJECT_NAME}
         ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/lufs_meters
         ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/master_gain
         ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/meters
-        ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/mode_selector
-        ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/profiling
         ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/response_graph
         ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/toolbar
         ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/transport

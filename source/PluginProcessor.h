@@ -9,7 +9,6 @@
 #include "GlobalConstants.h"
 #include "InputAnalysisFilter.h"
 #include "MonoFftBuffer.h"
-#include "MonoWaveform.h"
 #include "UnityGainCalculator.h"
 
 class PluginProcessor final : public juce::AudioProcessor
@@ -53,8 +52,7 @@ public:
     FftBuffers&           getFftBuffers();
     Equalizer::MonoChain& getFilterChain();
 
-    float         getInputGainValue() const;
-    MonoWaveform& getMonoWaveform();
+    float getInputGainValue() const;
 
     float getMeterValue(const Global::Meters::METER_TYPE meter_type) const;
 
@@ -69,7 +67,6 @@ public:
 private:
     bool booleanParameterEnabled(GuiParams::PARAM_ID param_id) const;
 
-    bool         pluginInMode(Global::PluginMode::OPTION mode) const;
     void         updateFilterCoefficients();
     void         updateInputGainValue(const juce::AudioBuffer< float >& buffer);
     void         updateLufsValues(const juce::AudioBuffer< float >& dummy_buffer);
@@ -93,7 +90,6 @@ private:
     Equalizer::MonoChain filter_chain_right_;
 
     SmoothedFloat input_gain_value_;
-    MonoWaveform  mono_waveform_;
 
     // LUFS values.
     std::array< SmoothedFloat, Global::Meters::NUM_LOUDNESS_METERS > loudness_values_;

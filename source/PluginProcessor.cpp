@@ -157,10 +157,9 @@ PluginProcessor::prepareToPlay(double sample_rate, int samples_per_block)
     // Band pass filters.
     updateFilterCoefficients();
 
-    // Profiler input gain and waveform.
+    // Input gain.
     input_gain_value_.reset(sample_rate, METER_DB_RAMP_TIME_SECONDS);
     input_gain_value_.setCurrentAndTargetValue(Global::METER_NEG_INF);
-    mono_waveform_.setBufferSize(samples_per_block);
 
     // Meter values.
     for (auto& loudness_val : loudness_values_) {
@@ -255,21 +254,14 @@ PluginProcessor::processBlock(juce::AudioBuffer< float >& buffer, juce::MidiBuff
         // Clear the profiler input gain and waveform.
         input_gain_value_.skip(samples_to_skip);
         input_gain_value_.setTargetValue(Global::METER_NEG_INF);  //! Ramp to the new value.
-        mono_waveform_.clear();
 
         // Don't do any processing on the real buffer.
         return;
     }
 
-    // If we're in profiler mode apply any input trim, then update the meter and waveform.
-    if (pluginInMode(Global::PluginMode::PROFILER)) {
-        applyInputTrim(buffer);
-        updateInputGainValue(buffer);
-
-        for (int i = 0; i < buffer.getNumSamples(); ++i) {
-            mono_waveform_.pushSample(buffer.getReadPointer(0, i), 1);
-        }
-    }
+    // Apply any input trim, then update the input gain meter value.
+    applyInputTrim(buffer);
+    updateInputGainValue(buffer);
 
     if (booleanParameterEnabled(GuiParams::UNITY_GAIN_ENABLED)) {
         unity_gain_calculator_.pushForAnalysis(buffer, UnityGainCalculator::PRE_PROCESSED_FIFO);
@@ -417,15 +409,6 @@ PluginProcessor::getInputGainValue() const
 /*---------------------------------------------------------------------------
 **
 */
-MonoWaveform&
-PluginProcessor::getMonoWaveform()
-{
-    return mono_waveform_;
-}
-
-/*---------------------------------------------------------------------------
-**
-*/
 float
 PluginProcessor::getMeterValue(const Global::Meters::METER_TYPE meter_type) const
 {
@@ -508,18 +491,6 @@ PluginProcessor::booleanParameterEnabled(GuiParams::PARAM_ID param_id) const
     juce::RangedAudioParameter* param = apvts_.getParameter(GuiParams::getName(param_id));
 
     return (param != nullptr) && static_cast< bool >(param->getValue());
-}
-
-/*---------------------------------------------------------------------------
-**
-*/
-bool
-PluginProcessor::pluginInMode(Global::PluginMode::OPTION mode) const
-{
-    juce::RangedAudioParameter* raw_param = apvts_.getParameter(GuiParams::getName(GuiParams::PLUGIN_MODE));
-    const auto* choice_param = (raw_param != nullptr) ? dynamic_cast< juce::AudioParameterChoice* >(raw_param) : nullptr;
-
-    return (choice_param != nullptr) && (choice_param->getIndex() == mode);
 }
 
 /*---------------------------------------------------------------------------
@@ -662,7 +633,6 @@ PluginProcessor::getParameterLayout()
     juce::AudioProcessorValueTreeState::ParameterLayout pl;
 
     juce::String power_param_id        = GuiParams::getName(GuiParams::POWER);
-    juce::String plugin_mode_param_id  = GuiParams::getName(GuiParams::PLUGIN_MODE);
     juce::String analysis_param_id     = GuiParams::getName(GuiParams::ANALYSE_INPUT);
     juce::String power_saving_param_id = GuiParams::getName(GuiParams::POWER_SAVING);
     juce::String input_trim_param_id   = GuiParams::getName(GuiParams::INPUT_TRIM);
@@ -682,17 +652,9 @@ PluginProcessor::getParameterLayout()
                                                        GuiParams::MASTER_GAIN_INTERVAL,
                                                        1.f);
 
-    juce::StringArray plugin_mode_choices(Global::PluginMode::getName(Global::PluginMode::ANALYSER),
-                                          Global::PluginMode::getName(Global::PluginMode::PROFILER));
-
     pl.add(std::make_unique< juce::AudioParameterBool >(juce::ParameterID(power_param_id, 1),
                                                         power_param_id,
                                                         GuiParams::INITIAL_POWER_STATE));
-
-    pl.add(std::make_unique< juce::AudioParameterChoice >(juce::ParameterID(plugin_mode_param_id, 1),
-                                                          plugin_mode_param_id,
-                                                          plugin_mode_choices,
-                                                          Global::PluginMode::DEFAULT));
 
     pl.add(std::make_unique< juce::AudioParameterBool >(juce::ParameterID(analysis_param_id, 1),
                                                         analysis_param_id,
