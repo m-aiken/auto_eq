@@ -19,7 +19,7 @@ PluginEditor::PluginEditor(PluginProcessor& p)
     , input_trim_(p.getApvts())
     , eq_intensity_(p.getApvts())
     , master_gain_(p)
-    , lufs_meters_(p)
+    , meters_(p)
     , cached_power_saving_state_(GuiParams::INITIAL_POWER_SAVING_STATE)
 {
     setLookAndFeel(&lnf_);
@@ -29,12 +29,11 @@ PluginEditor::PluginEditor(PluginProcessor& p)
     addAndMakeVisible(input_trim_);
     addAndMakeVisible(eq_intensity_);
     addAndMakeVisible(master_gain_);
-    addAndMakeVisible(lufs_meters_);
+    addAndMakeVisible(meters_);
 
     toolbar_.getPluginEnablementButton().addListener(this);
     toolbar_.getAnalysisStateButton().addListener(this);
     toolbar_.getThemeButton().addListener(this);
-    lufs_meters_.getResetButton().addListener(this);
 
     setResizable(true, true);
     setResizeLimits(MAIN_WINDOW_MIN_WIDTH, MAIN_WINDOW_MIN_HEIGHT, MAIN_WINDOW_MAX_WIDTH, MAIN_WINDOW_MAX_HEIGHT);
@@ -49,7 +48,6 @@ PluginEditor::~PluginEditor()
     toolbar_.getPluginEnablementButton().removeListener(this);
     toolbar_.getAnalysisStateButton().removeListener(this);
     toolbar_.getThemeButton().removeListener(this);
-    lufs_meters_.getResetButton().removeListener(this);
 
     setLookAndFeel(nullptr);
 }
@@ -89,7 +87,7 @@ PluginEditor::resized()
     input_trim_.setBounds(0, bottom_section_y, rotary_widget_width, bottom_section_height);
     eq_intensity_.setBounds(input_trim_.getRight(), bottom_section_y, rotary_widget_width, bottom_section_height);
     master_gain_.setBounds(eq_intensity_.getRight(), bottom_section_y, rotary_widget_width, bottom_section_height);
-    lufs_meters_.setBounds(master_gain_.getRight(), bottom_section_y, meters_width, bottom_section_height);
+    meters_.setBounds(master_gain_.getRight(), bottom_section_y, meters_width, bottom_section_height);
 }
 
 /*---------------------------------------------------------------------------
@@ -106,7 +104,6 @@ PluginEditor::buttonClicked(juce::Button* button)
     CustomTextToggleButton&       power_saving_button      = toolbar_.getPowerSavingButton();
     CustomTextToggleButton&       analysis_state_button    = toolbar_.getAnalysisStateButton();
     const ThemeButton&            theme_button             = toolbar_.getThemeButton();
-    const CustomTextButton&       lufs_meters_reset_button = lufs_meters_.getResetButton();
 
     if (button == &plugin_enablement_button) {
         const bool plugin_enabled = plugin_enablement_button.getToggleState();
@@ -116,7 +113,7 @@ PluginEditor::buttonClicked(juce::Button* button)
         input_trim_.setEnabled(plugin_enabled);
         eq_intensity_.setEnabled(plugin_enabled);
         master_gain_.setEnabled(plugin_enabled);
-        lufs_meters_.setEnabled(plugin_enabled);
+        meters_.setEnabled(plugin_enabled);
 
         // If the user is disabling the plugin and the analysis is active, stop the analysis.
         if (!plugin_enabled && analysis_state_button.getToggleState()) {
@@ -142,9 +139,6 @@ PluginEditor::buttonClicked(juce::Button* button)
     }
     else if (button == &theme_button) {
         repaint();
-    }
-    else if (button == &lufs_meters_reset_button) {
-        processor_ref_.resetLufsModule();
     }
 }
 

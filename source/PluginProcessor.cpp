@@ -157,14 +157,10 @@ PluginProcessor::prepareToPlay(double sample_rate, int samples_per_block)
     // Band pass filters.
     updateFilterCoefficients();
 
-    // Input gain.
-    input_gain_value_.reset(sample_rate, METER_DB_RAMP_TIME_SECONDS);
-    input_gain_value_.setCurrentAndTargetValue(Global::METER_NEG_INF);
-
     // Meter values.
-    for (auto& loudness_val : loudness_values_) {
-        loudness_val.reset(sample_rate, METER_DB_RAMP_TIME_SECONDS);
-        loudness_val.setCurrentAndTargetValue(Global::METER_NEG_INF);
+    for (auto& meter_val : meter_values_) {
+        meter_val.reset(sample_rate, METER_DB_RAMP_TIME_SECONDS);
+        meter_val.setCurrentAndTargetValue(Global::METER_NEG_INF);
     }
 
     // Initialise the empty buffer.
@@ -246,14 +242,10 @@ PluginProcessor::processBlock(juce::AudioBuffer< float >& buffer, juce::MidiBuff
         // Clear out the meter values.
         const int samples_to_skip = buffer.getNumSamples();
 
-        for (auto& loudness_val : loudness_values_) {
-            loudness_val.skip(samples_to_skip);
-            loudness_val.setTargetValue(Global::METER_NEG_INF);  //! Ramp to the new value.
+        for (auto& meter_val : meter_values_) {
+            meter_val.skip(samples_to_skip);
+            meter_val.setTargetValue(Global::METER_NEG_INF);  //! Ramp to the new value.
         }
-
-        // Clear the profiler input gain and waveform.
-        input_gain_value_.skip(samples_to_skip);
-        input_gain_value_.setTargetValue(Global::METER_NEG_INF);  //! Ramp to the new value.
 
         // Don't do any processing on the real buffer.
         return;
@@ -261,7 +253,7 @@ PluginProcessor::processBlock(juce::AudioBuffer< float >& buffer, juce::MidiBuff
 
     // Apply any input trim, then update the input gain meter value.
     applyInputTrim(buffer);
-    updateInputGainValue(buffer);
+    updateMeterValue(Global::Meters::INPUT_GAIN, buffer);
 
     if (booleanParameterEnabled(GuiParams::UNITY_GAIN_ENABLED)) {
         unity_gain_calculator_.pushForAnalysis(buffer, UnityGainCalculator::PRE_PROCESSED_FIFO);
@@ -323,7 +315,11 @@ PluginProcessor::processBlock(juce::AudioBuffer< float >& buffer, juce::MidiBuff
     // LUFS.
     lufs_module_.processBlock(buffer);
 
-    updateLufsValues(buffer);
+    // Output meters.
+    updateMeterValue(Global::Meters::OUTPUT_PEAK, buffer);
+    updateMeterValue(Global::Meters::OUTPUT_RMS, buffer);
+    updateMeterValue(Global::Meters::MOMENTARY_LOUDNESS, buffer);
+    updateMeterValue(Global::Meters::SHORT_TERM_LOUDNESS, buffer);
 }
 
 /*---------------------------------------------------------------------------
@@ -401,36 +397,9 @@ PluginProcessor::getFilterChain()
 **
 */
 float
-PluginProcessor::getInputGainValue() const
-{
-    return input_gain_value_.getCurrentValue();
-}
-
-/*---------------------------------------------------------------------------
-**
-*/
-float
 PluginProcessor::getMeterValue(const Global::Meters::METER_TYPE meter_type) const
 {
-    float ret = Global::NEG_INF;
-
-    if (Global::Meters::isLoudnessMeter(meter_type)) {
-        ret = loudness_values_.at(meter_type).getCurrentValue();
-    }
-    else if (Global::Meters::isInputGainMeter(meter_type)) {
-        ret = input_gain_value_.getCurrentValue();
-    }
-
-    return ret;
-}
-
-/*---------------------------------------------------------------------------
-**
-*/
-void
-PluginProcessor::resetLufsModule()
-{
-    lufs_module_.reset();
+    return meter_values_.at(meter_type).getCurrentValue();
 }
 
 /*---------------------------------------------------------------------------
@@ -528,49 +497,49 @@ PluginProcessor::updateFilterCoefficients()
 **
 */
 void
-PluginProcessor::updateInputGainValue(const juce::AudioBuffer< float >& buffer)
+PluginProcessor::updateMeterValue(Global::Meters::METER_TYPE meter, const juce::AudioBuffer< float >& buffer)
 {
-    // Note: This logic (or similar) might be nice for the value updating below.
-    const int   num_samples = buffer.getNumSamples();
-    const float new_value = juce::Decibels::gainToDecibels(buffer.getMagnitude(0, 0, num_samples), Global::METER_NEG_INF);
+    const int num_samples = buffer.getNumSamples();
+    float     new_value   = Global::METER_NEG_INF;
 
-    input_gain_value_.skip(num_samples);
+    switch (meter) {
+    case Global::Meters::INPUT_GAIN:
+    case Global::Meters::OUTPUT_PEAK:
+        new_value = juce::Decibels::gainToDecibels(buffer.getMagnitude(0, num_samples), Global::METER_NEG_INF);
+        break;
 
-    // new value >  current value: jump to it immediately.
-    // new value <= current value: ramp to it gradually.
-    new_value > input_gain_value_.getCurrentValue() ? input_gain_value_.setCurrentAndTargetValue(new_value) :
-                                                      input_gain_value_.setTargetValue(new_value);
-}
+    case Global::Meters::OUTPUT_RMS:
+    {
+        const float rms_l_gain = buffer.getRMSLevel(Global::Channels::INPUT_LEFT, 0, num_samples);
+        const float rms_l_db   = juce::Decibels::gainToDecibels(rms_l_gain, Global::METER_NEG_INF);
+        const float rms_r_gain = buffer.getRMSLevel(Global::Channels::INPUT_RIGHT, 0, num_samples);
+        const float rms_r_db   = juce::Decibels::gainToDecibels(rms_r_gain, Global::METER_NEG_INF);
 
-/*---------------------------------------------------------------------------
-**
-*/
-void
-PluginProcessor::updateLufsValues(const juce::AudioBuffer< float >& dummy_buffer)
-{
-#if 0
-    // Note: This logic (or similar) might be nice for the value updating below.
-    int   num_samples = buffer.getNumSamples();
-    float new_value = juce::Decibels::gainToDecibels(buffer.getMagnitude(channel, 0, num_samples), Global::METER_NEG_INF);
+        new_value = (rms_l_db + rms_r_db) / 2.f;
 
-    val.skip(num_samples);
-
-    // new value >  current value: jump to it immediately.
-    // new value <= current value: ramp to it gradually.
-    new_value > val.getCurrentValue() ? val.setCurrentAndTargetValue(new_value) : val.setTargetValue(new_value);
-#endif
-
-    const int samples_to_skip = dummy_buffer.getNumSamples();
-
-    for (auto& loudness_val : loudness_values_) {
-        loudness_val.skip(samples_to_skip);
+        break;
     }
 
-    loudness_values_.at(Global::Meters::SHORT_TERM).setTargetValue(lufs_module_.getShortTermLoudness());
-    loudness_values_.at(Global::Meters::MOMENTARY).setTargetValue(lufs_module_.getMomentaryLoudness());
-    loudness_values_.at(Global::Meters::SHORT_TERM_MAX).setTargetValue(lufs_module_.getMaximumShortTermLoudness());
-    loudness_values_.at(Global::Meters::MOMENTARY_MAX).setTargetValue(lufs_module_.getMaximumMomentaryLoudness());
-    loudness_values_.at(Global::Meters::INTEGRATED).setTargetValue(lufs_module_.getIntegratedLoudness());
+    case Global::Meters::MOMENTARY_LOUDNESS:
+        new_value = lufs_module_.getMomentaryLoudness();
+        break;
+
+    case Global::Meters::SHORT_TERM_LOUDNESS:
+        new_value = lufs_module_.getShortTermLoudness();
+        break;
+
+    default:
+        break;
+    }
+
+    SmoothedFloat& current_meter_val = meter_values_.at(meter);
+
+    current_meter_val.skip(num_samples);
+
+    // new value >  current value: jump to it immediately.
+    // new value <= current value: ramp to it gradually.
+    new_value > current_meter_val.getCurrentValue() ? current_meter_val.setCurrentAndTargetValue(new_value) :
+                                                      current_meter_val.setTargetValue(new_value);
 }
 
 /*---------------------------------------------------------------------------

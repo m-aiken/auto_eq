@@ -52,11 +52,7 @@ public:
     FftBuffers&           getFftBuffers();
     Equalizer::MonoChain& getFilterChain();
 
-    float getInputGainValue() const;
-
     float getMeterValue(const Global::Meters::METER_TYPE meter_type) const;
-
-    void resetLufsModule();
 
     void startInputAnalysis();
     void stopInputAnalysis();
@@ -68,8 +64,7 @@ private:
     bool booleanParameterEnabled(GuiParams::PARAM_ID param_id) const;
 
     void         updateFilterCoefficients();
-    void         updateInputGainValue(const juce::AudioBuffer< float >& buffer);
-    void         updateLufsValues(const juce::AudioBuffer< float >& dummy_buffer);
+    void         updateMeterValue(Global::Meters::METER_TYPE meter, const juce::AudioBuffer< float >& buffer);
     void         applyInputTrim(juce::AudioBuffer< float >& buffer) const;
     void         applyMasterGain(juce::AudioBuffer< float >& buffer);
     static float getNormalisedValue(float full_range_value);
@@ -89,10 +84,8 @@ private:
     Equalizer::MonoChain filter_chain_left_;
     Equalizer::MonoChain filter_chain_right_;
 
-    SmoothedFloat input_gain_value_;
-
-    // LUFS values.
-    std::array< SmoothedFloat, Global::Meters::NUM_LOUDNESS_METERS > loudness_values_;
+    // Meter values.
+    std::array< SmoothedFloat, Global::Meters::NUM_METERS > meter_values_;
 
     juce::AudioBuffer< float > empty_buffer_;  //! Used to clear the meters when the plugin is disabled.
 

@@ -52,16 +52,14 @@ namespace Channels
 namespace Meters
 {
 
-    static constexpr uint8 NUM_LOUDNESS_METERS = 5;
+    static constexpr uint8_t NUM_METERS = 5;
 
     enum METER_TYPE {
-        SHORT_TERM,
-        MOMENTARY,
-        SHORT_TERM_MAX,
-        MOMENTARY_MAX,
-        INTEGRATED,
-
         INPUT_GAIN,
+        OUTPUT_PEAK,
+        OUTPUT_RMS,
+        MOMENTARY_LOUDNESS,
+        SHORT_TERM_LOUDNESS,
     };
 
     enum ORIENTATION {
@@ -70,30 +68,14 @@ namespace Meters
     };
 
     static const std::map< METER_TYPE, juce::String > METER_NAME_MAP = {
-        { SHORT_TERM, "Short Term" },            //
-        { MOMENTARY, "Momentary" },              //
-        { SHORT_TERM_MAX, "Short Term (MAX)" },  //
-        { MOMENTARY_MAX, "Momentary (MAX)" },    //
-        { INTEGRATED, "Integrated" },            //
-        { INPUT_GAIN, "Input Gain" }             //
+        { INPUT_GAIN, "Input Gain" },                    //
+        { OUTPUT_PEAK, "Output Peak" },                  //
+        { OUTPUT_RMS, "Output RMS" },                    //
+        { MOMENTARY_LOUDNESS, "Momentary Loudness" },    //
+        { SHORT_TERM_LOUDNESS, "Short Term Loudness" },  //
     };
 
     static juce::String getName(const METER_TYPE meter_type) { return METER_NAME_MAP.at(meter_type); }
-
-    static bool isLoudnessMeter(const METER_TYPE meter_type)
-    {
-        bool is_loudness_meter = false;
-
-        is_loudness_meter |= (meter_type == SHORT_TERM);
-        is_loudness_meter |= (meter_type == MOMENTARY);
-        is_loudness_meter |= (meter_type == SHORT_TERM_MAX);
-        is_loudness_meter |= (meter_type == MOMENTARY_MAX);
-        is_loudness_meter |= (meter_type == INTEGRATED);
-
-        return is_loudness_meter;
-    }
-
-    static bool isInputGainMeter(const METER_TYPE meter_type) { return (meter_type == INPUT_GAIN); }
 
 }  // namespace Meters
 

@@ -50,12 +50,12 @@ set(PROJECT_SOURCES
         source/gui/input_trim/InputTrim.cpp
         source/gui/look_and_feel/CustomLookAndFeel.cpp
         source/gui/look_and_feel/Theme.cpp
-        source/gui/lufs_meters/LufsLabelGroup.cpp
-        source/gui/lufs_meters/LufsMeterGroup.cpp
-        source/gui/lufs_meters/LufsMetersWidget.cpp
         source/gui/master_gain/MasterGain.cpp
         source/gui/meters/MeterCanvas.cpp
         source/gui/meters/MeterDbScale.cpp
+        source/gui/meters/MeterGroup.cpp
+        source/gui/meters/MeterLabelGroup.cpp
+        source/gui/meters/MetersWidget.cpp
         source/gui/meters/MonoMeter.cpp
         source/gui/response_graph/DecibelMarkers.cpp
         source/gui/response_graph/EqBandSlider.cpp
@@ -97,12 +97,12 @@ set(PROJECT_HEADERS
         source/gui/input_trim/InputTrim.h
         source/gui/look_and_feel/CustomLookAndFeel.h
         source/gui/look_and_feel/Theme.h
-        source/gui/lufs_meters/LufsLabelGroup.h
-        source/gui/lufs_meters/LufsMeterGroup.h
-        source/gui/lufs_meters/LufsMetersWidget.h
         source/gui/master_gain/MasterGain.h
         source/gui/meters/MeterCanvas.h
         source/gui/meters/MeterDbScale.h
+        source/gui/meters/MeterGroup.h
+        source/gui/meters/MeterLabelGroup.h
+        source/gui/meters/MetersWidget.h
         source/gui/meters/MonoMeter.h
         source/gui/response_graph/DecibelMarkers.h
         source/gui/response_graph/EqBandSlider.h
@@ -145,7 +145,6 @@ target_include_directories(${PROJECT_NAME}
         ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/eq_intensity
         ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/input_trim
         ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/look_and_feel
-        ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/lufs_meters
         ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/master_gain
         ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/meters
         ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/response_graph

@@ -5,7 +5,7 @@
 #include "EqIntensity.h"
 #include "FilterResponseGraph.h"
 #include "InputTrim.h"
-#include "LufsMetersWidget.h"
+#include "MetersWidget.h"
 #include "MasterGain.h"
 #include "PluginProcessor.h"
 
@@ -37,7 +37,7 @@ private:
     InputTrim           input_trim_;
     EqIntensity         eq_intensity_;
     MasterGain          master_gain_;
-    LufsMetersWidget    lufs_meters_;
+    MetersWidget        meters_;
 
     CustomLookAndFeel lnf_;
 

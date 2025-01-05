@@ -1,9 +1,9 @@
-#include "LufsLabelGroup.h"
+#include "MeterLabelGroup.h"
 
 /*---------------------------------------------------------------------------
 **
 */
-LufsLabelGroup::LufsLabelGroup()
+MeterLabelGroup::MeterLabelGroup()
 {
     for (int i = 0; i < labels_.size(); ++i) {
         const juce::String text           = Global::Meters::getName(static_cast< Global::Meters::METER_TYPE >(i));
@@ -19,7 +19,7 @@ LufsLabelGroup::LufsLabelGroup()
 **
 */
 void
-LufsLabelGroup::resized()
+MeterLabelGroup::resized()
 {
     using Track = juce::Grid::TrackInfo;
     using Fr    = juce::Grid::Fr;

@@ -1,15 +1,15 @@
-#include "LufsMeterGroup.h"
+#include "MeterGroup.h"
 
 /*---------------------------------------------------------------------------
 **
 */
-LufsMeterGroup::LufsMeterGroup(PluginProcessor& p)
+MeterGroup::MeterGroup(PluginProcessor& p)
 {
-    initMeter(p, Global::Meters::METER_TYPE::SHORT_TERM);
-    initMeter(p, Global::Meters::METER_TYPE::MOMENTARY);
-    initMeter(p, Global::Meters::METER_TYPE::SHORT_TERM_MAX);
-    initMeter(p, Global::Meters::METER_TYPE::MOMENTARY_MAX);
-    initMeter(p, Global::Meters::METER_TYPE::INTEGRATED);
+    initMeter(p, Global::Meters::METER_TYPE::INPUT_GAIN);
+    initMeter(p, Global::Meters::METER_TYPE::OUTPUT_PEAK);
+    initMeter(p, Global::Meters::METER_TYPE::OUTPUT_RMS);
+    initMeter(p, Global::Meters::METER_TYPE::MOMENTARY_LOUDNESS);
+    initMeter(p, Global::Meters::METER_TYPE::SHORT_TERM_LOUDNESS);
 
     for (auto& meter : meters_) {
         addAndMakeVisible(meter.get());
@@ -20,7 +20,7 @@ LufsMeterGroup::LufsMeterGroup(PluginProcessor& p)
 **
 */
 void
-LufsMeterGroup::resized()
+MeterGroup::resized()
 {
     using Track = juce::Grid::TrackInfo;
     using Fr    = juce::Grid::Fr;
@@ -48,7 +48,7 @@ LufsMeterGroup::resized()
 **
 */
 void
-LufsMeterGroup::initMeter(PluginProcessor& p, Global::Meters::METER_TYPE meter_type)
+MeterGroup::initMeter(PluginProcessor& p, Global::Meters::METER_TYPE meter_type)
 {
     meters_.at(meter_type) = std::make_unique< MonoMeter >(p, meter_type, Global::Meters::ORIENTATION::HORIZONTAL, 40.0);
 }
