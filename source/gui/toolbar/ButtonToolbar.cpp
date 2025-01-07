@@ -11,20 +11,20 @@ ButtonToolbar::ButtonToolbar(juce::AudioProcessorValueTreeState& apvts)
                              GuiParams::INITIAL_ANALYSIS_STATE,
                              "Stop Analysis",
                              "Start Analysis")
-    , current_profile_name_("Unsaved")
-    , new_profile_button_("New")
-    , load_profile_button_("Open")
-    , save_profile_button_("Save")
-    , save_as_profile_button_("Save As")
+    , current_profile_name_("unsaved preset...")
 {
+    for (int i = 0; i < PresetManagement::NUM_BUTTONS; ++i) {
+        const auto&         button_id    = static_cast< PresetManagement::BUTTON_ID >(i);
+        const juce::String& button_text  = PresetManagement::getButtonText(button_id);
+        preset_management_buttons_.at(i) = std::make_unique< CustomTextButton >(button_text);
+
+        addAndMakeVisible(preset_management_buttons_.at(i).get());
+    }
+
     addAndMakeVisible(plugin_enablement_button_);
     addAndMakeVisible(power_saving_button_);
     addAndMakeVisible(analysis_state_button_);
     addAndMakeVisible(current_profile_name_);
-    addAndMakeVisible(new_profile_button_);
-    addAndMakeVisible(load_profile_button_);
-    addAndMakeVisible(save_profile_button_);
-    addAndMakeVisible(save_as_profile_button_);
     addAndMakeVisible(theme_button_);
 
     addAndMakeVisible(section_separator_1_);
@@ -54,11 +54,11 @@ ButtonToolbar::resized()
         Track(Fr(8)),   //! Plugin enablement button.
         Track(Fr(12)),  //! Start/Stop Analysis button.
         Track(Fr(6)),   //! ******************************** SECTION SEPARATOR 1.
-        Track(Fr(24)),  //! Current profile name.
-        Track(Fr(6)),   //! "New" profile button.
-        Track(Fr(6)),   //! "Load" profile button.
-        Track(Fr(6)),   //! "Save" profile button.
-        Track(Fr(6)),   //! "Save As" profile button.
+        Track(Fr(6)),   //! "New" preset button.
+        Track(Fr(24)),  //! Current preset name.
+        Track(Fr(6)),   //! "Load" preset button.
+        Track(Fr(6)),   //! "Save" preset button.
+        Track(Fr(6)),   //! "Save As" preset button.
         Track(Fr(6)),   //! ******************************** SECTION SEPARATOR 2.
         Track(Fr(12)),  //! Power saving button.
         Track(Fr(8)),   //! Theme button.
@@ -67,11 +67,11 @@ ButtonToolbar::resized()
     grid.items.add(juce::GridItem(plugin_enablement_button_));
     grid.items.add(juce::GridItem(analysis_state_button_));
     grid.items.add(juce::GridItem(section_separator_1_));
+    grid.items.add(juce::GridItem(preset_management_buttons_.at(PresetManagement::BUTTON_NEW).get()));
     grid.items.add(juce::GridItem(current_profile_name_));
-    grid.items.add(juce::GridItem(new_profile_button_));
-    grid.items.add(juce::GridItem(load_profile_button_));
-    grid.items.add(juce::GridItem(save_profile_button_));
-    grid.items.add(juce::GridItem(save_as_profile_button_));
+    grid.items.add(juce::GridItem(preset_management_buttons_.at(PresetManagement::BUTTON_OPEN).get()));
+    grid.items.add(juce::GridItem(preset_management_buttons_.at(PresetManagement::BUTTON_SAVE).get()));
+    grid.items.add(juce::GridItem(preset_management_buttons_.at(PresetManagement::BUTTON_SAVE_AS).get()));
     grid.items.add(juce::GridItem(section_separator_2_));
     grid.items.add(juce::GridItem(power_saving_button_));
     grid.items.add(juce::GridItem(theme_button_));
@@ -120,20 +120,47 @@ ButtonToolbar::getThemeButton()
 /*---------------------------------------------------------------------------
 **
 */
+ReadonlyTextBox&
+ButtonToolbar::getCurrentPresetTextBox()
+{
+    return current_profile_name_;
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
+const std::unique_ptr< CustomTextButton >&
+ButtonToolbar::getPresetButton(const PresetManagement::BUTTON_ID button_id) const
+{
+    return preset_management_buttons_.at(button_id);
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
+void
+ButtonToolbar::setLoadedPresetName(const juce::String& name)
+{
+    current_profile_name_.setText(name);
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
 void
 ButtonToolbar::setGlobalEnablement(const bool enable)
 {
     analysis_state_button_.setEnabled(enable);
     current_profile_name_.setEnabled(enable);
-    new_profile_button_.setEnabled(enable);
-    load_profile_button_.setEnabled(enable);
-    save_profile_button_.setEnabled(enable);
-    save_as_profile_button_.setEnabled(enable);
     power_saving_button_.setEnabled(enable);
     theme_button_.setEnabled(enable);
 
     section_separator_1_.setEnabled(enable);
     section_separator_2_.setEnabled(enable);
+
+    for (auto& preset_btn : preset_management_buttons_) {
+        preset_btn.get()->setEnabled(enable);
+    }
 }
 
 /*---------------------------------------------------------------------------

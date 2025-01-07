@@ -9,6 +9,7 @@
 #include "GlobalConstants.h"
 #include "InputAnalysisFilter.h"
 #include "MonoFftBuffer.h"
+#include "PresetManager.h"
 #include "UnityGainCalculator.h"
 
 class PluginProcessor final : public juce::AudioProcessor
@@ -45,6 +46,8 @@ public:
     void setStateInformation(const void* data, int size_in_bytes) override;
 
     juce::AudioProcessorValueTreeState& getApvts();
+    PresetManager&                      getPresetManager();
+    bool                                loadPreset(const int preset_index);
 
     typedef juce::SmoothedValue< float, juce::ValueSmoothingTypes::Linear > SmoothedFloat;
     typedef std::array< MonoFftBuffer, Global::FFT::NUM_BUFFERS >           FftBuffers;
@@ -73,6 +76,7 @@ private:
 
 private:
     juce::AudioProcessorValueTreeState apvts_;
+    PresetManager                      preset_manager_;
 
     static const double METER_DB_RAMP_TIME_SECONDS;
 

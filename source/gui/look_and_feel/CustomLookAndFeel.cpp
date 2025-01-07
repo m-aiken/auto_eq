@@ -87,5 +87,62 @@ CustomLookAndFeel::drawLinearSlider(juce::Graphics&           g,
 }
 
 /*---------------------------------------------------------------------------
+**
+*/
+void
+CustomLookAndFeel::fillTextEditorBackground(juce::Graphics& g, int width, int height, juce::TextEditor& editor)
+{
+    g.setColour(Theme::getColour(Theme::TEXTBOX_BG));
+    g.fillRoundedRectangle(editor.getLocalBounds().toFloat(), 8.f);
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
+void
+CustomLookAndFeel::drawTextEditorOutline(juce::Graphics& g, int width, int height, juce::TextEditor& editor)
+{
+    // No outline, do nothing...
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
+void
+CustomLookAndFeel::drawPopupMenuBackgroundWithOptions(juce::Graphics&                 g,
+                                                      int                             width,
+                                                      int                             height,
+                                                      const juce::PopupMenu::Options& options)
+{
+    g.fillAll(Theme::getColour(Theme::MAIN_BG));
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
+void
+CustomLookAndFeel::drawPopupMenuItemWithOptions(juce::Graphics&                 g,
+                                                const juce::Rectangle< int >&   area,
+                                                bool                            is_highlighted,
+                                                const juce::PopupMenu::Item&    item,
+                                                const juce::PopupMenu::Options& options)
+{
+    g.fillAll(Theme::getColour(is_highlighted ? Theme::MENU_ITEM_BG_FOCUS : Theme::MENU_ITEM_BG));
+
+    g.setFont(Theme::getFont());
+    g.setColour(Theme::getColour(Theme::TEXT));
+    g.drawFittedText(item.text, area, juce::Justification::centred, 1);
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
+int
+CustomLookAndFeel::getPopupMenuBorderSize()
+{
+    return 0;
+}
+
+/*---------------------------------------------------------------------------
 ** End of File
 */

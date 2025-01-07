@@ -8,6 +8,7 @@
 #include "MetersWidget.h"
 #include "MasterGain.h"
 #include "PluginProcessor.h"
+#include "PresetManager.h"
 
 class PluginEditor final
     : public juce::AudioProcessorEditor
@@ -28,9 +29,21 @@ private:
     static const uint16 MAIN_WINDOW_MAX_WIDTH;
     static const uint16 MAIN_WINDOW_MAX_HEIGHT;
 
+    struct ComponentDimensions {
+        int width_ { 0 };
+        int height_ { 0 };
+    };
+
+    void                handlePresetSave() const;
+    void                handlePresetSaveAs();
+    void                handlePresetSaveChanges();
+    ComponentDimensions getDialogDimensions() const;
+
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     PluginProcessor& processor_ref_;
+
+    PresetManager& preset_manager_;
 
     ButtonToolbar       toolbar_;
     FilterResponseGraph filter_res_graph_;

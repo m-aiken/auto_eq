@@ -2,8 +2,9 @@
 
 #include <JuceHeader.h>
 
-//#define TEST_FFT_ACCURACY 1
-//#define SHOW_DEBUG_BOUNDS 1
+// #define TEST_FFT_ACCURACY 1
+// #define SHOW_DEBUG_BOUNDS 1
+#define ADD_TEST_PRESETS 1
 
 namespace Global
 {
@@ -142,3 +143,30 @@ getName(PARAM_ID param_id)
 }
 
 }  // namespace GuiParams
+
+namespace PresetManagement
+{
+
+static constexpr uint8_t NUM_BUTTONS = 4;
+
+enum BUTTON_ID {
+    BUTTON_NEW,
+    BUTTON_OPEN,
+    BUTTON_SAVE,
+    BUTTON_SAVE_AS,
+};
+
+static const std::map< BUTTON_ID, juce::String > BUTTON_TEXT_MAP = {
+    { BUTTON_NEW, "New" },
+    { BUTTON_OPEN, "Open" },
+    { BUTTON_SAVE, "Save" },
+    { BUTTON_SAVE_AS, "Save As" },
+};
+
+static const juce::String
+getButtonText(const BUTTON_ID button_id)
+{
+    return BUTTON_TEXT_MAP.at(button_id);
+}
+
+}  // namespace PresetManagement

@@ -5,10 +5,13 @@
 /*---------------------------------------------------------------------------
 **
 */
-DisableableLabel::DisableableLabel(const juce::String& component_name,
-                                   const juce::String& label_text,
-                                   juce::Justification justification)
+DisableableLabel::DisableableLabel(const juce::String&       component_name,
+                                   const juce::String&       label_text,
+                                   const juce::Justification justification,
+                                   const bool                is_warning)
     : juce::Label(component_name, label_text)
+    , is_warning_label_(is_warning)
+    , font_(is_warning ? Theme::getFont().italicised() : Theme::getFont())
 {
     setJustificationType(justification);
 }
@@ -24,8 +27,10 @@ DisableableLabel::paint(juce::Graphics& g)
     g.drawRect(getLocalBounds());
 #endif
 
-    g.setFont(Theme::getFont());
-    g.setColour(Theme::getColour(isEnabled() ? Theme::TEXT : Theme::DISABLED_WIDGET));
+    const juce::Colour enabled_colour = Theme::getColour(is_warning_label_ ? Theme::WARNING_TEXT : Theme::TEXT);
+
+    g.setColour(isEnabled() ? enabled_colour : Theme::getColour(Theme::DISABLED_WIDGET));
+    g.setFont(font_);
     g.drawFittedText(getText(), getLocalBounds(), getJustificationType(), 1);
 }
 

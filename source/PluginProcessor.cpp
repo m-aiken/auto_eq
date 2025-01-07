@@ -12,6 +12,7 @@ PluginProcessor::PluginProcessor()
                          .withInput("Input", juce::AudioChannelSet::stereo(), true)
                          .withOutput("Output", juce::AudioChannelSet::stereo(), true))
     , apvts_(*this, nullptr, "APVTS", getParameterLayout())
+    , preset_manager_(apvts_)
     , input_analysis_filter_()
     , band_updater_(input_analysis_filter_)
     , band_parameter_updater_(apvts_, band_updater_)
@@ -370,6 +371,49 @@ juce::AudioProcessorValueTreeState&
 PluginProcessor::getApvts()
 {
     return apvts_;
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
+PresetManager&
+PluginProcessor::getPresetManager()
+{
+    return preset_manager_;
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
+bool
+PluginProcessor::loadPreset(const int preset_index)
+{
+    const juce::ValueTree& preset = preset_manager_.getPreset(preset_index);
+
+    if (!PresetManager::isValidPreset(preset)) {
+        return false;
+    }
+
+    for (uint8 i = 0; i < Equalizer::NUM_BANDS; ++i) {
+        const auto                  band_id      = static_cast< Equalizer::BAND_ID >(i);
+        const juce::String          parameter_id = Equalizer::getBandName(band_id);
+        juce::RangedAudioParameter* apvts_param  = apvts_.getParameter(parameter_id);
+
+        if (apvts_param == nullptr) {
+            continue;
+        }
+
+        const double band_gain = PresetManager::getPresetBandGain(preset, static_cast< Equalizer::BAND_ID >(i));
+        const float  db_value  = apvts_param->convertTo0to1(band_gain);
+
+        apvts_param->setValue(db_value);
+    }
+
+    updateFilterCoefficients();
+
+    preset_manager_.setCurrentlyLoadedPresetName(preset_manager_.getPresetName(preset));
+
+    return true;
 }
 
 /*---------------------------------------------------------------------------

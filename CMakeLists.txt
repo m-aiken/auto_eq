@@ -66,6 +66,9 @@ set(PROJECT_SOURCES
         source/gui/response_graph/FrequencyMarkers.cpp
         source/gui/response_graph/MonoFftPath.cpp
         source/gui/response_graph/MonoFftPathProducer.cpp
+        source/gui/save_dialog/SaveAsDialog.cpp
+        source/gui/save_dialog/SaveChangesDialog.cpp
+        source/gui/save_dialog/SaveDialogBase.cpp
         source/gui/toolbar/ButtonToolbar.cpp
         source/gui/toolbar/PluginEnablementButton.cpp
         source/gui/toolbar/ReadonlyTextBox.cpp
@@ -73,15 +76,17 @@ set(PROJECT_SOURCES
         source/gui/toolbar/ToolbarSeparator.cpp
         source/gui/transport/TransportButton.cpp
         source/gui/widgets/CustomTextButton.cpp
+        source/gui/widgets/CustomTextEntryBox.cpp
         source/gui/widgets/CustomTextToggleButton.cpp
         source/gui/widgets/DisableableLabel.cpp
         source/gui/widgets/RotaryControl.cpp
         source/gui/widgets/ToggleSwitch.cpp
-        source/preset_management/EqProfile.cpp
+        source/preset_management/PresetManager.cpp
+        source/preset_management/PresetMenu.cpp
 
         source/third_party/klangfreund_lufs_meter/Ebu128LoudnessMeter.cpp
         source/third_party/klangfreund_lufs_meter/filters/SecondOrderIIRFilter.cpp
-        )
+)
 
 set(PROJECT_HEADERS
         source/PluginEditor.h
@@ -113,6 +118,9 @@ set(PROJECT_HEADERS
         source/gui/response_graph/FrequencyMarkers.h
         source/gui/response_graph/MonoFftPath.h
         source/gui/response_graph/MonoFftPathProducer.h
+        source/gui/save_dialog/SaveAsDialog.h
+        source/gui/save_dialog/SaveChangesDialog.h
+        source/gui/save_dialog/SaveDialogBase.h
         source/gui/toolbar/ButtonToolbar.h
         source/gui/toolbar/PluginEnablementButton.h
         source/gui/toolbar/ReadonlyTextBox.h
@@ -120,22 +128,24 @@ set(PROJECT_HEADERS
         source/gui/toolbar/ToolbarSeparator.h
         source/gui/transport/TransportButton.h
         source/gui/widgets/CustomTextButton.h
+        source/gui/widgets/CustomTextEntryBox.h
         source/gui/widgets/CustomTextToggleButton.h
         source/gui/widgets/DisableableLabel.h
         source/gui/widgets/RotaryControl.h
         source/gui/widgets/ToggleSwitch.h
-        source/preset_management/EqProfile.h
+        source/preset_management/PresetManager.h
+        source/preset_management/PresetMenu.h
         source/utility/GlobalConstants.h
 
         source/third_party/klangfreund_lufs_meter/Ebu128LoudnessMeter.h
         source/third_party/klangfreund_lufs_meter/filters/SecondOrderIIRFilter.h
-        )
+)
 
 target_sources(${PROJECT_NAME}
         PRIVATE
         ${PROJECT_SOURCES}
         ${PROJECT_HEADERS}
-        )
+)
 
 target_include_directories(${PROJECT_NAME}
         PRIVATE
@@ -148,6 +158,7 @@ target_include_directories(${PROJECT_NAME}
         ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/master_gain
         ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/meters
         ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/response_graph
+        ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/save_dialog
         ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/toolbar
         ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/transport
         ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/widgets
@@ -156,7 +167,7 @@ target_include_directories(${PROJECT_NAME}
 
         ${CMAKE_CURRENT_SOURCE_DIR}/source/third_party/klangfreund_lufs_meter
         ${CMAKE_CURRENT_SOURCE_DIR}/source/third_party/klangfreund_lufs_meter/filters
-        )
+)
 
 # JUCE modules make use of compile definitions to switch certain features on/off.
 # If there's a particular feature you need that's not on by default,
