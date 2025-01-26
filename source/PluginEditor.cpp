@@ -3,8 +3,8 @@
 #include "PluginEditor.h"
 #include "Theme.h"
 
-/*static*/ const uint16 PluginEditor::MAIN_WINDOW_MIN_WIDTH  = 768;
-/*static*/ const uint16 PluginEditor::MAIN_WINDOW_MIN_HEIGHT = 400;
+/*static*/ const uint16 PluginEditor::MAIN_WINDOW_MIN_WIDTH  = 900;
+/*static*/ const uint16 PluginEditor::MAIN_WINDOW_MIN_HEIGHT = 500;
 /*static*/ const uint16 PluginEditor::MAIN_WINDOW_MAX_WIDTH  = 1100;
 /*static*/ const uint16 PluginEditor::MAIN_WINDOW_MAX_HEIGHT = 600;
 
