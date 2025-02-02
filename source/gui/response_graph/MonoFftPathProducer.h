@@ -7,7 +7,7 @@
 class MonoFftPathProducer : juce::Thread
 {
 public:
-    MonoFftPathProducer(MonoFftBuffer& fft_buffer);
+    explicit MonoFftPathProducer(MonoFftBuffer& fft_buffer);
     ~MonoFftPathProducer() override;
 
     void prepare(const juce::Rectangle< int >& bounds);
@@ -19,7 +19,7 @@ public:
 private:
     void  processFftData();
     void  generatePath();
-    float getYCoordinate(const float& sample);
+    float getYCoordinate(const float& sample) const;
 
     static constexpr size_t             FIFO_SIZE = 8;
     std::array< juce::Path, FIFO_SIZE > fifo_;
@@ -32,6 +32,8 @@ private:
     MonoFftBuffer&                        fft_buffer_;
 
     juce::Rectangle< int > drawable_bounds_;
+
+    static constexpr uint8 PATH_RESOLUTION = 2;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MonoFftPathProducer)
 };

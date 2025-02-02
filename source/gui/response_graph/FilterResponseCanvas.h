@@ -10,10 +10,10 @@ public:
     void paint(juce::Graphics& g) override;
 
 private:
-    bool shouldDrawFrequency(int freq) const;
-    bool shouldBeBold(int freq) const;
+    static bool shouldDrawFrequency(const int freq);
+    static bool shouldBeBold(const int freq);
 
-    static const uint8 DB_INTERVAL;
+    static constexpr uint8 DB_INTERVAL = 3;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(FilterResponseCanvas)
 };

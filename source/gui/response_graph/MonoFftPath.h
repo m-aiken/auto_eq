@@ -12,7 +12,7 @@ class MonoFftPath
 {
 public:
     MonoFftPath(MonoFftBuffer&              fft_buffer,
-                Theme::DarkLightPair        path_colour,
+                const Theme::DarkLightPair& path_colour,
                 juce::RangedAudioParameter* power_saving_param);
     ~MonoFftPath() override;
 

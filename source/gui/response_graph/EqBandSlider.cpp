@@ -10,7 +10,9 @@ EqBandSlider::EqBandSlider(juce::AudioProcessorValueTreeState& apvts, const juce
     , band_param_(apvts.getParameter(parameter_id))
     , intensity_param_(apvts.getParameter(GuiParams::getName(GuiParams::EQ_INTENSITY)))
 {
-    slider_attachment_.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(apvts, parameter_id, *this));
+    slider_attachment_ = std::make_unique< juce::AudioProcessorValueTreeState::SliderAttachment >(apvts,
+                                                                                                  parameter_id,
+                                                                                                  *this);
 
     if (band_param_ != nullptr) {
         band_param_->addListener(this);
@@ -39,11 +41,11 @@ EqBandSlider::paint(juce::Graphics& g)
         return;
     }
 
-    juce::Rectangle< float > bounds        = getLocalBounds().toFloat();
-    float                    bounds_y      = bounds.getY();
-    float                    bounds_bottom = bounds.getBottom();
-    float                    intensity     = intensity_param_->getValue();
-    float                    band_value    = band_param_->convertFrom0to1(band_param_->getValue());
+    const juce::Rectangle< int > bounds        = getLocalBounds();
+    const int                    bounds_y      = bounds.getY();
+    const int                    bounds_bottom = bounds.getBottom();
+    const float                  intensity     = intensity_param_->getValue();
+    const float                  band_value    = band_param_->convertFrom0to1(band_param_->getValue());
 
     // Display the raw band value (i.e. without the intensity factored in) as a sort of ghost value.
     // Note, this is not the real slider thumb.
@@ -52,7 +54,7 @@ EqBandSlider::paint(juce::Graphics& g)
 
     // Now display the real slider thumb. It factors in the intensity value as that accurately reflects
     // boost/attenuation being applied.
-    float slider_value = getScaledValue(band_value * intensity);
+    const float slider_value = getScaledValue(band_value * intensity);
 
     getLookAndFeel().drawLinearSlider(g,
                                       bounds.getX(),
@@ -60,8 +62,8 @@ EqBandSlider::paint(juce::Graphics& g)
                                       bounds.getWidth(),
                                       bounds.getHeight(),
                                       slider_value,
-                                      bounds_bottom,
-                                      bounds_y,
+                                      static_cast< float >(bounds_bottom),
+                                      static_cast< float >(bounds_y),
                                       getSliderStyle(),
                                       *this);
 }
@@ -102,9 +104,9 @@ EqBandSlider::parameterGestureChanged(int parameter_index, bool gesture_is_start
 **
 */
 float
-EqBandSlider::getScaledValue(float raw_value) const
+EqBandSlider::getScaledValue(const float raw_value) const
 {
-    auto bounds = getLocalBounds().toFloat();
+    const auto bounds = getLocalBounds().toFloat();
 
     return juce::jmap< float >(raw_value, Global::MAX_DB_CUT, Global::MAX_DB_BOOST, bounds.getBottom(), bounds.getY());
 }
@@ -113,14 +115,14 @@ EqBandSlider::getScaledValue(float raw_value) const
 **
 */
 juce::Rectangle< float >
-EqBandSlider::getGhostNode(float band_value) const
+EqBandSlider::getGhostNode(const float band_value) const
 {
-    auto  bounds   = getLocalBounds().toFloat();
-    float diameter = bounds.getWidth();
-    float x        = bounds.getCentreX() - (diameter * 0.5f);
-    float y        = getScaledValue(band_value) - (diameter * 0.5f);
+    const auto  bounds   = getLocalBounds().toFloat();
+    const float diameter = bounds.getWidth();
+    const float x        = bounds.getCentreX() - (diameter * 0.5f);
+    const float y        = getScaledValue(band_value) - (diameter * 0.5f);
 
-    return juce::Rectangle< float >(x, y, diameter, diameter);
+    return { x, y, diameter, diameter };
 }
 
 /*---------------------------------------------------------------------------

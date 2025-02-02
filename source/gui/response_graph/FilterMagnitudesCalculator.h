@@ -10,7 +10,7 @@ public:
     typedef std::vector< double > MagnitudesVector;
 
 public:
-    FilterMagnitudesCalculator(PluginProcessor& processor_ref);
+    explicit FilterMagnitudesCalculator(PluginProcessor& processor_ref);
     ~FilterMagnitudesCalculator() override;
 
     void prepare(int num_x_pixels);

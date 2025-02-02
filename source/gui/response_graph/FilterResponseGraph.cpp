@@ -8,10 +8,10 @@
 FilterResponseGraph::FilterResponseGraph(PluginProcessor& p)
     : eq_bands_(p)
 {
-    PluginProcessor::FftBuffers&        fft_buffers = p.getFftBuffers();
-    juce::AudioProcessorValueTreeState& apvts       = p.getApvts();
+    PluginProcessor::FftBuffers&              fft_buffers = p.getFftBuffers();
+    const juce::AudioProcessorValueTreeState& apvts       = p.getApvts();
 
-    juce::String power_saving_param_id = GuiParams::getName(GuiParams::POWER_SAVING);
+    const juce::String power_saving_param_id = GuiParams::getName(GuiParams::POWER_SAVING);
 
     fft_path_primary_post_eq_l_ = std::make_unique< MonoFftPath >(fft_buffers.at(Global::FFT::LEFT_POST_EQ),
                                                                   Theme::FFT,
@@ -39,6 +39,8 @@ FilterResponseGraph::paint(juce::Graphics& g)
 #ifdef SHOW_DEBUG_BOUNDS
     g.setColour(juce::Colours::yellow);
     g.drawRect(getLocalBounds());
+#else
+    juce::ignoreUnused(g);
 #endif
 }
 
@@ -48,13 +50,13 @@ FilterResponseGraph::paint(juce::Graphics& g)
 void
 FilterResponseGraph::resized()
 {
-    auto                   bounds        = getLocalBounds();
-    auto                   bounds_width  = bounds.getWidth();
-    auto                   bounds_height = bounds.getHeight();
-    juce::Rectangle< int > y_padded_bounds(0,
-                                           Global::GRAPH_TOP_PADDING,
-                                           bounds_width,
-                                           (bounds_height - Global::GRAPH_TOP_PADDING));
+    const auto                   bounds        = getLocalBounds();
+    const auto                   bounds_width  = bounds.getWidth();
+    const auto                   bounds_height = bounds.getHeight();
+    const juce::Rectangle< int > y_padded_bounds(0,
+                                                 Global::GRAPH_TOP_PADDING,
+                                                 bounds_width,
+                                                 (bounds_height - Global::GRAPH_TOP_PADDING));
 
     backdrop_.setBounds(y_padded_bounds);
 

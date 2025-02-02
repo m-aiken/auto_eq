@@ -26,23 +26,21 @@ FrequencyMarkers::paint(juce::Graphics& g)
     g.setFont(Theme::getFont());
     g.setColour(Theme::getColour(isEnabled() ? Theme::TEXT : Theme::DISABLED_WIDGET));
 
-    juce::Rectangle< int > bounds = getLocalBounds();
+    const juce::Rectangle< int > bounds = getLocalBounds();
 
-    int bounds_x       = bounds.getX();
-    int bounds_width   = bounds.getWidth();
-    int bounds_bottom  = bounds.getBottom();
-    int label_height   = static_cast< int >(std::floor(Theme::getFont().getHeight()));
-    int x_left_padding = 4;
-    int y_padding      = 2;
-    int y              = bounds_bottom - label_height - y_padding;
+    const int bounds_x      = bounds.getX();
+    const int bounds_width  = bounds.getWidth();
+    const int bounds_bottom = bounds.getBottom();
+    const int label_height  = static_cast< int >(std::floor(Theme::getFont().getHeight()));
+    const int y             = bounds_bottom - label_height - Y_PADDING;
 
     for (int i = min_hz_; i <= max_hz_; ++i) {
         if (shouldDrawFrequency(i)) {
-            float        normalised_freq = juce::mapFromLog10< float >(i, min_hz_, max_hz_);
-            int          x               = bounds_x + static_cast< int >(std::floor(bounds_width * normalised_freq));
-            juce::String label           = (i < 1000.f) ? (juce::String(i) + "Hz") : (juce::String(i / 1000.f) + "kHz");
+            const auto         normalised_freq = juce::mapFromLog10< float >(i, min_hz_, max_hz_);
+            const int          x     = bounds_x + static_cast< int >(std::floor(bounds_width * normalised_freq));
+            const juce::String label = (i < 1000.f) ? (juce::String(i) + "Hz") : (juce::String(i / 1000.f) + "kHz");
 
-            g.drawFittedText(label, (x + x_left_padding), y, label_width_, label_height, juce::Justification::centredLeft, 1);
+            g.drawFittedText(label, (x + X_LEFT_PADDING), y, label_width_, label_height, juce::Justification::centredLeft, 1);
         }
     }
 }
@@ -50,8 +48,8 @@ FrequencyMarkers::paint(juce::Graphics& g)
 /*---------------------------------------------------------------------------
 **
 */
-bool
-FrequencyMarkers::shouldDrawFrequency(int freq) const
+/*static*/ bool
+FrequencyMarkers::shouldDrawFrequency(const int freq)
 {
     bool draw = false;
 

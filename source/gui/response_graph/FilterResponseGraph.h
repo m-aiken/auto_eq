@@ -12,7 +12,7 @@
 class FilterResponseGraph : public juce::Component
 {
 public:
-    FilterResponseGraph(PluginProcessor& p);
+    explicit FilterResponseGraph(PluginProcessor& p);
 
     void paint(juce::Graphics& g) override;
     void resized() override;

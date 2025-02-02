@@ -7,23 +7,17 @@
 #include "FilterMagnitudesCalculator.h"
 #include "PluginProcessor.h"
 
-class FilterResponseBands
-    : public juce::Component
-    , public juce::Timer
+class FilterResponseBands : public juce::Component
 {
 public:
-    FilterResponseBands(PluginProcessor& p);
-    ~FilterResponseBands() override;
+    explicit FilterResponseBands(PluginProcessor& p);
 
-    //    void paint(juce::Graphics& g) override;
     void resized() override;
 
-    void timerCallback() override;
-
 private:
-    int  getYCoordinateFromMagnitude(double magnitude);
+    int  getYCoordinateFromMagnitude(const double magnitude) const;
     void updateSliderValues();
-    int  getBandBarHeight(double magnitude);
+    int  getBandBarHeight(const double magnitude) const;
     void calculateXCoordinates();
 
 private:

@@ -95,11 +95,10 @@ MonoFftPathProducer::processFftData()
 void
 MonoFftPathProducer::generatePath()
 {
-    auto   bounds_x      = drawable_bounds_.getX();
-    auto   bounds_width  = drawable_bounds_.getWidth();
-    auto   bounds_height = drawable_bounds_.getHeight();
-    size_t num_bins      = MonoFftBuffer::NUM_BINS;
-    float  bin_width     = static_cast< float >(fft_buffer_.getBinWidth());
+    const auto  bounds_x      = drawable_bounds_.getX();
+    const auto  bounds_width  = drawable_bounds_.getWidth();
+    const auto  bounds_height = drawable_bounds_.getHeight();
+    const float bin_width     = static_cast< float >(fft_buffer_.getBinWidth());
 
     auto y_coord = getYCoordinate(fft_data_.at(0));
 
@@ -112,18 +111,16 @@ MonoFftPathProducer::generatePath()
     path.clear();
     path.startNewSubPath(bounds_x, bounds_height);
 
-    const uint8 path_resolution = 2;
-
-    for (size_t i = 1; i < num_bins + 1; i += path_resolution) {
+    for (size_t i = 1; i < MonoFftBuffer::NUM_BINS + 1; i += PATH_RESOLUTION) {
         y_coord = getYCoordinate(fft_data_.at(i));
 
         if (std::isnan(y_coord) || std::isinf(y_coord)) {
             continue;
         }
 
-        auto raw_freq        = i * bin_width;
-        auto normalised_freq = juce::mapFromLog10(raw_freq, Global::MIN_HZ, Global::MAX_HZ);
-        auto x_coord         = std::floor(normalised_freq * bounds_width);
+        const auto raw_freq        = i * bin_width;
+        const auto normalised_freq = juce::mapFromLog10(raw_freq, Global::MIN_HZ, Global::MAX_HZ);
+        const auto x_coord         = std::floor(normalised_freq * bounds_width);
 
         if (x_coord > bounds_width) {
             continue;
@@ -140,10 +137,10 @@ MonoFftPathProducer::generatePath()
 **
 */
 float
-MonoFftPathProducer::getYCoordinate(const float& sample)
+MonoFftPathProducer::getYCoordinate(const float& sample) const
 {
-    auto bounds_y      = drawable_bounds_.getY();
-    auto bounds_height = drawable_bounds_.getHeight();
+    const auto bounds_y      = drawable_bounds_.getY();
+    const auto bounds_height = drawable_bounds_.getHeight();
 
     return juce::jmap< float >(sample, Global::FFT_NEG_INF, Global::FFT_MAX_DB, bounds_height, bounds_y);
 }

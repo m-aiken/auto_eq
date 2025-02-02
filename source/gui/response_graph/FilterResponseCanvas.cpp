@@ -2,34 +2,32 @@
 #include "GlobalConstants.h"
 #include "Theme.h"
 
-/*static*/ const uint8 FilterResponseCanvas::DB_INTERVAL = 3;
-
 /*---------------------------------------------------------------------------
 **
 */
 void
 FilterResponseCanvas::paint(juce::Graphics& g)
 {
-    juce::Rectangle< int > bounds = getLocalBounds();
+    const juce::Rectangle< int > bounds = getLocalBounds();
 
-    int bounds_x      = bounds.getX();
-    int bounds_y      = bounds.getY();
-    int bounds_width  = bounds.getWidth();
-    int bounds_bottom = bounds.getBottom();
-    int min_db        = static_cast< int >(Global::MAX_DB_CUT);
-    int max_db        = static_cast< int >(Global::MAX_DB_BOOST);
-    int min_hz        = static_cast< int >(Global::MIN_HZ);
-    int max_hz        = static_cast< int >(Global::MAX_HZ);
+    const int bounds_x      = bounds.getX();
+    const int bounds_y      = bounds.getY();
+    const int bounds_width  = bounds.getWidth();
+    const int bounds_bottom = bounds.getBottom();
+    const int min_db        = static_cast< int >(Global::MAX_DB_CUT);
+    const int max_db        = static_cast< int >(Global::MAX_DB_BOOST);
+    const int min_hz        = static_cast< int >(Global::MIN_HZ);
+    const int max_hz        = static_cast< int >(Global::MAX_HZ);
 
-    juce::Colour line_colour = Theme::getColour(Theme::ANALYSER_GRID);
-    float        alpha_bold  = Theme::app_is_in_dark_mode ? 0.05f : 0.1f;
-    float        alpha_faint = Theme::app_is_in_dark_mode ? 0.02f : 0.05f;
+    const juce::Colour line_colour = Theme::getColour(Theme::ANALYSER_GRID);
+    const float        alpha_bold  = Theme::app_is_in_dark_mode ? 0.05f : 0.1f;
+    const float        alpha_faint = Theme::app_is_in_dark_mode ? 0.02f : 0.05f;
 
     // dB markers (horizontal).
     g.setColour(line_colour.withAlpha(alpha_bold));
 
     for (int i = min_db; i <= max_db; i += DB_INTERVAL) {
-        int y = juce::jmap< int >(i, min_db, max_db, bounds_bottom, bounds_y);
+        const int y = juce::jmap< int >(i, min_db, max_db, bounds_bottom, bounds_y);
 
         g.fillRect(0, y, bounds_width, 1);
     }
@@ -37,9 +35,9 @@ FilterResponseCanvas::paint(juce::Graphics& g)
     // Hz markers (vertical).
     for (int i = min_hz; i <= max_hz; ++i) {
         if (shouldDrawFrequency(i)) {
-            float normalised_freq = juce::mapFromLog10< float >(i, min_hz, max_hz);
-            int   x               = bounds_x + static_cast< int >(std::floor(bounds_width * normalised_freq));
-            float alpha           = shouldBeBold(i) ? alpha_bold : alpha_faint;
+            const auto normalised_freq = juce::mapFromLog10< float >(i, Global::MIN_HZ, Global::MAX_HZ);
+            const int x = bounds_x + static_cast< int >(std::floor(static_cast< float >(bounds_width) * normalised_freq));
+            const float alpha = shouldBeBold(i) ? alpha_bold : alpha_faint;
 
             g.setColour(line_colour.withAlpha(alpha));
             g.drawVerticalLine(x, static_cast< float >(bounds_y), static_cast< float >(bounds_bottom));
@@ -50,8 +48,8 @@ FilterResponseCanvas::paint(juce::Graphics& g)
 /*---------------------------------------------------------------------------
 **
 */
-bool
-FilterResponseCanvas::shouldDrawFrequency(int freq) const
+/*static*/ bool
+FilterResponseCanvas::shouldDrawFrequency(const int freq)
 {
     bool draw = false;
 
@@ -68,8 +66,8 @@ FilterResponseCanvas::shouldDrawFrequency(int freq) const
 /*---------------------------------------------------------------------------
 **
 */
-bool
-FilterResponseCanvas::shouldBeBold(int freq) const
+/*static*/ bool
+FilterResponseCanvas::shouldBeBold(const int freq)
 {
     bool bold = false;
 

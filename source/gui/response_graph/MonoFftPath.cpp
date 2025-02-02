@@ -5,7 +5,7 @@
 **
 */
 MonoFftPath::MonoFftPath(MonoFftBuffer&              fft_buffer,
-                         Theme::DarkLightPair        path_colour,
+                         const Theme::DarkLightPair& path_colour,
                          juce::RangedAudioParameter* power_saving_param)
     : path_producer_(fft_buffer)
     , path_colour_(path_colour)

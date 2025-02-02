@@ -107,16 +107,16 @@ FilterMagnitudesCalculator::calculateMagnitudes()
     // Get the filters.
     Equalizer::MonoChain& filter_chain = processor_ref_.getFilterChain();
 
-    double sample_rate = processor_ref_.getSampleRate();
+    const double sample_rate = processor_ref_.getSampleRate();
 
     // Calculate the magnitudes.
     for (size_t i = 0; i < num_x_pixels_; ++i) {
         double mag = 1.0;
 
         // Get the frequency that this x coordinate represents in the analyser.
-        double x_hz = juce::mapToLog10< double >((static_cast< double >(i) / static_cast< double >(num_x_pixels_)),
-                                                 Global::MIN_HZ,
-                                                 Global::MAX_HZ);
+        const double x_hz = juce::mapToLog10< double >((static_cast< double >(i) / static_cast< double >(num_x_pixels_)),
+                                                       Global::MIN_HZ,
+                                                       Global::MAX_HZ);
 
         // Magnitude per band.
         mag *= filter_chain.get< Equalizer::B1 >().coefficients->getMagnitudeForFrequency(x_hz, sample_rate);
