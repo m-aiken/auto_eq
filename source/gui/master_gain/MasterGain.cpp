@@ -64,10 +64,9 @@ MasterGain::resized()
     grid.items.add(juce::GridItem(rotary_control_));
     grid.items.add(juce::GridItem(unity_gain_button_));
 
-    const int              padding       = 12;
-    juce::Rectangle< int > og_bounds     = getLocalBounds();
-    juce::Rectangle< int > padded_bounds = og_bounds.withSizeKeepingCentre(og_bounds.getWidth() - (padding * 2),
-                                                                           og_bounds.getHeight() - (padding * 2));
+    const juce::Rectangle< int > og_bounds     = getLocalBounds();
+    const juce::Rectangle< int > padded_bounds = og_bounds.withSizeKeepingCentre(og_bounds.getWidth() - (PADDING * 2),
+                                                                                 og_bounds.getHeight() - (PADDING * 2));
 
     grid.performLayout(padded_bounds);
 }
@@ -79,7 +78,7 @@ void
 MasterGain::buttonClicked(juce::Button* button)
 {
     if (button != nullptr && button == &unity_gain_button_) {
-        bool unity_gain_enabled = unity_gain_button_.getToggleState();
+        const bool unity_gain_enabled = unity_gain_button_.getToggleState();
 
         unity_gain_enabled ? processor_ref_.startUnityGainCalculation() : processor_ref_.stopUnityGainCalculation();
         rotary_control_.setEnabled(!unity_gain_enabled);

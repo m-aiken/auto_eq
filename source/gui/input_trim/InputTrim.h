@@ -19,5 +19,7 @@ private:
     DisableableLabel min_label_;
     DisableableLabel max_label_;
 
+    static constexpr int PADDING = 12;
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(InputTrim)
 };

@@ -19,5 +19,7 @@ private:
     DisableableLabel off_label_;
     DisableableLabel full_label_;
 
+    static constexpr int PADDING = 12;
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(EqIntensity)
 };

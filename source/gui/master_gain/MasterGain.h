@@ -12,7 +12,7 @@ class MasterGain
     , public juce::Button::Listener
 {
 public:
-    MasterGain(PluginProcessor& p);
+    explicit MasterGain(PluginProcessor& p);
     ~MasterGain() override;
 
     void paint(juce::Graphics& g) override;
@@ -26,6 +26,8 @@ private:
     CustomTextToggleButton unity_gain_button_;
 
     PluginProcessor& processor_ref_;
+
+    static constexpr int PADDING = 12;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MasterGain)
 };

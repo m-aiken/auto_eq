@@ -15,7 +15,10 @@ private:
     Global::Meters::ORIENTATION meter_orientation_;
     int                         min_value_;
     int                         max_value_;
-    uint8                       db_interval_;
+
+    static constexpr int DB_INTERVAL  = 6;
+    static constexpr int LABEL_WIDTH  = 40;
+    static constexpr int LABEL_HEIGHT = 20;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MeterDbScale)
 };

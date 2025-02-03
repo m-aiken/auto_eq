@@ -13,7 +13,9 @@ public:
 
 private:
     Global::Meters::ORIENTATION meter_orientation_;
-    static const uint8          DB_INTERVAL;
+
+    static constexpr uint8 DB_INTERVAL    = 3;
+    static constexpr uint8 LINE_THICKNESS = 1;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MeterCanvas)
 };

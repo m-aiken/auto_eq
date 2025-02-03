@@ -55,17 +55,16 @@ EqIntensity::resized()
     grid.items.add(juce::GridItem(rotary_control_));
     grid.items.add(juce::GridItem());
 
-    const int              padding       = 12;
-    juce::Rectangle< int > og_bounds     = getLocalBounds();
-    juce::Rectangle< int > padded_bounds = og_bounds.withSizeKeepingCentre(og_bounds.getWidth() - (padding * 2),
-                                                                           og_bounds.getHeight() - (padding * 2));
+    const juce::Rectangle< int > og_bounds     = getLocalBounds();
+    const juce::Rectangle< int > padded_bounds = og_bounds.withSizeKeepingCentre(og_bounds.getWidth() - (PADDING * 2),
+                                                                                 og_bounds.getHeight() - (PADDING * 2));
 
     grid.performLayout(padded_bounds);
 
-    int rotary_control_bottom = rotary_control_.getBottom();
-    int center_x              = padded_bounds.getCentreX();
-    int label_width           = static_cast< int >(std::floor(padded_bounds.getWidth() * 0.3));
-    int label_height          = static_cast< int >(std::floor(padded_bounds.getHeight() * 0.15));
+    const int rotary_control_bottom = rotary_control_.getBottom();
+    const int center_x              = padded_bounds.getCentreX();
+    const int label_width           = static_cast< int >(std::floor(padded_bounds.getWidth() * 0.3));
+    const int label_height          = static_cast< int >(std::floor(padded_bounds.getHeight() * 0.15));
 
     off_label_.setBounds(center_x - label_width, rotary_control_bottom, label_width, label_height);
     full_label_.setBounds(center_x, rotary_control_bottom, label_width, label_height);

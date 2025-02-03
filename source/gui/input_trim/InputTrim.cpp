@@ -55,10 +55,9 @@ InputTrim::resized()
     grid.items.add(juce::GridItem(rotary_control_));
     grid.items.add(juce::GridItem());
 
-    constexpr int                padding       = 12;
     const juce::Rectangle< int > og_bounds     = getLocalBounds();
-    const juce::Rectangle< int > padded_bounds = og_bounds.withSizeKeepingCentre(og_bounds.getWidth() - (padding * 2),
-                                                                                 og_bounds.getHeight() - (padding * 2));
+    const juce::Rectangle< int > padded_bounds = og_bounds.withSizeKeepingCentre(og_bounds.getWidth() - (PADDING * 2),
+                                                                                 og_bounds.getHeight() - (PADDING * 2));
 
     grid.performLayout(padded_bounds);
 
