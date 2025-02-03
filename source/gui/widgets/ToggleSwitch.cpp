@@ -31,25 +31,23 @@ ToggleSwitch::paintButton(juce::Graphics& g, bool should_draw_button_as_highligh
     g.drawRect(getLocalBounds());
 #endif
 
-    const juce::Rectangle< int >   bounds           = getLocalBounds();
-    const juce::Rectangle< float > float_bounds     = bounds.toFloat();
-    constexpr uint8                padding          = 4;
-    constexpr float                border_thickness = 1.f;
-    const uint8                    thumb_diameter   = bounds.getHeight() - (padding * 2);
+    const juce::Rectangle< int >   bounds         = getLocalBounds();
+    const juce::Rectangle< float > float_bounds   = bounds.toFloat();
+    const uint8                    thumb_diameter = bounds.getHeight() - (PADDING * 2);
 
     g.setColour(Theme::getColour(isEnabled() ? Theme::CHECKBOX : Theme::DISABLED_WIDGET));
-    g.drawRoundedRectangle(float_bounds.withSizeKeepingCentre(float_bounds.getWidth() - border_thickness,
-                                                              float_bounds.getHeight() - border_thickness),
+    g.drawRoundedRectangle(float_bounds.withSizeKeepingCentre(float_bounds.getWidth() - BORDER_THICKNESS,
+                                                              float_bounds.getHeight() - BORDER_THICKNESS),
                            thumb_diameter,
-                           border_thickness);
+                           BORDER_THICKNESS);
 
-    int x = padding;
+    int x = PADDING;
 
     if (getToggleState()) {
-        x = bounds.getRight() - thumb_diameter - padding;
+        x = bounds.getRight() - thumb_diameter - PADDING;
     }
 
-    const juce::Rectangle< float > thumb(x, padding, thumb_diameter, thumb_diameter);
+    const juce::Rectangle< float > thumb(x, PADDING, thumb_diameter, thumb_diameter);
 
     g.fillEllipse(thumb);
 }

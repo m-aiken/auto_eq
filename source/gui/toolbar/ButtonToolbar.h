@@ -41,5 +41,7 @@ private:
     ToolbarSeparator section_separator_1_;
     ToolbarSeparator section_separator_2_;
 
+    static constexpr int PADDING = 6;
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ButtonToolbar)
 };

@@ -1,4 +1,3 @@
-#include "GlobalConstants.h"
 #include "Theme.h"
 #include "ThemeButton.h"
 

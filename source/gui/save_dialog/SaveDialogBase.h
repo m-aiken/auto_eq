@@ -34,5 +34,7 @@ protected:
     CustomTextButton   positive_button_;
     DisableableLabel   duplicate_warning_;
 
+    static constexpr int PADDING = 24;
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(SaveDialogBase)
 };

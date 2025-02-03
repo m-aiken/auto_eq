@@ -41,10 +41,9 @@ ButtonToolbar::resized()
     using Fr    = juce::Grid::Fr;
     using Px    = juce::Grid::Px;
 
-    const int padding     = 6;
-    auto      bounds      = getLocalBounds();
-    auto      grid_bounds = bounds.withSizeKeepingCentre(bounds.getWidth() - (padding * 2),
-                                                    bounds.getHeight() - (padding * 2));
+    const auto bounds      = getLocalBounds();
+    const auto grid_bounds = bounds.withSizeKeepingCentre(bounds.getWidth() - (PADDING * 2),
+                                                          bounds.getHeight() - (PADDING * 2));
 
     juce::Grid grid;
 
@@ -76,7 +75,7 @@ ButtonToolbar::resized()
     grid.items.add(juce::GridItem(power_saving_button_));
     grid.items.add(juce::GridItem(theme_button_));
 
-    grid.setGap(Px(padding));
+    grid.setGap(Px(PADDING));
 
     grid.performLayout(grid_bounds);
 }

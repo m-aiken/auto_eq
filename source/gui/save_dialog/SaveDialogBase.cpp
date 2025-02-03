@@ -62,14 +62,13 @@ SaveDialogBase::~SaveDialogBase()
 void
 SaveDialogBase::resized()
 {
-    const auto&   bounds        = getLocalBounds();
-    const int     bounds_width  = bounds.getWidth();
-    const int     bounds_height = bounds.getHeight();
-    constexpr int padding       = 24;
-    const auto padded_bounds = bounds.withSizeKeepingCentre(bounds_width - (padding * 2), bounds_height - (padding * 2));
+    const auto& bounds        = getLocalBounds();
+    const int   bounds_width  = bounds.getWidth();
+    const int   bounds_height = bounds.getHeight();
+    const auto padded_bounds = bounds.withSizeKeepingCentre(bounds_width - (PADDING * 2), bounds_height - (PADDING * 2));
     const auto text_box_height = static_cast< int >(std::floor(padded_bounds.getHeight() * 0.5));
     const auto button_height   = static_cast< int >(std::floor(text_box_height * 0.5));
-    const auto button_width    = static_cast< int >(std::floor((padded_bounds.getWidth() * 0.5) - (padding * 0.25)));
+    const auto button_width    = static_cast< int >(std::floor((padded_bounds.getWidth() * 0.5) - (PADDING * 0.25)));
 
     name_entry_box_.setBounds(padded_bounds.getX(), padded_bounds.getY(), padded_bounds.getWidth(), text_box_height);
     negative_button_.setBounds(padded_bounds.getX(), padded_bounds.getBottom() - button_height, button_width, button_height);

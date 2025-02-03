@@ -46,7 +46,7 @@ RotaryControl::paint(juce::Graphics& g)
     g.drawRect(getLocalBounds());
 #endif
 
-    auto bounds = getLocalBounds();
+    const auto bounds = getLocalBounds();
 
     getLookAndFeel().drawRotarySlider(g,
                                       bounds.getX(),
@@ -63,7 +63,7 @@ RotaryControl::paint(juce::Graphics& g)
     }
 
     // Value text.
-    juce::String value_str(getValue(), num_decimal_places_);
+    const juce::String value_str(getValue(), num_decimal_places_);
 
     g.setColour(Theme::getColour(isEnabled() ? Theme::TEXT : Theme::DISABLED_WIDGET));
     g.setFont(Theme::getFont());
@@ -106,7 +106,7 @@ RotaryControl::parameterGestureChanged(int parameter_index, bool gesture_is_star
 **
 */
 float
-RotaryControl::getNormalisedValue()
+RotaryControl::getNormalisedValue() const
 {
     if (param_ == nullptr) {
         return 0.f;

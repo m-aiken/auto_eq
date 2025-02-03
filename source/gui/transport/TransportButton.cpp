@@ -23,7 +23,7 @@ TransportButton::paintButton(juce::Graphics& g, bool should_draw_button_as_highl
 {
     juce::ignoreUnused(should_draw_button_as_highlighted, should_draw_button_as_down);
 
-    auto bounds = getImageBounds().toFloat();
+    const auto bounds = getImageBounds().toFloat();
 
     if (getToggleState()) {
         g.setColour(Theme::getColour(isEnabled() ? Theme::STOP_BUTTON : Theme::DISABLED_WIDGET));

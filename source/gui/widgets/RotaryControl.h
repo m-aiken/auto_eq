@@ -25,7 +25,7 @@ public:
     void parameterGestureChanged(int parameter_index, bool gesture_is_starting) override;
 
 private:
-    float getNormalisedValue();
+    float getNormalisedValue() const;
 
     std::unique_ptr< juce::AudioProcessorValueTreeState::SliderAttachment > slider_attachment_;
     juce::RangedAudioParameter*                                             param_;
