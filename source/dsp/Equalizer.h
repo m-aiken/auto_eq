@@ -39,10 +39,9 @@ public:
                                                  IIRFilter >;
 
 public:
-    static constexpr uint8 NUM_BANDS = 31;
-
-    static const float DEFAULT_BAND_DB;
-    static const float DEFAULT_BAND_Q;
+    static constexpr uint8 NUM_BANDS       = 31;
+    static constexpr float DEFAULT_BAND_DB = 0.f;
+    static constexpr float DEFAULT_BAND_Q  = 2.f;
 
     enum BAND_ID {
         B1,
@@ -81,12 +80,13 @@ public:
 public:
     Equalizer() = default;
 
-    static juce::String getBandName(BAND_ID band_id);
-    static float        getBandHz(BAND_ID band_id);
-    static float        getBandTestDb(BAND_ID band_id);
-    static float        getBandTargetDb(BAND_ID band_id);
+    static juce::String getBandName(const BAND_ID band_id);
+    static float        getBandHz(const BAND_ID band_id);
+    static float        getBandTestDb(const BAND_ID band_id);
+    static float        getBandTargetDb(const BAND_ID band_id);
 
-    static void updateBandCoefficients(MonoChain& chain, const BAND_ID& band_id, float gain, double sample_rate);
+    static void
+    updateBandCoefficients(MonoChain& chain, const BAND_ID& band_id, const float gain, const double sample_rate);
 
 private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Equalizer)

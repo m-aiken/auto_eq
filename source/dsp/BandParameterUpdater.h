@@ -7,7 +7,7 @@
 class BandParameterUpdater : public juce::Thread
 {
 public:
-    static const uint16 UPDATE_FREQUENCY_MS;
+    static constexpr uint16 UPDATE_FREQUENCY_MS = 20;
 
 public:
     BandParameterUpdater(juce::AudioProcessorValueTreeState& apvts, BandUpdater& band_updater);
@@ -16,7 +16,7 @@ public:
     void run() override;
 
 private:
-    void updateParameters();
+    void updateParameters() const;
 
     juce::AudioProcessorValueTreeState& apvts_;
     BandUpdater&                        band_updater_;

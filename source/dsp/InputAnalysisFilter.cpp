@@ -1,8 +1,6 @@
 #include "GlobalConstants.h"
 #include "InputAnalysisFilter.h"
 
-/*static*/ const uint16 InputAnalysisFilter::ANALYSIS_FREQUENCY_MS = 200;
-
 /*---------------------------------------------------------------------------
 **
 */
@@ -43,7 +41,7 @@ InputAnalysisFilter::run()
 **
 */
 void
-InputAnalysisFilter::prepare(juce::dsp::ProcessSpec& process_spec)
+InputAnalysisFilter::prepare(const juce::dsp::ProcessSpec& process_spec)
 {
     for (auto& band : filter_matrix_) {
         for (auto& filter : band) {
@@ -88,7 +86,7 @@ InputAnalysisFilter::pushBufferForAnalysis(const juce::AudioBuffer< float >& buf
 **
 */
 float
-InputAnalysisFilter::getBandDbAdjustment(Equalizer::BAND_ID band_id) const
+InputAnalysisFilter::getBandDbAdjustment(const Equalizer::BAND_ID band_id) const
 {
     return band_adjustments_.at(band_id);
 }
@@ -102,9 +100,9 @@ InputAnalysisFilter::initFilters()
     using filter_type = juce::dsp::LinkwitzRileyFilterType;
 
     for (size_t bnd_idx = 0; bnd_idx < Equalizer::NUM_BANDS; ++bnd_idx) {
-        Equalizer::BAND_ID                             band_id = static_cast< Equalizer::BAND_ID >(bnd_idx);
+        const auto                                     band_id = static_cast< Equalizer::BAND_ID >(bnd_idx);
         InputAnalysisFilter::SingleBandFilterSequence& band_filter_sequence = filter_matrix_.at(band_id);
-        uint8 num_filters_needed = (band_id < 2) ? Equalizer::NUM_BANDS - 1 : Equalizer::NUM_BANDS - band_id;
+        const uint8 num_filters_needed = (band_id < 2) ? Equalizer::NUM_BANDS - 1 : Equalizer::NUM_BANDS - band_id;
 
         // The first filter in the sequence should be either:
         // * low pass for the first band
@@ -121,7 +119,7 @@ InputAnalysisFilter::initFilters()
         // * low pass for the 2nd filter if NOT band zero
         // * all pass otherwise.
         for (uint8 flt_idx = 1; flt_idx < num_filters_needed; ++flt_idx) {
-            bool is_lowpass = (flt_idx == 1) && (band_id != 0);
+            const bool is_lowpass = (flt_idx == 1) && (band_id != 0);
 
             band_filter_sequence[flt_idx].setType(is_lowpass ? filter_type::lowpass : filter_type::allpass);
         }
@@ -168,15 +166,15 @@ InputAnalysisFilter::processInputBuffer()
         }
 
         // Calculate the value to bring the current value to the target for this band.
-        Equalizer::BAND_ID band_id  = static_cast< Equalizer::BAND_ID >(band);
-        float              input_db = getBandInputDb(band_id);
+        const auto  band_id  = static_cast< Equalizer::BAND_ID >(band);
+        const float input_db = getBandInputDb(band_id);
 
         if (input_db == Global::NEG_INF) {
             // If the input dB for this band is essentially silent skip this band.
             band_adjustments_.at(band) = 0.f;
         }
         else {
-            float target_db            = Equalizer::getBandTargetDb(band_id);
+            const float target_db      = Equalizer::getBandTargetDb(band_id);
             band_adjustments_.at(band) = (target_db - input_db);
         }
     }
@@ -188,7 +186,7 @@ InputAnalysisFilter::processInputBuffer()
 **
 */
 float
-InputAnalysisFilter::getBandInputDb(Equalizer::BAND_ID band_id) const
+InputAnalysisFilter::getBandInputDb(const Equalizer::BAND_ID band_id) const
 {
     const juce::AudioBuffer< float >& buffer      = band_buffers_.at(band_id);
     const int                         num_samples = buffer.getNumSamples();
@@ -203,12 +201,12 @@ InputAnalysisFilter::getBandInputDb(Equalizer::BAND_ID band_id) const
 **
 */
 void
-InputAnalysisFilter::printBandMagnitudesPreProcessing()
+InputAnalysisFilter::printBandMagnitudesPreProcessing() const
 {
     DBG("--------------------------------------------------");
 
     for (size_t band = 0; band < Equalizer::NUM_BANDS; ++band) {
-        float val = getBandInputDb(static_cast< Equalizer::BAND_ID >(band));
+        const float val = getBandInputDb(static_cast< Equalizer::BAND_ID >(band));
         DBG("B" + juce::String(band + 1) + ": " + juce::String(val));
     }
 }

@@ -1,9 +1,6 @@
 #include "GlobalConstants.h"
 #include "UnityGainCalculator.h"
 
-/*static*/ const uint16 UnityGainCalculator::CALCULATION_FREQUENCY_MS = 1000;
-/*static*/ const double UnityGainCalculator::RAMP_TIME_SECONDS        = 0.001;
-
 /*---------------------------------------------------------------------------
 **
 */
@@ -50,10 +47,10 @@ UnityGainCalculator::run()
 **
 */
 void
-UnityGainCalculator::prepare(double sample_rate, uint32 samples_per_callback)
+UnityGainCalculator::prepare(const double sample_rate, const uint32 samples_per_callback)
 {
     // Set the 2 magnitude buffers to the correct size for one second.
-    size_t num_callbacks_per_second = static_cast< size_t >(std::floor(sample_rate / samples_per_callback));
+    const size_t num_callbacks_per_second = static_cast< size_t >(std::floor(sample_rate / samples_per_callback));
 
     magnitude_fifos_.at(PRE_PROCESSED_FIFO).resize(num_callbacks_per_second, 0.f);
     magnitude_fifos_.at(POST_PROCESSED_FIFO).resize(num_callbacks_per_second, 0.f);
@@ -79,7 +76,7 @@ UnityGainCalculator::isPrepared() const
 **
 */
 void
-UnityGainCalculator::pushForAnalysis(const juce::AudioBuffer< float >& buffer, FIFO_ID fifo_id)
+UnityGainCalculator::pushForAnalysis(const juce::AudioBuffer< float >& buffer, const FIFO_ID fifo_id)
 {
     if (!isPrepared()) {
         return;
@@ -106,9 +103,9 @@ UnityGainCalculator::getGainAdjustment()
         return 0.f;
     }
 
-    float adjustment        = unity_gain_adjustment_.getNextValue();
-    float adjustment_scaled = juce::jmap< float >(adjustment, -1.f, 1.f, Global::MAX_DB_CUT, Global::MAX_DB_BOOST);
-    float adjustment_norm   = master_gain_param_->convertTo0to1(adjustment_scaled);
+    const float adjustment        = unity_gain_adjustment_.getNextValue();
+    const float adjustment_scaled = juce::jmap< float >(adjustment, -1.f, 1.f, Global::MAX_DB_CUT, Global::MAX_DB_BOOST);
+    const float adjustment_norm   = master_gain_param_->convertTo0to1(adjustment_scaled);
 
     return adjustment_norm;
 }
@@ -119,7 +116,7 @@ UnityGainCalculator::getGainAdjustment()
 void
 UnityGainCalculator::calculateNextTargetValue()
 {
-    auto float2dp = [](float a) -> float { return std::round(std::round(a * 1000.f) / 10.f) / 100.f; };
+    auto float2dp = [](const float a) -> float { return std::round(std::round(a * 1000.f) / 10.f) / 100.f; };
 
     float pre  = magnitude_fifos_.at(PRE_PROCESSED_FIFO).at(read_indexes_.at(PRE_PROCESSED_FIFO));
     float post = magnitude_fifos_.at(POST_PROCESSED_FIFO).at(read_indexes_.at(POST_PROCESSED_FIFO));
@@ -127,7 +124,7 @@ UnityGainCalculator::calculateNextTargetValue()
     pre  = float2dp(pre);
     post = float2dp(post);
 
-    float adjustment = (pre - post);
+    const float adjustment = (pre - post);
 
     unity_gain_adjustment_.setTargetValue(adjustment);
 }

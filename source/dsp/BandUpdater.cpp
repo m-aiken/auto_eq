@@ -1,9 +1,6 @@
 #include "BandUpdater.h"
 #include "GlobalConstants.h"
 
-/*static*/ const uint16 BandUpdater::UPDATE_FREQUENCY_MS       = 1000;
-/*static*/ const double BandUpdater::BAND_DB_RAMP_TIME_SECONDS = 0.02;
-
 /*---------------------------------------------------------------------------
 **
 */
@@ -28,7 +25,7 @@ BandUpdater::~BandUpdater()
 **
 */
 void
-BandUpdater::prepare(double sample_rate)
+BandUpdater::prepare(const double sample_rate)
 {
     for (auto& band : band_values_array_) {
         band.reset(sample_rate, BAND_DB_RAMP_TIME_SECONDS);
@@ -64,7 +61,7 @@ BandUpdater::run()
 **
 */
 float
-BandUpdater::getBandDb(Equalizer::BAND_ID band_id)
+BandUpdater::getBandDb(const Equalizer::BAND_ID band_id)
 {
     BandUpdater::SmoothedFloat& sf = band_values_array_.at(band_id);
 
@@ -75,17 +72,17 @@ BandUpdater::getBandDb(Equalizer::BAND_ID band_id)
 **
 */
 void
-BandUpdater::syncroniseWithTreeState(juce::AudioProcessorValueTreeState& apvts)
+BandUpdater::syncroniseWithTreeState(const juce::AudioProcessorValueTreeState& apvts)
 {
     for (size_t i = 0; i < band_values_array_.size(); ++i) {
-        Equalizer::BAND_ID          band_id     = static_cast< Equalizer::BAND_ID >(i);
-        juce::RangedAudioParameter* apvts_param = apvts.getParameter(Equalizer::getBandName(band_id));
+        const auto                        band_id     = static_cast< Equalizer::BAND_ID >(i);
+        const juce::RangedAudioParameter* apvts_param = apvts.getParameter(Equalizer::getBandName(band_id));
 
         if (apvts_param == nullptr) {
             continue;
         }
 
-        float db_value = apvts_param->convertFrom0to1(apvts_param->getValue());
+        const float db_value = apvts_param->convertFrom0to1(apvts_param->getValue());
 
         band_values_array_.at(band_id).setCurrentAndTargetValue(db_value);
     }

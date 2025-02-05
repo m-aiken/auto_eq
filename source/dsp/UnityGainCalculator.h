@@ -10,27 +10,26 @@ public:
         POST_PROCESSED_FIFO,
     };
 
-    static const uint16 CALCULATION_FREQUENCY_MS;
-    static const double RAMP_TIME_SECONDS;
+    static constexpr uint16 CALCULATION_FREQUENCY_MS = 1000;
+    static constexpr double RAMP_TIME_SECONDS        = 0.001;
 
 public:
-    UnityGainCalculator(juce::RangedAudioParameter* master_gain_param);
+    explicit UnityGainCalculator(juce::RangedAudioParameter* master_gain_param);
     ~UnityGainCalculator() override;
 
     void run() override;
 
-    void prepare(double sample_rate, uint32 samples_per_callback);
-    bool isPrepared() const;
-
-    void  pushForAnalysis(const juce::AudioBuffer< float >& buffer, FIFO_ID fifo_id);
+    void  prepare(const double sample_rate, const uint32 samples_per_callback);
+    bool  isPrepared() const;
+    void  pushForAnalysis(const juce::AudioBuffer< float >& buffer, const FIFO_ID fifo_id);
     float getGainAdjustment();
 
 private:
+    typedef juce::SmoothedValue< float, juce::ValueSmoothingTypes::Linear > SmoothedFloat;
+
     void calculateNextTargetValue();
 
     juce::RangedAudioParameter* master_gain_param_;
-
-    typedef juce::SmoothedValue< float, juce::ValueSmoothingTypes::Linear > SmoothedFloat;
 
     SmoothedFloat unity_gain_adjustment_;
 

@@ -1,8 +1,6 @@
 #include "BandParameterUpdater.h"
 #include "Equalizer.h"
 
-/*static*/ const uint16 BandParameterUpdater::UPDATE_FREQUENCY_MS = 20;
-
 /*---------------------------------------------------------------------------
 **
 */
@@ -40,7 +38,7 @@ BandParameterUpdater::run()
 **
 */
 void
-BandParameterUpdater::updateParameters()
+BandParameterUpdater::updateParameters() const
 {
     if (!band_updater_.isThreadRunning()) {
         return;
@@ -53,15 +51,15 @@ BandParameterUpdater::updateParameters()
     const juce::MessageManagerLock message_manager_lock;
 
     for (uint8 i = 0; i < Equalizer::NUM_BANDS; ++i) {
-        Equalizer::BAND_ID          band_id      = static_cast< Equalizer::BAND_ID >(i);
-        juce::String                parameter_id = Equalizer::getBandName(band_id);
+        const auto                  band_id      = static_cast< Equalizer::BAND_ID >(i);
+        const juce::String          parameter_id = Equalizer::getBandName(band_id);
         juce::RangedAudioParameter* apvts_param  = apvts_.getParameter(parameter_id);
 
         if (apvts_param == nullptr) {
             continue;
         }
 
-        float db_value = band_updater_.getBandDb(band_id);
+        const float db_value = band_updater_.getBandDb(band_id);
 
         apvts_param->beginChangeGesture();
         apvts_param->setValueNotifyingHost(apvts_param->convertTo0to1(db_value));

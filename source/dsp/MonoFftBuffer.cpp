@@ -15,7 +15,7 @@ MonoFftBuffer::MonoFftBuffer()
 **
 */
 void
-MonoFftBuffer::prepare(double sample_rate)
+MonoFftBuffer::prepare(const double sample_rate)
 {
     sample_rate_ = sample_rate;
     is_prepared_ = true;
@@ -25,7 +25,7 @@ MonoFftBuffer::prepare(double sample_rate)
 **
 */
 void
-MonoFftBuffer::pushNextSample(float sample)
+MonoFftBuffer::pushNextSample(const float sample)
 {
     ring_buffer_.at(buffer_index_) = sample;
 

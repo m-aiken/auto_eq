@@ -25,21 +25,17 @@ public:
 public:
     MonoFftBuffer();
 
-    void prepare(double sample_rate);
-
-    void pushNextSample(float sample);
-    void getNextBlock(FftDataBlock& block) const;
-
+    void   prepare(const double sample_rate);
+    void   pushNextSample(const float sample);
+    void   getNextBlock(FftDataBlock& block) const;
     double getBinWidth() const;
-
-    bool isPrepared() const;
+    bool   isPrepared() const;
 
 private:
     double                        sample_rate_;
     std::array< float, FFT_SIZE > ring_buffer_;
     size_t                        buffer_index_;
-
-    bool is_prepared_;
+    bool                          is_prepared_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MonoFftBuffer)
 };

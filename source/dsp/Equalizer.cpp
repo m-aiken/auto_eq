@@ -1,13 +1,10 @@
 #include "Equalizer.h"
 
-/*static*/ const float Equalizer::DEFAULT_BAND_DB = 0.f;
-/*static*/ const float Equalizer::DEFAULT_BAND_Q  = 2.f;
-
 /*---------------------------------------------------------------------------
 **
 */
 /*static*/ juce::String
-Equalizer::getBandName(BAND_ID band_id)
+Equalizer::getBandName(const BAND_ID band_id)
 {
     switch (band_id) {
     case B1:
@@ -82,7 +79,7 @@ Equalizer::getBandName(BAND_ID band_id)
 **
 */
 /*static*/ float
-Equalizer::getBandHz(BAND_ID band_id)
+Equalizer::getBandHz(const BAND_ID band_id)
 {
     switch (band_id) {
     case B1:
@@ -157,7 +154,7 @@ Equalizer::getBandHz(BAND_ID band_id)
 **
 */
 /*static*/ float
-Equalizer::getBandTestDb(BAND_ID band_id)
+Equalizer::getBandTestDb(const BAND_ID band_id)
 {
     switch (band_id) {
     case B1:
@@ -202,7 +199,7 @@ Equalizer::getBandTestDb(BAND_ID band_id)
 **
 */
 /*static*/ float
-Equalizer::getBandTargetDb(BAND_ID band_id)
+Equalizer::getBandTargetDb(const BAND_ID band_id)
 {
     // TODO find the correct magnitude target for each band/frequency.
     switch (band_id) {
@@ -278,9 +275,10 @@ Equalizer::getBandTargetDb(BAND_ID band_id)
 **
 */
 /*static*/ void
-Equalizer::updateBandCoefficients(MonoChain& chain, const BAND_ID& band_id, float gain, double sample_rate)
+Equalizer::updateBandCoefficients(MonoChain& chain, const BAND_ID& band_id, const float gain, const double sample_rate)
 {
-    auto cf = juce::dsp::IIR::Coefficients< float >::makePeakFilter(sample_rate, getBandHz(band_id), DEFAULT_BAND_Q, gain);
+    const auto cf =
+        juce::dsp::IIR::Coefficients< float >::makePeakFilter(sample_rate, getBandHz(band_id), DEFAULT_BAND_Q, gain);
 
     switch (band_id) {
     case B1:
