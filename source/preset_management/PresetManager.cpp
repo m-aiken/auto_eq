@@ -7,16 +7,7 @@
 /*static*/ const juce::Identifier PresetManager::PROPERTY_IDENTIFIER_NAME = "name";
 /*static*/ const juce::Identifier PresetManager::PROPERTY_IDENTIFIER_ID   = "id";
 /*static*/ const juce::Identifier PresetManager::PROPERTY_IDENTIFIER_GAIN = "gain";
-
-// There's always a default (empty) preset in our preset state at index zero.
-// This preset isn't added to the "Load" menu, so it's essentially invisible.
-// When the clicks "New" what actually happens is this hidden default preset is loaded.
-// When the default preset is loaded the user cannot "Save", they can only "Save As",
-// which in turn saves the current preset's state as a new preset.
-/*static*/ const int          PresetManager::DEFAULT_PRESET_INDEX            = 0;
-/*static*/ const juce::String PresetManager::DEFAULT_PRESET_NAME             = "unsaved preset...";
-/*static*/ const int          PresetManager::FIRST_USER_DEFINED_PRESET_INDEX = 1;
-/*static*/ const int          PresetManager::INVALID_PRESET_INDEX            = -1;
+/*static*/ const juce::String     PresetManager::DEFAULT_PRESET_NAME      = "unsaved preset...";
 
 /*---------------------------------------------------------------------------
 **
