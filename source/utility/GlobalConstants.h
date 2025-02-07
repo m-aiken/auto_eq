@@ -9,32 +9,32 @@
 namespace Global
 {
 
-static const float NEG_INF = -72.f;
+static constexpr float NEG_INF = -72.f;
 
-static const float MAX_DB_BOOST = 12.f;
-static const float MAX_DB_CUT   = -12.f;
+static constexpr float MAX_DB_BOOST = 12.f;
+static constexpr float MAX_DB_CUT   = -12.f;
 
-static const float METER_MAX_DB  = 6.f;
-static const float METER_NEG_INF = -48.f;
+static constexpr float METER_MAX_DB  = 6.f;
+static constexpr float METER_NEG_INF = -48.f;
 
-static const float FFT_MAX_DB  = 3.f;
-static const float FFT_NEG_INF = -96.f;
+static constexpr float FFT_MAX_DB  = 3.f;
+static constexpr float FFT_NEG_INF = -96.f;
 
-static const float MIN_HZ = 20.f;
-static const float MAX_HZ = 20000.f;
+static constexpr float MIN_HZ = 20.f;
+static constexpr float MAX_HZ = 20000.f;
 
-static const double BAND_MAGNITUDE_CALCULATION_FREQUENCY_MS = 20.0;
-static const double FFT_PATH_PRODUCTION_FREQUENCY_MS        = 20.0;
+static constexpr double BAND_MAGNITUDE_CALCULATION_FREQUENCY_MS = 20.0;
+static constexpr double FFT_PATH_PRODUCTION_FREQUENCY_MS        = 20.0;
 
-static const uint8 GRAPH_TOP_PADDING = 32;
-static const uint8 METER_X_PADDING   = 32;
-static const uint8 METER_Y_PADDING   = 16;
+static constexpr uint8 GRAPH_TOP_PADDING = 32;
+static constexpr uint8 METER_X_PADDING   = 32;
+static constexpr uint8 METER_Y_PADDING   = 16;
 
 namespace Channels
 {
 
-    static const uint8 NUM_INPUTS  = 2;
-    static const uint8 NUM_OUTPUTS = 2;
+    static constexpr uint8 NUM_INPUTS  = 2;
+    static constexpr uint8 NUM_OUTPUTS = 2;
 
     enum CHANNEL_ID {
         INPUT_LEFT,
@@ -46,7 +46,7 @@ namespace Channels
         { INPUT_RIGHT, "Input Right" },
     };
 
-    static const juce::String getName(CHANNEL_ID channel_id) { return CHANNEL_NAME_MAP.at(channel_id); }
+    static juce::String getName(const CHANNEL_ID channel_id) { return CHANNEL_NAME_MAP.at(channel_id); }
 
 }  // namespace Channels
 
@@ -83,7 +83,7 @@ namespace Meters
 namespace FFT
 {
 
-    static const uint8 NUM_BUFFERS = 2;
+    static constexpr uint8 NUM_BUFFERS = 2;
 
     enum BUFFER_ID {
         LEFT_POST_EQ,
@@ -97,20 +97,20 @@ namespace FFT
 namespace GuiParams
 {
 
-static const bool INITIAL_POWER_STATE        = true;
-static const bool INITIAL_ANALYSIS_STATE     = false;
-static const bool INITIAL_POWER_SAVING_STATE = false;
-static const bool INITIAL_UNITY_GAIN_STATE   = false;
+static constexpr bool INITIAL_POWER_STATE        = true;
+static constexpr bool INITIAL_ANALYSIS_STATE     = false;
+static constexpr bool INITIAL_POWER_SAVING_STATE = false;
+static constexpr bool INITIAL_UNITY_GAIN_STATE   = false;
 
-static const float INPUT_TRIM_MIN      = -24.f;
-static const float INPUT_TRIM_MAX      = 24.f;
-static const float INPUT_TRIM_INTERVAL = 0.1f;
-static const float INITIAL_INPUT_TRIM  = 0.f;
+static constexpr float INPUT_TRIM_MIN      = -24.f;
+static constexpr float INPUT_TRIM_MAX      = 24.f;
+static constexpr float INPUT_TRIM_INTERVAL = 0.1f;
+static constexpr float INITIAL_INPUT_TRIM  = 0.f;
 
-static const float MASTER_GAIN_MIN      = -24.f;
-static const float MASTER_GAIN_MAX      = 12.f;
-static const float MASTER_GAIN_INTERVAL = 0.1f;
-static const float INITIAL_MASTER_GAIN  = 0.f;
+static constexpr float MASTER_GAIN_MIN      = -24.f;
+static constexpr float MASTER_GAIN_MAX      = 12.f;
+static constexpr float MASTER_GAIN_INTERVAL = 0.1f;
+static constexpr float INITIAL_MASTER_GAIN  = 0.f;
 
 enum PARAM_ID {
     POWER,
@@ -136,8 +136,8 @@ static const std::map< PARAM_ID, juce::String > PARAM_NAME_MAP = {
     { FFT_ACCURACY_TEST_TONE_DB, "FFT_ACCURACY_TEST_TONE_DB" },
 };
 
-static const juce::String
-getName(PARAM_ID param_id)
+static juce::String
+getName(const PARAM_ID param_id)
 {
     return PARAM_NAME_MAP.at(param_id);
 }
@@ -163,7 +163,7 @@ static const std::map< BUTTON_ID, juce::String > BUTTON_TEXT_MAP = {
     { BUTTON_SAVE_AS, "Save As" },
 };
 
-static const juce::String
+static juce::String
 getButtonText(const BUTTON_ID button_id)
 {
     return BUTTON_TEXT_MAP.at(button_id);
