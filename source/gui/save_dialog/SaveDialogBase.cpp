@@ -33,18 +33,13 @@ SaveDialogBase::SaveDialogBase(PluginProcessor&    processor_ref,
         name_entry_box_.setText(preset_manager_.getCurrentlyLoadedPresetName());
     }
 
-    // The save button is disabled if the user clears the text (no name to save as).
     name_entry_box_.onTextChange = [&]() {
-        const juce::String& text = name_entry_box_.getText();
-
-        positive_button_.setEnabled(!text.isEmpty());
-
-        // If the user is trying to use the name of a preset that already exists display a warning.
-        const bool is_duplicate = preset_manager_.hasPresetWithName(text)
-                                  && (text != preset_manager_.getCurrentlyLoadedPresetName());
-
-        duplicate_warning_.setVisible(is_duplicate);
+        updatePositiveButtonEnablement();
+        updateDuplicateWarningVisibility();
     };
+
+    // Initialise the positive (save) button.
+    updatePositiveButtonEnablement();
 }
 
 /*---------------------------------------------------------------------------
@@ -80,6 +75,32 @@ SaveDialogBase::resized()
                                  name_entry_box_.getBottom(),
                                  padded_bounds.getWidth(),
                                  negative_button_.getY() - name_entry_box_.getBottom());
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
+void
+SaveDialogBase::updatePositiveButtonEnablement()
+{
+    // The save button is disabled if the user clears the text (no name to save as) or if it has the default name.
+    const juce::String& text = name_entry_box_.getText();
+
+    positive_button_.setEnabled(!text.isEmpty() && (text != PresetManager::DEFAULT_PRESET_NAME));
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
+void
+SaveDialogBase::updateDuplicateWarningVisibility()
+{
+    // If the user is trying to use the name of a preset that already exists display a warning.
+    const juce::String& text         = name_entry_box_.getText();
+    const bool          is_duplicate = preset_manager_.hasPresetWithName(text)
+                              && (text != preset_manager_.getCurrentlyLoadedPresetName());
+
+    duplicate_warning_.setVisible(is_duplicate);
 }
 
 /*---------------------------------------------------------------------------

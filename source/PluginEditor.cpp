@@ -183,7 +183,7 @@ PluginEditor::buttonClicked(juce::Button* button)
                                .withTargetComponent(current_preset_text_box)
                                .withMinimumWidth(current_preset_text_box.getWidth())
                                .withParentComponent(getParentComponent()),
-                           [&](int result) {
+                           [&](const int result) {
                                if (result < 1) {
                                    return;
                                }

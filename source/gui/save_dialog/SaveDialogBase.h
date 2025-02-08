@@ -25,6 +25,9 @@ public:
     void buttonClicked(juce::Button* button) override = 0;
 
 protected:
+    void updatePositiveButtonEnablement();
+    void updateDuplicateWarningVisibility();
+
     PluginProcessor& processor_ref_;
     PresetManager&   preset_manager_;
     ButtonToolbar&   toolbar_;
