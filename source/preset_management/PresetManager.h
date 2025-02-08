@@ -24,6 +24,13 @@ public:
     static const juce::Identifier PROPERTY_IDENTIFIER_GAIN;
     static const juce::String     DEFAULT_PRESET_NAME;
 
+    enum OPERATION {
+        NEW,
+        LOAD,
+        SAVE,
+        SAVE_AS,
+    };
+
 public:
     explicit PresetManager(const juce::AudioProcessorValueTreeState& apvts);
 

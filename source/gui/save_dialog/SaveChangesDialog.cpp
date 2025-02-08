@@ -27,11 +27,6 @@ SaveChangesDialog::buttonClicked(juce::Button* button)
         }
     }
 
-    // Load the default empty preset.
-    if (processor_ref_.loadPreset(PresetManager::DEFAULT_PRESET_INDEX)) {
-        toolbar_.setLoadedPresetName(PresetManager::DEFAULT_PRESET_NAME);
-    }
-
     // Close the dialog window.
     if (auto* dw = findParentComponentOfClass< DialogWindow >()) {
         dw->exitModalState();

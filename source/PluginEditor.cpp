@@ -165,35 +165,21 @@ PluginEditor::buttonClicked(juce::Button* button)
         }
 
         if (preset_manager_.currentPresetHasUnsavedChanges()) {
-            handlePresetSaveChanges();  //! Also loads the default empty preset afterwards.
+            handlePresetSaveChanges(PresetManager::OPERATION::NEW);
+            // The callback from the "Save Changes" dialog being closed will call PluginEditor::handleLoadDefaultPreset().
             return;
         }
 
-        // Load the default empty preset.
-        if (processor_ref_.loadPreset(PresetManager::DEFAULT_PRESET_INDEX)) {
-            toolbar_.setLoadedPresetName(PresetManager::DEFAULT_PRESET_NAME);
-        }
+        handleLoadDefaultPreset();
     }
     else if (button == open_preset_button.get()) {
-        // Launch dialog that lists the existing presets.
-        PresetMenu       menu(preset_manager_, lnf_);
-        ReadonlyTextBox& current_preset_text_box = toolbar_.getCurrentPresetTextBox();
+        if (preset_manager_.currentPresetHasUnsavedChanges()) {
+            handlePresetSaveChanges(PresetManager::OPERATION::LOAD);
+            // The callback from the "Save Changes" dialog being closed will call PluginEditor::handleDisplayPresetList().
+            return;
+        }
 
-        menu.showMenuAsync(PopupMenu::Options()
-                               .withTargetComponent(current_preset_text_box)
-                               .withMinimumWidth(current_preset_text_box.getWidth())
-                               .withParentComponent(getParentComponent()),
-                           [&](const int result) {
-                               if (result < 1) {
-                                   return;
-                               }
-
-                               const int preset_index = (result - 1);
-
-                               if (processor_ref_.loadPreset(preset_index)) {
-                                   current_preset_text_box.setText(preset_manager_.getCurrentlyLoadedPresetName());
-                               }
-                           });
+        handleDisplayPresetList();
     }
     else if (button == save_preset_button.get()) {
         if (!preset_manager_.currentPresetIsUnchangedDefault()) {
@@ -236,7 +222,7 @@ PluginEditor::handlePresetSaveAs()
 **
 */
 void
-PluginEditor::handlePresetSaveChanges()
+PluginEditor::handlePresetSaveChanges(const PresetManager::OPERATION operation)
 {
     juce::DialogWindow::LaunchOptions dialog;
     const ComponentDimensions&        dims = getDialogDimensions();
@@ -247,7 +233,67 @@ PluginEditor::handlePresetSaveChanges()
     dialog.content.setOwned(new SaveChangesDialog(processor_ref_, toolbar_));
     dialog.content->setLookAndFeel(&lnf_);
     dialog.content->setSize(dims.width_, dims.height_);
-    dialog.launchAsync();
+
+    juce::DialogWindow*                    window   = dialog.launchAsync();
+    juce::ModalComponentManager::Callback* callback = nullptr;
+
+    switch (operation) {
+    case PresetManager::OPERATION::NEW:
+        callback = juce::ModalCallbackFunction::create([&](int ignore) { handleLoadDefaultPreset(); });
+        break;
+
+    case PresetManager::OPERATION::LOAD:
+        callback = juce::ModalCallbackFunction::create([&](int ignore) { handleDisplayPresetList(); });
+        break;
+
+    case PresetManager::OPERATION::SAVE:
+    case PresetManager::OPERATION::SAVE_AS:
+    default:
+        break;
+    }
+
+    if (callback != nullptr) {
+        juce::ModalComponentManager::getInstance()->attachCallback(window, callback);
+    }
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
+void
+PluginEditor::handleLoadDefaultPreset()
+{
+    // Load the default empty preset.
+    if (processor_ref_.loadPreset(PresetManager::DEFAULT_PRESET_INDEX)) {
+        toolbar_.setLoadedPresetName(PresetManager::DEFAULT_PRESET_NAME);
+    }
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
+void
+PluginEditor::handleDisplayPresetList()
+{
+    // Launch dialog that lists the existing presets.
+    PresetMenu       menu(preset_manager_, lnf_);
+    ReadonlyTextBox& current_preset_text_box = toolbar_.getCurrentPresetTextBox();
+
+    menu.showMenuAsync(PopupMenu::Options()
+                           .withTargetComponent(current_preset_text_box)
+                           .withMinimumWidth(current_preset_text_box.getWidth())
+                           .withParentComponent(getParentComponent()),
+                       [&](const int result) {
+                           if (result < 1) {
+                               return;
+                           }
+
+                           const int preset_index = (result - 1);
+
+                           if (processor_ref_.loadPreset(preset_index)) {
+                               current_preset_text_box.setText(preset_manager_.getCurrentlyLoadedPresetName());
+                           }
+                       });
 }
 
 /*---------------------------------------------------------------------------

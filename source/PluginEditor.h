@@ -36,7 +36,9 @@ private:
 
     void                handlePresetSave() const;
     void                handlePresetSaveAs();
-    void                handlePresetSaveChanges();
+    void                handlePresetSaveChanges(const PresetManager::OPERATION operation);
+    void                handleLoadDefaultPreset();
+    void                handleDisplayPresetList();
     ComponentDimensions getDialogDimensions() const;
 
     // This reference is provided as a quick way for your editor to
