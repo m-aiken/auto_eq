@@ -15,8 +15,7 @@ SaveDialogBase::SaveDialogBase(PluginProcessor&    processor_ref,
     , positive_button_(positive_button_text)
     , duplicate_warning_("duplicate_preset_name_warning",
                          "Warning: a preset with that name already exists!",
-                         juce::Justification::centred,
-                         true)
+                         juce::Justification::centred)
 {
     negative_button_.addListener(this);
     positive_button_.addListener(this);

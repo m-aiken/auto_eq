@@ -5,9 +5,9 @@
 #include "ButtonToolbar.h"
 #include "CustomTextButton.h"
 #include "CustomTextEntryBox.h"
-#include "DisableableLabel.h"
 #include "PluginProcessor.h"
 #include "PresetManager.h"
+#include "WarningLabel.h"
 
 class SaveDialogBase
     : public juce::Component
@@ -35,7 +35,7 @@ protected:
     CustomTextEntryBox name_entry_box_;
     CustomTextButton   negative_button_;
     CustomTextButton   positive_button_;
-    DisableableLabel   duplicate_warning_;
+    WarningLabel       duplicate_warning_;
 
     static constexpr int PADDING = 24;
 

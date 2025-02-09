@@ -42,6 +42,7 @@ public:
     static const DarkLightPair MENU_ITEM_BG;
     static const DarkLightPair MENU_ITEM_BG_FOCUS;
     static const DarkLightPair WARNING_TEXT;
+    static const DarkLightPair DEFAULT_PRESET_NAME_TEXT;
 
     static bool app_is_in_dark_mode;
 

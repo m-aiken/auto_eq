@@ -2,7 +2,7 @@
 
 #include <JuceHeader.h>
 
-#include "DisableableLabel.h"
+#include "PresetNameLabel.h"
 
 class ReadonlyTextBox : public juce::Component
 {
@@ -15,7 +15,7 @@ public:
     void setText(const juce::String& text);
 
 private:
-    DisableableLabel label_;
+    PresetNameLabel label_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ReadonlyTextBox)
 };

@@ -35,6 +35,7 @@ const Theme::DLP Theme::READONLY_TEXTBOX_BG = DarkLightPair(PARCHMENT.withAlpha(
 const Theme::DLP Theme::MENU_ITEM_BG        = DarkLightPair(PARCHMENT.withAlpha(0.02f), DARK_GREY.withAlpha(0.05f));
 const Theme::DLP Theme::MENU_ITEM_BG_FOCUS  = DarkLightPair(PARCHMENT.withAlpha(0.05f), DARK_GREY.withAlpha(0.1f));
 const Theme::DLP Theme::WARNING_TEXT        = DarkLightPair(RED_ORANGE, RED_ORANGE);
+const Theme::DLP Theme::DEFAULT_PRESET_NAME_TEXT = DarkLightPair(PARCHMENT.withAlpha(0.4f), DARK_GREY.withAlpha(0.6f));
 
 bool Theme::app_is_in_dark_mode = true;
 

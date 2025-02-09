@@ -69,8 +69,10 @@ set(PROJECT_SOURCES
         source/gui/save_dialog/SaveAsDialog.cpp
         source/gui/save_dialog/SaveChangesDialog.cpp
         source/gui/save_dialog/SaveDialogBase.cpp
+        source/gui/save_dialog/WarningLabel.cpp
         source/gui/toolbar/ButtonToolbar.cpp
         source/gui/toolbar/PluginEnablementButton.cpp
+        source/gui/toolbar/PresetNameLabel.cpp
         source/gui/toolbar/ReadonlyTextBox.cpp
         source/gui/toolbar/ThemeButton.cpp
         source/gui/toolbar/ToolbarSeparator.cpp
@@ -121,8 +123,10 @@ set(PROJECT_HEADERS
         source/gui/save_dialog/SaveAsDialog.h
         source/gui/save_dialog/SaveChangesDialog.h
         source/gui/save_dialog/SaveDialogBase.h
+        source/gui/save_dialog/WarningLabel.h
         source/gui/toolbar/ButtonToolbar.h
         source/gui/toolbar/PluginEnablementButton.h
+        source/gui/toolbar/PresetNameLabel.h
         source/gui/toolbar/ReadonlyTextBox.h
         source/gui/toolbar/ThemeButton.h
         source/gui/toolbar/ToolbarSeparator.h
