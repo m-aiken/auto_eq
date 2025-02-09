@@ -23,11 +23,11 @@ PresetManager::PresetManager(const juce::AudioProcessorValueTreeState& apvts)
     presets_.addChild(getDefaultPreset(undo_manager_.get()), DEFAULT_PRESET_INDEX, undo_manager_.get());
 
 #ifdef ADD_TEST_PRESETS
-    addTestPreset("John Doe", 1.0, undo_manager_.get());
-    addTestPreset("Steve Poe", 2.0, undo_manager_.get());
-    addTestPreset("Jane Goe", 3.0, undo_manager_.get());
-    addTestPreset("Will Boe", 4.0, undo_manager_.get());
-    addTestPreset("Sarah Hoe", 5.0, undo_manager_.get());
+    addTestPreset("Acoustic Guitar", 1.0, undo_manager_.get());
+    addTestPreset("Synth Pads", 2.0, undo_manager_.get());
+    addTestPreset("Jazz Drums", 3.0, undo_manager_.get());
+    addTestPreset("Double Bass", 4.0, undo_manager_.get());
+    addTestPreset("Grand Piano", 5.0, undo_manager_.get());
 #endif
 }
 
