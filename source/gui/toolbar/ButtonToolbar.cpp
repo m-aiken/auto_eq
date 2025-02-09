@@ -1,4 +1,5 @@
 #include "ButtonToolbar.h"
+#include "PresetManager.h"
 
 /*---------------------------------------------------------------------------
 **
@@ -11,7 +12,7 @@ ButtonToolbar::ButtonToolbar(juce::AudioProcessorValueTreeState& apvts)
                              GuiParams::INITIAL_ANALYSIS_STATE,
                              "Stop Analysis",
                              "Start Analysis")
-    , current_profile_name_("unsaved preset...")
+    , current_profile_name_(PresetManager::DEFAULT_PRESET_NAME)
 {
     for (int i = 0; i < PresetManagement::NUM_BUTTONS; ++i) {
         const auto&         button_id    = static_cast< PresetManagement::BUTTON_ID >(i);

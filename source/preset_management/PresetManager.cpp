@@ -7,7 +7,7 @@
 /*static*/ const juce::Identifier PresetManager::PROPERTY_IDENTIFIER_NAME = "name";
 /*static*/ const juce::Identifier PresetManager::PROPERTY_IDENTIFIER_ID   = "id";
 /*static*/ const juce::Identifier PresetManager::PROPERTY_IDENTIFIER_GAIN = "gain";
-/*static*/ const juce::String     PresetManager::DEFAULT_PRESET_NAME      = "unsaved preset...";
+/*static*/ const juce::String     PresetManager::DEFAULT_PRESET_NAME      = "new preset...";
 
 /*---------------------------------------------------------------------------
 **

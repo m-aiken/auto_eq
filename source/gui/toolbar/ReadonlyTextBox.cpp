@@ -8,8 +8,6 @@ ReadonlyTextBox::ReadonlyTextBox(const juce::String& initial_text)
     : label_("readonly_textbox", initial_text)
 {
     addAndMakeVisible(label_);
-
-    label_.setFont(Theme::getFont().italicised());
 }
 
 /*---------------------------------------------------------------------------
