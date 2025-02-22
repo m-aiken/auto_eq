@@ -5,4 +5,4 @@
 .zed/
 build_*
 dependencies/
-relufs.filtergraph
+auto_eq.filtergraph
